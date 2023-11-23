@@ -8,8 +8,9 @@ import { HomeLayout } from "./layout/Homelayout";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<HomeLayout />} />,
-    // <Route path="경로명" element={컴포넌트} />
+    <Route path="/" element={<HomeLayout />}>
+      {/*<Route path="경로명" element={컴포넌트} />*/}
+    </Route>,
   ),
 );
 
