@@ -1,5 +1,5 @@
 function App() {
-  return <div>hello</div>;
+  return <div>Start React!!</div>;
 }
 
 export default App;
