@@ -5,11 +5,15 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import { HomeLayout } from "./layout/Homelayout";
+import { BoardWrite } from "./board/BoardWrite";
+import { BoardView } from "./board/BoardView";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<HomeLayout />}>
       {/*<Route path="경로명" element={컴포넌트} />*/}
+      <Route path="/board/write" element={<BoardWrite />} />
+      <Route path="/board/:id" element={<BoardView />} />
     </Route>,
   ),
 );
