@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import {
   Box,
+  Divider,
+  Flex,
   FormControl,
   FormLabel,
   Heading,
   Input,
   Spinner,
+  Text,
   Textarea,
 } from "@chakra-ui/react";
 import axios from "axios";
@@ -33,16 +36,27 @@ function BoardView() {
       <Heading>{board.id} 번 게시글 보기</Heading>
 
       {/* 제목 */}
-      <FormControl mb={2}>
-        <FormLabel>제목</FormLabel>
-        <Input value={board.title} readOnly />
+      <FormControl mt={10} mb={2}>
+        <Text fontSize={"large"} as={"strong"}>
+          {board.title}
+        </Text>
+        <Flex justifyContent={"space-between"}>
+          <Text>
+            {board.board_member_id} | {board.updated_at}
+          </Text>
+          <Text>좋아요 | 조회수</Text>
+        </Flex>
       </FormControl>
+
+      <Divider my={5} borderColor="grey" />
 
       {/* 링크 */}
       <FormControl mb={2}>
-        <FormLabel>링크</FormLabel>
-        <Input value={board.link} readOnly />
+        <FormLabel>유튜브 링크</FormLabel>
+        <Text>{board.link}</Text>
       </FormControl>
+
+      <Divider my={5} borderColor="grey" />
 
       {/* 본문 */}
       <FormControl mb={2}>
