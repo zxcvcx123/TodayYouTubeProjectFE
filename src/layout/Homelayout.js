@@ -5,10 +5,13 @@ import { Nav } from "./Nav";
 
 export function HomeLayout() {
   return (
-    <Box>
+    <Box height={"500px"}>
       <Nav />
+
       <Outlet />
-      <Footer />
+      {/* Footer를 바닥에 고정시키려고 빈 컨텐츠 넣었습니다 */}
+      <Box height={"auto"} minHeight="100%" paddingBottom="400px"></Box>
+      <Footer height="400px" />
     </Box>
   );
 }
