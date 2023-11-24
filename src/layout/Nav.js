@@ -102,9 +102,9 @@ export function Nav() {
           </Menu>
         </Flex>
       </Flex>
-
+      {/* 메인(영상) */}
       <MainView />
-
+      {/* 메인(게시판) */}
       <MainBoardList />
     </>
   );
