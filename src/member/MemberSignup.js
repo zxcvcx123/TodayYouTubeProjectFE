@@ -13,7 +13,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function MemberSignup(props) {
   /* 회원 폼 상태 */
@@ -26,9 +26,15 @@ function MemberSignup(props) {
   const [email, setEmail] = useState("");
   const [phone_number, setPhone_number] = useState("");
 
-  /* ChakraUI*/
-  let toast = useToast();
+  /* 중복 검증 */
+  const [memberIdAvailable, setMemberIdAvailable] = useState(false);
+  const [emailAvailable, setEmailAvailable] = useState(false);
+  const [nickNameAvailable, setNickNameAvailable] = useState(false);
+  let submitAvailabe = true;
 
+  /* ChakraUI*/
+  const toast = useToast();
+  const navigate = useNavigate();
   function handleSignupForm() {
     axios
       .post("/api/member/signup", {
@@ -40,12 +46,14 @@ function MemberSignup(props) {
         email,
         phone_number,
       })
-      .then(
+      .then(() => {
         toast({
           description: "회원가입에 성공했습니다",
           status: "success",
-        }),
-      )
+        });
+        navigate("/member/signup");
+      })
+
       .catch((error) => {
         if (error.status === 400) {
           toast({
@@ -64,7 +72,7 @@ function MemberSignup(props) {
   return (
     <>
       <Box>
-        <FormControl>
+        <FormControl isRequired>
           <FormLabel>아이디</FormLabel>
           <Input
             placeholder="아이디 입력"
@@ -72,6 +80,7 @@ function MemberSignup(props) {
               setMember_id(e.target.value);
             }}
           />
+          <FormHelperText color={"blue"}>* 최소 5글자 입력</FormHelperText>
         </FormControl>
         <FormControl isRequired>
           <FormLabel>닉네임</FormLabel>
@@ -81,6 +90,7 @@ function MemberSignup(props) {
               setNickname(e.target.value);
             }}
           />
+          <FormHelperText color={"blue"}>* 최소 5글자 입력</FormHelperText>
         </FormControl>
         <FormControl isRequired>
           <FormLabel>비밀번호</FormLabel>
@@ -91,6 +101,7 @@ function MemberSignup(props) {
               setPassword(e.target.value);
             }}
           />
+          <FormHelperText color={"blue"}>* 최소 5글자 입력</FormHelperText>
         </FormControl>
         <FormControl isRequired>
           <FormLabel>비밀번호 재확인</FormLabel>
@@ -102,6 +113,7 @@ function MemberSignup(props) {
               setPassword_check(e.target.value);
             }}
           />
+          <FormHelperText color={"blue"}>* 최소 5글자 입력</FormHelperText>
         </FormControl>
         <FormControl isRequired>
           <FormLabel>이메일</FormLabel>
@@ -112,6 +124,7 @@ function MemberSignup(props) {
               setEmail(e.target.value);
             }}
           />
+          <FormHelperText color={"blue"}>* 최소 5글자 입력</FormHelperText>
         </FormControl>
         <FormControl isRequired>
           <FormLabel>생년월일</FormLabel>
