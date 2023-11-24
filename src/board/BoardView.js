@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   Box,
+  Button,
   Divider,
   Flex,
   FormControl,
@@ -48,7 +49,7 @@ function BoardView() {
   }
 
   return (
-    <Box m={"50px 500px 20px 50px"}>
+    <Box m={"50px 20% 20px 50px"}>
       <Heading>{board.id} 번 게시글 보기(임시 게시글 번호 확인용!!)</Heading>
 
       {/* 제목 */}
@@ -87,6 +88,8 @@ function BoardView() {
           resize={"none"}
         />
       </FormControl>
+
+      <Button colorScheme="puple">수정</Button>
     </Box>
   );
 }
