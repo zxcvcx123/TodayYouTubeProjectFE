@@ -13,9 +13,9 @@ const routes = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<HomeLayout />}>
       {/*<Route path="경로명" element={컴포넌트} />*/}
-      <Route path="/write" element={<BoardWrite />} />
-      <Route path="/board/:id" element={<BoardView />} />
-      <Route path="/board/list" element={<BoardList />} />
+      <Route path="write" element={<BoardWrite />} />
+      <Route path="board/:id" element={<BoardView />} />
+      <Route path="board/list" element={<BoardList />} />
     </Route>,
   ),
 );

@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Box, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
 function BoardList() {
+  // state
   const [boardList, setBoardList] = useState(null);
 
+  // navigate
+  const navigate = useNavigate();
+
+  // 초기 이펙트
   useEffect(() => {
     axios
       .get("/api/board/list")
@@ -28,7 +34,11 @@ function BoardList() {
         <Tbody>
           {boardList &&
             boardList.map((board) => (
-              <Tr _hover={{ backgroundColor: "lightcyan" }}>
+              <Tr
+                key={board.id}
+                onClick={() => navigate("/board/" + board.id)}
+                _hover={{ backgroundColor: "lightcyan" }}
+              >
                 <Td>{board.id}</Td>
                 <Td>{board.title}</Td>
                 <Td>좋아요</Td>
