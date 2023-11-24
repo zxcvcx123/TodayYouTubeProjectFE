@@ -2,14 +2,16 @@ import {
   Avatar,
   Box,
   Button,
-  Center,
   Divider,
   Flex,
   HStack,
+  ListIcon,
+  ListItem,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
+  OrderedList,
   Stack,
 } from "@chakra-ui/react";
 import * as PropTypes from "prop-types";
@@ -18,7 +20,8 @@ import { ChevronDownIcon } from "@chakra-ui/icons";
 import { SearchMain } from "./SearchMain";
 import { faBell } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { FirstMain } from "./FirstMain";
+import { MainView } from "./MainView";
+import { MainBoardList } from "./MainBoardList";
 
 Stack.propTypes = {
   p: PropTypes.number,
@@ -97,9 +100,9 @@ export function Nav() {
         </Flex>
       </Flex>
 
-      <FirstMain />
+      <MainView />
 
-      <Flex width="70%" m="auto"></Flex>
+      <MainBoardList />
     </>
   );
 }

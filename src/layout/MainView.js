@@ -1,7 +1,7 @@
 import { Box, Center, Flex } from "@chakra-ui/react";
 import React from "react";
 
-export function FirstMain() {
+export function MainView() {
   // 임시메인
   return (
     <Box bg="beige" w="100%" h="700px" p={4}>
