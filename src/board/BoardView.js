@@ -6,6 +6,7 @@ import {
   FormControl,
   FormLabel,
   Heading,
+  Img,
   Input,
   Spinner,
   Text,
@@ -17,16 +18,30 @@ import { useParams } from "react-router-dom";
 function BoardView() {
   // state
   const [board, setBoard] = useState(null);
+  const [thumbnail, setThumbnail] = useState(null);
 
   //URL 매개변수 추출
   const { id } = useParams();
 
+  // 초기 렌더링
   useEffect(() => {
-    axios
-      .get("/api/board/id/" + id)
-      .then((response) => setBoard(response.data));
+    axios.get("/api/board/id/" + id).then((response) => {
+      setBoard(response.data);
+
+      // 유튜브 링크에서 동영상 ID 추출 (정규표현식 match 메서드)
+      const videoIdMatch = response.data.link.match(
+        /^(https?:\/\/)?(www\.)?(youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/,
+      );
+
+      if (videoIdMatch && videoIdMatch[4]) {
+        const videoId = videoIdMatch[4];
+        const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
+        setThumbnail(thumbnailUrl);
+      }
+    });
   }, []);
 
+  // board 불러오지 못할 시 로딩중 표시
   if (board === null) {
     return <Spinner />;
   }
@@ -54,6 +69,8 @@ function BoardView() {
       <FormControl mb={2}>
         <FormLabel>유튜브 링크</FormLabel>
         <Text>{board.link}</Text>
+        {/* 유튜브 썸네일 출력 */}
+        {thumbnail && <Img src={thumbnail} alt="유튜브 썸네일" />}
       </FormControl>
 
       <Divider my={5} borderColor="grey" />
