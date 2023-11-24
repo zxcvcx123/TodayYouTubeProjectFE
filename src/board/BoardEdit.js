@@ -14,7 +14,7 @@ import { useParams } from "react-router-dom";
 import { useImmer } from "use-immer";
 
 function BoardEdit() {
-  const [board, updateBoard] = useImmer(null);
+  const [board, updateBoard] = useImmer({});
 
   const { id } = useParams();
 
