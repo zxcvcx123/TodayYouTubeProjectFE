@@ -67,16 +67,19 @@ export function Nav() {
           <SearchMain />
         </Box>
 
-        <Flex gap={20}>
+        <Flex gap={10}>
           <Flex>
             <Button
-              w={100}
+              w={70}
               size="md"
               variant="ghost"
               leftIcon={<FontAwesomeIcon icon={faBell} />}
             ></Button>
-            <Button w={100} size="md" variant="ghost">
+            <Button w={90} size="md" variant="ghost">
               로그인
+            </Button>
+            <Button w={90} size="md" variant="ghost">
+              회원가입
             </Button>
           </Flex>
           <Menu w={200} size="md" variant="ghost">
