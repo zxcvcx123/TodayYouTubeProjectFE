@@ -33,6 +33,7 @@ function BoardView() {
         /^(https?:\/\/)?(www\.)?(youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/,
       );
 
+      // 정규표현식 match 메서드 4번의 값으로 썸네일 추출
       if (videoIdMatch && videoIdMatch[4]) {
         const videoId = videoIdMatch[4];
         const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
@@ -47,8 +48,8 @@ function BoardView() {
   }
 
   return (
-    <Box>
-      <Heading>{board.id} 번 게시글 보기</Heading>
+    <Box m={"50px 500px 20px 50px"}>
+      <Heading>{board.id} 번 게시글 보기(임시 게시글 번호 확인용!!)</Heading>
 
       {/* 제목 */}
       <FormControl mt={10} mb={2}>
@@ -78,7 +79,13 @@ function BoardView() {
       {/* 본문 */}
       <FormControl mb={2}>
         <FormLabel>본문</FormLabel>
-        <Textarea value={board.content} readOnly resize={"none"} />
+        <Textarea
+          value={board.content}
+          readOnly
+          w={"100%"}
+          minH={"400px"}
+          resize={"none"}
+        />
       </FormControl>
     </Box>
   );
