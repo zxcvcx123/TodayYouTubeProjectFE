@@ -8,6 +8,7 @@ import { HomeLayout } from "./layout/Homelayout";
 import BoardWrite from "./board/BoardWrite";
 import BoardView from "./board/BoardView";
 import BoardList from "./board/BoardList";
+import BoardEdit from "./board/BoardEdit";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -16,6 +17,7 @@ const routes = createBrowserRouter(
       <Route path="write" element={<BoardWrite />} />
       <Route path="board/:id" element={<BoardView />} />
       <Route path="board/list" element={<BoardList />} />
+      <Route path="board/edit/:id" element={<BoardEdit />} />
     </Route>,
   ),
 );

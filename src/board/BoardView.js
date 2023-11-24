@@ -14,7 +14,7 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 function BoardView() {
   // state
@@ -23,6 +23,9 @@ function BoardView() {
 
   //URL 매개변수 추출
   const { id } = useParams();
+
+  // navigate
+  const navigate = useNavigate();
 
   // 초기 렌더링
   useEffect(() => {
@@ -89,7 +92,12 @@ function BoardView() {
         />
       </FormControl>
 
-      <Button colorScheme="puple">수정</Button>
+      <Button
+        colorScheme="purple"
+        onClick={() => navigate("/board/edit/" + id)}
+      >
+        수정
+      </Button>
     </Box>
   );
 }
