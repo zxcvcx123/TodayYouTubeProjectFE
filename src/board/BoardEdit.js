@@ -7,6 +7,7 @@ import {
   FormLabel,
   Heading,
   Input,
+  Spinner,
   Textarea,
 } from "@chakra-ui/react";
 import axios from "axios";
@@ -14,7 +15,7 @@ import { useParams } from "react-router-dom";
 import { useImmer } from "use-immer";
 
 function BoardEdit() {
-  const [board, updateBoard] = useImmer({});
+  const [board, updateBoard] = useImmer(null);
 
   const { id } = useParams();
 
@@ -24,7 +25,18 @@ function BoardEdit() {
       .then((response) => updateBoard(response.data));
   }, []);
 
-  function handleSubmit() {}
+  // 게시글을 로딩중이라면 스피너 돌리기
+  if (board === null) {
+    return <Spinner />;
+  }
+
+  function handleSubmit() {
+    axios
+      .put("/api/board/edit", board)
+      .then(() => console.log("good"))
+      .catch(() => console.log("bad"))
+      .finally(() => console.log("done"));
+  }
 
   function handleBoardUpdate(e, field) {
     updateBoard((draft) => {
