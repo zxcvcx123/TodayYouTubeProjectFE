@@ -24,7 +24,7 @@ function BoardWrite() {
 
   function handleSubmit() {
     axios
-      .postForm("/api/board/add", { title, content, uploadFiles })
+      .postForm("/api/board/add", { title, link, content, uploadFiles })
       .then(() => navigate("/"))
       .catch(() => console.log("error"))
       .finally(() => console.log("done"));
