@@ -9,12 +9,26 @@ import {
   Input,
   Textarea,
 } from "@chakra-ui/react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function BoardWrite() {
+  /* use state */
   const [title, setTitle] = useState("");
   const [link, setLink] = useState("");
   const [content, setContent] = useState("");
   const [uploadFiles, setUploadFiles] = useState(null);
+
+  /* use navigate */
+  let navigate = useNavigate();
+
+  function handleSubmit() {
+    axios
+      .postForm("/api/board/add", { title, content, uploadFiles })
+      .then(() => navigate("/"))
+      .catch(() => console.log("error"))
+      .finally(() => console.log("done"));
+  }
 
   return (
     <Box border={"2px solid black"} m={5}>
@@ -67,7 +81,9 @@ function BoardWrite() {
       </FormControl>
 
       {/* 저장 버튼 */}
-      <Button colorScheme="blue">작성 완료</Button>
+      <Button onClick={handleSubmit} colorScheme="blue">
+        작성 완료
+      </Button>
     </Box>
   );
 }
