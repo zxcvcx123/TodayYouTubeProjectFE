@@ -2,39 +2,71 @@ import React, { useState } from "react";
 import {
   Box,
   Button,
+  Flex,
   FormControl,
-  FormHelperText,
+  FormErrorMessage,
   FormLabel,
   HStack,
   Input,
   Radio,
   RadioGroup,
-  Text,
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import {
+  defaultLength,
+  defaultMessage,
+  defaultPatterns,
+  englishAndNumberOnly,
+  validatePassword,
+  validateEmail,
+} from "./memberUtil/memberSignUpMethods";
 
 function MemberSignup(props) {
-  /* 회원 폼 상태 */
+  /* 회원 상태---------------------------------------------------------------------------------- */
   const [member_id, setMember_id] = useState("");
   const [password, setPassword] = useState("");
   const [password_check, setPassword_check] = useState("");
-  const [gender, setGender] = useState("");
-  const [birth_date, setBirth_date] = useState();
+  const [gender, setGender] = useState("m");
+  const [birth_date, setBirth_date] = useState(null);
   const [nickname, setNickname] = useState("");
   const [email, setEmail] = useState("");
   const [phone_number, setPhone_number] = useState("");
+  /* ID 검증---------------------------------------------------------------------------------- */
 
-  /* 중복 검증 */
-  const [memberIdAvailable, setMemberIdAvailable] = useState(false);
-  const [emailAvailable, setEmailAvailable] = useState(false);
-  const [nickNameAvailable, setNickNameAvailable] = useState(false);
-  let submitAvailabe = true;
+  const [checkIdResult, setCheckIdResult] = useState(false); // 중복 체크 결과
+  const [idMessage, setIdMessage] = useState(defaultMessage);
+  const [idDisable, setIdDisable] = useState(false); // 중복 체크 후 비활성화
+  /* 닉네임 검증 ----------------------------------------------------------------------------------*/
+  const [checkNicknameResult, setCheckNicknameResult] = useState(false); // 중복 체크 결과
+  const [nicknameMessage, setNicknameMessage] = useState(defaultMessage);
+  const [nickNameDisable, setNickNameDisable] = useState(false); // 중복 체크 후 비활성화
+  /* 이메일 검증 ----------------------------------------------------------------------------------*/
+
+  const [checkEmailResult, setCheckEmailResult] = useState(false); // 중복 체크 결과
+  const [emailMessage, setEmailMessage] = useState(defaultMessage);
+  const [emailDisable, setEmailDisable] = useState(false); // 중복 체크 후 비활성화
+
+  /* 비밀번호 관련 메세지 ----------------------------------------------------------------------------------*/
+  const [passwordTypeResult, setPasswordTypeResult] = useState(false);
+  const [passwordMessage, setPasswordMessage] = useState(defaultMessage);
+  const [passwordCheckMessage, setPasswordCheckMessage] =
+    useState("비밀번호가 일치하지 않습니다");
+
+  const submitAvailable =
+    checkIdResult &&
+    checkNicknameResult &&
+    true &&
+    passwordTypeResult &&
+    birth_date !== null &&
+    phone_number.length > 12;
 
   /* ChakraUI*/
   const toast = useToast();
   const navigate = useNavigate();
+
+  /* 회원 가입 요청 ----------------------------------------------------------------------------------*/
   function handleSignupForm() {
     axios
       .post("/api/member/signup", {
@@ -48,16 +80,16 @@ function MemberSignup(props) {
       })
       .then(() => {
         toast({
-          description: "회원가입에 성공했습니다",
+          description: "회원가입이 완료되었습니다",
           status: "success",
         });
         navigate("/member/signup");
       })
 
       .catch((error) => {
-        if (error.status === 400) {
+        if (error.response.status === 400) {
           toast({
-            description: "회원가입에 실패하셨습니다.",
+            description: "가입 정보를 확인해주세요",
             status: "warning",
           });
         } else {
@@ -69,63 +101,235 @@ function MemberSignup(props) {
       });
   }
 
+  /* 중복 체크 메서드 ----------------------------------------------------------------------------------*/
+  function handleDuplicated(itemName, item) {
+    const params = new URLSearchParams();
+    params.set(itemName, item);
+    console.log(params);
+    axios
+      .get("/api/member/signup/check?" + params)
+      .then((response) => {
+        const result = response.data;
+        toast({
+          description: result,
+          status: "success",
+        });
+        if (itemName === "member_id") {
+          setCheckIdResult(true);
+          setIdDisable(false);
+        }
+        if (itemName === "nickname") {
+          setCheckNicknameResult(true);
+          setNickNameDisable(false);
+        }
+        if (itemName === "email") {
+          setCheckEmailResult(true);
+          setEmailDisable(false);
+        }
+      })
+      .catch((error) => {
+        const result = error.response.data;
+        toast({
+          description: result,
+          status: "warning",
+        });
+        if (itemName === "member_id") {
+          setCheckIdResult(false);
+          setIdMessage(result);
+        }
+        if (itemName === "nickname") {
+          setCheckNicknameResult(false);
+          setNicknameMessage(result);
+        }
+        if (itemName === "email") {
+          setCheckEmailResult(false);
+          setEmailMessage(result);
+        }
+      });
+  }
+
   return (
     <>
       <Box>
-        <FormControl isRequired>
+        {/* 아이디 폼  ---------------------------------------------------------------------------------- */}
+        <FormControl
+          isRequired
+          isInvalid={
+            member_id.length === 0
+              ? false
+              : englishAndNumberOnly(member_id)
+                ? true
+                : !checkIdResult
+          }
+        >
           <FormLabel>아이디</FormLabel>
-          <Input
-            placeholder="아이디 입력"
-            onChange={(e) => {
-              setMember_id(e.target.value);
-            }}
-          />
-          <FormHelperText color={"blue"}>* 최소 5글자 입력</FormHelperText>
+          <Flex>
+            <Input
+              placeholder="아이디 입력 (4~20자)"
+              value={member_id}
+              maxLength={"20"}
+              onChange={(e) => {
+                if (!e.target.value.includes(" ")) {
+                  setCheckIdResult(false);
+                  setIdDisable(true);
+                  setMember_id(e.target.value);
+                  setIdMessage("4" + defaultLength);
+                  if (e.target.value.length > 3) {
+                    setIdMessage(defaultMessage);
+                  }
+                  if (englishAndNumberOnly(member_id)) {
+                    setIdMessage(defaultPatterns);
+                  }
+                }
+              }}
+            />
+            <Button
+              isDisabled={
+                member_id.length < 4 ||
+                englishAndNumberOnly(member_id) ||
+                !idDisable
+              }
+              onClick={() => {
+                handleDuplicated("member_id", member_id);
+              }}
+            >
+              중복확인
+            </Button>
+          </Flex>
+          <FormErrorMessage>{idMessage}</FormErrorMessage>
         </FormControl>
-        <FormControl isRequired>
+        {/* 닉네임 폼 ---------------------------------------------------------------------------------- */}
+        <FormControl
+          isRequired
+          isInvalid={nickname.length === 0 ? false : !checkNicknameResult}
+        >
           <FormLabel>닉네임</FormLabel>
-          <Input
-            placeholder="닉네임"
-            onChange={(e) => {
-              setNickname(e.target.value);
-            }}
-          />
-          <FormHelperText color={"blue"}>* 최소 5글자 입력</FormHelperText>
+          <Flex>
+            <Input
+              placeholder="닉네임 입력"
+              value={nickname}
+              onChange={(e) => {
+                if (!e.target.value.includes(" ")) {
+                  setNickNameDisable(true);
+                  setNicknameMessage(true);
+                  setCheckNicknameResult(false);
+                  setNicknameMessage("2" + defaultLength);
+                  setNickname(e.target.value);
+                  if (e.target.value.length > 3) {
+                    setNicknameMessage(defaultMessage);
+                  }
+                }
+              }}
+            />
+            <Button
+              isDisabled={nickname.length < 1 || !nickNameDisable}
+              onClick={() => {
+                handleDuplicated("nickname", nickname);
+              }}
+            >
+              중복확인
+            </Button>
+          </Flex>
+          <FormErrorMessage>{nicknameMessage}</FormErrorMessage>
         </FormControl>
-        <FormControl isRequired>
+        {/* 비밀번호 폼 ---------------------------------------------------------------------------------- */}
+        <FormControl
+          isRequired
+          isInvalid={password.length === 0 ? false : !passwordTypeResult}
+        >
           <FormLabel>비밀번호</FormLabel>
-          <Input
-            type="password"
-            placeholder="최소"
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
-          />
-          <FormHelperText color={"blue"}>* 최소 5글자 입력</FormHelperText>
+          <Flex>
+            <Input
+              type="password"
+              placeholder="비밀번호 입력( 8~20자, 특수기호 포함)"
+              value={password}
+              onChange={(e) => {
+                if (!e.target.value.includes(" ")) {
+                  setPasswordTypeResult(false);
+                  setPasswordMessage("8" + defaultLength);
+                  setPassword(e.target.value);
+                  if (e.target.value.length > 7) {
+                    setPasswordMessage("안전검사가 필요합니다");
+                  }
+                }
+              }}
+            />
+            <Button
+              isDisabled={password.length < 7 || password !== password_check}
+              onClick={() => {
+                if (validatePassword(password)) {
+                  setPasswordTypeResult(true);
+                  toast({
+                    description: "안전한 비밀번호입니다",
+                    status: "success",
+                  });
+                } else {
+                  setPasswordTypeResult(false);
+                  setPasswordMessage(
+                    "형식이 올바르지 않습니다. 영문자(대문자 또는 소문자)와 숫자, 특수기호를 모두 포함해주세요",
+                  );
+                  setPasswordCheckMessage("");
+                }
+              }}
+            >
+              안전검사
+            </Button>
+          </Flex>
+          <FormErrorMessage>{passwordMessage}</FormErrorMessage>
         </FormControl>
-        <FormControl isRequired>
+        {/* 비밀번호 재확인 ---------------------------------------------------------------------------------- */}
+        <FormControl
+          isRequired
+          isInvalid={
+            password_check.length === 0
+              ? false
+              : password === password_check
+                ? !passwordTypeResult
+                : true
+          }
+        >
           <FormLabel>비밀번호 재확인</FormLabel>
           <Input
             type="password"
-            placeholder="비밀번호 재입력"
+            placeholder="비밀번호 재확인"
+            value={password_check}
             onChange={(e) => {
-              console.log(e.target.value);
-              setPassword_check(e.target.value);
+              if (!e.target.value.includes(" ")) {
+                setPasswordTypeResult(false);
+                setPassword_check(e.target.value);
+                if (password === e.target.value) {
+                  setPasswordCheckMessage("안전검사가 필요합니다");
+                }
+              }
             }}
           />
-          <FormHelperText color={"blue"}>* 최소 5글자 입력</FormHelperText>
+          <FormErrorMessage>{passwordCheckMessage}</FormErrorMessage>
         </FormControl>
-        <FormControl isRequired>
+        {/* 이메일 폼 -----------------------------------------------------------------------------------*/}
+        <FormControl>
           <FormLabel>이메일</FormLabel>
-          <Input
-            placeholder="이메일"
-            onChange={(e) => {
-              console.log(e.target.value);
-              setEmail(e.target.value);
-            }}
-          />
-          <FormHelperText color={"blue"}>* 최소 5글자 입력</FormHelperText>
+          <Flex>
+            <Input
+              type="email"
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+            />
+            <Button
+              isDisabled={email.length < 5}
+              onClick={(e) => {
+                if (validateEmail(email)) {
+                  handleDuplicated("email", email);
+                } else {
+                  console.log("실패!");
+                }
+              }}
+            >
+              중복확인
+            </Button>
+          </Flex>
         </FormControl>
+        {/* 생년월일 ---------------------------------------------------------------------------------- */}
         <FormControl isRequired>
           <FormLabel>생년월일</FormLabel>
           <Input
@@ -144,6 +348,7 @@ function MemberSignup(props) {
             </HStack>
           </RadioGroup>
         </FormControl>
+        {/* 전화번호 ---------------------------------------------------------------------------------- */}
         <FormControl isRequired>
           <FormLabel>휴대폰 번호</FormLabel>
           <Input
@@ -162,7 +367,9 @@ function MemberSignup(props) {
             }}
           />
         </FormControl>
-        <Button onClick={handleSignupForm}>가입</Button>
+        <Button isDisabled={!submitAvailable} onClick={handleSignupForm}>
+          가입
+        </Button>
       </Box>
     </>
   );
