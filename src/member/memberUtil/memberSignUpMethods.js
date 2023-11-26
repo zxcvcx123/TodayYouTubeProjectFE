@@ -1,6 +1,6 @@
-/* 검증 관련 메세지 */
 import axios from "axios";
 
+/* 검증 관련 메세지 */
 const defaultMessage = "중복확인이 필요합니다";
 const defaultPatterns = "영어 소문자와 숫자만 입력 가능합니다";
 const defaultLength = "글자 이상 입력 가능합니다";
