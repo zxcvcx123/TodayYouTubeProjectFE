@@ -4,6 +4,7 @@ import axios from "axios";
 const defaultMessage = "중복확인이 필요합니다";
 const defaultPatterns = "영어 소문자와 숫자만 입력 가능합니다";
 const defaultLength = "글자 이상 입력 가능합니다";
+
 /* 비밀번호 형식 검증 */
 function validatePassword(password) {
   // 대,소문자, 숫자 포함 여부 및 특수문자 필수 포함
@@ -23,7 +24,6 @@ function validatePassword(password) {
 
 /* 이메일 형식 검증 */
 function validateEmail(email) {
-  console.log("실행 됨!");
   const hasAvailableRegex = /^[a-zA-Z0-9]+@[a-zA-Z]+\.[a-zA-Z]{2,3}$/.test(
     email,
   );

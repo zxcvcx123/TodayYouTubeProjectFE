@@ -54,6 +54,8 @@ function MemberSignup(props) {
   const [passwordCheckMessage, setPasswordCheckMessage] =
     useState("비밀번호가 일치하지 않습니다");
 
+  const [timer, setTimer] = useState(null);
+
   const submitAvailable =
     checkIdResult &&
     checkNicknameResult &&
@@ -306,28 +308,45 @@ function MemberSignup(props) {
           <FormErrorMessage>{passwordCheckMessage}</FormErrorMessage>
         </FormControl>
         {/* 이메일 폼 -----------------------------------------------------------------------------------*/}
-        <FormControl>
+        <FormControl
+          isRequired
+          isInvalid={email.length === 0 ? false : !checkEmailResult}
+        >
           <FormLabel>이메일</FormLabel>
           <Flex>
             <Input
               type="email"
               onChange={(e) => {
-                setEmail(e.target.value);
+                if (!e.target.value.includes(" ")) {
+                  setCheckEmailResult(false);
+                  setEmailDisable(true);
+                  setEmail(e.target.value);
+                  if (timer) clearTimeout(timer); // 기존 타이머가 있으면 초기화
+                  const newTimer = setTimeout(() => {
+                    // 함수 호출을 지연시키는 메서드
+                    if (validateEmail(e.target.value)) {
+                      setEmailMessage(defaultMessage);
+                    } else {
+                      setEmailMessage("이메일 형식이 맞지 않습니다");
+                    }
+                  }, 1000); // 500ms 후에 유효성 검사
+                  setTimer(newTimer);
+                }
               }}
             />
+
             <Button
-              isDisabled={email.length < 5}
+              isDisabled={!emailDisable || !validateEmail(email)}
               onClick={(e) => {
                 if (validateEmail(email)) {
                   handleDuplicated("email", email);
-                } else {
-                  console.log("실패!");
                 }
               }}
             >
               중복확인
             </Button>
           </Flex>
+          <FormErrorMessage>{emailMessage}</FormErrorMessage>
         </FormControl>
         {/* 생년월일 ---------------------------------------------------------------------------------- */}
         <FormControl isRequired>
@@ -356,6 +375,7 @@ function MemberSignup(props) {
             placeholder="전화번호"
             maxLength={"15"}
             onChange={(e) => {
+              handle;
               setPhone_number(
                 (e.target.value = e.target.value
                   .replace(/[^0-9]/g, "")
