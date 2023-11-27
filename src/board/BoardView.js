@@ -27,7 +27,13 @@ function BoardView() {
   const navigate = useNavigate();
 
   // 유튜브 정보 추출 컴포넌트
-  function YoutubeInfo({ link, extraThumbnail, extraVideo }) {
+  function YoutubeInfo({
+    link,
+    extraThumbnail,
+    extraVideo,
+    thumbnailWidth = 320,
+    thumbnailHeight = 180,
+  }) {
     // 상태 값
     const [thumbnail, setThumbnail] = useState(null);
     const [videoId, setVideoId] = useState(null);
@@ -50,7 +56,15 @@ function BoardView() {
       <div>
         {/* 프롭에 따라 썸네일, 유튜브영상 등을 선택해서 추출 가능 */}
         {/* 유튜브 썸네일 출력 => extraThumnail을 true로 설정 */}
-        {extraThumbnail && <Img src={thumbnail} alt="유튜브 썸네일" />}
+        {/* thumbnailWidth, thumbnailHeight prop을 통해 길이 설정 가능, (기본값 320*180) */}
+        {extraThumbnail && (
+          <Img
+            src={thumbnail}
+            alt="유튜브 썸네일"
+            w={thumbnailWidth}
+            h={thumbnailHeight}
+          />
+        )}
         {/* 유튜브 영상 출력 => extraVideo를 true로 설정 */}
         {extraVideo && <YouTube videoId={videoId} />}
       </div>
