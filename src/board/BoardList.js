@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Box, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import { Box, Table, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
 function BoardList() {
@@ -39,12 +39,20 @@ function BoardList() {
                 onClick={() => navigate("/board/" + board.id)}
                 _hover={{ backgroundColor: "lightcyan" }}
               >
-                <Td>{board.id}</Td>
-                <Td>{board.title}</Td>
-                <Td>좋아요</Td>
-                <Td>{board.board_member_id}</Td>
-                <Td>{board.created_at}</Td>
-                <Td>조회수</Td>
+                {board.is_show ? (
+                  <>
+                    <Td>{board.id}</Td>
+                    <Td>{board.title}</Td>
+                    <Td>좋아요</Td>
+                    <Td>{board.board_member_id}</Td>
+                    <Td>{board.created_at}</Td>
+                    <Td>조회수</Td>
+                  </>
+                ) : (
+                  <Td colSpan={6}>
+                    <Text textAlign={"center"}>삭제된 게시물입니다.</Text>
+                  </Td>
+                )}
               </Tr>
             ))}
         </Tbody>
