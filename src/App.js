@@ -7,6 +7,7 @@ import {
 import { HomeLayout } from "./layout/Homelayout";
 import { BoardWrite } from "./board/BoardWrite";
 import { BoardView } from "./board/BoardView";
+import { Filednd } from "./file/Filednd";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -14,6 +15,7 @@ const routes = createBrowserRouter(
       {/*<Route path="경로명" element={컴포넌트} />*/}
       <Route path="/board/write" element={<BoardWrite />} />
       <Route path="/board/:id" element={<BoardView />} />
+      <Route path="/file/" element={<Filednd />} />
     </Route>,
   ),
 );
