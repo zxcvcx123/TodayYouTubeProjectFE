@@ -5,7 +5,7 @@ import { Nav } from "./Nav";
 
 export function HomeLayout() {
   return (
-    <Box height={"500px"}>
+    <Box>
       <Nav />
 
       <Outlet />
