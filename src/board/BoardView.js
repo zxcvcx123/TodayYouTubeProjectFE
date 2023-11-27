@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import {
   Box,
@@ -52,6 +51,14 @@ function BoardView() {
     return <Spinner />;
   }
 
+  function handleDelete() {
+    axios
+      .put("/api/board/remove/" + id)
+      .then(() => console.log("good"))
+      .catch(() => console.log("bad"))
+      .finally(() => console.log("done"));
+  }
+
   return (
     <Box m={"50px 20% 20px 50px"}>
       <Heading>{board.id} 번 게시글 보기(임시 게시글 번호 확인용!!)</Heading>
@@ -93,16 +100,20 @@ function BoardView() {
         />
       </FormControl>
 
+      {/* 수정 버튼 */}
       <Button
         colorScheme="purple"
         onClick={() => navigate("/board/edit/" + id)}
       >
         수정
       </Button>
+
+      {/* 삭제 버튼 */}
+      <Button colorScheme="red" onClick={handleDelete}>
+        삭제
+      </Button>
     </Box>
   );
 }
 
 export default BoardView;
-
-
