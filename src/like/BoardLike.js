@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as fullHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as emptyHeart } from "@fortawesome/free-regular-svg-icons";
 
-function BoardLike({ id, like, board, onClick }) {
+function BoardLike({ like, board, onClick }) {
   // 게시물 조회시 좋아요 출력
 
   return (
