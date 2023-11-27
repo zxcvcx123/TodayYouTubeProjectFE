@@ -19,8 +19,6 @@ import YouTube from "react-youtube";
 function BoardView() {
   // state
   const [board, setBoard] = useState(null);
-  const [thumbnail, setThumbnail] = useState(null);
-  const [videoId, setVideoId] = useState(null);
 
   //URL 매개변수 추출
   const { id } = useParams();
@@ -28,13 +26,15 @@ function BoardView() {
   // navigate
   const navigate = useNavigate();
 
-  // 초기 렌더링
-  useEffect(() => {
-    axios.get("/api/board/id/" + id).then((response) => {
-      setBoard(response.data);
+  // 유튜브 정보 추출 컴포넌트
+  function YoutubeInfo({ link, extraThumbnail, extraVideo }) {
+    // 상태 값
+    const [thumbnail, setThumbnail] = useState(null);
+    const [videoId, setVideoId] = useState(null);
 
+    useEffect(() => {
       // 유튜브 링크에서 동영상 ID 추출 (정규표현식 match 메서드)
-      const videoIdMatch = response.data.link.match(
+      const videoIdMatch = link.match(
         /^(https?:\/\/)?(www\.)?(youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/,
       );
 
@@ -44,6 +44,23 @@ function BoardView() {
         setThumbnail(thumbnailUrl);
         setVideoId(videoIdMatch[4]);
       }
+    }, []);
+
+    return (
+      <div>
+        {/* 프롭에 따라 썸네일, 유튜브영상 등을 선택해서 추출 가능 */}
+        {/* 유튜브 썸네일 출력 => extraThumnail을 true로 설정 */}
+        {extraThumbnail && <Img src={thumbnail} alt="유튜브 썸네일" />}
+        {/* 유튜브 영상 출력 => extraVideo를 true로 설정 */}
+        {extraVideo && <YouTube videoId={videoId} />}
+      </div>
+    );
+  }
+
+  // 초기 렌더링
+  useEffect(() => {
+    axios.get("/api/board/id/" + id).then((response) => {
+      setBoard(response.data);
     });
   }, []);
 
@@ -93,12 +110,12 @@ function BoardView() {
       {/* 유튜브 썸네일 및 영상 출력 */}
       <FormControl mb={2}>
         <FormLabel>추천 유튜브 영상!</FormLabel>
-        {/* 유튜브 썸네일 출력 */}
-        {thumbnail && <Img src={thumbnail} alt="유튜브 썸네일" />}
-        {/* 유튜브 영상 출력 */}
-        <YouTube videoId={videoId} />
+        <YoutubeInfo
+          link={board.link}
+          extraThumbnail={true}
+          extraVideo={true}
+        />
       </FormControl>
-
       <Divider my={5} borderColor="grey" />
 
       {/* 본문 */}
