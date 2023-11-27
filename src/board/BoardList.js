@@ -48,7 +48,7 @@ function BoardList() {
               <Tr
                 key={board.id}
                 onClick={() => navigate("/board/" + board.id)}
-                _hover={{ backgroundColor: "lightcyan" }}
+                _hover={{ backgroundColor: "lightcyan", cursor: "pointer" }}
               >
                 {/* 삭제된 게시물일 경우 표기가 변동 */}
                 {board.is_show ? (
@@ -72,7 +72,7 @@ function BoardList() {
                   </>
                 ) : (
                   <>
-                    <Td>{board.id}</Td>
+                    <Td textAlign={"center"}>{board.id}</Td>
                     <Td colSpan={5}>
                       <Text textAlign={"center"}>삭제된 게시물입니다.</Text>
                     </Td>
