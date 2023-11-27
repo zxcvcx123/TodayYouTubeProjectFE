@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import {
   Box,
+  Button,
   Flex,
   Table,
   Tbody,
@@ -14,6 +15,8 @@ import {
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import YoutubeInfo from "../component/YoutubeInfo";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBorderAll, faList } from "@fortawesome/free-solid-svg-icons";
 
 function BoardList() {
   // state
@@ -31,6 +34,25 @@ function BoardList() {
 
   return (
     <Box>
+      {/* 게시글 목록 상단 바 */}
+      <Flex justifyContent={"space-between"}>
+        <Box>
+          <Button colorScheme="blue">글쓰기</Button>
+        </Box>
+        <Box>
+          <Tooltip label={"리스트 형태 보기"}>
+            <Button>
+              <FontAwesomeIcon icon={faList} />
+            </Button>
+          </Tooltip>
+          <Tooltip label={"격자 형태 보기 "}>
+            <Button>
+              <FontAwesomeIcon icon={faBorderAll} />
+            </Button>
+          </Tooltip>
+        </Box>
+      </Flex>
+
       <Table size={"sm"}>
         <Thead>
           <Tr>
