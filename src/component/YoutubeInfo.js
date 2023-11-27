@@ -34,7 +34,7 @@ function YoutubeInfo({
       {/* 프롭에 따라 썸네일, 유튜브영상 등을 선택해서 추출 가능 */}
       {/* 유튜브 썸네일 출력 => extraThumnail을 true로 설정 */}
       {/* thumbnailWidth, thumbnailHeight prop을 통해 길이 설정 가능, (기본값 320*180) */}
-      {/* toolTip 을 true로 하면 이미지에 마우스 호버 시 툴팁으로 큰 이미지가 표시 된다.*/}
+      {/* toolTip 을 true로 하면 이미지에 마우스 호버 시 툴팁으로 2배 적용된 이미지가 표시 된다.*/}
       {extraThumbnail && (
         <>
           {toolTip ? (
