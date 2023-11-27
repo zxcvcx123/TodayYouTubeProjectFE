@@ -62,6 +62,7 @@ function BoardList() {
                           extraThumbnail={true}
                           thumbnailWidth={120}
                           thumbnailHeight={70}
+                          toolTip={true}
                         />
 
                         {/* 길이가 길 경우 20자로 제한하고 나머지는 ...으로 표시 */}
