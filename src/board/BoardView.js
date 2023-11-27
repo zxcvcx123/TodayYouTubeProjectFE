@@ -8,18 +8,19 @@ import {
   FormLabel,
   Heading,
   Img,
-  Input,
   Spinner,
   Text,
   Textarea,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import YouTube from "react-youtube";
 
 function BoardView() {
   // state
   const [board, setBoard] = useState(null);
   const [thumbnail, setThumbnail] = useState(null);
+  const [videoId, setVideoId] = useState(null);
 
   //URL 매개변수 추출
   const { id } = useParams();
@@ -39,9 +40,9 @@ function BoardView() {
 
       // 정규표현식 match 메서드 4번의 값으로 썸네일 추출
       if (videoIdMatch && videoIdMatch[4]) {
-        const videoId = videoIdMatch[4];
-        const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
+        const thumbnailUrl = `https://img.youtube.com/vi/${videoIdMatch[4]}/mqdefault.jpg`;
         setThumbnail(thumbnailUrl);
+        setVideoId(videoIdMatch[4]);
       }
     });
   }, []);
@@ -82,8 +83,17 @@ function BoardView() {
       <FormControl mb={2}>
         <FormLabel>유튜브 링크</FormLabel>
         <Text>{board.link}</Text>
+      </FormControl>
+
+      <Divider my={5} borderColor="grey" />
+
+      {/* 유튜브 썸네일 및 영상 출력 */}
+      <FormControl mb={2}>
+        <FormLabel>추천 유튜브 영상!</FormLabel>
         {/* 유튜브 썸네일 출력 */}
         {thumbnail && <Img src={thumbnail} alt="유튜브 썸네일" />}
+        {/* 유튜브 영상 출력 */}
+        <YouTube videoId={videoId} />
       </FormControl>
 
       <Divider my={5} borderColor="grey" />
