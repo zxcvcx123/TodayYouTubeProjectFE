@@ -110,6 +110,11 @@ function BoardView() {
         />
       </FormControl>
 
+      {/* 목록 버튼 */}
+      <Button colorScheme="blue" onClick={() => navigate("/board/list")}>
+        목록
+      </Button>
+
       {/* 수정 버튼 */}
       <Button
         colorScheme="purple"
