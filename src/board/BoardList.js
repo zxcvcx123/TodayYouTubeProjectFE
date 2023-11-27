@@ -8,6 +8,7 @@ import {
   CardFooter,
   CardHeader,
   Flex,
+  SimpleGrid,
   Table,
   Tbody,
   Td,
@@ -74,6 +75,7 @@ function BoardList() {
         {/* currentView에 따라 게시판 목록 형태가 달라짐 */}
         {currentView === "list" ? (
           <>
+            {/* -------------------- 리스트 형태 보기 -------------------------*/}
             <Table size={"sm"}>
               <Thead>
                 <Tr>
@@ -97,7 +99,7 @@ function BoardList() {
                         cursor: "pointer",
                       }}
                     >
-                      {/* 삭제된 게시물일 경우 표기가 변동 */}
+                      {/* is_show = true 인 경우 */}
                       {board.is_show ? (
                         <>
                           <Td textAlign={"center"}>{board.id}</Td>
@@ -132,6 +134,7 @@ function BoardList() {
                         </>
                       ) : (
                         <>
+                          {/* is_show = false 인 경우 */}
                           <Td textAlign={"center"}>{board.id}</Td>
                           <Td colSpan={5}>
                             <Text textAlign={"center"}>
@@ -147,70 +150,64 @@ function BoardList() {
           </>
         ) : (
           <>
-            <Flex>
+            {/* -------------------- 그리드 형태 보기 -------------------------*/}
+            <SimpleGrid columns={[2, 3, 4, 5, 6, 7]} spacing={4}>
               {boardList &&
                 boardList.map((board) => (
-                  <>
+                  <Card
+                    key={board.id}
+                    w={"200px"}
+                    h={"200px"}
+                    border={"1px solid black"}
+                  >
+                    {/* is_show = true 인 경우 */}
                     {board.is_show ? (
                       <>
-                        <Card
-                          key={board.id}
-                          maxW={"200px"}
-                          maxH={"200px"}
-                          border={"1px solid black"}
-                        >
-                          <CardHeader p={"10px"}>
-                            <YoutubeInfo
-                              link={board.link}
-                              extraThumbnail={true}
-                              thumbnailWidth={120}
-                              thumbnailHeight={70}
-                              toolTip={true}
-                            />
-                          </CardHeader>
-                          <CardBody p={"10px"}>
-                            {board.title.length > 10 ? (
-                              <Tooltip label={board.title}>
-                                <Text>{`${board.title.slice(0, 10)}...`}</Text>
-                              </Tooltip>
-                            ) : (
-                              <Text>{board.title}</Text>
-                            )}
-                          </CardBody>
-                          <CardFooter p={"10px"}>
-                            {board.board_member_id}
-                          </CardFooter>
-                        </Card>
+                        <CardHeader p={"10px"}>
+                          <YoutubeInfo
+                            link={board.link}
+                            extraThumbnail={true}
+                            thumbnailWidth={120}
+                            thumbnailHeight={70}
+                            toolTip={true}
+                          />
+                        </CardHeader>
+                        <CardBody p={"10px"}>
+                          {board.title.length > 10 ? (
+                            <Tooltip label={board.title}>
+                              <Text>{`${board.title.slice(0, 10)}...`}</Text>
+                            </Tooltip>
+                          ) : (
+                            <Text>{board.title}</Text>
+                          )}
+                        </CardBody>
+                        <CardFooter p={"10px"}>
+                          {board.board_member_id}
+                        </CardFooter>
                       </>
                     ) : (
                       <>
-                        <Card
-                          key={board.id}
-                          maxW={"200px"}
-                          maxH={"200px"}
-                          border={"1px solid black"}
-                        >
-                          <CardHeader p={"10px"}>
-                            <YoutubeInfo
-                              link={board.link}
-                              extraThumbnail={true}
-                              thumbnailWidth={120}
-                              thumbnailHeight={70}
-                              toolTip={true}
-                            />
-                          </CardHeader>
-                          <CardBody p={"10px"}>
-                            <Text color={"red"}>삭제됨</Text>
-                          </CardBody>
-                          <CardFooter p={"10px"}>
-                            <Text color={"red"}>삭제됨</Text>
-                          </CardFooter>
-                        </Card>
+                        {/* is_show = false 인 경우 */}
+                        <CardHeader p={"10px"}>
+                          <YoutubeInfo
+                            link={board.link}
+                            extraThumbnail={true}
+                            thumbnailWidth={120}
+                            thumbnailHeight={70}
+                            toolTip={true}
+                          />
+                        </CardHeader>
+                        <CardBody p={"10px"}>
+                          <Text color={"red"}>삭제됨</Text>
+                        </CardBody>
+                        <CardFooter p={"10px"}>
+                          <Text color={"red"}>삭제됨</Text>
+                        </CardFooter>
                       </>
                     )}
-                  </>
+                  </Card>
                 ))}
-            </Flex>
+            </SimpleGrid>
           </>
         )}
       </Box>
