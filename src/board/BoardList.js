@@ -33,12 +33,12 @@ function BoardList() {
       <Table size={"sm"}>
         <Thead>
           <Tr>
-            <Th>번호</Th>
-            <Th>제목</Th>
-            <Th>좋아요</Th>
-            <Th>작성자</Th>
-            <Th>작성일시</Th>
-            <Th>조회수</Th>
+            <Th textAlign={"center"}>번호</Th>
+            <Th textAlign={"center"}>제목</Th>
+            <Th textAlign={"center"}>좋아요</Th>
+            <Th textAlign={"center"}>작성자</Th>
+            <Th textAlign={"center"}>작성일시</Th>
+            <Th textAlign={"center"}>조회수</Th>
           </Tr>
         </Thead>
 
@@ -53,7 +53,7 @@ function BoardList() {
                 {/* 삭제된 게시물일 경우 표기가 변동 */}
                 {board.is_show ? (
                   <>
-                    <Td>{board.id}</Td>
+                    <Td textAlign={"center"}>{board.id}</Td>
                     <Td>
                       <Flex align={"center"} gap={"10px"}>
                         <YoutubeInfo
@@ -65,10 +65,10 @@ function BoardList() {
                         {board.title}
                       </Flex>
                     </Td>
-                    <Td>좋아요</Td>
-                    <Td>{board.board_member_id}</Td>
-                    <Td>{board.created_at}</Td>
-                    <Td>조회수</Td>
+                    <Td textAlign={"center"}>좋아요</Td>
+                    <Td textAlign={"center"}>{board.board_member_id}</Td>
+                    <Td textAlign={"center"}>{board.created_at}</Td>
+                    <Td textAlign={"center"}>조회수</Td>
                   </>
                 ) : (
                   <>
