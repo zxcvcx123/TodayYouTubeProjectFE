@@ -41,7 +41,7 @@ function BoardList() {
               >
                 <Td>{board.id}</Td>
                 <Td>{board.title}</Td>
-                <Td>좋아요</Td>
+                <Td>{board.countlike}</Td>
                 <Td>{board.board_member_id}</Td>
                 <Td>{board.created_at}</Td>
                 <Td>조회수</Td>
