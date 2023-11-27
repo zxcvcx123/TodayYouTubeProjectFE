@@ -22,7 +22,9 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
-import axios, { post } from "axios";
+import axios from "axios";
+import { BoardReplyComment } from "./BoardReplyComment";
+import { SmallAddIcon } from "@chakra-ui/icons";
 
 function CommentFrom({ board_id, isSubmitting, onSubmit }) {
   const [comment, setComment] = useState("");
@@ -82,8 +84,18 @@ function CommentItem({
       </Flex>
       <Flex justifyContent="space-between" alignItems="center">
         <Box flex={1}>
-          <Text sx={{ whiteSpace: "pre-wrap" }} pt="2" fontSize="sm">
+          <Text
+            sx={{ whiteSpace: "pre-wrap" }}
+            pt="2"
+            fontSize="sm"
+            alignItems="center"
+            justifyContent="center"
+          >
             {comment.comment}
+            <Button size="xs">
+              <SmallAddIcon />
+            </Button>
+            <BoardReplyComment comment_id={comment.id} />
           </Text>
 
           {isEditing && (
