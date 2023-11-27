@@ -74,7 +74,7 @@ function CommentItem({
     <Box>
       <Flex justifyContent="space-between">
         <Heading size="xs" bg="whitesmoke" borderRadius="5">
-          {comment.member_id}
+          {comment.nickname}({comment.member_id})
         </Heading>
         <Text size="xs" as="sub">
           {comment.created_at}
