@@ -84,6 +84,11 @@ function BoardWrite() {
       <Button onClick={handleSubmit} colorScheme="blue">
         작성 완료
       </Button>
+
+      {/* 저장 버튼 */}
+      <Button onClick={() => navigate("/board/list")} colorScheme="red">
+        취소
+      </Button>
     </Box>
   );
 }
