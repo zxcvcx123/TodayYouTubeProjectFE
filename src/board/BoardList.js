@@ -9,6 +9,7 @@ import {
   Text,
   Th,
   Thead,
+  Tooltip,
   Tr,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
@@ -59,10 +60,19 @@ function BoardList() {
                         <YoutubeInfo
                           link={board.link}
                           extraThumbnail={true}
-                          thumbnailWidth={50}
-                          thumbnailHeight={50}
+                          thumbnailWidth={120}
+                          thumbnailHeight={70}
                         />
-                        {board.title}
+
+                        {/* 길이가 길 경우 20자로 제한하고 나머지는 ...으로 표시 */}
+                        {/* 짤린 제목에 커서를 올릴 시 제목이 툴팁으로 나타남 */}
+                        {board.title.length > 20 ? (
+                          <Tooltip label={board.title}>
+                            <Text>{`${board.title.slice(0, 20)}...`}</Text>
+                          </Tooltip>
+                        ) : (
+                          <Text>{board.title}</Text>
+                        )}
                       </Flex>
                     </Td>
                     <Td textAlign={"center"}>좋아요</Td>
