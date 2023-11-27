@@ -37,7 +37,9 @@ function BoardList() {
       {/* 게시글 목록 상단 바 */}
       <Flex justifyContent={"space-between"}>
         <Box>
-          <Button colorScheme="blue">글쓰기</Button>
+          <Button onClick={() => navigate("/write")} colorScheme="blue">
+            글쓰기
+          </Button>
         </Box>
         <Box>
           <Tooltip label={"리스트 형태 보기"}>
