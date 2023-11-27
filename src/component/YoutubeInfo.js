@@ -47,6 +47,7 @@ function YoutubeInfo({
                   h={thumbnailHeight * 2}
                 />
               }
+              placement="top-end"
             >
               <Img
                 src={thumbnail}
