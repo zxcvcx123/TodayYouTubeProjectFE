@@ -127,7 +127,8 @@ function BoardView() {
         <YoutubeInfo
           link={board.link}
           extraThumbnail={true}
-          extraVideo={true}
+          thumbnailWidth={100}
+          thumbnailHeight={100}
         />
       </FormControl>
       <Divider my={5} borderColor="grey" />
@@ -135,6 +136,8 @@ function BoardView() {
       {/* 본문 */}
       <FormControl mb={2}>
         <FormLabel>본문</FormLabel>
+        {/* 유튜브 영상 출력 */}
+        <YoutubeInfo link={board.link} extraVideo={true} />
         <Textarea
           value={board.content}
           readOnly
