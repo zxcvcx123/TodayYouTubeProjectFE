@@ -70,7 +70,7 @@ function BoardView() {
       <FormControl mb={2}>
         <FormLabel>유튜브 링크</FormLabel>
         <Text>{board.link}</Text>
-        <Button onClick={() => (window.location.href = board.link)}>
+        <Button onClick={() => window.open(board.link)}>
           유튜브 영상으로 가기!
         </Button>
       </FormControl>
