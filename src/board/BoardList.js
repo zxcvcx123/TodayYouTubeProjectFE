@@ -1,7 +1,18 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Box, Table, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Table,
+  Tbody,
+  Td,
+  Text,
+  Th,
+  Thead,
+  Tr,
+} from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import YoutubeInfo from "../component/YoutubeInfo";
 
 function BoardList() {
   // state
@@ -43,7 +54,17 @@ function BoardList() {
                 {board.is_show ? (
                   <>
                     <Td>{board.id}</Td>
-                    <Td>{board.title}</Td>
+                    <Td>
+                      <Flex align={"center"} gap={"10px"}>
+                        <YoutubeInfo
+                          link={board.link}
+                          extraThumbnail={true}
+                          thumbnailWidth={50}
+                          thumbnailHeight={50}
+                        />
+                        {board.title}
+                      </Flex>
+                    </Td>
                     <Td>좋아요</Td>
                     <Td>{board.board_member_id}</Td>
                     <Td>{board.created_at}</Td>
