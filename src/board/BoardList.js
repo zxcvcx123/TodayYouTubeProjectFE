@@ -50,9 +50,12 @@ function BoardList() {
                     <Td>조회수</Td>
                   </>
                 ) : (
-                  <Td colSpan={6}>
-                    <Text textAlign={"center"}>삭제된 게시물입니다.</Text>
-                  </Td>
+                  <>
+                    <Td>{board.id}</Td>
+                    <Td colSpan={5}>
+                      <Text textAlign={"center"}>삭제된 게시물입니다.</Text>
+                    </Td>
+                  </>
                 )}
               </Tr>
             ))}
