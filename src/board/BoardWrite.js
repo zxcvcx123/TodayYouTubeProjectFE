@@ -18,7 +18,7 @@ function BoardWrite() {
   const [title, setTitle] = useState("");
   const [link, setLink] = useState("");
   const [content, setContent] = useState("");
-  const [uploadFiles, setUploadFiles] = useState(null);
+  const [uploadFiles, setUploadFiles] = useState([]);
 
   /* use navigate */
   let navigate = useNavigate();
@@ -68,7 +68,7 @@ function BoardWrite() {
       </FormControl>
 
       {/* 파일 첨부 */}
-      <Filednd />
+      <Filednd setUploadFiles={setUploadFiles} uploadFiles={uploadFiles} />
       {/*<FormControl mb={5}>*/}
       {/*  <FormLabel>파일 첨부 (이미지) @@@ 미구현 @@@</FormLabel>*/}
       {/*  <Input*/}
