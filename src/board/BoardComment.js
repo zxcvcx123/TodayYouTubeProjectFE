@@ -19,10 +19,10 @@ import {
   Text,
   Textarea,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios, { post } from "axios";
-import { Footer } from "../layout/Footer";
 
 function CommentFrom({ board_id, isSubmitting, onSubmit }) {
   const [comment, setComment] = useState("");
@@ -41,7 +41,106 @@ function CommentFrom({ board_id, isSubmitting, onSubmit }) {
   );
 }
 
-function CommentList({ commentList, onDeleteModalOpen, isSubmitting }) {
+function CommentItem({
+  comment,
+  onDeleteModalOpen,
+  setIsSubmitting,
+  isSubmitting,
+}) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [commentEdited, setCommentEdited] = useState(comment.comment);
+
+  const toast = useToast();
+
+  function handleSubmit() {
+    setIsSubmitting(true);
+
+    axios
+      .put("/api/comment/edit", { id: comment.id, comment: commentEdited })
+      .then(() => {
+        toast({
+          description: "댓글이 수정되었습니다.",
+          status: "success",
+        });
+      })
+      .catch(console.log("bad"))
+      .finally(() => {
+        setIsSubmitting(false);
+        setIsEditing(false);
+      });
+  }
+
+  return (
+    <Box>
+      <Flex justifyContent="space-between">
+        <Heading size="xs" bg="whitesmoke" borderRadius="5">
+          {comment.member_id}
+        </Heading>
+        <Text size="xs" as="sub">
+          {comment.created_at}
+        </Text>
+      </Flex>
+      <Flex justifyContent="space-between" alignItems="center">
+        <Box flex={1}>
+          <Text sx={{ whiteSpace: "pre-wrap" }} pt="2" fontSize="sm">
+            {comment.comment}
+          </Text>
+
+          {isEditing && (
+            <Box>
+              <Textarea
+                value={commentEdited}
+                onChange={(e) => setCommentEdited(e.target.value)}
+              />
+              <Button
+                isDisabled={isSubmitting}
+                size="xs"
+                colorScheme="telegram"
+                onClick={handleSubmit}
+              >
+                저장
+              </Button>
+            </Box>
+          )}
+        </Box>
+        <Box>
+          {isEditing || (
+            <Button
+              size="xs"
+              colorScheme="purple"
+              onClick={() => setIsEditing(true)}
+            >
+              수정
+            </Button>
+          )}
+          {isEditing && (
+            <Button
+              size="xs"
+              colorScheme="gray"
+              onClick={() => setIsEditing(false)}
+            >
+              취소
+            </Button>
+          )}
+          <Button
+            onClick={() => onDeleteModalOpen(comment.id)}
+            colorScheme="red"
+            size="xs"
+          >
+            삭제
+          </Button>
+        </Box>
+      </Flex>
+    </Box>
+  );
+}
+
+function CommentList({
+  commentList,
+  onDeleteModalOpen,
+  isSubmitting,
+  setIsSubmitting,
+}) {
   return (
     <Card border="1px solid black" borderRadius="5" mt={3}>
       <CardHeader size="md">댓글 목록</CardHeader>
@@ -49,29 +148,13 @@ function CommentList({ commentList, onDeleteModalOpen, isSubmitting }) {
       <CardBody>
         <Stack divider={<StackDivider />} spacing="5">
           {commentList.map((comment) => (
-            <Box key={comment.id}>
-              <Flex justifyContent="space-between">
-                <Heading size="xs" bg="whitesmoke" borderRadius="5">
-                  {comment.member_id}
-                </Heading>
-                <Text size="xs" as="sub">
-                  {comment.created_at}
-                </Text>
-              </Flex>
-              <Flex justifyContent="space-between" alignItems="center">
-                <Text sx={{ whiteSpace: "pre-wrap" }} pt="2" fontSize="sm">
-                  {comment.comment}
-                </Text>
-                <Button
-                  isDisabled={isSubmitting}
-                  onClick={() => onDeleteModalOpen(comment.id)}
-                  colorScheme="red"
-                  size="xs"
-                >
-                  삭제
-                </Button>
-              </Flex>
-            </Box>
+            <CommentItem
+              key={comment.id}
+              isSubmitting={isSubmitting}
+              comment={comment}
+              setIsSubmitting={setIsSubmitting}
+              onDeleteModalOpen={onDeleteModalOpen}
+            />
           ))}
         </Stack>
       </CardBody>
@@ -81,7 +164,8 @@ function CommentList({ commentList, onDeleteModalOpen, isSubmitting }) {
 
 export function BoardComment({ board_id }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [id, setId] = useState(0);
+
+  const commentIdRef = useRef(0);
 
   const [commentList, setCommentList] = useState([]);
 
@@ -109,14 +193,18 @@ export function BoardComment({ board_id }) {
   function handleDelete() {
     setIsSubmitting(true);
 
-    axios.delete("/api/comment/" + id).finally(() => {
-      setIsSubmitting(false);
-      onClose();
-    });
+    axios
+      .delete("/api/comment/" + commentIdRef.current)
+      .then(() => console.log("good"))
+      .catch(() => console.log("bad"))
+      .finally(() => {
+        setIsSubmitting(false);
+        onClose();
+      });
   }
 
   function handleDeleteModalOpen(id) {
-    setId(id);
+    commentIdRef.current = id;
 
     onOpen();
   }
@@ -131,6 +219,7 @@ export function BoardComment({ board_id }) {
       <CommentList
         board_id={board_id}
         isSubmitting={isSubmitting}
+        setIsSubmitting={setIsSubmitting}
         commentList={commentList}
         onDeleteModalOpen={handleDeleteModalOpen}
       />
