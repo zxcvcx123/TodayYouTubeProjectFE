@@ -21,7 +21,12 @@ import {
 import { useNavigate } from "react-router-dom";
 import YoutubeInfo from "../component/YoutubeInfo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBorderAll, faList } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBorderAll,
+  faComment,
+  faList,
+  faThumbsUp,
+} from "@fortawesome/free-solid-svg-icons";
 
 function BoardList() {
   // state
@@ -50,9 +55,9 @@ function BoardList() {
 
   return (
     <Flex justifyContent={"center"}>
-      <Box w={"90%"}>
-        {/* 게시글 목록 상단 바 */}
-        <Flex justifyContent={"space-between"}>
+      <Box>
+        {/* ------------------------- 게시글 목록 상단 바 ------------------------- */}
+        <Flex justifyContent={"space-between"} mb={5}>
           <Box>
             <Button onClick={() => navigate("/write")} colorScheme="blue">
               글쓰기
@@ -151,13 +156,13 @@ function BoardList() {
         ) : (
           <>
             {/* -------------------- 그리드 형태 보기 -------------------------*/}
-            <SimpleGrid columns={[2, 3, 4, 5, 6, 7]} spacing={4}>
+            <SimpleGrid columns={[1, 2, 3, 4, 5]} spacing={[4]}>
               {boardList &&
                 boardList.map((board) => (
                   <Card
                     key={board.id}
-                    w={"200px"}
-                    h={"200px"}
+                    w={"270px"}
+                    h={"300px"}
                     border={"1px solid black"}
                   >
                     {/* is_show = true 인 경우 */}
@@ -167,22 +172,35 @@ function BoardList() {
                           <YoutubeInfo
                             link={board.link}
                             extraThumbnail={true}
-                            thumbnailWidth={120}
-                            thumbnailHeight={70}
-                            toolTip={true}
+                            thumbnailWidth={250}
+                            thumbnailHeight={150}
                           />
                         </CardHeader>
                         <CardBody p={"10px"}>
-                          {board.title.length > 10 ? (
+                          {board.title.length > 15 ? (
                             <Tooltip label={board.title}>
-                              <Text>{`${board.title.slice(0, 10)}...`}</Text>
+                              <Text fontWeight={"bold"}>{`${board.title.slice(
+                                0,
+                                15,
+                              )}...`}</Text>
                             </Tooltip>
                           ) : (
-                            <Text>{board.title}</Text>
+                            <Text fontWeight={"bold"}>{board.title}</Text>
                           )}
                         </CardBody>
                         <CardFooter p={"10px"}>
-                          {board.board_member_id}
+                          <Box w={"100%"}>
+                            <Text>{board.board_member_id}</Text>
+                            <Text>{board.updated_at}</Text>
+                            <Flex w={"40%"} justifyContent={"space-between"}>
+                              <Box>
+                                <FontAwesomeIcon icon={faThumbsUp} /> 1
+                              </Box>
+                              <Box>
+                                <FontAwesomeIcon icon={faComment} /> 2
+                              </Box>
+                            </Flex>
+                          </Box>
                         </CardFooter>
                       </>
                     ) : (
