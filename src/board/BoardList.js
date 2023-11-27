@@ -39,6 +39,7 @@ function BoardList() {
                 onClick={() => navigate("/board/" + board.id)}
                 _hover={{ backgroundColor: "lightcyan" }}
               >
+                {/* 삭제된 게시물일 경우 표기가 변동 */}
                 {board.is_show ? (
                   <>
                     <Td>{board.id}</Td>
