@@ -3,6 +3,10 @@ import axios from "axios";
 import {
   Box,
   Button,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
   Flex,
   Table,
   Tbody,
@@ -143,7 +147,70 @@ function BoardList() {
           </>
         ) : (
           <>
-            <Text>격자형태</Text>
+            <Flex>
+              {boardList &&
+                boardList.map((board) => (
+                  <>
+                    {board.is_show ? (
+                      <>
+                        <Card
+                          key={board.id}
+                          maxW={"200px"}
+                          maxH={"200px"}
+                          border={"1px solid black"}
+                        >
+                          <CardHeader p={"10px"}>
+                            <YoutubeInfo
+                              link={board.link}
+                              extraThumbnail={true}
+                              thumbnailWidth={120}
+                              thumbnailHeight={70}
+                              toolTip={true}
+                            />
+                          </CardHeader>
+                          <CardBody p={"10px"}>
+                            {board.title.length > 10 ? (
+                              <Tooltip label={board.title}>
+                                <Text>{`${board.title.slice(0, 10)}...`}</Text>
+                              </Tooltip>
+                            ) : (
+                              <Text>{board.title}</Text>
+                            )}
+                          </CardBody>
+                          <CardFooter p={"10px"}>
+                            {board.board_member_id}
+                          </CardFooter>
+                        </Card>
+                      </>
+                    ) : (
+                      <>
+                        <Card
+                          key={board.id}
+                          maxW={"200px"}
+                          maxH={"200px"}
+                          border={"1px solid black"}
+                        >
+                          <CardHeader p={"10px"}>
+                            <YoutubeInfo
+                              link={board.link}
+                              extraThumbnail={true}
+                              thumbnailWidth={120}
+                              thumbnailHeight={70}
+                              toolTip={true}
+                            />
+                          </CardHeader>
+                          <CardBody p={"10px"}>
+                            <Text color={"red"}>삭제됨</Text>
+                          </CardBody>
+                          <CardFooter p={"10px"}>
+                            <Text color={"red"}>삭제됨</Text>
+                          </CardFooter>
+                        </Card>
+                      </>
+                    )}
+                  </>
+                ))}
+            </Flex>
           </>
         )}
       </Box>
