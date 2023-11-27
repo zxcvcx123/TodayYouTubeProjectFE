@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import {
   Box,
@@ -9,13 +8,13 @@ import {
   FormLabel,
   Heading,
   Img,
-  Input,
   Spinner,
   Text,
   Textarea,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import { BoardComment } from "./BoardComment";
 
 function BoardView() {
   // state
@@ -99,10 +98,10 @@ function BoardView() {
       >
         수정
       </Button>
+
+      <BoardComment board_id={id} />
     </Box>
   );
 }
 
 export default BoardView;
-
-
