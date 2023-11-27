@@ -7,10 +7,15 @@ import {
 import { HomeLayout } from "./layout/Homelayout";
 import MemberSignup from "./member/MemberSignup";
 import MemberLogin from "./member/MemberLogin";
+import { MainView } from "./layout/MainView";
+import { MainBoardList } from "./layout/MainBoardList";
+
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<HomeLayout />}>
+      <Route index element={<MainView />} />
+      <Route index element={<MainBoardList />} />
       {/*<Route path="경로명" element={컴포넌트} />*/}
       <Route path={"member/signup"} element={<MemberSignup />} />
       <Route path={"member/login"} element={<MemberLogin />} />
