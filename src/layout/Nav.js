@@ -78,17 +78,28 @@ export function Nav() {
               variant="ghost"
               leftIcon={<FontAwesomeIcon icon={faBell} />}
             ></Button>
-            <Button w={90} size="md" variant="ghost">
+            <Button
+              onClick={() => {
+                navigate("member/login");
+              }}
+              w={90}
+              size="md"
+              variant="ghost"
+            >
               로그인
             </Button>
+
             <Button
-              onClick={() => navigate("member/signup")}
+              onClick={() => {
+                navigate("member/signup");
+              }}
               w={90}
               size="md"
               variant="ghost"
             >
               회원가입
             </Button>
+
           </Flex>
           <Menu w={200} size="md" variant="ghost">
             <MenuButton>
