@@ -13,6 +13,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Filednd } from "../file/Filednd";
 import YouTube from "react-youtube";
+import Editor from "../component/Editor";
 
 function BoardWrite() {
   /* use state */
@@ -20,13 +21,14 @@ function BoardWrite() {
   const [link, setLink] = useState("");
   const [content, setContent] = useState("");
   const [uploadFiles, setUploadFiles] = useState([]);
+  const [uuid, setUuid] = useState(null);
 
   /* use navigate */
   let navigate = useNavigate();
 
   function handleSubmit() {
     axios
-      .postForm("/api/board/add", { title, link, content, uploadFiles })
+      .postForm("/api/board/add", { title, link, content, uploadFiles, uuid })
       .then(() => navigate("/board/list"))
       .catch(() => console.log("error"))
       .finally(() => console.log("done"));
@@ -59,13 +61,15 @@ function BoardWrite() {
       {/* 본문 */}
       <FormControl mb={2}>
         <FormLabel>본문</FormLabel>
-        <Textarea
+        <Editor setUuid={setUuid} setContent1={setContent} />
+
+        {/*<Textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder="본문을 작성 전 안내사항. @@개행문자 추가하기1) 욕설 비방 작품 어쩌구 2) 저작권 침해 어쩌구 3) 개인정보 침해 어쩌구... 등등"
           h={"sm"}
           resize={"none"}
-        />
+        />*/}
       </FormControl>
 
       {/* 파일 첨부 */}
