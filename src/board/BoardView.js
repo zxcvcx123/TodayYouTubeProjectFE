@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
-import { BoardComment } from "./BoardComment";
+import { BoardComment } from "../comment/BoardComment";
 import BoardLike from "../like/BoardLike";
 import YouTube from "react-youtube";
 import YoutubeInfo from "../component/YoutubeInfo";
