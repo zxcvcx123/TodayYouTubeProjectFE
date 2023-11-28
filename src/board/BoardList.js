@@ -19,6 +19,7 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import Pagination from "../page/Pagination";
 import YoutubeInfo from "../component/YoutubeInfo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -28,9 +29,11 @@ import {
   faThumbsUp,
 } from "@fortawesome/free-solid-svg-icons";
 
+
 function BoardList() {
   // state
   const [boardList, setBoardList] = useState(null);
+  const [pageInfo, setPageInfo] = useState(null);
   const [currentView, setCurrentView] = useState("list");
 
   // navigate
@@ -38,9 +41,10 @@ function BoardList() {
 
   // 초기 이펙트
   useEffect(() => {
-    axios
-      .get("/api/board/list")
-      .then((response) => setBoardList(response.data));
+    axios.get("/api/board/list").then((response) => {
+      setBoardList(response.data.boardList);
+      // setPageInfo(response.data.pageInfo);
+    });
   }, []);
 
   // 리스트 뷰 세팅 동작
@@ -132,7 +136,7 @@ function BoardList() {
                               )}
                             </Flex>
                           </Td>
-                          <Td textAlign={"center"}>좋아요</Td>
+                          <Td textAlign={"center"}>{board.countlike}</Td>
                           <Td textAlign={"center"}>{board.board_member_id}</Td>
                           <Td textAlign={"center"}>{board.created_at}</Td>
                           <Td textAlign={"center"}>조회수</Td>
@@ -194,7 +198,7 @@ function BoardList() {
                             <Text>{board.updated_at}</Text>
                             <Flex w={"40%"} justifyContent={"space-between"}>
                               <Box>
-                                <FontAwesomeIcon icon={faThumbsUp} /> 1
+                                <FontAwesomeIcon icon={faThumbsUp} /> {board.countlike}
                               </Box>
                               <Box>
                                 <FontAwesomeIcon icon={faComment} /> 2
@@ -230,6 +234,9 @@ function BoardList() {
         )}
       </Box>
     </Flex>
+    
+    {/* 게시물 페이징 */}
+    {/*<Pagination pageInfo={pageInfo} />*/}
   );
 }
 

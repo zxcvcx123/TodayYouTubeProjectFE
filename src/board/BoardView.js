@@ -14,12 +14,17 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import BoardLike from "../like/BoardLike";
 import YouTube from "react-youtube";
 import YoutubeInfo from "../component/YoutubeInfo";
+
 
 function BoardView() {
   // state
   const [board, setBoard] = useState(null);
+  const [thumbnail, setThumbnail] = useState(null);
+  const [like, setLike] = useState(0);
+
 
   //URL 매개변수 추출
   const { id } = useParams();
@@ -34,10 +39,29 @@ function BoardView() {
     });
   }, []);
 
+  // 초기 렌더링 좋아요 출력
+  useEffect(() => {
+    axios
+      .get("/api/like/board/" + id)
+      .then((response) => {
+        setLike(response.data);
+      })
+      .catch(() => console.log("bad"))
+      .finally(() => console.log("완료"));
+  }, []);
+
   // board 불러오지 못할 시 로딩중 표시
   if (board === null) {
     return <Spinner />;
   }
+
+
+  function handleLike() {
+    axios
+      .post("/api/like/board/" + id)
+      .then((response) => setLike(response.data))
+      .catch(() => console.log("bad"))
+      .catch(() => console.log("done"));
 
   function handleDelete() {
     axios
@@ -45,6 +69,7 @@ function BoardView() {
       .then(() => console.log("good"))
       .catch(() => console.log("bad"))
       .finally(() => console.log("done"));
+
   }
 
   return (
@@ -60,7 +85,8 @@ function BoardView() {
           <Text>
             {board.board_member_id} | {board.updated_at}
           </Text>
-          <Text>좋아요 | 조회수</Text>
+          <BoardLike id={id} like={like} board={board} onClick={handleLike} />
+          <Text>| 조회수</Text>
         </Flex>
       </FormControl>
 
