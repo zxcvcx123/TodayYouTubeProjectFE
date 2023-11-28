@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import {
   Box,
@@ -7,7 +6,6 @@ import {
   FormHelperText,
   FormLabel,
   Heading,
-
   Input,
   Textarea,
 } from "@chakra-ui/react";
@@ -27,7 +25,7 @@ function BoardWrite() {
   function handleSubmit() {
     axios
       .postForm("/api/board/add", { title, link, content, uploadFiles })
-      .then(() => navigate("/"))
+      .then(() => navigate("/board/list"))
       .catch(() => console.log("error"))
       .finally(() => console.log("done"));
   }
@@ -85,6 +83,11 @@ function BoardWrite() {
       {/* 저장 버튼 */}
       <Button onClick={handleSubmit} colorScheme="blue">
         작성 완료
+      </Button>
+
+      {/* 저장 버튼 */}
+      <Button onClick={() => navigate("/board/list")} colorScheme="red">
+        취소
       </Button>
     </Box>
   );
