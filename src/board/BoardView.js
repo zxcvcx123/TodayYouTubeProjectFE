@@ -83,7 +83,7 @@ function BoardView() {
             {board.board_member_id} | {board.updated_at}
           </Text>
           <BoardLike id={id} like={like} board={board} onClick={handleLike} />
-          <Text>| 조회수</Text>
+          <Text>| 조회수 : {board.views}</Text>
         </Flex>
       </FormControl>
 
