@@ -13,9 +13,11 @@ import {
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { useImmer } from "use-immer";
+import { Filednd } from "../file/Filednd";
 
 function BoardEdit() {
   const [board, updateBoard] = useImmer(null);
+  const [uploadFiles, setUploadFiles] = useState([]);
 
   const { id } = useParams();
 
@@ -25,6 +27,13 @@ function BoardEdit() {
     axios
       .get("/api/board/id/" + id)
       .then((response) => updateBoard(response.data));
+  }, []);
+
+  // 파일 목록 가져오기
+  useEffect(() => {
+    axios
+      .get("/api/file/list/" + id)
+      .then((response) => setUploadFiles(response.data));
   }, []);
 
   // 게시글을 로딩중이라면 스피너 돌리기
@@ -80,6 +89,9 @@ function BoardEdit() {
           resize={"none"}
         />
       </FormControl>
+
+      {/* 파일 */}
+      <Filednd uploadFiles={uploadFiles} setUploadFiles={setUploadFiles} />
 
       {/* 저장 버튼 */}
       <Button onClick={handleSubmit} colorScheme="blue">

@@ -147,6 +147,7 @@ function BoardView() {
           >
             {uploadFile.map((fileList) => (
               <Link
+                key={fileList.id}
                 style={{ display: "block", color: "blue" }}
                 to={fileList.fileurl}
               >
