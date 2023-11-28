@@ -61,6 +61,7 @@ function BoardWrite() {
       {/* 본문 */}
       <FormControl mb={2}>
         <FormLabel>본문</FormLabel>
+        {/* CKEditor 본문 영역 */}
         <Editor setUuid={setUuid} setContent1={setContent} />
 
         {/*<Textarea

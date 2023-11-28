@@ -6,12 +6,6 @@ import { useNavigate } from "react-router-dom";
 import { Box, Button } from "@chakra-ui/react";
 
 const Editor = ({ setUuid, setContent1 }) => {
-  const navigate = useNavigate();
-
-  const titleRef = useRef();
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-
   const customUploadAdapter = (loader) => {
     return {
       upload() {
@@ -44,23 +38,27 @@ const Editor = ({ setUuid, setContent1 }) => {
   return (
     <Box>
       <section>
+        {/*TODO : 높이 길어지면 스크롤 만들기*/}
         <CKEditor
           editor={ClassicEditor}
           data=""
           config={{ extraPlugins: [uploadPlugin] }}
           onReady={(editor) => {
+            editor.ui.view.editable.element.style.minHeight = "500px";
             // You can store the "editor" and use when it is needed.
             // console.log("Editor is ready to use!", editor);
           }}
           onChange={(event, editor) => {
-            setContent(editor.getData());
             setContent1(editor.getData());
+            editor.ui.view.editable.element.style.minHeight = "500px";
             // console.log({ event, editor, content });
           }}
           onBlur={(event, editor) => {
+            editor.ui.view.editable.element.style.minHeight = "500px";
             // console.log("Blur.", editor);
           }}
           onFocus={(event, editor) => {
+            editor.ui.view.editable.element.style.minHeight = "500px";
             // console.log("Focus.", editor);
           }}
         />

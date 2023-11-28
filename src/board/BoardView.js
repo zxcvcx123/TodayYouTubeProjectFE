@@ -18,12 +18,16 @@ import { BoardComment } from "./BoardComment";
 import BoardLike from "../like/BoardLike";
 import YouTube from "react-youtube";
 import YoutubeInfo from "../component/YoutubeInfo";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import editor from "../component/Editor";
 
 function BoardView() {
   // state
   const [board, setBoard] = useState(null);
   const [thumbnail, setThumbnail] = useState(null);
   const [like, setLike] = useState(0);
+  // const [isReadOnly, setIsReadOnly] = useState(true);
 
   //URL 매개변수 추출
   const { id } = useParams();
@@ -33,9 +37,12 @@ function BoardView() {
 
   // 초기 렌더링
   useEffect(() => {
-    axios.get("/api/board/id/" + id).then((response) => {
-      setBoard(response.data);
-    });
+    axios
+      .get("/api/board/id/" + id)
+      .then((response) => {
+        setBoard(response.data);
+      })
+      .finally(() => {});
   }, []);
 
   // 초기 렌더링 좋아요 출력
@@ -61,6 +68,7 @@ function BoardView() {
       .catch(() => console.log("bad"))
       .catch(() => console.log("done"));
   }
+
   function handleDelete() {
     axios
       .put("/api/board/remove/" + id)
@@ -68,6 +76,13 @@ function BoardView() {
       .catch(() => console.log("bad"))
       .finally(() => console.log("done"));
   }
+
+  //  ck에디터 설정 값 (toolbar 삭제함)
+  const editorConfig = {
+    toolbar: [],
+    width: "800px",
+    height: "800px",
+  };
 
   return (
     <Box m={"50px 20% 20px 50px"}>
@@ -117,13 +132,18 @@ function BoardView() {
         <FormLabel>본문</FormLabel>
         {/* 유튜브 영상 출력 */}
         <YoutubeInfo link={board.link} extraVideo={true} />
-        <Textarea
-          value={board.content}
-          readOnly
-          w={"100%"}
-          minH={"400px"}
-          resize={"none"}
-        />
+        <Box border={"1px solid red"}>
+          {/* CKEditor 본문 영역 onReady => 높이 설정 */}
+          <CKEditor
+            disabled={"true"}
+            editor={ClassicEditor}
+            data={board.content}
+            config={editorConfig}
+            onReady={(editor) => {
+              editor.ui.view.editable.element.style.minHeight = "500px";
+            }}
+          />
+        </Box>
       </FormControl>
 
       {/* 목록 버튼 */}
