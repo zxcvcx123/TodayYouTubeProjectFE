@@ -139,7 +139,7 @@ function BoardList() {
                           <Td textAlign={"center"}>{board.countlike}</Td>
                           <Td textAlign={"center"}>{board.board_member_id}</Td>
                           <Td textAlign={"center"}>{board.created_at}</Td>
-                          <Td textAlign={"center"}>조회수</Td>
+                          <Td textAlign={"center"}>{board.views}</Td>
                         </>
                       ) : (
                         <>
@@ -181,6 +181,8 @@ function BoardList() {
                           />
                         </CardHeader>
                         <CardBody p={"10px"}>
+                          {/* 길이가 길 경우 15자로 제한하고 나머지는 ...으로 표시 */}
+                          {/* 짤린 제목에 커서를 올릴 시 제목이 툴팁으로 나타남 */}
                           {board.title.length > 15 ? (
                             <Tooltip label={board.title}>
                               <Text fontWeight={"bold"}>{`${board.title.slice(
@@ -196,13 +198,16 @@ function BoardList() {
                           <Box w={"100%"}>
                             <Text>{board.board_member_id}</Text>
                             <Text>{board.updated_at}</Text>
-                            <Flex w={"40%"} justifyContent={"space-between"}>
+                            <Flex w={"100%"} justifyContent={"space-between"}>
                               <Box>
                                 <FontAwesomeIcon icon={faThumbsUp} />{" "}
                                 {board.countlike}
                               </Box>
                               <Box>
-                                <FontAwesomeIcon icon={faComment} /> 2
+                                <FontAwesomeIcon icon={faComment} /> 0
+                              </Box>
+                              <Box>
+                                <Text>조회수 : {board.views}</Text>
                               </Box>
                             </Flex>
                           </Box>
