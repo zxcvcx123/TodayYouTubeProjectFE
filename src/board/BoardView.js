@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import { BoardComment } from "./BoardComment";
 import BoardLike from "../like/BoardLike";
 import YouTube from "react-youtube";
 import YoutubeInfo from "../component/YoutubeInfo";
@@ -146,7 +147,13 @@ function BoardView() {
       <Button colorScheme="red" onClick={handleDelete}>
         삭제
       </Button>
+
+    {/* 댓글 영역 */}
+    <BoardComment board_id={id} />
+      
     </Box>
+
+
   );
 }
 

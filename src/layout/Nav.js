@@ -22,6 +22,7 @@ import { faBell } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { MainView } from "./MainView";
 import { MainBoardList } from "./MainBoardList";
+import { useNavigate } from "react-router-dom";
 
 Stack.propTypes = {
   p: PropTypes.number,
@@ -31,6 +32,8 @@ Stack.propTypes = {
 };
 
 export function Nav() {
+  let navigate = useNavigate();
+
   return (
     <>
       <Flex
@@ -54,7 +57,7 @@ export function Nav() {
               <ChevronDownIcon />
             </MenuButton>
             <MenuList>
-              <MenuItem>스포츠</MenuItem>
+              <MenuItem onClick={() => navigate("board/list")}>스포츠</MenuItem>
               <MenuItem>먹방</MenuItem>
               <MenuItem>일상</MenuItem>
               <MenuItem>요리</MenuItem>
@@ -78,7 +81,12 @@ export function Nav() {
             <Button w={90} size="md" variant="ghost">
               로그인
             </Button>
-            <Button w={90} size="md" variant="ghost">
+            <Button
+              onClick={() => navigate("member/signup")}
+              w={90}
+              size="md"
+              variant="ghost"
+            >
               회원가입
             </Button>
           </Flex>
