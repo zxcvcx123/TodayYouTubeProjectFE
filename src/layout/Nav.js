@@ -22,6 +22,7 @@ import { faBell } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { MainView } from "./MainView";
 import { MainBoardList } from "./MainBoardList";
+import { useNavigate } from "react-router-dom";
 
 Stack.propTypes = {
   p: PropTypes.number,
@@ -31,6 +32,7 @@ Stack.propTypes = {
 };
 
 export function Nav() {
+  let navigate = useNavigate();
   return (
     <>
       <Flex
@@ -75,10 +77,24 @@ export function Nav() {
               variant="ghost"
               leftIcon={<FontAwesomeIcon icon={faBell} />}
             ></Button>
-            <Button w={90} size="md" variant="ghost">
+            <Button
+              onClick={() => {
+                navigate("member/login");
+              }}
+              w={90}
+              size="md"
+              variant="ghost"
+            >
               로그인
             </Button>
-            <Button w={90} size="md" variant="ghost">
+            <Button
+              onClick={() => {
+                navigate("member/signup");
+              }}
+              w={90}
+              size="md"
+              variant="ghost"
+            >
               회원가입
             </Button>
           </Flex>
