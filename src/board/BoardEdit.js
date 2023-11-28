@@ -11,13 +11,15 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useImmer } from "use-immer";
 
 function BoardEdit() {
   const [board, updateBoard] = useImmer(null);
 
   const { id } = useParams();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -30,14 +32,16 @@ function BoardEdit() {
     return <Spinner />;
   }
 
+  // 게시글 수정 버튼 클릭 함수
   function handleSubmit() {
     axios
       .put("/api/board/edit", board)
-      .then(() => console.log("good"))
+      .then(() => navigate("/board/list"))
       .catch(() => console.log("bad"))
       .finally(() => console.log("done"));
   }
 
+  // 게시글 수정시 상태 업데이트
   function handleBoardUpdate(e, field) {
     updateBoard((draft) => {
       draft[field] = e.target.value;

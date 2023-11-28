@@ -15,11 +15,17 @@ import {
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { BoardComment } from "./BoardComment";
+import BoardLike from "../like/BoardLike";
+import YouTube from "react-youtube";
+import YoutubeInfo from "../component/YoutubeInfo";
+
 
 function BoardView() {
   // state
   const [board, setBoard] = useState(null);
   const [thumbnail, setThumbnail] = useState(null);
+  const [like, setLike] = useState(0);
+
 
   //URL 매개변수 추출
   const { id } = useParams();
@@ -31,24 +37,40 @@ function BoardView() {
   useEffect(() => {
     axios.get("/api/board/id/" + id).then((response) => {
       setBoard(response.data);
-
-      // 유튜브 링크에서 동영상 ID 추출 (정규표현식 match 메서드)
-      const videoIdMatch = response.data.link.match(
-        /^(https?:\/\/)?(www\.)?(youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/,
-      );
-
-      // 정규표현식 match 메서드 4번의 값으로 썸네일 추출
-      if (videoIdMatch && videoIdMatch[4]) {
-        const videoId = videoIdMatch[4];
-        const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
-        setThumbnail(thumbnailUrl);
-      }
     });
+  }, []);
+
+  // 초기 렌더링 좋아요 출력
+  useEffect(() => {
+    axios
+      .get("/api/like/board/" + id)
+      .then((response) => {
+        setLike(response.data);
+      })
+      .catch(() => console.log("bad"))
+      .finally(() => console.log("완료"));
   }, []);
 
   // board 불러오지 못할 시 로딩중 표시
   if (board === null) {
     return <Spinner />;
+  }
+
+
+  function handleLike() {
+    axios
+      .post("/api/like/board/" + id)
+      .then((response) => setLike(response.data))
+      .catch(() => console.log("bad"))
+      .catch(() => console.log("done"));
+
+  function handleDelete() {
+    axios
+      .put("/api/board/remove/" + id)
+      .then(() => console.log("good"))
+      .catch(() => console.log("bad"))
+      .finally(() => console.log("done"));
+
   }
 
   return (
@@ -64,7 +86,8 @@ function BoardView() {
           <Text>
             {board.board_member_id} | {board.updated_at}
           </Text>
-          <Text>좋아요 | 조회수</Text>
+          <BoardLike id={id} like={like} board={board} onClick={handleLike} />
+          <Text>| 조회수</Text>
         </Flex>
       </FormControl>
 
@@ -74,15 +97,30 @@ function BoardView() {
       <FormControl mb={2}>
         <FormLabel>유튜브 링크</FormLabel>
         <Text>{board.link}</Text>
-        {/* 유튜브 썸네일 출력 */}
-        {thumbnail && <Img src={thumbnail} alt="유튜브 썸네일" />}
+        <Button onClick={() => window.open(board.link)}>
+          유튜브 영상으로 가기!
+        </Button>
       </FormControl>
 
+      <Divider my={5} borderColor="grey" />
+
+      {/* 유튜브 썸네일 및 영상 출력 */}
+      <FormControl mb={2}>
+        <FormLabel>추천 유튜브 영상!</FormLabel>
+        <YoutubeInfo
+          link={board.link}
+          extraThumbnail={true}
+          thumbnailWidth={100}
+          thumbnailHeight={100}
+        />
+      </FormControl>
       <Divider my={5} borderColor="grey" />
 
       {/* 본문 */}
       <FormControl mb={2}>
         <FormLabel>본문</FormLabel>
+        {/* 유튜브 영상 출력 */}
+        <YoutubeInfo link={board.link} extraVideo={true} />
         <Textarea
           value={board.content}
           readOnly
@@ -92,6 +130,12 @@ function BoardView() {
         />
       </FormControl>
 
+      {/* 목록 버튼 */}
+      <Button colorScheme="blue" onClick={() => navigate("/board/list")}>
+        목록
+      </Button>
+
+      {/* 수정 버튼 */}
       <Button
         colorScheme="purple"
         onClick={() => navigate("/board/edit/" + id)}
@@ -99,8 +143,17 @@ function BoardView() {
         수정
       </Button>
 
-      <BoardComment board_id={id} />
+      {/* 삭제 버튼 */}
+      <Button colorScheme="red" onClick={handleDelete}>
+        삭제
+      </Button>
+
+    {/* 댓글 영역 */}
+    <BoardComment board_id={id} />
+      
     </Box>
+
+
   );
 }
 
