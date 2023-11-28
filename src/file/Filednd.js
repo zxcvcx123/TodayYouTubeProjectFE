@@ -25,8 +25,6 @@ export function Filednd({ uploadFiles, setUploadFiles }) {
       const newPreviews = [];
       // 반복문
       for (let i = 0; i < uploadFiles.length; i++) {
-        // 방금추가
-        const loadFile = new File([blob], uploadFiles[i], { type: "image/*" });
         // 파일리더 객체 선언
         const reader = new FileReader();
         // 파일리더의 onloadend 메소드 실행
