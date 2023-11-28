@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import {
   Box,
@@ -7,19 +6,19 @@ import {
   FormHelperText,
   FormLabel,
   Heading,
-
   Input,
   Textarea,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Filednd } from "../file/Filednd";
 
 function BoardWrite() {
   /* use state */
   const [title, setTitle] = useState("");
   const [link, setLink] = useState("");
   const [content, setContent] = useState("");
-  const [uploadFiles, setUploadFiles] = useState(null);
+  const [uploadFiles, setUploadFiles] = useState([]);
 
   /* use navigate */
   let navigate = useNavigate();
@@ -27,7 +26,7 @@ function BoardWrite() {
   function handleSubmit() {
     axios
       .postForm("/api/board/add", { title, link, content, uploadFiles })
-      .then(() => navigate("/"))
+      .then(() => navigate("/board/list"))
       .catch(() => console.log("error"))
       .finally(() => console.log("done"));
   }
@@ -69,22 +68,28 @@ function BoardWrite() {
       </FormControl>
 
       {/* 파일 첨부 */}
-      <FormControl mb={5}>
-        <FormLabel>파일 첨부 (이미지) @@@ 미구현 @@@</FormLabel>
-        <Input
-          type="file"
-          accept="image/*"
-          multiple
-          onChange={(e) => setUploadFiles(e.target.files)}
-        />
-        <FormHelperText>
-          한 개 파일은 1MB 이내, 총 용량은 10MB 이내로 첨부하세요.
-        </FormHelperText>
-      </FormControl>
+      <Filednd setUploadFiles={setUploadFiles} uploadFiles={uploadFiles} />
+      {/*<FormControl mb={5}>*/}
+      {/*  <FormLabel>파일 첨부 (이미지) @@@ 미구현 @@@</FormLabel>*/}
+      {/*  <Input*/}
+      {/*    type="file"*/}
+      {/*    accept="image/*"*/}
+      {/*    multiple*/}
+      {/*    onChange={(e) => setUploadFiles(e.target.files)}*/}
+      {/*  />*/}
+      {/*  <FormHelperText>*/}
+      {/*    한 개 파일은 1MB 이내, 총 용량은 10MB 이내로 첨부하세요.*/}
+      {/*  </FormHelperText>*/}
+      {/*</FormControl>*/}
 
       {/* 저장 버튼 */}
       <Button onClick={handleSubmit} colorScheme="blue">
         작성 완료
+      </Button>
+
+      {/* 저장 버튼 */}
+      <Button onClick={() => navigate("/board/list")} colorScheme="red">
+        취소
       </Button>
     </Box>
   );

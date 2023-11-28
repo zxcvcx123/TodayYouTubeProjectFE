@@ -33,6 +33,7 @@ Stack.propTypes = {
 
 export function Nav() {
   let navigate = useNavigate();
+
   return (
     <>
       <Flex
@@ -56,7 +57,7 @@ export function Nav() {
               <ChevronDownIcon />
             </MenuButton>
             <MenuList>
-              <MenuItem>스포츠</MenuItem>
+              <MenuItem onClick={() => navigate("board/list")}>스포츠</MenuItem>
               <MenuItem>먹방</MenuItem>
               <MenuItem>일상</MenuItem>
               <MenuItem>요리</MenuItem>
@@ -87,6 +88,7 @@ export function Nav() {
             >
               로그인
             </Button>
+
             <Button
               onClick={() => {
                 navigate("member/signup");
@@ -97,6 +99,7 @@ export function Nav() {
             >
               회원가입
             </Button>
+
           </Flex>
           <Menu w={200} size="md" variant="ghost">
             <MenuButton>
