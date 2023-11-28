@@ -12,6 +12,7 @@ import {
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Filednd } from "../file/Filednd";
+import YouTube from "react-youtube";
 
 function BoardWrite() {
   /* use state */

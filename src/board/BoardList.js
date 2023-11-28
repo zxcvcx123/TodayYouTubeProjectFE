@@ -28,7 +28,7 @@ import {
   faList,
   faThumbsUp,
 } from "@fortawesome/free-solid-svg-icons";
-
+import YouTube from "react-youtube";
 
 function BoardList() {
   // state
@@ -198,7 +198,8 @@ function BoardList() {
                             <Text>{board.updated_at}</Text>
                             <Flex w={"40%"} justifyContent={"space-between"}>
                               <Box>
-                                <FontAwesomeIcon icon={faThumbsUp} /> {board.countlike}
+                                <FontAwesomeIcon icon={faThumbsUp} />{" "}
+                                {board.countlike}
                               </Box>
                               <Box>
                                 <FontAwesomeIcon icon={faComment} /> 2
@@ -233,11 +234,9 @@ function BoardList() {
           </>
         )}
       </Box>
+      {/* 게시물 페이징 */}
+      {/*<Pagination pageInfo={pageInfo} />*/}
     </Flex>
-    
-    {/* 게시물 페이징 */}
-    {/*<Pagination pageInfo={pageInfo} />*/}
   );
 }
-
 export default BoardList;

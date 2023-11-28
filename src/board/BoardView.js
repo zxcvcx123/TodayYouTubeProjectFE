@@ -19,13 +19,11 @@ import BoardLike from "../like/BoardLike";
 import YouTube from "react-youtube";
 import YoutubeInfo from "../component/YoutubeInfo";
 
-
 function BoardView() {
   // state
   const [board, setBoard] = useState(null);
   const [thumbnail, setThumbnail] = useState(null);
   const [like, setLike] = useState(0);
-
 
   //URL 매개변수 추출
   const { id } = useParams();
@@ -56,21 +54,19 @@ function BoardView() {
     return <Spinner />;
   }
 
-
   function handleLike() {
     axios
       .post("/api/like/board/" + id)
       .then((response) => setLike(response.data))
       .catch(() => console.log("bad"))
       .catch(() => console.log("done"));
-
+  }
   function handleDelete() {
     axios
       .put("/api/board/remove/" + id)
       .then(() => console.log("good"))
       .catch(() => console.log("bad"))
       .finally(() => console.log("done"));
-
   }
 
   return (
@@ -148,12 +144,9 @@ function BoardView() {
         삭제
       </Button>
 
-    {/* 댓글 영역 */}
-    <BoardComment board_id={id} />
-      
+      {/* 댓글 영역 */}
+      <BoardComment board_id={id} />
     </Box>
-
-
   );
 }
 

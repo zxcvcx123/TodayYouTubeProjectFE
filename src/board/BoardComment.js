@@ -25,6 +25,7 @@ import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { BoardReplyComment } from "./BoardReplyComment";
 import { SmallAddIcon } from "@chakra-ui/icons";
+import YouTube from "react-youtube";
 
 function CommentFrom({ board_id, isSubmitting, onSubmit }) {
   const [comment, setComment] = useState("");
