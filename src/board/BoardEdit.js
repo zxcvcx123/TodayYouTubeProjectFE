@@ -29,7 +29,7 @@ function BoardEdit() {
     axios
       .get("/api/board/id/" + id)
       .then((response) => updateBoard(response.data));
-  }, [board]);
+  }, []);
 
   // 게시글을 로딩중이라면 스피너 돌리기
   if (board === null) {
@@ -93,6 +93,11 @@ function BoardEdit() {
       {/* 저장 버튼 */}
       <Button onClick={handleSubmit} colorScheme="blue">
         수정 완료
+      </Button>
+
+      {/* 취소 버튼 */}
+      <Button onClick={() => navigate("/board/" + board.id)} colorScheme="red">
+        취소
       </Button>
     </Box>
   );
