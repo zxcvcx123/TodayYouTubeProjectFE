@@ -52,6 +52,7 @@ function CommentItem({
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [commentEdited, setCommentEdited] = useState(comment.comment);
+  const [isReplyOpen, setIsReplyOpen] = useState(false);
 
   const toast = useToast();
 
@@ -93,10 +94,15 @@ function CommentItem({
             justifyContent="center"
           >
             {comment.comment}
-            <Button size="xs">
+            <Button size="xs" onClick={() => setIsReplyOpen(!isReplyOpen)}>
               <SmallAddIcon />
             </Button>
-            <BoardReplyComment comment_id={comment.id} />
+            {isReplyOpen && (
+              <BoardReplyComment
+                comment_id={comment.id}
+                onClick={() => setIsReplyOpen(false)}
+              />
+            )}
           </Text>
 
           {isEditing && (
