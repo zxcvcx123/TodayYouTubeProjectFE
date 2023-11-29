@@ -7,6 +7,7 @@ import {
   CardBody,
   CardFooter,
   CardHeader,
+  Center,
   Flex,
   SimpleGrid,
   Table,
@@ -18,7 +19,7 @@ import {
   Tooltip,
   Tr,
 } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import Pagination from "../page/Pagination";
 import YoutubeInfo from "../component/YoutubeInfo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -28,24 +29,28 @@ import {
   faList,
   faThumbsUp,
 } from "@fortawesome/free-solid-svg-icons";
-import YouTube from "react-youtube";
+import { SearchComponent } from "../page/SearchComponent";
 
 function BoardList() {
   // state
   const [boardList, setBoardList] = useState(null);
-  const [pageInfo, setPageInfo] = useState(null);
+  // 빈 배열로 받으면 null 값 오류 안나옴
+  const [pageInfo, setPageInfo] = useState([]);
   const [currentView, setCurrentView] = useState("list");
+
+  const [params] = useSearchParams();
+  const location = useLocation();
 
   // navigate
   const navigate = useNavigate();
 
   // 초기 이펙트
   useEffect(() => {
-    axios.get("/api/board/list").then((response) => {
+    axios.get("/api/board/list?" + params).then((response) => {
       setBoardList(response.data.boardList);
-      // setPageInfo(response.data.pageInfo);
+      setPageInfo(response.data.pageInfo);
     });
-  }, []);
+  }, [location]);
 
   // 리스트 뷰 세팅 동작
   const switchToListView = () => {
@@ -156,6 +161,12 @@ function BoardList() {
                   ))}
               </Tbody>
             </Table>
+            <Center>
+              <Box>
+                <SearchComponent />
+                <Pagination pageInfo={pageInfo} />
+              </Box>
+            </Center>
           </>
         ) : (
           <>
@@ -231,11 +242,14 @@ function BoardList() {
                   </Card>
                 ))}
             </SimpleGrid>
+            <Box>
+              <SearchComponent />
+              <Pagination pageInfo={pageInfo} />
+            </Box>
           </>
         )}
       </Box>
-      {/* 게시물 페이징 */}
-      {/*<Pagination pageInfo={pageInfo} />*/}
+      <Box></Box>
     </Flex>
   );
 }
