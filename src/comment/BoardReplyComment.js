@@ -3,10 +3,8 @@ import {
   Button,
   Card,
   CardBody,
-  CardHeader,
   Flex,
   Heading,
-  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -21,7 +19,7 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { SmallAddIcon } from "@chakra-ui/icons";
+
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import YouTube from "react-youtube";
@@ -155,8 +153,6 @@ function ReplyCommentList({
   reply_commentList,
   onDeleteModalOpen,
   setIsSubmitting,
-  isSubmitting,
-  isReplyListOpen,
 }) {
   return (
     <Card ml={10}>
