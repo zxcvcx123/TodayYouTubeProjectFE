@@ -5,13 +5,10 @@ import {
   Divider,
   Flex,
   HStack,
-  ListIcon,
-  ListItem,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
-  OrderedList,
   Stack,
 } from "@chakra-ui/react";
 import * as PropTypes from "prop-types";
@@ -20,8 +17,6 @@ import { ChevronDownIcon } from "@chakra-ui/icons";
 import { SearchMain } from "./SearchMain";
 import { faBell } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { MainView } from "./MainView";
-import { MainBoardList } from "./MainBoardList";
 import { useNavigate } from "react-router-dom";
 
 Stack.propTypes = {
