@@ -13,8 +13,8 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
-import { BoardComment } from "./BoardComment";
+import {Link, useNavigate, useParams} from "react-router-dom";
+import { BoardComment } from "../comment/BoardComment";
 import BoardLike from "../like/BoardLike";
 import YouTube from "react-youtube";
 import YoutubeInfo from "../component/YoutubeInfo";
@@ -27,6 +27,7 @@ function BoardView() {
   const [board, setBoard] = useState(null);
   const [thumbnail, setThumbnail] = useState(null);
   const [like, setLike] = useState(0);
+  const [uploadFiles, setUploadFiles] = useState([]);
   // const [isReadOnly, setIsReadOnly] = useState(true);
 
   //URL 매개변수 추출
@@ -43,6 +44,13 @@ function BoardView() {
         setBoard(response.data);
       })
       .finally(() => {});
+  }, []);
+
+  // 초기 렌더링 파일 목로 가져오기
+  useEffect(() => {
+    axios.get("/api/file/list/" + id).then((response) => {
+      setUploadFiles(response.data);
+    });
   }, []);
 
   // 초기 렌더링 좋아요 출력
@@ -145,6 +153,29 @@ function BoardView() {
           />
         </Box>
       </FormControl>
+
+      {/* 파일 리스트 */}
+      {uploadFile.length > 0 && (
+        <Box mb={2}>
+          <Text>파일 목록</Text>
+          <Box
+            border={"1px solid #edf1f6"}
+            h={"50px"}
+            display={"flex"}
+            alignItems={"center"}
+            gap={3}
+          >
+            {uploadFile.map((fileList) => (
+              <Link
+                key={fileList.id}
+                style={{ display: "block", color: "blue" }}
+                to={fileList.fileurl}
+              >
+                {fileList.filename}
+              </Link>
+            ))}
+          </Box>
+        </Box>
 
       {/* 목록 버튼 */}
       <Button colorScheme="blue" onClick={() => navigate("/board/list")}>

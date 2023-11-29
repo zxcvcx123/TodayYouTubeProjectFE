@@ -17,17 +17,29 @@ export function Filednd({ uploadFiles, setUploadFiles }) {
   const [preViews, setPreviews] = useState([]);
 
   // 파일 미리보기
+  // re-render 시켜야 첨부한 파일을 인식 (Drop 이벤트 경우)
   useEffect(() => {
+    // 파일이 있으면 동작 실행
     if (uploadFiles.length !== 0) {
+      // 새 배열 선언
       const newPreviews = [];
+      // 반복문
       for (let i = 0; i < uploadFiles.length; i++) {
+        // 방금추가
+        const loadFile = new File([blob], uploadFiles[i], { type: "image/*" });
+        // 파일리더 객체 선언
         const reader = new FileReader();
+        // 파일리더의 onloadend 메소드 실행
         reader.onloadend = () => {
+          // 파일을 읽은 값(reader.result)를 새 배열(newPreviews)에 추가
           newPreviews.push(reader.result);
+          // 배열에 추가된 파일이랑 기존 파일이 같으면
           if (newPreviews.length === uploadFiles.length) {
+            // 가공된 파일 배열을 새 state에 추가
             setPreviews(newPreviews);
           }
         };
+        // html에 이미지를 미리보기 할 수 있게 url주소로 나옴
         reader.readAsDataURL(uploadFiles[i]);
       }
     }
@@ -62,6 +74,7 @@ export function Filednd({ uploadFiles, setUploadFiles }) {
 
   function handleUploadFile(e) {
     setUploadFiles(e.target.files);
+    setUploadFiles([...uploadFiles, ...e.target.files]);
   }
 
   return (

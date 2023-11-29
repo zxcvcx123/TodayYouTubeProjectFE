@@ -13,6 +13,7 @@ import {
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { useImmer } from "use-immer";
+import { Filednd } from "../file/Filednd";
 
 function BoardEdit() {
   const [board, updateBoard] = useImmer(null);
@@ -80,6 +81,9 @@ function BoardEdit() {
           resize={"none"}
         />
       </FormControl>
+
+      {/* 파일 */}
+      <Filednd uploadFiles={uploadFiles} setUploadFiles={setUploadFiles} />
 
       {/* 저장 버튼 */}
       <Button onClick={handleSubmit} colorScheme="blue">
