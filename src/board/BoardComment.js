@@ -179,13 +179,14 @@ export function BoardComment({ board_id }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const commentIdRef = useRef(0);
+  const toast = useToast();
 
   const [commentList, setCommentList] = useState([]);
 
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   const params = new URLSearchParams();
-  params.set("id", board_id);
+  params.set("board_id", board_id);
 
   useEffect(() => {
     if (!isSubmitting) {
@@ -200,6 +201,13 @@ export function BoardComment({ board_id }) {
 
     axios
       .post("/api/comment/add", comment)
+      .then(() => {
+        toast({
+          description: "댓글이 등록되었습니다.",
+          status: "success",
+        });
+      })
+      .catch((error) => console.log("bad"))
       .finally(() => setIsSubmitting(false));
   }
 
@@ -208,7 +216,12 @@ export function BoardComment({ board_id }) {
 
     axios
       .delete("/api/comment/" + commentIdRef.current)
-      .then(() => console.log("good"))
+      .then(() => {
+        toast({
+          description: "댓글이 삭제되었습니다.",
+          status: "success",
+        });
+      })
       .catch(() => console.log("bad"))
       .finally(() => {
         setIsSubmitting(false);
@@ -216,8 +229,8 @@ export function BoardComment({ board_id }) {
       });
   }
 
-  function handleDeleteModalOpen(id) {
-    commentIdRef.current = id;
+  function handleCommentDeleteModalOpen(comment_id) {
+    commentIdRef.current = comment_id;
 
     onOpen();
   }
@@ -234,7 +247,7 @@ export function BoardComment({ board_id }) {
         isSubmitting={isSubmitting}
         setIsSubmitting={setIsSubmitting}
         commentList={commentList}
-        onDeleteModalOpen={handleDeleteModalOpen}
+        onDeleteModalOpen={handleCommentDeleteModalOpen}
       />
 
       {/* 삭제 모달 */}
