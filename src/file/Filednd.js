@@ -4,17 +4,45 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-regular-svg-icons";
 import {
   Box,
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
   FormControl,
   FormLabel,
   Img,
   Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Text,
+  useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
+import { faXmark } from "@fortawesome/free-solid-svg-icons/faXmark";
 
-export function Filednd({ uploadFiles, setUploadFiles }) {
+export function Filednd({
+  editUploadFiles,
+  setEditUploadFiles,
+  mode,
+  setUploadFiles,
+  uploadFiles,
+}) {
   const [isActive, setIsActive] = useState(false);
-  // const [uploadFiles, setUploadFiles] = useState([]);
+
   const [preViews, setPreviews] = useState([]);
+
+  // BoardEdit에서 넘어오는 값들
+  const [fileKey, setFileKey] = useState("");
+  const [boardId, setBoardId] = useState("");
+
+  const toast = useToast();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   // 파일 미리보기
   // re-render 시켜야 첨부한 파일을 인식 (Drop 이벤트 경우)
@@ -43,7 +71,7 @@ export function Filednd({ uploadFiles, setUploadFiles }) {
     }
   }, [uploadFiles]);
 
-  // 파일 제거
+  // 첨부한 파일 제거
   function removeUploadFile(index) {
     const newUploadFile = [...uploadFiles];
     newUploadFile.splice(index, 1);
@@ -65,72 +93,172 @@ export function Filednd({ uploadFiles, setUploadFiles }) {
     e.preventDefault();
   }
 
+  // 파일을 드래그해서 놓을 때
   function handleDrop(e) {
     e.preventDefault();
     setUploadFiles(Array.from(e.dataTransfer.files));
   }
 
+  // 파일창 열려서 첨부할 때
   function handleUploadFile(e) {
     setUploadFiles(e.target.files);
     setUploadFiles([...uploadFiles, ...e.target.files]);
   }
 
-  return (
-    <Box>
-      <FormControl w={"100%"} h={"200px"} border={"3px dashed black"}>
-        <FormLabel
-          textAlign={"center"}
-          w={"100%"}
-          h={"100%"}
-          _hover={{
-            backgroundColor: "#efeef3",
-            color: "darkgray",
-          }}
-          style={
-            isActive
-              ? {
-                  backgroundColor: "#efeef3",
-                  color: "darkgray",
-                }
-              : {}
-          }
-          onDragEnter={handleDragStart}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragEnd}
-          onDrop={handleDrop}
-        >
-          <Input
-            display={"none"}
-            type="file"
-            multiple
-            accept="image/*"
-            onChange={handleUploadFile}
-          />
+  // 수정 게시판에서 기존 파일 제거
+  function handleDeleteFile() {
+    axios
+      .delete("/api/file/delete/" + boardId + "/" + fileKey)
+      .then((res) => {
+        if (res.status === 200) {
+          toast({
+            position: "top",
+            description: "삭제 완료 됐습니다.",
+            status: "success",
+          });
+          setEditUploadFiles(res.data);
+        } else {
+          toast({
+            position: "top",
+            description: "삭제 중 문제가 발생하였습니다.",
+            status: "warning",
+          });
+        }
+      })
+      .catch()
+      .finally(() => onClose());
+  }
 
-          {uploadFiles.length === 0 && (
-            <Text lineHeight={"150px"}>Click and Drag File.</Text>
-          )}
-          {uploadFiles.length === 0 || (
-            <Box id="image_container" display={"flex"} gap={2} h={"80%"}>
-              {preViews.map((preview, index) => (
-                <Box key={index} display={"inline-block"} h={"80%"}>
-                  <Img src={preview} alt={`미리보기 ${index + 1}`} h={"100%"} />
-                  <button onClick={() => removeUploadFile(index)}>
-                    <FontAwesomeIcon
-                      icon={faCircleXmark}
-                      color="red"
-                      mt={"0%"}
+  return (
+    <>
+      {/* 파일 리스트 */}
+      {mode === "Update" && (
+        <Box h={"200px"}>
+          <Text>기존 파일</Text>
+          <Box
+            border={"1px solid #edf1f6"}
+            display={"flex"}
+            h={"100%"}
+            alignItems={"center"}
+            gap={5}
+          >
+            {editUploadFiles.map((fileList) => (
+              <Card key={fileList.id} h={"100%"}>
+                <CardBody
+                  w={"100%"}
+                  h={"auto"}
+                  backgroundImage={fileList.fileurl}
+                  backgroundSize={"100%"}
+                ></CardBody>
+                <CardFooter>
+                  <Box display={"flex"} alignItems={"center"}>
+                    <Link
+                      style={{
+                        display: "flex",
+                        color: "blue",
+                        marginRight: "2px",
+                      }}
+                      to={fileList.fileurl}
+                    >
+                      {fileList.filename}
+                    </Link>
+                    <Box
+                      _hover={{ cursor: "pointer" }}
+                      onClick={() => {
+                        onOpen();
+                        setFileKey(fileList.id);
+                        setBoardId(fileList.board_id);
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faXmark} />
+                    </Box>
+                  </Box>
+                </CardFooter>
+              </Card>
+            ))}
+          </Box>
+        </Box>
+      )}
+      <Box pt={9}>
+        <FormControl w={"100%"} h={"200px"} border={"3px dashed black"}>
+          <FormLabel
+            textAlign={"center"}
+            w={"100%"}
+            h={"100%"}
+            _hover={{
+              backgroundColor: "#efeef3",
+              color: "darkgray",
+            }}
+            style={
+              isActive
+                ? {
+                    backgroundColor: "#efeef3",
+                    color: "darkgray",
+                  }
+                : {}
+            }
+            onDragEnter={handleDragStart}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragEnd}
+            onDrop={handleDrop}
+          >
+            <Input
+              display={"none"}
+              type="file"
+              multiple
+              accept="image/*"
+              onChange={handleUploadFile}
+            />
+
+            {uploadFiles.length === 0 && (
+              <Text lineHeight={"150px"}>Click and Drag File.</Text>
+            )}
+            {uploadFiles.length === 0 || (
+              <Box id="image_container" display={"flex"} gap={2} h={"80%"}>
+                {preViews.map((preview, index) => (
+                  <Box key={index} display={"inline-block"} h={"80%"}>
+                    <Img
+                      src={preview}
+                      alt={`미리보기 ${index + 1}`}
+                      h={"100%"}
                     />
-                  </button>
-                </Box>
-              ))}
-            </Box>
-          )}
-          <Text lineHeight={"50px"}>
-            파일 용량은 최대 10MB, 1개당 1MB 까지 가능 합니다.
-          </Text>
-        </FormLabel>
-      </FormControl>
-    </Box>
+                    <button onClick={() => removeUploadFile(index)}>
+                      <FontAwesomeIcon
+                        icon={faCircleXmark}
+                        color="red"
+                        mt={"0%"}
+                      />
+                    </button>
+                  </Box>
+                ))}
+              </Box>
+            )}
+            <Text lineHeight={"50px"}>
+              파일 용량은 최대 10MB, 1개당 1MB 까지 가능 합니다.
+            </Text>
+          </FormLabel>
+        </FormControl>
+      </Box>
+      {/* 삭제 모달 */}
+      <>
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>첨부파일 삭제</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>첨부파일을 삭제 하시겠습니까? (복구 불가)</ModalBody>
+
+            <ModalFooter>
+              <Button colorScheme="blue" mr={3} onClick={onClose}>
+                취소
+              </Button>
+              <Button variant="ghost" onClick={handleDeleteFile}>
+                삭제
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      </>
+    </>
   );
 }
