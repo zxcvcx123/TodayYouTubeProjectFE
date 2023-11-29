@@ -5,7 +5,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Box, Button } from "@chakra-ui/react";
 
-const Editor = ({ setUuid, setContent1, data }) => {
+const Editor = ({ uuid, setUuid, setContent1, data }) => {
   const customUploadAdapter = (loader) => {
     return {
       upload() {
@@ -20,7 +20,7 @@ const Editor = ({ setUuid, setContent1, data }) => {
                 resolve({
                   default: res.data.ckuri,
                 });
-                setUuid(res.data.data.uuid);
+                setUuid(res.data.uuid);
               })
               .catch((err) => reject(err));
           });
