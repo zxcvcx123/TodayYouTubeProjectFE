@@ -25,8 +25,15 @@ import { SmallAddIcon } from "@chakra-ui/icons";
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import YouTube from "react-youtube";
+import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-function ReplyCommentForm({ comment_id, isSubmitting, onSubmit }) {
+function ReplyCommentForm({
+  comment_id,
+  isSubmitting,
+  onSubmit,
+  isReplyFormOpen,
+}) {
   const [reply_comment, setReply_comment] = useState("");
 
   function handleReplySubmit() {
@@ -83,7 +90,6 @@ function ReplyCommentItem({
       });
   }
 
-
   return (
     <Box>
       <Flex justifyContent="space-between">
@@ -105,38 +111,40 @@ function ReplyCommentItem({
                 onChange={(e) => setReplyEdited(e.target.value)}
               />
               <Button size="xs" colorScheme="telegram" onClick={handleSubmit}>
-                저장
+                <FontAwesomeIcon icon={faPenToSquare} />
               </Button>
             </Box>
           )}
         </Box>
         <Box>
-          {isEditing || (
-            <Button
-              size="xs"
-              colorScheme="purple"
-              onClick={() => setIsEditing(true)}
-            >
-              수정
-            </Button>
-          )}
-          {isEditing && (
-            <Button
-              size="xs"
-              colorScheme="gray"
-              onClick={() => setIsEditing(false)}
-            >
-              취소
-            </Button>
-          )}
+          <Flex gap={0.5}>
+            {isEditing || (
+              <Button
+                size="xs"
+                colorScheme="purple"
+                onClick={() => setIsEditing(true)}
+              >
+                <FontAwesomeIcon icon={faPenToSquare} />
+              </Button>
+            )}
+            {isEditing && (
+              <Button
+                size="xs"
+                colorScheme="gray"
+                onClick={() => setIsEditing(false)}
+              >
+                취소
+              </Button>
+            )}
 
-          <Button
-            onClick={() => onDeleteModalOpen(reply_comment.id)}
-            size="xs"
-            colorScheme="red"
-          >
-            삭제
-          </Button>
+            <Button
+              onClick={() => onDeleteModalOpen(reply_comment.id)}
+              size="xs"
+              colorScheme="red"
+            >
+              <FontAwesomeIcon icon={faTrash} />
+            </Button>
+          </Flex>
         </Box>
       </Flex>
     </Box>
@@ -148,9 +156,10 @@ function ReplyCommentList({
   onDeleteModalOpen,
   setIsSubmitting,
   isSubmitting,
+  isReplyListOpen,
 }) {
   return (
-    <Card>
+    <Card ml={10}>
       <CardBody>
         <Stack divider={<StackDivider />} spacing={4}>
           {reply_commentList.map((reply_comment) => (
@@ -167,7 +176,12 @@ function ReplyCommentList({
   );
 }
 
-export function BoardReplyComment({ comment_id }) {
+export function BoardReplyComment({
+  comment_id,
+  isReplyFormOpen,
+  isReplyListOpen,
+  setIsReplyFormOpen,
+}) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const replyIdRef = useRef(0);
 
@@ -189,6 +203,7 @@ export function BoardReplyComment({ comment_id }) {
 
   function handleReplySubmit(reply_comment) {
     setIsSubmitting(true);
+    setIsReplyFormOpen(true);
 
     axios
       .post("/api/comment/reply/add", reply_comment)
@@ -199,7 +214,10 @@ export function BoardReplyComment({ comment_id }) {
         });
       })
       .catch((error) => console.log("bad"))
-      .finally(() => setIsSubmitting(false));
+      .finally(() => {
+        setIsSubmitting(false);
+        setIsReplyFormOpen(false);
+      });
   }
 
   function handleReplyDelete() {
@@ -227,18 +245,24 @@ export function BoardReplyComment({ comment_id }) {
 
   return (
     <Box>
-      <ReplyCommentForm
-        comment_id={comment_id}
-        isSubmitting={isSubmitting}
-        onSubmit={handleReplySubmit}
-      />
-      <ReplyCommentList
-        comment_id={comment_id}
-        isSubmitting={isSubmitting}
-        setIsSubmitting={setIsSubmitting}
-        reply_commentList={reply_commentList}
-        onDeleteModalOpen={handleReplyDeleteModalOpen}
-      />
+      {isReplyFormOpen && (
+        <ReplyCommentForm
+          comment_id={comment_id}
+          isSubmitting={isSubmitting}
+          onSubmit={handleReplySubmit}
+          isReplyFormOpen={isReplyFormOpen}
+        />
+      )}
+      {isReplyListOpen && (
+        <ReplyCommentList
+          comment_id={comment_id}
+          isSubmitting={isSubmitting}
+          setIsSubmitting={setIsSubmitting}
+          reply_commentList={reply_commentList}
+          isReplyListOpen={isReplyListOpen}
+          onDeleteModalOpen={handleReplyDeleteModalOpen}
+        />
+      )}
 
       {/* 삭제 모달 */}
       <Modal isOpen={isOpen} onClose={onClose}>
