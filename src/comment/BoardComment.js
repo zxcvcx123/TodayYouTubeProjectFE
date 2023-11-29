@@ -140,12 +140,14 @@ function CommentItem({
             <Flex gap={0.3} mt={2}>
               <Button
                 size="xs"
+                colorScheme="blackAlpha"
                 onClick={() => setIsReplyFormOpen(!isReplyFormOpen)}
               >
                 <FontAwesomeIcon icon={faPen} />
               </Button>
               <Button
                 size="xs"
+                colorScheme="blackAlpha"
                 onClick={() => setIsReplyListOpen(!isReplyListOpen)}
               >
                 <FontAwesomeIcon icon={faCommentDots} />
