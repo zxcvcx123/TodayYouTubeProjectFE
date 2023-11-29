@@ -13,7 +13,7 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import axios from "axios";
-import {Link, useNavigate, useParams} from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { BoardComment } from "../comment/BoardComment";
 import BoardLike from "../like/BoardLike";
 import YouTube from "react-youtube";
@@ -154,29 +154,29 @@ function BoardView() {
         </Box>
       </FormControl>
 
-      {/* 파일 리스트 */}
-      {uploadFile.length > 0 && (
-        <Box mb={2}>
-          <Text>파일 목록</Text>
-          <Box
-            border={"1px solid #edf1f6"}
-            h={"50px"}
-            display={"flex"}
-            alignItems={"center"}
-            gap={3}
-          >
-            {uploadFile.map((fileList) => (
-              <Link
-                key={fileList.id}
-                style={{ display: "block", color: "blue" }}
-                to={fileList.fileurl}
-              >
-                {fileList.filename}
-              </Link>
-            ))}
-          </Box>
-        </Box>
-
+      {/*/!* 파일 리스트 *!/*/}
+      {/*{uploadFile.length > 0 && (*/}
+      {/*  <Box mb={2}>*/}
+      {/*    <Text>파일 목록</Text>*/}
+      {/*    <Box*/}
+      {/*      border={"1px solid #edf1f6"}*/}
+      {/*      h={"50px"}*/}
+      {/*      display={"flex"}*/}
+      {/*      alignItems={"center"}*/}
+      {/*      gap={3}*/}
+      {/*    >*/}
+      {/*      {uploadFile.map((fileList) => (*/}
+      {/*        <Link*/}
+      {/*          key={fileList.id}*/}
+      {/*          style={{ display: "block", color: "blue" }}*/}
+      {/*          to={fileList.fileurl}*/}
+      {/*        >*/}
+      {/*          {fileList.filename}*/}
+      {/*        </Link>*/}
+      {/*      ))}*/}
+      {/*    </Box>*/}
+      {/*  </Box>*/}
+      {/*)}*/}
       {/* 목록 버튼 */}
       <Button colorScheme="blue" onClick={() => navigate("/board/list")}>
         목록

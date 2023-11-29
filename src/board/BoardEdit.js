@@ -82,8 +82,8 @@ function BoardEdit() {
         />
       </FormControl>
 
-      {/* 파일 */}
-      <Filednd uploadFiles={uploadFiles} setUploadFiles={setUploadFiles} />
+      {/*/!* 파일 *!/*/}
+      {/*<Filednd uploadFiles={uploadFiles} setUploadFiles={setUploadFiles} />*/}
 
       {/* 저장 버튼 */}
       <Button onClick={handleSubmit} colorScheme="blue">
