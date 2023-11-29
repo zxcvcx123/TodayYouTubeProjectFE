@@ -38,28 +38,25 @@ const Editor = ({ setUuid, setContent1 }) => {
   return (
     <Box>
       <section>
-        {/*TODO : 높이 길어지면 스크롤 만들기*/}
+        {/*TODO : focus를 벗어나도 높이가 고정되게 만들기*/}
         <CKEditor
           editor={ClassicEditor}
           data=""
           config={{ extraPlugins: [uploadPlugin] }}
           onReady={(editor) => {
-            editor.ui.view.editable.element.style.minHeight = "500px";
+            editor.ui.view.editable.element.style.height = "500px";
             // You can store the "editor" and use when it is needed.
             // console.log("Editor is ready to use!", editor);
           }}
           onChange={(event, editor) => {
             setContent1(editor.getData());
-            editor.ui.view.editable.element.style.minHeight = "500px";
             // console.log({ event, editor, content });
           }}
-          onBlur={(event, editor) => {
-            editor.ui.view.editable.element.style.minHeight = "500px";
-            // console.log("Blur.", editor);
-          }}
           onFocus={(event, editor) => {
-            editor.ui.view.editable.element.style.minHeight = "500px";
-            // console.log("Focus.", editor);
+            editor.ui.view.editable.element.style.height = "500px";
+          }}
+          onBlur={(event, editor) => {
+            editor.ui.view.editable.element.style.height = "500px";
           }}
         />
       </section>
