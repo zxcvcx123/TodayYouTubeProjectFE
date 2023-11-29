@@ -94,7 +94,39 @@ function ReplyCommentItem({
         <Heading size="xs" bg="whitesmoke" borderRadius="5">
           {reply_comment.nickname}({reply_comment.member_id})
         </Heading>
-        <Text fontSize="xs">{reply_comment.created_at}</Text>
+        <Flex gap={2} alignItems="center">
+          <Text fontSize="xs">{reply_comment.created_at}</Text>
+          <Box>
+            <Flex gap={0.5}>
+              {isEditing || (
+                <Button
+                  size="xs"
+                  colorScheme="purple"
+                  onClick={() => setIsEditing(true)}
+                >
+                  <FontAwesomeIcon icon={faPenToSquare} />
+                </Button>
+              )}
+              {isEditing && (
+                <Button
+                  size="xs"
+                  colorScheme="gray"
+                  onClick={() => setIsEditing(false)}
+                >
+                  취소
+                </Button>
+              )}
+
+              <Button
+                onClick={() => onDeleteModalOpen(reply_comment.id)}
+                size="xs"
+                colorScheme="red"
+              >
+                <FontAwesomeIcon icon={faTrash} />
+              </Button>
+            </Flex>
+          </Box>
+        </Flex>
       </Flex>
 
       <Flex justifyContent="space-between" alignItems="center">
@@ -114,36 +146,6 @@ function ReplyCommentItem({
             </Box>
           )}
         </Box>
-        <Box>
-          <Flex gap={0.5}>
-            {isEditing || (
-              <Button
-                size="xs"
-                colorScheme="purple"
-                onClick={() => setIsEditing(true)}
-              >
-                <FontAwesomeIcon icon={faPenToSquare} />
-              </Button>
-            )}
-            {isEditing && (
-              <Button
-                size="xs"
-                colorScheme="gray"
-                onClick={() => setIsEditing(false)}
-              >
-                취소
-              </Button>
-            )}
-
-            <Button
-              onClick={() => onDeleteModalOpen(reply_comment.id)}
-              size="xs"
-              colorScheme="red"
-            >
-              <FontAwesomeIcon icon={faTrash} />
-            </Button>
-          </Flex>
-        </Box>
       </Flex>
     </Box>
   );
@@ -155,7 +157,7 @@ function ReplyCommentList({
   setIsSubmitting,
 }) {
   return (
-    <Card ml={10}>
+    <Card ml={5}>
       <CardBody>
         <Stack divider={<StackDivider />} spacing={4}>
           {reply_commentList.map((reply_comment) => (
