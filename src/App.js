@@ -16,6 +16,7 @@ import MemberLogin from "./member/MemberLogin";
 import { MainView } from "./layout/MainView";
 import { MainBoardList } from "./layout/MainBoardList";
 import Editor from "./component/Editor";
+import InquiryList from "./inquiry/InquiryList";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -27,6 +28,7 @@ const routes = createBrowserRouter(
       <Route path="board/:id" element={<BoardView />} />
       <Route path="board/list" element={<BoardList />} />
       <Route path="board/edit/:id" element={<BoardEdit />} />
+      <Route path="inquiry/list" element={<InquiryList />} />
       <Route path="/file/" element={<Filednd />} />
       <Route path={"member/signup"} element={<MemberSignup />} />
       <Route path={"member/login"} element={<MemberLogin />} />

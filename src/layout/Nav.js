@@ -63,6 +63,10 @@ export function Nav() {
               <MenuItem>요리</MenuItem>
               <MenuItem>영화/드라마</MenuItem>
               <MenuItem>게임</MenuItem>
+              <Divider />
+              <MenuItem onClick={() => navigate("/inquiry/list")}>
+                문의게시판
+              </MenuItem>
             </MenuList>
           </Menu>
         </Flex>
@@ -99,7 +103,6 @@ export function Nav() {
             >
               회원가입
             </Button>
-
           </Flex>
           <Menu w={200} size="md" variant="ghost">
             <MenuButton>
