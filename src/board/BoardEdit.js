@@ -14,6 +14,9 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { useImmer } from "use-immer";
 import { Filednd } from "../file/Filednd";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import Editor from "../component/Editor";
 
 function BoardEdit() {
   const [board, updateBoard] = useImmer(null);
@@ -26,7 +29,7 @@ function BoardEdit() {
     axios
       .get("/api/board/id/" + id)
       .then((response) => updateBoard(response.data));
-  }, []);
+  }, [board]);
 
   // 게시글을 로딩중이라면 스피너 돌리기
   if (board === null) {
@@ -74,12 +77,14 @@ function BoardEdit() {
       {/* 본문 */}
       <FormControl mb={2}>
         <FormLabel>본문</FormLabel>
-        <Textarea
-          value={board.content}
-          onChange={(e) => handleBoardUpdate(e, "content")}
-          h={"sm"}
-          resize={"none"}
-        />
+        <Box border={"1px solid red"}>
+          <Editor
+            data={board.content}
+            setContent1={(content) =>
+              handleBoardUpdate({ target: { value: content } }, "content")
+            }
+          />
+        </Box>
       </FormControl>
 
       {/*/!* 파일 *!/*/}

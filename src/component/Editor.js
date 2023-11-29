@@ -5,7 +5,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Box, Button } from "@chakra-ui/react";
 
-const Editor = ({ setUuid, setContent1 }) => {
+const Editor = ({ setUuid, setContent1, data }) => {
   const customUploadAdapter = (loader) => {
     return {
       upload() {
@@ -41,7 +41,7 @@ const Editor = ({ setUuid, setContent1 }) => {
         {/*TODO : focus를 벗어나도 높이가 고정되게 만들기*/}
         <CKEditor
           editor={ClassicEditor}
-          data=""
+          data={data || ""}
           config={{ extraPlugins: [uploadPlugin] }}
           onReady={(editor) => {
             editor.ui.view.editable.element.style.height = "500px";
