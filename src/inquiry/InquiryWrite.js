@@ -57,6 +57,7 @@ function InquiryWrite(props) {
           문의유형
         </FormLabel>
         <Select
+          borderColor={"black"}
           size={"sm"}
           width={"30%"}
           placeholder="문의 유형을 선택하세요"
@@ -74,6 +75,7 @@ function InquiryWrite(props) {
           제목
         </FormLabel>
         <Input
+          borderColor={"black.300"}
           type="text"
           width={"70%"}
           onChange={(e) => setTitle(e.target.value)}
@@ -84,6 +86,7 @@ function InquiryWrite(props) {
           문의내용
         </FormLabel>
         <Textarea
+          borderColor={"black.300"}
           padding={3}
           size={"xl"}
           h={"300px"}

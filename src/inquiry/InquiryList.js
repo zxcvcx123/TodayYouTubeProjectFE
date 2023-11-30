@@ -68,24 +68,84 @@ function InquiryList(props) {
         <Table size={"sm"}>
           <Thead>
             <Tr>
-              <Th>번호</Th>
-              <Th>카테고리</Th>
-              <Th>제목</Th>
-              <Th>작성자</Th>
-              <Th>작성일자</Th>
-              <Th>답변상태</Th>
+              <Th textAlign={"center"}>번호</Th>
+              <Th textAlign={"center"}>카테고리</Th>
+              <Th textAlign={"center"}>제목</Th>
+              <Th textAlign={"center"}>작성자</Th>
+              <Th textAlign={"center"}>작성일자</Th>
+              <Th textAlign={"center"}>답변상태</Th>
             </Tr>
           </Thead>
           <Tbody>
+            <Tr
+              backgroundColor={"purple.100"}
+              _hover={{
+                cursor: "pointer",
+                backgroundColor: "purple.200",
+              }}
+            >
+              <Td textAlign={"center"} fontWeight={"bold"}>
+                notice
+              </Td>
+              <Td textAlign={"center"} fontWeight={"bold"}>
+                공지사항
+              </Td>
+              <Td textAlign={"center"} fontWeight={"bold"}>
+                문의게시판 답변관련 공지사항입니다.
+              </Td>
+              <Td textAlign={"center"} fontWeight={"bold"}>
+                관리자
+              </Td>
+              <Td textAlign={"center"} fontWeight={"bold"}>
+                2023 / 11 / 30
+              </Td>
+              <Td textAlign={"center"} fontWeight={"bold"}>
+                --
+              </Td>
+            </Tr>
+            <Tr
+              backgroundColor={"purple.100"}
+              _hover={{
+                cursor: "pointer",
+                backgroundColor: "purple.200",
+              }}
+            >
+              <Td textAlign={"center"} fontWeight={"bold"}>
+                notice
+              </Td>
+              <Td textAlign={"center"} fontWeight={"bold"}>
+                공지사항
+              </Td>
+              <Td textAlign={"center"} fontWeight={"bold"}>
+                문의게시판 답변관련 공지사항입니다.
+              </Td>
+              <Td textAlign={"center"} fontWeight={"bold"}>
+                관리자
+              </Td>
+              <Td textAlign={"center"} fontWeight={"bold"}>
+                2023 / 11 / 30
+              </Td>
+              <Td textAlign={"center"} fontWeight={"bold"}>
+                --
+              </Td>
+            </Tr>
             {inquiryList &&
               inquiryList.map((inquiry) => (
-                <Tr key={inquiry.id}>
-                  <Td>{inquiry.id}</Td>
-                  <Td>{inquiry.inquiry_category}</Td>
-                  <Td>{inquiry.title}</Td>
-                  <Td>{inquiry.inquiry_member_id}</Td>
-                  <Td>{inquiry.created_at}</Td>
-                  <Td>{inquiry.answer_status}</Td>
+                <Tr
+                  textAlign={"center"}
+                  key={inquiry.id}
+                  _hover={{
+                    cursor: "pointer",
+                    backgroundColor: "gray.100",
+                  }}
+                  onClick={() => navigate("/inquiry/" + inquiry.id)}
+                >
+                  <Td textAlign={"center"}>{inquiry.id}</Td>
+                  <Td textAlign={"center"}>{inquiry.inquiry_category}</Td>
+                  <Td textAlign={"center"}>{inquiry.title}</Td>
+                  <Td textAlign={"center"}>{inquiry.inquiry_member_id}</Td>
+                  <Td textAlign={"center"}>{inquiry.created_at}</Td>
+                  <Td textAlign={"center"}>{inquiry.answer_status}</Td>
                 </Tr>
               ))}
           </Tbody>

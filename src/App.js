@@ -32,6 +32,7 @@ const routes = createBrowserRouter(
       <Route path="board/edit/:id" element={<BoardEdit />} />
       <Route path="inquiry/list" element={<InquiryList />} />
       <Route path="inquiry/write" element={<InquiryWrite />} />
+      <Route path="inquiry/:id" element={<InquiryView />} />
       <Route path="/file/" element={<Filednd />} />
       <Route path={"member/signup"} element={<MemberSignup />} />
       <Route path={"member/login"} element={<MemberLogin />} />
