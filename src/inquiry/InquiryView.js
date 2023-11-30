@@ -43,6 +43,20 @@ function InquiryView(props) {
     return <Spinner />;
   }
 
+  function handleDeleteButton() {
+    axios
+      .delete("/api/inquiry/delete/" + id)
+      .then(() => {
+        navigate("/inquiry/list");
+        toast({
+          description: "글이 삭제되었습니다.",
+          status: "success",
+        });
+      })
+      .catch(() => console.log("bad"))
+      .finally(() => console.log("done"));
+  }
+
   return (
     <Box width={"80%"} m={"auto"}>
       <FormControl mb={1}>
@@ -83,7 +97,10 @@ function InquiryView(props) {
           readOnly
         ></Textarea>
       </FormControl>
-      <Button colorScheme="blue" onClick={() => navigate("/api/inquiry/edit")}>
+      <Button
+        colorScheme="blue"
+        onClick={() => navigate("/inquiry/edit/" + id)}
+      >
         수정
       </Button>
       <Button colorScheme="red" onClick={onOpen}>
@@ -101,16 +118,7 @@ function InquiryView(props) {
             <Button variant={"ghost"} onClick={onClose}>
               닫기
             </Button>
-            <Button
-              colorScheme="blue"
-              onClick={() => {
-                navigate("/inquiry/list");
-                toast({
-                  description: "글이 삭제되었습니다.",
-                  status: "success",
-                });
-              }}
-            >
+            <Button colorScheme="blue" onClick={handleDeleteButton}>
               삭제
             </Button>
           </ModalFooter>
