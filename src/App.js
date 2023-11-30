@@ -2,6 +2,7 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
   Route,
+  Router,
   RouterProvider,
 } from "react-router-dom";
 import { HomeLayout } from "./layout/Homelayout";
@@ -16,6 +17,7 @@ import MemberLogin from "./member/MemberLogin";
 import { MainView } from "./layout/MainView";
 import { MainBoardList } from "./layout/MainBoardList";
 import Editor from "./component/Editor";
+import LoginProvider from "./component/LoginProvider";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
