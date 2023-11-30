@@ -2,6 +2,7 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
   Route,
+  Router,
   RouterProvider,
 } from "react-router-dom";
 import { HomeLayout } from "./layout/Homelayout";
@@ -19,6 +20,7 @@ import Editor from "./component/Editor";
 import InquiryList from "./inquiry/InquiryList";
 import InquiryView from "./inquiry/InquiryView";
 import InquiryWrite from "./inquiry/InquiryWrite";
+import LoginProvider from "./component/LoginProvider";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
