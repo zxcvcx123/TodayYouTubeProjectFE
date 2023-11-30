@@ -21,13 +21,26 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { BoardReplyComment } from "./BoardReplyComment";
 import { SmallAddIcon } from "@chakra-ui/icons";
 import YouTube from "react-youtube";
+import { isDisabled } from "@testing-library/user-event/dist/utils";
+import {
+  faCommentDots,
+  faEnvelope,
+  faPen,
+  faPencil,
+  faTrash,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import { faHeart } from "@fortawesome/free-regular-svg-icons";
+import commentLike from "../like/CommentLike";
 
-function CommentFrom({ board_id, isSubmitting, onSubmit }) {
+function CommentForm({ board_id, isSubmitting, onSubmit, setCommentLike }) {
   const [comment, setComment] = useState("");
 
   function handleSubmit() {
@@ -49,9 +62,12 @@ function CommentItem({
   onDeleteModalOpen,
   setIsSubmitting,
   isSubmitting,
+  setCommentLike,
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [commentEdited, setCommentEdited] = useState(comment.comment);
+  const [isReplyFormOpen, setIsReplyFormOpen] = useState(false);
+  const [isReplyListOpen, setIsReplyListOpen] = useState(false);
 
   const toast = useToast();
 
@@ -73,32 +89,109 @@ function CommentItem({
       });
   }
 
+  function handleCommentLike() {
+    axios
+      .post("/api/comment/like", {
+        member_id: comment.member_id,
+        board_id: comment.board_id,
+        comment_id: comment.id,
+      })
+      .then((response) => setCommentLike(response.data))
+      .catch((error) => console.log("bad"))
+      .finally(() => console.log("done"));
+  }
+
   return (
     <Box>
       <Flex justifyContent="space-between">
         <Heading size="xs" bg="whitesmoke" borderRadius="5">
           {comment.nickname}({comment.member_id})
         </Heading>
-        <Text size="xs" as="sub">
-          {comment.created_at}
-        </Text>
+        <Flex gap={2} alignItems="center">
+          <Text size="xs" as="sub">
+            {comment.created_at}
+          </Text>
+          <Flex gap={0.5}>
+            {isEditing || (
+              <Button
+                size="xs"
+                colorScheme="purple"
+                onClick={() => setIsEditing(true)}
+              >
+                <FontAwesomeIcon icon={faPenToSquare} />
+              </Button>
+            )}
+            {isEditing && (
+              <Button
+                size="xs"
+                colorScheme="gray"
+                onClick={() => setIsEditing(false)}
+              >
+                <FontAwesomeIcon icon={faXmark} />
+              </Button>
+            )}
+            <Button
+              onClick={() => onDeleteModalOpen(comment.id)}
+              colorScheme="red"
+              size="xs"
+            >
+              <FontAwesomeIcon icon={faTrash} />
+            </Button>
+          </Flex>
+        </Flex>
       </Flex>
       <Flex justifyContent="space-between" alignItems="center">
         <Box flex={1}>
-          <Text
-            sx={{ whiteSpace: "pre-wrap" }}
-            pt="2"
-            fontSize="sm"
-            alignItems="center"
-            justifyContent="center"
-          >
-            {comment.comment}
-            <Button size="xs">
-              <SmallAddIcon />
-            </Button>
-            <BoardReplyComment comment_id={comment.id} />
-          </Text>
+          <Flex alignItems="center" gap={2}>
+            <Text
+              sx={{ whiteSpace: "pre-wrap" }}
+              pt="2"
+              fontSize="sm"
+              alignItems="center"
+              justifyContent="center"
+            >
+              {comment.comment}
+            </Text>
+            <Flex gap={0.3} mt={2}>
+              <Button
+                size="xs"
+                colorScheme="blackAlpha"
+                onClick={() => setIsReplyFormOpen(!isReplyFormOpen)}
+              >
+                <FontAwesomeIcon icon={faPen} />
+              </Button>
+              <Button
+                size="xs"
+                colorScheme="blackAlpha"
+                onClick={() => setIsReplyListOpen(!isReplyListOpen)}
+              >
+                <FontAwesomeIcon icon={faCommentDots} />
+              </Button>
 
+              <Flex alignItems="center">
+                <Button
+                  variant="ghost"
+                  size="xs"
+                  colorScheme="red"
+                  onClick={handleCommentLike}
+                >
+                  <FontAwesomeIcon icon={faHeart} />
+                </Button>{" "}
+                <Text fontSize="x-small">{comment.count_comment_like}</Text>
+              </Flex>
+            </Flex>
+          </Flex>
+
+          <BoardReplyComment
+            setIsReplyFormOpen={setIsReplyFormOpen}
+            isReplyFormOpen={isReplyFormOpen}
+            isReplyListOpen={isReplyListOpen}
+            comment_id={comment.id}
+            onClick={() => {
+              setIsReplyFormOpen(false);
+            }}
+            isReplyFormOpen={isReplyFormOpen}
+          />
           {isEditing && (
             <Box>
               <Textarea
@@ -111,37 +204,10 @@ function CommentItem({
                 colorScheme="telegram"
                 onClick={handleSubmit}
               >
-                저장
+                <FontAwesomeIcon icon={faPenToSquare} />
               </Button>
             </Box>
           )}
-        </Box>
-        <Box>
-          {isEditing || (
-            <Button
-              size="xs"
-              colorScheme="purple"
-              onClick={() => setIsEditing(true)}
-            >
-              수정
-            </Button>
-          )}
-          {isEditing && (
-            <Button
-              size="xs"
-              colorScheme="gray"
-              onClick={() => setIsEditing(false)}
-            >
-              취소
-            </Button>
-          )}
-          <Button
-            onClick={() => onDeleteModalOpen(comment.id)}
-            colorScheme="red"
-            size="xs"
-          >
-            삭제
-          </Button>
         </Box>
       </Flex>
     </Box>
@@ -153,6 +219,7 @@ function CommentList({
   onDeleteModalOpen,
   isSubmitting,
   setIsSubmitting,
+  setCommentLike,
 }) {
   return (
     <Card border="1px solid black" borderRadius="5" mt={3}>
@@ -167,6 +234,7 @@ function CommentList({
               comment={comment}
               setIsSubmitting={setIsSubmitting}
               onDeleteModalOpen={onDeleteModalOpen}
+              setCommentLike={setCommentLike}
             />
           ))}
         </Stack>
@@ -177,6 +245,7 @@ function CommentList({
 
 export function BoardComment({ board_id }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [commentLike, setCommentLike] = useState(null);
 
   const commentIdRef = useRef(0);
   const toast = useToast();
@@ -237,10 +306,11 @@ export function BoardComment({ board_id }) {
 
   return (
     <Box mt={5}>
-      <CommentFrom
+      <CommentForm
         board_id={board_id}
         isSubmitting={isSubmitting}
         onSubmit={handleSubmit}
+        setCommentLike={setCommentLike}
       />
       <CommentList
         board_id={board_id}
@@ -248,6 +318,7 @@ export function BoardComment({ board_id }) {
         setIsSubmitting={setIsSubmitting}
         commentList={commentList}
         onDeleteModalOpen={handleCommentDeleteModalOpen}
+        setCommentLike={setCommentLike}
       />
 
       {/* 삭제 모달 */}
