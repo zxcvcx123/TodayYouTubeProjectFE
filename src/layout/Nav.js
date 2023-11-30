@@ -15,7 +15,7 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import * as PropTypes from "prop-types";
-import React from "react";
+import React, { useContext } from "react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { SearchMain } from "./SearchMain";
 import { faBell } from "@fortawesome/free-regular-svg-icons";
@@ -23,6 +23,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { MainView } from "./MainView";
 import { MainBoardList } from "./MainBoardList";
 import { useNavigate } from "react-router-dom";
+import { DetectLoginContext } from "../component/LoginProvider";
 
 Stack.propTypes = {
   p: PropTypes.number,
@@ -32,6 +33,7 @@ Stack.propTypes = {
 };
 
 export function Nav() {
+  const { detectLogin, logout, loginInfo } = useContext(DetectLoginContext);
   let navigate = useNavigate();
 
   return (
@@ -78,17 +80,20 @@ export function Nav() {
               variant="ghost"
               leftIcon={<FontAwesomeIcon icon={faBell} />}
             ></Button>
-            <Button
-              onClick={() => {
-                navigate("member/login");
-              }}
-              w={90}
-              size="md"
-              variant="ghost"
-            >
-              로그인
-            </Button>
-
+            {detectLogin ? (
+              <Box>반갑습니다 {loginInfo.nickname}</Box>
+            ) : (
+              <Button
+                onClick={() => {
+                  navigate("member/login");
+                }}
+                w={90}
+                size="md"
+                variant="ghost"
+              >
+                로그인
+              </Button>
+            )}
             <Button
               onClick={() => {
                 navigate("member/signup");
@@ -99,7 +104,6 @@ export function Nav() {
             >
               회원가입
             </Button>
-
           </Flex>
           <Menu w={200} size="md" variant="ghost">
             <MenuButton>
