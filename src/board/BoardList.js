@@ -78,21 +78,23 @@ function BoardList() {
               글쓰기
             </Button>
           </Box>
-          <Box>
-            <Tooltip label={"리스트 형태 보기"}>
-              <Button onClick={switchToListView}>
-                <FontAwesomeIcon icon={faList} />
-              </Button>
-            </Tooltip>
-            <Tooltip label={"격자 형태 보기 "}>
-              <Button onClick={switchToGridView}>
-                <FontAwesomeIcon icon={faBorderAll} />
-              </Button>
-            </Tooltip>
-          </Box>
+          <Flex>
+            {/* 게시글 몇개씩 볼건지*/}
+            <PageCount />
+            <Box ml={3}>
+              <Tooltip label={"리스트 형태 보기"}>
+                <Button onClick={switchToListView}>
+                  <FontAwesomeIcon icon={faList} />
+                </Button>
+              </Tooltip>
+              <Tooltip label={"격자 형태 보기 "}>
+                <Button onClick={switchToGridView}>
+                  <FontAwesomeIcon icon={faBorderAll} />
+                </Button>
+              </Tooltip>
+            </Box>
+          </Flex>
         </Flex>
-        {/* 게시글 몇개씩 볼건지 선택 */}
-        <PageCount />
 
         {/* currentView에 따라 게시판 목록 형태가 달라짐 */}
         {currentView === "list" ? (
@@ -177,7 +179,7 @@ function BoardList() {
               </Tbody>
             </Table>
             <Center>
-              <Box>
+              <Box width={"70%"}>
                 <SearchComponent />
                 <Pagination pageInfo={pageInfo} />
               </Box>

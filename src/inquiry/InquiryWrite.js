@@ -25,7 +25,7 @@ import Editor from "../component/Editor";
 function InquiryWrite(props) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [inquiry_category, setInquiry_category] = useState(1);
+  const [inquiry_category, setInquiry_category] = useState(null);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 

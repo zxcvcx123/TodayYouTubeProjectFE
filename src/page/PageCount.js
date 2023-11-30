@@ -23,24 +23,34 @@ function PageCount(props) {
   }, [pageCount]);
 
   return (
+    <Box>
+      <Select onChange={(e) => setPageCount(e.target.value)}>
+        <option value={5}>5개씩 보기</option>
+        <option selected value={10}>
+          10개씩 보기
+        </option>
+        <option value={20}>20개씩 보기</option>
+      </Select>
+    </Box>
+
     // radio로 해본것
 
-    <Box>
-      <RadioGroup
-        border="1px"
-        borderColor="gray.200"
-        padding={1}
-        size={"sm"}
-        value={pageCount}
-        onChange={setPageCount}
-      >
-        <Stack spacing={4} direction="row">
-          <Radio value="5">5개씩 보기</Radio>
-          <Radio value="10">10개씩 보기</Radio>
-          <Radio value="20">20개씩 보기</Radio>
-        </Stack>
-      </RadioGroup>
-    </Box>
+    // <Box>
+    //   <RadioGroup
+    //     border="1px"
+    //     borderColor="gray.200"
+    //     padding={1}
+    //     size={"sm"}
+    //     value={pageCount}
+    //     onChange={setPageCount}
+    //   >
+    //     <Stack spacing={4} direction="row">
+    //       <Radio value="5">5개씩 보기</Radio>
+    //       <Radio value="10">10개씩 보기</Radio>
+    //       <Radio value="20">20개씩 보기</Radio>
+    //     </Stack>
+    //   </RadioGroup>
+    // </Box>
 
     // <Flex border={"1px"} borderColor={"gray.200"} padding={1}>
     //   <Box
