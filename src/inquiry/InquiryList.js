@@ -2,6 +2,10 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import {
   Box,
+  Button,
+  Divider,
+  Flex,
+  Heading,
   Spinner,
   Table,
   Tbody,
@@ -10,11 +14,14 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { defineStyle, defineStyleConfig } from "@chakra-ui/react";
+import { extendTheme } from "@chakra-ui/react";
 
 function InquiryList(props) {
   const [inquiryList, setInquiryList] = useState(null);
 
+  const navigate = useNavigate();
   const [params] = useSearchParams();
 
   useEffect(() => {
@@ -30,6 +37,34 @@ function InquiryList(props) {
   return (
     <Box>
       <Box width={"60%"} m={"auto"}>
+        <Box>
+          <Heading mb={2}>문의게시판</Heading>
+          <Flex
+            width={"99%"}
+            justifyContent={"space-between"}
+            alignItems={"center"}
+            mb={2}
+          >
+            <Box
+              mb={3}
+              fontSize={"0.9rem"}
+              ml={3}
+              fontStyle={"italic"}
+              color={"gray.500"}
+            >
+              문의하실 사항이 있으면 말씀해주세요
+            </Box>
+            <Button
+              colorScheme="red"
+              variant={"outline"}
+              onClick={() => navigate("/inquiry/write")}
+            >
+              문의하기
+            </Button>
+          </Flex>
+          <Divider />
+        </Box>
+
         <Table size={"sm"}>
           <Thead>
             <Tr>
