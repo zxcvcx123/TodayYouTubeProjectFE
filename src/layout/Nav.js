@@ -5,13 +5,10 @@ import {
   Divider,
   Flex,
   HStack,
-  ListIcon,
-  ListItem,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
-  OrderedList,
   Stack,
 } from "@chakra-ui/react";
 import * as PropTypes from "prop-types";
@@ -20,8 +17,6 @@ import { ChevronDownIcon } from "@chakra-ui/icons";
 import { SearchMain } from "./SearchMain";
 import { faBell } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { MainView } from "./MainView";
-import { MainBoardList } from "./MainBoardList";
 import { useNavigate } from "react-router-dom";
 import { DetectLoginContext } from "../component/LoginProvider";
 
@@ -65,6 +60,10 @@ export function Nav() {
               <MenuItem>요리</MenuItem>
               <MenuItem>영화/드라마</MenuItem>
               <MenuItem>게임</MenuItem>
+              <Divider />
+              <MenuItem onClick={() => navigate("/inquiry/list")}>
+                문의게시판
+              </MenuItem>
             </MenuList>
           </Menu>
         </Flex>

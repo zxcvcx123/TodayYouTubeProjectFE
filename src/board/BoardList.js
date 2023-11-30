@@ -9,7 +9,10 @@ import {
   CardHeader,
   Center,
   Flex,
+  Radio,
+  RadioGroup,
   SimpleGrid,
+  Stack,
   Table,
   Tbody,
   Td,
@@ -30,6 +33,8 @@ import {
   faThumbsUp,
 } from "@fortawesome/free-solid-svg-icons";
 import { SearchComponent } from "../page/SearchComponent";
+import PageCount from "../page/PageCount";
+import pageCount from "../page/PageCount";
 
 function BoardList() {
   // state
@@ -85,6 +90,8 @@ function BoardList() {
             </Tooltip>
           </Box>
         </Flex>
+        {/* 게시글 몇개씩 볼건지 선택 */}
+        <PageCount />
 
         {/* currentView에 따라 게시판 목록 형태가 달라짐 */}
         {currentView === "list" ? (
