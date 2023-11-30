@@ -8,6 +8,7 @@ import {
   CardFooter,
   CardHeader,
   Center,
+  Divider,
   Flex,
   SimpleGrid,
   Table,
@@ -131,13 +132,20 @@ function BoardList() {
                               {/* 짤린 제목에 커서를 올릴 시 제목이 툴팁으로 나타남 */}
                               {board.title.length > 20 ? (
                                 <Tooltip label={board.title}>
-                                  <Text>{`${board.title.slice(
-                                    0,
-                                    20,
-                                  )}...`}</Text>
+                                  <Text>
+                                    {`${board.title.slice(0, 20)}...`}
+                                    {"    "}
+                                    <FontAwesomeIcon icon={faComment} />{" "}
+                                    {board.count_comment}
+                                  </Text>
                                 </Tooltip>
                               ) : (
-                                <Text>{board.title}</Text>
+                                <Text>
+                                  {board.title}
+                                  {"    "}
+                                  <FontAwesomeIcon icon={faComment} />{" "}
+                                  {board.count_comment}
+                                </Text>
                               )}
                             </Flex>
                           </Td>
@@ -202,7 +210,9 @@ function BoardList() {
                               )}...`}</Text>
                             </Tooltip>
                           ) : (
-                            <Text fontWeight={"bold"}>{board.title}</Text>
+                            <Flex>
+                              <Text fontWeight={"bold"}>{board.title}</Text>{" "}
+                            </Flex>
                           )}
                         </CardBody>
                         <CardFooter p={"10px"}>
@@ -215,7 +225,8 @@ function BoardList() {
                                 {board.countlike}
                               </Box>
                               <Box>
-                                <FontAwesomeIcon icon={faComment} /> 0
+                                <FontAwesomeIcon icon={faComment} />{" "}
+                                {board.count_comment}
                               </Box>
                               <Box>
                                 <Text>조회수 : {board.views}</Text>
