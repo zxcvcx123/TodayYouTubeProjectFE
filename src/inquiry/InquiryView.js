@@ -21,6 +21,7 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import Editor from "../component/Editor";
 
 function InquiryView(props) {
   const [inquiry, setInquiry] = useState(null);
@@ -68,6 +69,7 @@ function InquiryView(props) {
           borderColor={"black.300"}
         ></Input>
       </FormControl>
+      {/*<Editor />*/}
       <FormControl mb={1}>
         <FormLabel fontWeight={"bold"} ml={3}>
           문의내용

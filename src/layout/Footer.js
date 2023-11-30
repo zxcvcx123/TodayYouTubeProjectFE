@@ -12,7 +12,7 @@ export function Footer() {
     // position, transform 코드는 footer를 바닥에 고정시키려쓴 코드
     <Box
       position="relative"
-      transform="translateY(-100%)"
+      transform="translateY(0%)"
       height="300px"
       mt={20}
       backgroundColor="gray.700"

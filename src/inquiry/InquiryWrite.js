@@ -20,6 +20,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import Editor from "../component/Editor";
 
 function InquiryWrite(props) {
   const [title, setTitle] = useState("");
@@ -81,6 +82,7 @@ function InquiryWrite(props) {
           onChange={(e) => setTitle(e.target.value)}
         ></Input>
       </FormControl>
+      {/*<Editor />*/}
       <FormControl mb={5}>
         <FormLabel fontWeight={"bold"} ml={3}>
           문의내용
