@@ -43,6 +43,8 @@ function BoardWrite() {
       .catch(() => console.log("error"))
       .finally(() => {});
   }
+
+  // 본문 영역 이미지 소스 코드 얻어오기
   function getSrc() {
     let imgSrc = document.getElementsByTagName("img");
     let arrSrc = [];

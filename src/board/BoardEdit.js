@@ -39,11 +39,32 @@ function BoardEdit() {
 
   // 게시글 수정 버튼 클릭 함수
   function handleSubmit() {
+    let uuSrc = getSrc();
+
     axios
-      .put("/api/board/edit", board)
+      .put("/api/board/edit", { board, uuSrc })
       .then(() => navigate("/board/list"))
       .catch(() => console.log("bad"))
       .finally(() => console.log("done"));
+  }
+
+  // 본문 영역 이미지 소스 코드 얻어오기
+  function getSrc() {
+    let imgSrc = document.getElementsByTagName("img");
+    let arrSrc = [];
+
+    for (let i = 0; i < imgSrc.length; i++) {
+      if (
+        imgSrc[i].src.length > 0 &&
+        imgSrc[i].src.startsWith(
+          "https://mybucketcontainer1133557799.s3.ap-northeast-2.amazonaws.com/fileserver/",
+        )
+      ) {
+        arrSrc.push(imgSrc[i].src.substring(79, 115));
+      }
+    }
+
+    return arrSrc;
   }
 
   // 게시글 수정 시 상태 업데이트
