@@ -1,5 +1,6 @@
 import { Box, Center, Flex } from "@chakra-ui/react";
 import React from "react";
+import { MainBoardList } from "./MainBoardList";
 
 export function MainView() {
   // 임시메인
@@ -59,6 +60,7 @@ export function MainView() {
           </Box>
         </Flex>
       </Center>
+      {/*<MainBoardList />*/}
     </Box>
   );
 }

@@ -69,8 +69,8 @@ function BoardEdit() {
         is_show: board.is_show,
         countlike: board.countlike,
         views: board.views,
+        uuSrc,
         uploadFiles,
-        uuSrc
       })
       .then(() => navigate("/board/list"))
       .catch(() => console.log("bad"))
