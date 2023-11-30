@@ -22,41 +22,43 @@ export function MemberLogin() {
   /* 아이디 */
   const [member_id, setMember_id] = useState("");
   const [password, setPassword] = useState("");
-  const [role_id, setRole_id] = useState(2);
-  const [role_name, setRole_name] = useState("general_member");
   const navigate = useNavigate();
   const toast = useToast();
 
   function handleLogin() {
     axios
-      .post(
-        "/member/login",
-        {
-          member_id,
-          password,
-        },
-        {
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-        },
-      )
-      .then(() => {
+      .post("/api/member/login", {
+        member_id,
+        password,
+      })
+      .then(function (response) {
         toast({
           description: "로그인 되었습니다.",
           status: "info",
         });
+        const { grantType, accessToken, refreshToken, memberInfo } =
+          response.data.token;
+        const authority = response.data.authentication[0].toString();
+        localStorage.setItem("grantType", grantType);
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
+        localStorage.setItem("authority", authority);
+        localStorage.setItem("memberInfo", memberInfo);
         navigate("/");
       })
       .catch((error) => {
         console.log(error);
 
-        if (error.response.status === 302) {
+        if (error.response && error.response.status === 400) {
           toast({
-            description: "로그인 되었습니다.",
-            status: "info",
+            description: "잘못된 접근입니다.",
+            status: "warning",
           });
-          navigate("/");
+        } else if (error.response && error.response.status === 404) {
+          toast({
+            description: "아이디와 암호를 다시 입력해주세요",
+            status: "warning",
+          });
         } else {
           toast({
             description: "아이디와 암호를 다시 입력해주세요",
@@ -65,7 +67,6 @@ export function MemberLogin() {
         }
       });
   }
-
   return (
     <>
       <Box marginTop={"130px"}>

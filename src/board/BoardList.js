@@ -8,8 +8,12 @@ import {
   CardFooter,
   CardHeader,
   Center,
+  Divider,
   Flex,
+  Radio,
+  RadioGroup,
   SimpleGrid,
+  Stack,
   Table,
   Tbody,
   Td,
@@ -30,6 +34,8 @@ import {
   faThumbsUp,
 } from "@fortawesome/free-solid-svg-icons";
 import { SearchComponent } from "../page/SearchComponent";
+import PageCount from "../page/PageCount";
+import pageCount from "../page/PageCount";
 
 function BoardList() {
   // state
@@ -85,6 +91,8 @@ function BoardList() {
             </Tooltip>
           </Box>
         </Flex>
+        {/* 게시글 몇개씩 볼건지 선택 */}
+        <PageCount />
 
         {/* currentView에 따라 게시판 목록 형태가 달라짐 */}
         {currentView === "list" ? (
@@ -131,13 +139,20 @@ function BoardList() {
                               {/* 짤린 제목에 커서를 올릴 시 제목이 툴팁으로 나타남 */}
                               {board.title.length > 20 ? (
                                 <Tooltip label={board.title}>
-                                  <Text>{`${board.title.slice(
-                                    0,
-                                    20,
-                                  )}...`}</Text>
+                                  <Text>
+                                    {`${board.title.slice(0, 20)}...`}
+                                    {"    "}
+                                    <FontAwesomeIcon icon={faComment} />{" "}
+                                    {board.count_comment}
+                                  </Text>
                                 </Tooltip>
                               ) : (
-                                <Text>{board.title}</Text>
+                                <Text>
+                                  {board.title}
+                                  {"    "}
+                                  <FontAwesomeIcon icon={faComment} />{" "}
+                                  {board.count_comment}
+                                </Text>
                               )}
                             </Flex>
                           </Td>
@@ -178,7 +193,12 @@ function BoardList() {
                     key={board.id}
                     w={"270px"}
                     h={"300px"}
-                    border={"1px solid black"}
+                    border={"1px solid lightgray"}
+                    onClick={() => navigate("/board/" + board.id)}
+                    _hover={{
+                      backgroundColor: "lightcyan",
+                      cursor: "pointer",
+                    }}
                   >
                     {/* is_show = true 인 경우 */}
                     {board.is_show ? (
@@ -202,7 +222,9 @@ function BoardList() {
                               )}...`}</Text>
                             </Tooltip>
                           ) : (
-                            <Text fontWeight={"bold"}>{board.title}</Text>
+                            <Flex>
+                              <Text fontWeight={"bold"}>{board.title}</Text>{" "}
+                            </Flex>
                           )}
                         </CardBody>
                         <CardFooter p={"10px"}>
@@ -215,7 +237,8 @@ function BoardList() {
                                 {board.countlike}
                               </Box>
                               <Box>
-                                <FontAwesomeIcon icon={faComment} /> 0
+                                <FontAwesomeIcon icon={faComment} />{" "}
+                                {board.count_comment}
                               </Box>
                               <Box>
                                 <Text>조회수 : {board.views}</Text>
@@ -258,4 +281,5 @@ function BoardList() {
     </Flex>
   );
 }
+
 export default BoardList;

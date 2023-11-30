@@ -2,6 +2,7 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
   Route,
+  Router,
   RouterProvider,
 } from "react-router-dom";
 import { HomeLayout } from "./layout/Homelayout";
@@ -17,6 +18,10 @@ import { MainView } from "./layout/MainView";
 import { MainBoardList } from "./layout/MainBoardList";
 import Editor from "./component/Editor";
 import Chat from "./socket/Chat";
+import InquiryList from "./inquiry/InquiryList";
+import InquiryView from "./inquiry/InquiryView";
+import InquiryWrite from "./inquiry/InquiryWrite";
+import LoginProvider from "./component/LoginProvider";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -28,6 +33,9 @@ const routes = createBrowserRouter(
       <Route path="board/:id" element={<BoardView />} />
       <Route path="board/list" element={<BoardList />} />
       <Route path="board/edit/:id" element={<BoardEdit />} />
+      <Route path="inquiry/list" element={<InquiryList />} />
+      <Route path="inquiry/write" element={<InquiryWrite />} />
+      <Route path="inquiry/:id" element={<InquiryView />} />
       <Route path="/file/" element={<Filednd />} />
       <Route path={"member/signup"} element={<MemberSignup />} />
       <Route path={"member/login"} element={<MemberLogin />} />

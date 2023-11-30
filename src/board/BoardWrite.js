@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -21,17 +21,46 @@ function BoardWrite() {
   const [link, setLink] = useState("");
   const [content, setContent] = useState("");
   const [uploadFiles, setUploadFiles] = useState([]);
-  const [uuid, setUuid] = useState(null);
+  const [uuid, setUuid] = useState("");
 
   /* use navigate */
   let navigate = useNavigate();
 
   function handleSubmit() {
+    let uuSrc = getSrc();
+
+    console.log(uuSrc);
+
     axios
-      .postForm("/api/board/add", { title, link, content, uploadFiles, uuid })
+      .postForm("/api/board/add", {
+        title,
+        link,
+        content,
+        uploadFiles,
+        uuSrc,
+      })
       .then(() => navigate("/board/list"))
       .catch(() => console.log("error"))
-      .finally(() => console.log("done"));
+      .finally(() => {});
+  }
+
+  // 본문 영역 이미지 소스 코드 얻어오기
+  function getSrc() {
+    let imgSrc = document.getElementsByTagName("img");
+    let arrSrc = [];
+
+    for (let i = 0; i < imgSrc.length; i++) {
+      if (
+        imgSrc[i].src.length > 0 &&
+        imgSrc[i].src.startsWith(
+          "https://mybucketcontainer1133557799.s3.ap-northeast-2.amazonaws.com/fileserver/",
+        )
+      ) {
+        arrSrc.push(imgSrc[i].src.substring(79, 115));
+      }
+    }
+
+    return arrSrc;
   }
 
   return (
@@ -62,7 +91,7 @@ function BoardWrite() {
       <FormControl mb={2}>
         <FormLabel>본문</FormLabel>
         {/* CKEditor 본문 영역 */}
-        <Editor setUuid={setUuid} setContent1={setContent} />
+        <Editor setUuid={setUuid} uuid={uuid} setContent1={setContent} />
 
         {/*<Textarea
           value={content}
