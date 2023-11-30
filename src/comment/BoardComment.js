@@ -37,8 +37,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import { faHeart } from "@fortawesome/free-regular-svg-icons";
+import commentLike from "../like/CommentLike";
 
-function CommentForm({ board_id, isSubmitting, onSubmit }) {
+function CommentForm({ board_id, isSubmitting, onSubmit, setCommentLike }) {
   const [comment, setComment] = useState("");
 
   function handleSubmit() {
@@ -60,6 +62,7 @@ function CommentItem({
   onDeleteModalOpen,
   setIsSubmitting,
   isSubmitting,
+  setCommentLike,
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [commentEdited, setCommentEdited] = useState(comment.comment);
@@ -84,6 +87,18 @@ function CommentItem({
         setIsSubmitting(false);
         setIsEditing(false);
       });
+  }
+
+  function handleCommentLike() {
+    axios
+      .post("/api/comment/like", {
+        member_id: comment.member_id,
+        board_id: comment.board_id,
+        comment_id: comment.id,
+      })
+      .then((response) => setCommentLike(response.data))
+      .catch((error) => console.log("bad"))
+      .finally(() => console.log("done"));
   }
 
   return (
@@ -152,6 +167,18 @@ function CommentItem({
               >
                 <FontAwesomeIcon icon={faCommentDots} />
               </Button>
+
+              <Flex alignItems="center">
+                <Button
+                  variant="ghost"
+                  size="xs"
+                  colorScheme="red"
+                  onClick={handleCommentLike}
+                >
+                  <FontAwesomeIcon icon={faHeart} />
+                </Button>{" "}
+                <Text fontSize="x-small">{comment.count_comment_like}</Text>
+              </Flex>
             </Flex>
           </Flex>
 
@@ -192,6 +219,7 @@ function CommentList({
   onDeleteModalOpen,
   isSubmitting,
   setIsSubmitting,
+  setCommentLike,
 }) {
   return (
     <Card border="1px solid black" borderRadius="5" mt={3}>
@@ -206,6 +234,7 @@ function CommentList({
               comment={comment}
               setIsSubmitting={setIsSubmitting}
               onDeleteModalOpen={onDeleteModalOpen}
+              setCommentLike={setCommentLike}
             />
           ))}
         </Stack>
@@ -216,6 +245,7 @@ function CommentList({
 
 export function BoardComment({ board_id }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [commentLike, setCommentLike] = useState(null);
 
   const commentIdRef = useRef(0);
   const toast = useToast();
@@ -280,6 +310,7 @@ export function BoardComment({ board_id }) {
         board_id={board_id}
         isSubmitting={isSubmitting}
         onSubmit={handleSubmit}
+        setCommentLike={setCommentLike}
       />
       <CommentList
         board_id={board_id}
@@ -287,6 +318,7 @@ export function BoardComment({ board_id }) {
         setIsSubmitting={setIsSubmitting}
         commentList={commentList}
         onDeleteModalOpen={handleCommentDeleteModalOpen}
+        setCommentLike={setCommentLike}
       />
 
       {/* 삭제 모달 */}
