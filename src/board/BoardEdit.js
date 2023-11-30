@@ -20,6 +20,9 @@ import Editor from "../component/Editor";
 
 function BoardEdit() {
   const [board, updateBoard] = useImmer(null);
+  const [editUploadFiles, setEditUploadFiles] = useState([]);
+  const [uploadFiles, setUploadFiles] = useState([]);
+  const [mode, setMode] = useState("");
 
   const { id } = useParams();
 
@@ -32,6 +35,18 @@ function BoardEdit() {
       .then((response) => updateBoard(response.data));
   }, []);
 
+  // 파일 목록 가져오기
+  useEffect(() => {
+    axios
+      .get("/api/file/list/" + id)
+      .then((response) => {
+        setEditUploadFiles(response.data);
+        setMode("Update");
+      })
+      .catch()
+      .finally();
+  }, []);
+
   // 게시글을 로딩중이라면 스피너 돌리기
   if (board === null) {
     return <Spinner />;
@@ -42,7 +57,21 @@ function BoardEdit() {
     let uuSrc = getSrc();
 
     axios
-      .put("/api/board/edit", { board, uuSrc })
+      .putForm("/api/board/edit", {
+        id: board.id,
+        title: board.title,
+        content: board.content,
+        link: board.link,
+        board_category_code: board.board_category_code,
+        board_member_id: board.board_member_id,
+        created_at: board.created_at,
+        updated_at: board.updated_at,
+        is_show: board.is_show,
+        countlike: board.countlike,
+        views: board.views,
+        uploadFiles,
+        uuSrc
+      })
       .then(() => navigate("/board/list"))
       .catch(() => console.log("bad"))
       .finally(() => console.log("done"));
@@ -111,8 +140,14 @@ function BoardEdit() {
         </Box>
       </FormControl>
 
-      {/*/!* 파일 *!/*/}
-      {/*<Filednd uploadFiles={uploadFiles} setUploadFiles={setUploadFiles} />*/}
+      {/* 파일 */}
+      <Filednd
+        editUploadFiles={editUploadFiles}
+        setEditUploadFiles={setEditUploadFiles}
+        mode={mode}
+        setUploadFiles={setUploadFiles}
+        uploadFiles={uploadFiles}
+      />
 
       {/* 저장 버튼 */}
       <Button onClick={handleSubmit} colorScheme="blue">

@@ -46,7 +46,7 @@ function BoardView() {
       .finally(() => {});
   }, []);
 
-  // 초기 렌더링 파일 목로 가져오기
+  // 초기 렌더링 파일 목록 가져오기
   useEffect(() => {
     axios.get("/api/file/list/" + id).then((response) => {
       setUploadFiles(response.data);
@@ -154,29 +154,29 @@ function BoardView() {
         </Box>
       </FormControl>
 
-      {/*/!* 파일 리스트 *!/*/}
-      {/*{uploadFile.length > 0 && (*/}
-      {/*  <Box mb={2}>*/}
-      {/*    <Text>파일 목록</Text>*/}
-      {/*    <Box*/}
-      {/*      border={"1px solid #edf1f6"}*/}
-      {/*      h={"50px"}*/}
-      {/*      display={"flex"}*/}
-      {/*      alignItems={"center"}*/}
-      {/*      gap={3}*/}
-      {/*    >*/}
-      {/*      {uploadFile.map((fileList) => (*/}
-      {/*        <Link*/}
-      {/*          key={fileList.id}*/}
-      {/*          style={{ display: "block", color: "blue" }}*/}
-      {/*          to={fileList.fileurl}*/}
-      {/*        >*/}
-      {/*          {fileList.filename}*/}
-      {/*        </Link>*/}
-      {/*      ))}*/}
-      {/*    </Box>*/}
-      {/*  </Box>*/}
-      {/*)}*/}
+      {/* 파일 리스트 */}
+      {uploadFiles.length > 0 && (
+        <Box mb={2}>
+          <Text>파일 목록</Text>
+          <Box
+            border={"1px solid #edf1f6"}
+            h={"50px"}
+            display={"flex"}
+            alignItems={"center"}
+            gap={3}
+          >
+            {uploadFiles.map((fileList) => (
+              <Link
+                key={fileList.id}
+                style={{ display: "block", color: "blue" }}
+                to={fileList.fileurl}
+              >
+                {fileList.filename}
+              </Link>
+            ))}
+          </Box>
+        </Box>
+      )}
       {/* 목록 버튼 */}
       <Button colorScheme="blue" onClick={() => navigate("/board/list")}>
         목록

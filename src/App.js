@@ -17,6 +17,7 @@ import MemberLogin from "./member/MemberLogin";
 import { MainView } from "./layout/MainView";
 import { MainBoardList } from "./layout/MainBoardList";
 import Editor from "./component/Editor";
+import Chat from "./socket/Chat";
 import InquiryList from "./inquiry/InquiryList";
 import InquiryView from "./inquiry/InquiryView";
 import InquiryWrite from "./inquiry/InquiryWrite";
@@ -39,6 +40,7 @@ const routes = createBrowserRouter(
       <Route path={"member/signup"} element={<MemberSignup />} />
       <Route path={"member/login"} element={<MemberLogin />} />
       <Route path={"editor"} element={<Editor />} />
+      <Route path="chat" element={<Chat />} />
     </Route>,
   ),
 );
