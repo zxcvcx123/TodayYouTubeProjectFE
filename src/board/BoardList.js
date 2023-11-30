@@ -185,7 +185,12 @@ function BoardList() {
                     key={board.id}
                     w={"270px"}
                     h={"300px"}
-                    border={"1px solid black"}
+                    border={"1px solid lightgray"}
+                    onClick={() => navigate("/board/" + board.id)}
+                    _hover={{
+                      backgroundColor: "lightcyan",
+                      cursor: "pointer",
+                    }}
                   >
                     {/* is_show = true 인 경우 */}
                     {board.is_show ? (
@@ -265,4 +270,5 @@ function BoardList() {
     </Flex>
   );
 }
+
 export default BoardList;
