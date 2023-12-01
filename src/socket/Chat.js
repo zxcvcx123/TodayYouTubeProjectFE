@@ -10,7 +10,7 @@ function Chat(props) {
   const [content, setContent] = useState("");
   const [text, setText] = useState("");
   const [chatId, setChatId] = useState("");
-  const [chat, setChat] = useState("");
+  const [chat, setChat] = useState([]);
   const [setIdAccess, setSetIdAccess] = useState(false);
   const [connection, setConnection] = useState(true);
 
@@ -40,6 +40,9 @@ function Chat(props) {
       body: JSON.stringify({ id: chatId, chat: text }),
     });
     //send("/app/hello", {}, JSON.stringify({ name: "테스트" }));
+    const newChat = [...chat];
+    newChat.push(content.chat);
+    setChat(newChat);
   }
 
   // 아이디 등록하기
@@ -64,6 +67,7 @@ function Chat(props) {
 
   useEffect(() => {
     connect();
+    setChat([]);
   }, [connection]);
 
   // 채팅내용
@@ -102,23 +106,42 @@ function Chat(props) {
         </Center>
       )}
       {setIdAccess && (
-        <>
-          <Center>
-            <Box>{content.id}님 반갑습니다.</Box>
-          </Center>
-          {chat.length >= 0 && (
+        <Center>
+          <Box w={"50%"} h={"500px"}>
             <Center>
-              <Box id="chatArea">{content.chat}</Box>
+              <Box
+                border={"1px solid black"}
+                w={"100%"}
+                textAlign={"center"}
+                h={"50px"}
+              >
+                {content.id}님 반갑습니다.
+              </Box>
             </Center>
-          )}
-          <Center>
-            <Flex w={"50%"}>
-              <Input value={text} onChange={handleTextInput} />
-              <Button onClick={sendMsg}>입력</Button>
-              <Button onClick={disconnectSocket}>종료</Button>
-            </Flex>
-          </Center>
-        </>
+
+            <Center>
+              <Box
+                id="chatArea"
+                w={"100%"}
+                border={"1px solid black"}
+                textIndent={"15px"}
+                h={"400px"}
+              >
+                {chat.map((item, index) => (
+                  <Text key={index}>{item}</Text>
+                ))}
+              </Box>
+            </Center>
+
+            <Center>
+              <Flex w={"100%"} h={"50px"}>
+                <Input value={text} onChange={handleTextInput} />
+                <Button onClick={sendMsg}>입력</Button>
+                <Button onClick={disconnectSocket}>종료</Button>
+              </Flex>
+            </Center>
+          </Box>
+        </Center>
       )}
     </>
   );
