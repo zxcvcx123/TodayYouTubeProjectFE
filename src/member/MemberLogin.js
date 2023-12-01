@@ -9,14 +9,18 @@ import {
   CardFooter,
   CardHeader,
   Center,
+  Flex,
   FormControl,
   FormLabel,
   Heading,
   Input,
+  Text,
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 export function MemberLogin() {
   /* 아이디 */
@@ -36,14 +40,13 @@ export function MemberLogin() {
           description: "로그인 되었습니다.",
           status: "info",
         });
-        const { grantType, accessToken, refreshToken, memberInfo } =
-          response.data.token;
+        const { grantType, accessToken, refreshToken } = response.data.token;
         const authority = response.data.authentication[0].toString();
         localStorage.setItem("grantType", grantType);
         localStorage.setItem("accessToken", accessToken);
         localStorage.setItem("refreshToken", refreshToken);
         localStorage.setItem("authority", authority);
-        localStorage.setItem("memberInfo", memberInfo);
+        localStorage.setItem("memberInfo", member_id);
         navigate("/");
       })
       .catch((error) => {
@@ -71,33 +74,46 @@ export function MemberLogin() {
     <>
       <Box marginTop={"130px"}>
         <Center>
-          <Card w={"lg"}>
-            <CardHeader>
-              <Heading>로그인</Heading>
-            </CardHeader>
-            <CardBody>
-              <FormControl mb={5}>
-                <FormLabel>아이디</FormLabel>
-                <Input
-                  value={member_id}
-                  onChange={(e) => setMember_id(e.target.value)}
-                />
-              </FormControl>
-              <FormControl>
-                <FormLabel>암호</FormLabel>
-                <Input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </FormControl>
-            </CardBody>
-            <CardFooter>
-              <Button colorScheme={"blue"} onClick={handleLogin}>
-                로그인
+          <Flex flexDirection={"column"}>
+            <Card w={"lg"}>
+              <CardHeader>
+                <Heading>로그인</Heading>
+              </CardHeader>
+              <CardBody>
+                <FormControl mb={5}>
+                  <FormLabel>아이디</FormLabel>
+                  <Input
+                    value={member_id}
+                    onChange={(e) => setMember_id(e.target.value)}
+                  />
+                </FormControl>
+                <FormControl>
+                  <FormLabel>암호</FormLabel>
+                  <Input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                </FormControl>
+              </CardBody>
+              <CardFooter>
+                <Button colorScheme={"blue"} onClick={handleLogin}>
+                  로그인
+                </Button>
+              </CardFooter>
+            </Card>
+            <Flex>
+              <Button
+                onClick={() => {
+                  navigate("/member/signup");
+                }}
+                size="md"
+                variant="ghost"
+              >
+                가입으로 이동 <FontAwesomeIcon icon={faArrowRight} />
               </Button>
-            </CardFooter>
-          </Card>
+            </Flex>
+          </Flex>
         </Center>
       </Box>
     </>

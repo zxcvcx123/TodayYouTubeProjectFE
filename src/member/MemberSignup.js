@@ -77,7 +77,7 @@ function MemberSignup(props) {
   /* 회원 가입 요청 ----------------------------------------------------------------------------------*/
   function handleSignupForm() {
     axios
-      .post("/api/member/signup", {
+      .post("/api/signup", {
         member_id,
         password,
         gender,
@@ -97,11 +97,13 @@ function MemberSignup(props) {
       .catch((error) => {
         if (error.response.status === 400) {
           toast({
+            position: "top",
             description: "가입 정보를 확인해주세요",
             status: "warning",
           });
         } else {
           toast({
+            position: "top",
             description: "서버에 오류가 발생하였습니다.",
             status: "error",
           });
@@ -115,7 +117,7 @@ function MemberSignup(props) {
     params.set(itemName, item);
     console.log(params);
     axios
-      .get("/api/member/signup/check?" + params)
+      .get("/api/signup/check?" + params)
       .then((response) => {
         const result = response.data;
         toast({
