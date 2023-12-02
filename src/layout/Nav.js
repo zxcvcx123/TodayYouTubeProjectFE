@@ -34,9 +34,6 @@ export function Nav() {
     useContext(DetectLoginContext);
   let navigate = useNavigate();
   const location = useLocation();
-  useEffect(() => {
-    validateToken();
-  }, [location]);
 
   return (
     <>
@@ -87,11 +84,11 @@ export function Nav() {
 
         <Flex gap={10} mar>
           <Flex gap={6} justifyContent={"center"} alignItems={"center"}>
-            <Button w={70} size="md" variant="ghost">
-              <FontAwesomeIcon fontSize={"20px"} icon={faBell} />
-            </Button>
             {token.detectLogin ? (
               <>
+                <Button w={70} size="md" variant="ghost">
+                  <FontAwesomeIcon fontSize={"20px"} icon={faBell} />
+                </Button>
                 <Menu w={200} size="md" variant="ghost">
                   <MenuButton>
                     <HStack>
@@ -119,9 +116,9 @@ export function Nav() {
                         navigate("/member/info");
                       }}
                     >
-                      정보수정
+                      마이페이지
                     </MenuItem>
-                    <MenuItem>고객센터</MenuItem>
+                    <MenuItem>준비중</MenuItem>
                   </MenuList>
                 </Menu>
               </>

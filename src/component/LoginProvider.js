@@ -2,7 +2,7 @@ import React, { createContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 
-export const DetectLoginContext = createContext(null);
+export let DetectLoginContext = createContext(null);
 // 로그인 만료 시간
 const loginActivityTimeOut = 30 * 60 * 1000;
 // 사용자 활동을 감지 타이머
@@ -17,26 +17,26 @@ export function LoginProvider({ children }) {
     memberInfo: null,
   });
   const [loginInfo, setLoginInfo] = useState({
-    id: null,
-    member_id: null,
-    nickname: null,
-    email: null,
-    phone_number: null,
+    id: "",
+    member_id: "",
+    nickname: "",
+    email: "",
+    phone_number: "",
     birth_date: null,
-    role_name: null,
-    total_like: null,
+    role_name: "",
+    total_like: "",
   });
 
   useEffect(() => {
     validateToken();
-  }, []);
+  }, [location]);
 
   function validateToken() {
     const grantType = localStorage.getItem("grantType");
     const accessToken = localStorage.getItem("accessToken");
     const authority = localStorage.getItem("authority");
     const memberInfo = localStorage.getItem("memberInfo");
-
+    console.log(memberInfo);
     // 응답 인터셉터
     axios.interceptors.response.use(
       (response) => response,
@@ -76,16 +76,17 @@ export function LoginProvider({ children }) {
         }));
       })
       .catch((error) => {
+        localStorage.clear();
         setLoginInfo((prevState) => ({
           ...prevState,
-          id: null,
-          member_id: null,
-          nickname: null,
-          email: null,
+          id: "",
+          member_id: "",
+          nickname: "",
+          email: "",
           phone_number: "",
           birth_date: null,
-          role_name: null,
-          total_like: null,
+          role_name: "",
+          total_like: "",
         }));
         setToken((prevState) => ({
           ...prevState,
@@ -97,16 +98,15 @@ export function LoginProvider({ children }) {
   // 사용자 활동을 감지
 
   const handleLogout = () => {
-    setLoginInfo((prevState) => ({
-      ...prevState,
-      id: null,
-      member_id: null,
-      nickname: null,
-      email: null,
+    setLoginInfo(() => ({
+      id: "",
+      member_id: "",
+      nickname: "",
+      email: "",
       phone_number: "",
       birth_date: null,
-      role_name: null,
-      total_like: null,
+      role_name: "",
+      total_like: "",
     }));
 
     setToken({

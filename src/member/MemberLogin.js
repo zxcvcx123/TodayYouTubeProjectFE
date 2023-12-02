@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 
 /* 로그인 컴포넌트 */
 import {
@@ -18,9 +18,11 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
+import "../index.css";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { DetectLoginContext } from "../component/LoginProvider";
 
 export function MemberLogin() {
   /* 아이디 */
@@ -28,8 +30,9 @@ export function MemberLogin() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const toast = useToast();
+  function handleLogin(event) {
+    event.preventDefault();
 
-  function handleLogin() {
     axios
       .post("/api/member/login", {
         member_id,
@@ -72,50 +75,87 @@ export function MemberLogin() {
   }
   return (
     <>
-      <Box marginTop={"130px"}>
-        <Center>
-          <Flex flexDirection={"column"}>
-            <Card w={"lg"}>
-              <CardHeader>
-                <Heading>로그인</Heading>
-              </CardHeader>
-              <CardBody>
-                <FormControl mb={5}>
-                  <FormLabel>아이디</FormLabel>
-                  <Input
-                    value={member_id}
-                    onChange={(e) => setMember_id(e.target.value)}
-                  />
-                </FormControl>
-                <FormControl>
-                  <FormLabel>암호</FormLabel>
-                  <Input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </FormControl>
-              </CardBody>
-              <CardFooter>
-                <Button colorScheme={"blue"} onClick={handleLogin}>
-                  로그인
-                </Button>
-              </CardFooter>
-            </Card>
-            <Flex>
-              <Button
-                onClick={() => {
-                  navigate("/member/signup");
-                }}
-                size="md"
-                variant="ghost"
+      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 mt-10">
+        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+          <img
+            className="mx-auto h-20 w-auto"
+            src="https://img.freepik.com/premium-vector/red-youtube-logo-social-media-logo_197792-1803.jpg"
+            alt="Your Company"
+          />
+        </div>
+
+        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+          <form className="space-y-6" onSubmit={handleLogin}>
+            <div>
+              <label
+                htmlFor="member_id"
+                className="block text-sm font-medium leading-6 text-gray-900"
               >
-                가입으로 이동 <FontAwesomeIcon icon={faArrowRight} />
-              </Button>
-            </Flex>
-          </Flex>
-        </Center>
-      </Box>
+                아이디
+              </label>
+              <div className="mt-2">
+                <input
+                  type="text"
+                  id="member_id"
+                  name="member_id"
+                  autoComplete=""
+                  required
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6"
+                  value={member_id}
+                  onChange={(e) => setMember_id(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div>
+              <div className="flex items-center justify-between">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium leading-6 text-gray-900"
+                >
+                  비밀번호
+                </label>
+                <div className="text-sm">
+                  <a className="font-semibold text-red-500 hover:text-red-400">
+                    비밀번호를 잊으셨나요?
+                  </a>
+                </div>
+              </div>
+              <div className="mt-2">
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  autoComplete="current-password"
+                  required
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+
+            <div>
+              <button
+                type="submit"
+                className="flex w-full justify-center rounded-md bg-red-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bg-red-500"
+              >
+                로그인
+              </button>
+            </div>
+          </form>
+
+          <p className="mt-10 text-center text-sm text-gray-500">
+            회원이 아니신가요?{" "}
+            <a
+              href="/member/signup"
+              className="font-semibold leading-6 text-red-500 hover:text-red-400"
+            >
+              회원가입 하러가기
+            </a>
+          </p>
+        </div>
+      </div>
     </>
   );
 }
