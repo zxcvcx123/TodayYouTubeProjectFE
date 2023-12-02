@@ -4,6 +4,7 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Box, Button } from "@chakra-ui/react";
+import "./editorStyle.css"; // External CSS file
 
 const Editor = ({ uuid, setUuid, setContent1, data }) => {
   const customUploadAdapter = (loader) => {
@@ -50,6 +51,7 @@ const Editor = ({ uuid, setUuid, setContent1, data }) => {
           }}
           onChange={(event, editor) => {
             setContent1(editor.getData());
+            editor.ui.view.editable.element.style.height = "500px";
             // console.log({ event, editor, content });
           }}
           onFocus={(event, editor) => {
