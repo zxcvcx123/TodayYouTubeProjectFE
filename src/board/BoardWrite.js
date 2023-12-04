@@ -31,6 +31,16 @@ function BoardWrite() {
 
     console.log("저장 버튼 클릭됨");
 
+    if (!title || title.trim() === "") {
+      console.log("제목을 입력해주세요. title은 null이거나 공백이면 안 됨.");
+      return;
+    }
+
+    if (!content || content.trim() === "") {
+      console.log("본문을 입력해주세요. 본문은 null이거나 공백이면 안 됨.");
+      return;
+    }
+
     axios
       .postForm("/api/board/add", {
         title,

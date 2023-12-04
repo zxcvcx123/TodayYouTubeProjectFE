@@ -56,6 +56,16 @@ function BoardEdit() {
   function handleSubmit() {
     let uuSrc = getSrc();
 
+    if (!board.title || board.title.trim() === "") {
+      console.log("제목을 입력해주세요. title은 null이거나 공백이면 안 됨.");
+      return;
+    }
+
+    if (!board.content || board.content.trim() === "") {
+      console.log("본문을 입력해주세요. 본문은 null이거나 공백이면 안 됨.");
+      return;
+    }
+
     axios
       .putForm("/api/board/edit", {
         id: board.id,
