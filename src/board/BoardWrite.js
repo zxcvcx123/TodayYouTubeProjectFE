@@ -28,6 +28,17 @@ function BoardWrite() {
   /* use navigate */
   let navigate = useNavigate();
 
+  // useEffect를 사용하여 titleError가 변경(에러발생)될 때마다 스크롤이 제목 라벨으로 이동
+  useEffect(() => {
+    if (titleError) {
+      // 오류 메시지가 있을 때 해당 영역으로 스크롤 이동
+      const errorElement = document.getElementById("field-:rj:-label");
+      if (errorElement) {
+        errorElement.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [titleError]);
+
   function handleSubmit() {
     let uuSrc = getSrc();
 
