@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Badge,
   Box,
   Button,
   Divider,
@@ -10,15 +11,17 @@ import {
   MenuItem,
   MenuList,
   Stack,
+  Text,
 } from "@chakra-ui/react";
 import * as PropTypes from "prop-types";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { SearchMain } from "./SearchMain";
 import { faBell } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { DetectLoginContext } from "../component/LoginProvider";
+import MemberProfile from "../member/MemberProfile";
 
 Stack.propTypes = {
   p: PropTypes.number,
@@ -28,8 +31,10 @@ Stack.propTypes = {
 };
 
 export function Nav() {
-  const { detectLogin, logout, loginInfo } = useContext(DetectLoginContext);
+  const { token, handleLogout, loginInfo, validateToken } =
+    useContext(DetectLoginContext);
   let navigate = useNavigate();
+  const location = useLocation();
 
   return (
     <>
@@ -41,7 +46,14 @@ export function Nav() {
         alignItems="center"
         justifyContent={"space-around"}
       >
-        <Button w={150} borderStyle={"solid"} size="md" variant="ghost">
+        <Button
+          borderStyle={"solid"}
+          size="md"
+          variant="ghost"
+          onClick={() => {
+            navigate("/");
+          }}
+        >
           로고
         </Button>
         <Flex>
@@ -71,57 +83,53 @@ export function Nav() {
           <SearchMain />
         </Box>
 
-        <Flex gap={10}>
-          <Flex>
-            <Button
-              w={70}
-              size="md"
-              variant="ghost"
-              leftIcon={<FontAwesomeIcon icon={faBell} />}
-            ></Button>
-            {detectLogin ? (
-              <Box>반갑습니다 {loginInfo.nickname}</Box>
+        <Flex gap={10} mar>
+          <Flex gap={6} justifyContent={"center"} alignItems={"center"}>
+            {token.detectLogin ? (
+              <>
+                <Button w={70} size="md" variant="ghost">
+                  <FontAwesomeIcon fontSize={"20px"} icon={faBell} />
+                </Button>
+                <Menu w={200} size="md" variant="ghost">
+                  <MenuButton>
+                    <MemberProfile />
+                  </MenuButton>
+                  <MenuList>
+                    <MenuItem
+                      onClick={() => {
+                        handleLogout();
+                        navigate("/");
+                      }}
+                    >
+                      로그아웃
+                    </MenuItem>
+                    <Divider />
+                    <MenuItem
+                      onClick={() => {
+                        navigate("/member/info");
+                      }}
+                    >
+                      마이페이지
+                    </MenuItem>
+                    <MenuItem>준비중</MenuItem>
+                  </MenuList>
+                </Menu>
+              </>
             ) : (
-              <Button
-                onClick={() => {
-                  navigate("member/login");
-                }}
-                w={90}
-                size="md"
-                variant="ghost"
-              >
-                로그인
-              </Button>
+              <>
+                <Button
+                  onClick={() => {
+                    navigate("member/login");
+                  }}
+                  w={90}
+                  size="md"
+                  variant="ghost"
+                >
+                  로그인
+                </Button>
+              </>
             )}
-            <Button
-              onClick={() => {
-                navigate("member/signup");
-              }}
-              w={90}
-              size="md"
-              variant="ghost"
-            >
-              회원가입
-            </Button>
           </Flex>
-          <Menu w={200} size="md" variant="ghost">
-            <MenuButton>
-              <HStack>
-                <Avatar
-                  size="sm"
-                  src={
-                    "https://images.unsplash.com/photo-1619946794135-5bc917a27793?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9"
-                  }
-                />
-              </HStack>
-            </MenuButton>
-            <MenuList>
-              <MenuItem>로그아웃</MenuItem>
-              <Divider />
-              <MenuItem>정보수정</MenuItem>
-              <MenuItem>고객센터</MenuItem>
-            </MenuList>
-          </Menu>
         </Flex>
       </Flex>
     </>
