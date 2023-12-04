@@ -24,20 +24,36 @@ function BoardWrite() {
   const [uploadFiles, setUploadFiles] = useState([]);
   const [uuid, setUuid] = useState("");
   const [titleError, setTitleError] = useState("");
+  const [contentError, setContentError] = useState("");
 
   /* use navigate */
   let navigate = useNavigate();
 
   // useEffect를 사용하여 titleError가 변경(에러발생)될 때마다 스크롤이 제목 라벨으로 이동
   useEffect(() => {
-    if (titleError) {
-      // 오류 메시지가 있을 때 해당 영역으로 스크롤 이동
+    // 동시에 발생했을 경우에는 title로 먼저 스크롤
+    if (titleError && contentError) {
       const errorElement = document.getElementById("field-:rj:-label");
       if (errorElement) {
         errorElement.scrollIntoView({ behavior: "smooth" });
       }
+    } else {
+      if (titleError) {
+        // 오류 메시지가 있을 때 해당 영역으로 스크롤 이동
+        const errorElement = document.getElementById("field-:rj:-label");
+        if (errorElement) {
+          errorElement.scrollIntoView({ behavior: "smooth" });
+        }
+      }
+
+      if (contentError) {
+        const errorElement = document.getElementById("field-:rn:-label");
+        if (errorElement) {
+          errorElement.scrollIntoView({ behavior: "smooth" });
+        }
+      }
     }
-  }, [titleError]);
+  }, [titleError, contentError]);
 
   function handleSubmit() {
     let uuSrc = getSrc();
@@ -51,6 +67,7 @@ function BoardWrite() {
 
     if (!content || content.trim() === "") {
       console.log("본문을 입력해주세요. 본문은 null이거나 공백이면 안 됨.");
+      setContentError("본문을 입력해주세요. 본문은 null이거나 공백이면 안 됨.");
       return;
     }
 
@@ -113,18 +130,11 @@ function BoardWrite() {
       </FormControl>
 
       {/* 본문 */}
-      <FormControl mb={2}>
+      <FormControl mb={2} isInvalid={contentError}>
         <FormLabel>본문</FormLabel>
         {/* CKEditor 본문 영역 */}
         <Editor setUuid={setUuid} uuid={uuid} setContent1={setContent} />
-
-        {/*<Textarea
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          placeholder="본문을 작성 전 안내사항. @@개행문자 추가하기1) 욕설 비방 작품 어쩌구 2) 저작권 침해 어쩌구 3) 개인정보 침해 어쩌구... 등등"
-          h={"sm"}
-          resize={"none"}
-        />*/}
+        <FormErrorMessage>{contentError}</FormErrorMessage>
       </FormControl>
 
       {/* 파일 첨부 */}
