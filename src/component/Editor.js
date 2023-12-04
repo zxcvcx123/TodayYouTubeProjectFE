@@ -45,15 +45,18 @@ const Editor = ({ uuid, setUuid, setContent1, data }) => {
           data={data || ""}
           config={{ extraPlugins: [uploadPlugin] }}
           onReady={(editor) => {
+            console.log("Ready.");
             // You can store the "editor" and use when it is needed.
             // console.log("Editor is ready to use!", editor);
           }}
           onChange={(event, editor) => {
             setContent1(editor.getData());
+            console.log("Change.");
             // console.log({ event, editor, content });
           }}
           onFocus={(event, editor) => {
             editor.ui.view.editable.element.style.minHeight = "500px";
+            console.log("Focus.");
           }}
         />
       </section>
