@@ -59,6 +59,32 @@ function BoardEdit() {
       .finally();
   }, []);
 
+  // useEffect를 사용하여 titleError가 변경(에러발생)될 때마다 스크롤이 제목 라벨으로 이동
+  useEffect(() => {
+    // 동시에 발생했을 경우에는 title로 먼저 스크롤
+    if (titleError && contentError) {
+      const errorElement = document.getElementById("title");
+      if (errorElement) {
+        errorElement.scrollIntoView({ behavior: "smooth" });
+      }
+    } else {
+      if (titleError) {
+        // 오류 메시지가 있을 때 해당 영역으로 스크롤 이동
+        const errorElement = document.getElementById("title");
+        if (errorElement) {
+          errorElement.scrollIntoView({ behavior: "smooth" });
+        }
+      }
+
+      if (contentError) {
+        const errorElement = document.getElementById("content");
+        if (errorElement) {
+          errorElement.scrollIntoView({ behavior: "smooth" });
+        }
+      }
+    }
+  }, [titleError, contentError]);
+
   // 게시글을 로딩중이라면 스피너 돌리기
   if (board === null) {
     return <Spinner />;
@@ -133,7 +159,7 @@ function BoardEdit() {
 
       {/* 제목 */}
         <FormControl mb={2} isInvalid={titleError}>
-        <FormLabel>제목</FormLabel>
+        <FormLabel id="title">제목</FormLabel>
         <Input
           value={board.title}
           onChange={(e) => handleBoardUpdate(e, "title")}
@@ -152,7 +178,7 @@ function BoardEdit() {
 
       {/* 본문 */}
         <FormControl mb={2} isInvalid={contentError}>
-        <FormLabel>본문</FormLabel>
+        <FormLabel id="content">본문</FormLabel>
         <Box border={"1px solid red"}>
           {/* data={board.content} : 페이지 초기값을 설정한다. */}
           {/* setContent1 : 사용자가 수정한 내용을 받아와 content 필드를 업데이트 한다. */}

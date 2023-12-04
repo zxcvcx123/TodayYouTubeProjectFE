@@ -46,21 +46,21 @@ function BoardWrite() {
   useEffect(() => {
     // 동시에 발생했을 경우에는 title로 먼저 스크롤
     if (titleError && contentError) {
-      const errorElement = document.getElementById("field-:rj:-label");
+      const errorElement = document.getElementById("title");
       if (errorElement) {
         errorElement.scrollIntoView({ behavior: "smooth" });
       }
     } else {
       if (titleError) {
         // 오류 메시지가 있을 때 해당 영역으로 스크롤 이동
-        const errorElement = document.getElementById("field-:rj:-label");
+        const errorElement = document.getElementById("title");
         if (errorElement) {
           errorElement.scrollIntoView({ behavior: "smooth" });
         }
       }
 
       if (contentError) {
-        const errorElement = document.getElementById("field-:rn:-label");
+        const errorElement = document.getElementById("content");
         if (errorElement) {
           errorElement.scrollIntoView({ behavior: "smooth" });
         }
@@ -125,7 +125,7 @@ function BoardWrite() {
 
       {/* 제목 */}
       <FormControl mb={2} isInvalid={titleError}>
-        <FormLabel>제목</FormLabel>
+        <FormLabel id="title">제목</FormLabel>
         <Input
           value={title}
           onChange={(e) => setTitle(e.target.value)}
@@ -147,7 +147,7 @@ function BoardWrite() {
 
       {/* 본문 */}
       <FormControl mb={2} isInvalid={contentError}>
-        <FormLabel>본문</FormLabel>
+        <FormLabel id="content">본문</FormLabel>
         {/* CKEditor 본문 영역 */}
         <Editor setUuid={setUuid} uuid={uuid} setContent1={setContent} />
         <FormErrorMessage>{contentError}</FormErrorMessage>
