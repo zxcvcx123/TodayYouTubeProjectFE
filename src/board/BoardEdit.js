@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {
   Box,
   Button,
-  FormControl,
+  FormControl, FormErrorMessage,
   FormHelperText,
   FormLabel,
   Heading,
@@ -17,15 +17,27 @@ import { Filednd } from "../file/Filednd";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import Editor from "../component/Editor";
+import {DetectLoginContext} from "../component/LoginProvider";
 
 function BoardEdit() {
-  const [board, updateBoard] = useImmer(null);
+  /* 로그인 정보 컨텍스트 */
+  const { token, handleLogout, loginInfo, validateToken } =
+    useContext(DetectLoginContext);
+
+  /* use state */
   const [editUploadFiles, setEditUploadFiles] = useState([]);
   const [uploadFiles, setUploadFiles] = useState([]);
   const [mode, setMode] = useState("");
+  const [titleError, setTitleError] = useState("");
+  const [contentError, setContentError] = useState("");
 
+  /* use immer */
+  const [board, updateBoard] = useImmer(null);
+
+  /* use params */
   const { id } = useParams();
 
+  /* use navigate */
   const navigate = useNavigate();
 
   // 초기 렌더링으로 게시물의 데이터를 가져와 상태를 업데이트 한다.
@@ -58,11 +70,13 @@ function BoardEdit() {
 
     if (!board.title || board.title.trim() === "") {
       console.log("제목을 입력해주세요. title은 null이거나 공백이면 안 됨.");
+      setTitleError("제목을 입력해주세요. title은 null이거나 공백이면 안 됨.");
       return;
     }
 
     if (!board.content || board.content.trim() === "") {
       console.log("본문을 입력해주세요. 본문은 null이거나 공백이면 안 됨.");
+      setContentError("본문을 입력해주세요. 본문은 null이거나 공백이면 안 됨.");
       return;
     }
 
@@ -118,12 +132,13 @@ function BoardEdit() {
       <Heading mb={5}>유튜브 추천 :: 게시글 수정하기</Heading>
 
       {/* 제목 */}
-      <FormControl mb={2}>
+        <FormControl mb={2} isInvalid={titleError}>
         <FormLabel>제목</FormLabel>
         <Input
           value={board.title}
           onChange={(e) => handleBoardUpdate(e, "title")}
         />
+          <FormErrorMessage>{titleError}</FormErrorMessage>
       </FormControl>
 
       {/* 링크 */}
@@ -136,7 +151,7 @@ function BoardEdit() {
       </FormControl>
 
       {/* 본문 */}
-      <FormControl mb={2}>
+        <FormControl mb={2} isInvalid={contentError}>
         <FormLabel>본문</FormLabel>
         <Box border={"1px solid red"}>
           {/* data={board.content} : 페이지 초기값을 설정한다. */}
@@ -148,6 +163,7 @@ function BoardEdit() {
             }
           />
         </Box>
+          <FormErrorMessage>{contentError}</FormErrorMessage>
       </FormControl>
 
       {/* 파일 */}
