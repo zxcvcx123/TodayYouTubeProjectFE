@@ -21,7 +21,7 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { BoardReplyComment } from "./BoardReplyComment";
 import { SmallAddIcon } from "@chakra-ui/icons";
@@ -40,6 +40,7 @@ import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faHeartRegular } from "@fortawesome/free-regular-svg-icons";
 import commentLike from "../like/CommentLike";
+import { DetectLoginContext } from "../component/LoginProvider";
 
 function CommentForm({ board_id, isSubmitting, onSubmit, setCommentLike }) {
   const [comment, setComment] = useState("");
@@ -255,6 +256,7 @@ function CommentList({
 }
 
 export function BoardComment({ board_id }) {
+  const { token, loginInfo } = useContext(DetectLoginContext);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [commentLike, setCommentLike] = useState(null);
 
@@ -295,16 +297,20 @@ export function BoardComment({ board_id }) {
 
   function handleSubmit(comment) {
     setIsSubmitting(true);
-
+    console.log("실행 여부 확인");
     axios
-      .post("/api/comment/add", comment)
+      .post("/api/comment/add", {
+        comment: comment.comment,
+        board_id: comment.board_id,
+        member_id: loginInfo.member_id,
+      })
       .then(() => {
         toast({
           description: "댓글이 등록되었습니다.",
           status: "success",
         });
       })
-      .catch((error) => console.log("bad"))
+      .catch((error) => console.log(error))
       .finally(() => setIsSubmitting(false));
   }
 
