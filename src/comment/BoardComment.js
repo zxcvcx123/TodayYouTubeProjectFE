@@ -64,6 +64,7 @@ function CommentItem({
   setIsSubmitting,
   isSubmitting,
   setCommentLike,
+  onCommentLikeClick,
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [commentEdited, setCommentEdited] = useState(comment.comment);
@@ -99,7 +100,8 @@ function CommentItem({
         comment_id: comment.id,
       })
       .then((response) => {
-        setCommentLike(response.data);
+        // setCommentLike(response.data);
+        onCommentLikeClick({ ...response.data, comment_id: comment.id });
         console.log(response.data);
       })
       .catch((error) => console.log("bad"))
@@ -227,6 +229,7 @@ function CommentList({
   isSubmitting,
   setIsSubmitting,
   setCommentLike,
+  onCommentLikeClick,
 }) {
   return (
     <Card border="1px solid black" borderRadius="5" mt={3}>
@@ -242,6 +245,7 @@ function CommentList({
               setIsSubmitting={setIsSubmitting}
               onDeleteModalOpen={onDeleteModalOpen}
               setCommentLike={setCommentLike}
+              onCommentLikeClick={onCommentLikeClick}
             />
           ))}
         </Stack>
@@ -272,6 +276,22 @@ export function BoardComment({ board_id }) {
       });
     }
   }, [isSubmitting]);
+
+  function handleCommentLike(data) {
+    setCommentList(
+      commentList.map((c) => {
+        if (c.id == data.comment_id) {
+          return {
+            ...c,
+            likeHeart: data.commentLike,
+            count_comment_like: data.countCommentLike,
+          };
+        } else {
+          return c;
+        }
+      }),
+    );
+  }
 
   function handleSubmit(comment) {
     setIsSubmitting(true);
@@ -327,6 +347,7 @@ export function BoardComment({ board_id }) {
         commentList={commentList}
         onDeleteModalOpen={handleCommentDeleteModalOpen}
         setCommentLike={setCommentLike}
+        onCommentLikeClick={handleCommentLike}
       />
 
       {/* 삭제 모달 */}
