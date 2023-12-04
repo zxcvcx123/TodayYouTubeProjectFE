@@ -37,7 +37,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
-import { faHeart } from "@fortawesome/free-regular-svg-icons";
+import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
+import { faHeart as faHeartRegular } from "@fortawesome/free-regular-svg-icons";
 import commentLike from "../like/CommentLike";
 
 function CommentForm({ board_id, isSubmitting, onSubmit, setCommentLike }) {
@@ -70,6 +71,7 @@ function CommentItem({
   const [isReplyListOpen, setIsReplyListOpen] = useState(false);
 
   const toast = useToast();
+  console.log(comment);
 
   function handleSubmit() {
     setIsSubmitting(true);
@@ -96,7 +98,10 @@ function CommentItem({
         board_id: comment.board_id,
         comment_id: comment.id,
       })
-      .then((response) => setCommentLike(response.data))
+      .then((response) => {
+        setCommentLike(response.data);
+        console.log(response.data);
+      })
       .catch((error) => console.log("bad"))
       .finally(() => console.log("done"));
   }
@@ -175,7 +180,9 @@ function CommentItem({
                   colorScheme="red"
                   onClick={handleCommentLike}
                 >
-                  <FontAwesomeIcon icon={faHeart} />
+                  <FontAwesomeIcon
+                    icon={comment.likeHeart ? faHeartSolid : faHeartRegular}
+                  />
                 </Button>{" "}
                 <Text fontSize="x-small">{comment.count_comment_like}</Text>
               </Flex>
@@ -255,13 +262,14 @@ export function BoardComment({ board_id }) {
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   const params = new URLSearchParams();
+
   params.set("board_id", board_id);
 
   useEffect(() => {
     if (!isSubmitting) {
-      axios
-        .get("/api/comment/list?" + params)
-        .then((response) => setCommentList(response.data));
+      axios.get("/api/comment/list?" + params).then((response) => {
+        setCommentList(response.data);
+      });
     }
   }, [isSubmitting]);
 
