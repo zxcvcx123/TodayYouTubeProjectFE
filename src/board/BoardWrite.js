@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -15,8 +15,13 @@ import { useNavigate } from "react-router-dom";
 import { Filednd } from "../file/Filednd";
 import YouTube from "react-youtube";
 import Editor from "../component/Editor";
+import { DetectLoginContext } from "../component/LoginProvider";
 
 function BoardWrite() {
+  /* 로그인 정보 컨텍스트 */
+  const { token, handleLogout, loginInfo, validateToken } =
+    useContext(DetectLoginContext);
+
   /* use state */
   const [title, setTitle] = useState("");
   const [link, setLink] = useState("");
@@ -80,6 +85,7 @@ function BoardWrite() {
         content,
         uploadFiles,
         uuSrc,
+        board_member_id: loginInfo.member_id,
       })
       .then(() => navigate("/board/list"))
       .catch(() => console.log("error"))
