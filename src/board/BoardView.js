@@ -74,7 +74,7 @@ function BoardView() {
       .post("/api/like/board/" + id)
       .then((response) => setLike(response.data))
       .catch(() => console.log("bad"))
-      .catch(() => console.log("done"));
+      .finally(() => console.log("done"));
   }
 
   function handleDelete() {

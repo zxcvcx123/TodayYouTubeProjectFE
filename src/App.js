@@ -23,6 +23,8 @@ import InquiryView from "./inquiry/InquiryView";
 import InquiryWrite from "./inquiry/InquiryWrite";
 import LoginProvider from "./component/LoginProvider";
 import MemberInfo from "./member/memberInfo/MemberInfo";
+import InquiryEdit from "./inquiry/InquiryEdit";
+
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -37,6 +39,7 @@ const routes = createBrowserRouter(
       <Route path="inquiry/list" element={<InquiryList />} />
       <Route path="inquiry/write" element={<InquiryWrite />} />
       <Route path="inquiry/:id" element={<InquiryView />} />
+      <Route path="inquiry/edit/:id" element={<InquiryEdit />} />
       <Route path="/file/" element={<Filednd />} />
       <Route path={"member/signup"} element={<MemberSignup />} />
       <Route path={"member/login"} element={<MemberLogin />} />

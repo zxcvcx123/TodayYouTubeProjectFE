@@ -1,117 +1,154 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { Box, Input, Text } from "@chakra-ui/react";
+import React, { useEffect, useRef, useState } from "react";
+import * as SockJS from "sockjs-client";
+import * as StompJS from "@stomp/stompjs";
+import { useParams } from "react-router-dom";
+import { Stomp } from "@stomp/stompjs";
+import { Box, Button, Center, Flex, Input, Text } from "@chakra-ui/react";
 
-const Chat = () => {
-  const [msg, setMsg] = useState("");
-  const [name, setName] = useState("");
-  const [chatt, setChatt] = useState([]);
-  const [chkLog, setChkLog] = useState(false);
-  const [socketData, setSocketData] = useState();
+function Chat(props) {
+  const stompClient = useRef(); // useRef로 connect()가 안끊기게하기
+  const [content, setContent] = useState("");
+  const [text, setText] = useState("");
+  const [chatId, setChatId] = useState("");
+  const [chat, setChat] = useState([]);
+  const [setIdAccess, setSetIdAccess] = useState(false);
+  const [connection, setConnection] = useState(true);
 
-  // webSockt을 담는 변수,
-  // 컴포넌트가 변경될 때 객체가 유지되어야하므로 'ref'로 저장
-  const ws = useRef(null);
+  const [testVal, setTestVal] = useState(0);
 
-  const msgBox = chatt.map((item, idx) => (
-    <Box key={idx}>
-      <Text>{item.name}</Text>
-      <Text>[{item.data}]</Text>
-      <Text>{item.msg}</Text>
-    </Box>
-  ));
+  // http://localhost:3000/gs-guide-websocket 소켓 주소
+  function connect() {
+    let socket = new SockJS("http://localhost:3000/gs-guide-websocket");
+    stompClient.current = Stomp.over(socket);
+    stompClient.current.connect({}, function (frame) {
+      console.log("소켓연결 성공: " + frame);
+      console.log(stompClient.current);
+      stompClient.current.subscribe("/topic/greetings", (res) => {
+        JSON.parse(res.body);
+        console.log(res);
+        console.log(res._body);
+        console.log(JSON.parse(res._body));
+        const newContent = JSON.parse(res._body);
+
+        // === 두번 눌러야 나온걸 선생님이 해결해준 코드 ===
+        setContent(newContent);
+        const newChat = [...chat];
+        newChat.push(newContent.chat);
+        setChat(newChat);
+        // =========================================
+      });
+    });
+  }
+
+  // 채팅내용
+  function sendMsg() {
+    stompClient.current.publish({
+      destination: "/app/hello",
+      body: JSON.stringify({ id: chatId, chat: text }),
+    });
+    //send("/app/hello", {}, JSON.stringify({ name: "테스트" }));
+  }
+
+  // 아이디 등록하기
+  function sendId() {
+    stompClient.current.publish({
+      destination: "/app/hello",
+      body: JSON.stringify({ id: chatId }),
+    });
+    //send("/app/hello", {}, JSON.stringify({ name: "테스트" }));
+    if (chatId.length > 0) {
+      setSetIdAccess(true);
+    }
+  }
+
+  function disconnectSocket() {
+    stompClient.current.disconnect();
+    console.log("소켓통신 종료");
+    console.log(stompClient.current);
+    setSetIdAccess(false);
+    setConnection(false);
+  }
 
   useEffect(() => {
-    if (socketData !== undefined) {
-      const tempDate = chatt.concat(socketData);
-      console.log(tempDate);
-      setChatt(tempDate);
+    connect();
+    setChat([]);
+  }, [connection]);
+
+  // 채팅내용
+  function handleTextInput(e) {
+    setText(e.target.value);
+  }
+
+  // 아이디 입력
+  function handleChatId(e) {
+    setChatId(e.target.value);
+  }
+
+  function testBtn() {
+    stompClient.current.publish({
+      destination: "/app/hello",
+      body: JSON.stringify({ id: chatId, chat: text }),
+    });
+    //send("/app/hello", {}, JSON.stringify({ name: "테스트" }));
+    if (chatId.length > 0) {
+      setSetIdAccess(true);
     }
-  }, [socketData]);
-
-  /* ===== webSocket 영역 시작 ===== */
-
-  const onText = (event) => {
-    console.log(event.target.value);
-    setMsg(event.target.vlaue);
-  };
-
-  const webSocketLogin = useCallback(() => {
-    ws.current = new WebSocket("ws://localhost:8080/socket/chatt");
-
-    ws.current.onmessage = (message) => {
-      const dataSet = JSON.parse(message.data);
-      setSocketData(dataSet);
-    };
-  });
-
-  const send = useCallback(() => {
-    if (!chkLog) {
-      if (name === "") {
-        alert("이름을 입력하세요.");
-        document.getElementById("name").focus();
-        return;
-      }
-      webSocketLogin();
-      setChkLog(true);
-    }
-    if (msg !== "") {
-      const data = {
-        name,
-        msg,
-        data: new Date().toLocaleDateString(),
-      }; // 전송데이터 (JSON)
-
-      const temp = JSON.stringify(data);
-
-      if (ws.current.readyState === 0) {
-        //readyState는 웹 소켓 연결 상태를 나타냄
-        ws.current.onopen = () => {
-          //webSocket이 맺어지고 난 후, 실행
-          console.log(ws.current.readyState);
-          ws.current.send(temp);
-        };
-      } else {
-        ws.current.send(temp);
-      }
-    } else {
-      alert("메세지를 입력하세요.");
-      document.getElementById("msg").focus();
-      return;
-    }
-    setMsg("");
-  });
-  /* ===== webSocket 영역 끝 ===== */
+  }
 
   return (
     <>
-      <Box id="chatt">
-        <h1 id="title">WebSocket Chatting</h1>
-        <br />
-        <Box>{msgBox}</Box>
-      </Box>
-      <Input
-        disabled={chkLog}
-        placeholder="이름을 입력하세요."
-        type="text"
-        id="name"
-        value={name}
-        onChange={(event) => setName(event.target.value)}
-      />
-      <Box>
-        <textarea
-          id="msg"
-          value={msg}
-          onChange={onText}
-          onKeyDown={(event) => {
-            if (event.keycode === 13) {
-              send();
-            }
-          }}
-        ></textarea>
-        <Input tpye={"button"} value={"전송"} id="btnSend" onClick={send} />
-      </Box>
+      {setIdAccess || (
+        <Center>
+          <Flex w={"50%"}>
+            <Input
+              value={chatId}
+              onChange={handleChatId}
+              placeholder="아이디를 입력해주세요"
+            />
+            <Button onClick={sendId}>입력</Button>
+          </Flex>
+        </Center>
+      )}
+      {setIdAccess && (
+        <Center>
+          <Box w={"50%"} h={"500px"}>
+            <Center>
+              <Box
+                border={"1px solid black"}
+                w={"100%"}
+                textAlign={"center"}
+                h={"50px"}
+              >
+                {content.id}님 반갑습니다.
+              </Box>
+            </Center>
+
+            <Center>
+              <Box
+                id="chatArea"
+                w={"100%"}
+                border={"1px solid black"}
+                textIndent={"15px"}
+                h={"400px"}
+              >
+                {chat.map((item, index) => (
+                  <Text key={index}>{item}</Text>
+                ))}
+              </Box>
+            </Center>
+
+            <Center>
+              <Flex w={"100%"} h={"50px"}>
+                <Input value={text} onChange={handleTextInput} />
+                <Button onClick={sendMsg}>입력</Button>
+                <Button onClick={disconnectSocket}>종료</Button>
+              </Flex>
+            </Center>
+          </Box>
+        </Center>
+      )}
     </>
   );
-};
+}
 
 export default Chat;
