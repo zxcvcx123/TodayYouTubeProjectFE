@@ -1,8 +1,15 @@
 import { Box, Center, Flex } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { MainBoardList } from "./MainBoardList";
+import axios from "axios";
 
 export function MainView() {
+  const [category, setCategory] = useState("all");
+
+  // useEffect(() => {
+  //   axios.get("/api/main");
+  // }, []);
+
   // 임시메인
   return (
     <Box bg="black" w="100%" h="700px" p={4}>

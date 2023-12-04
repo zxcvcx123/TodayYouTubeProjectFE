@@ -21,6 +21,7 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import Editor from "../component/Editor";
 
 function InquiryView(props) {
   const [inquiry, setInquiry] = useState(null);
@@ -40,6 +41,20 @@ function InquiryView(props) {
 
   if (inquiry == null) {
     return <Spinner />;
+  }
+
+  function handleDeleteButton() {
+    axios
+      .delete("/api/inquiry/delete/" + id)
+      .then(() => {
+        navigate("/inquiry/list");
+        toast({
+          description: "글이 삭제되었습니다.",
+          status: "success",
+        });
+      })
+      .catch(() => console.log("bad"))
+      .finally(() => console.log("done"));
   }
 
   return (
@@ -68,6 +83,7 @@ function InquiryView(props) {
           borderColor={"black.300"}
         ></Input>
       </FormControl>
+      {/*<Editor />*/}
       <FormControl mb={1}>
         <FormLabel fontWeight={"bold"} ml={3}>
           문의내용
@@ -81,7 +97,10 @@ function InquiryView(props) {
           readOnly
         ></Textarea>
       </FormControl>
-      <Button colorScheme="blue" onClick={() => navigate("/api/inquiry/edit")}>
+      <Button
+        colorScheme="blue"
+        onClick={() => navigate("/inquiry/edit/" + id)}
+      >
         수정
       </Button>
       <Button colorScheme="red" onClick={onOpen}>
@@ -99,16 +118,7 @@ function InquiryView(props) {
             <Button variant={"ghost"} onClick={onClose}>
               닫기
             </Button>
-            <Button
-              colorScheme="blue"
-              onClick={() => {
-                navigate("/inquiry/list");
-                toast({
-                  description: "글이 삭제되었습니다.",
-                  status: "success",
-                });
-              }}
-            >
+            <Button colorScheme="blue" onClick={handleDeleteButton}>
               삭제
             </Button>
           </ModalFooter>
