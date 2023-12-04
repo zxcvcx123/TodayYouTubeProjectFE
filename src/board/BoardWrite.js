@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   FormControl,
+  FormErrorMessage,
   FormHelperText,
   FormLabel,
   Heading,
@@ -22,6 +23,7 @@ function BoardWrite() {
   const [content, setContent] = useState("");
   const [uploadFiles, setUploadFiles] = useState([]);
   const [uuid, setUuid] = useState("");
+  const [titleError, setTitleError] = useState("");
 
   /* use navigate */
   let navigate = useNavigate();
@@ -33,7 +35,7 @@ function BoardWrite() {
 
     if (!title || title.trim() === "") {
       console.log("제목을 입력해주세요. title은 null이거나 공백이면 안 됨.");
-      return;
+      setTitleError("제목을 입력해주세요. title은 null이거나 공백이면 안 됨.");
     }
 
     if (!content || content.trim() === "") {
@@ -78,13 +80,15 @@ function BoardWrite() {
       <Heading mb={5}>유튜브 추천 :: 새 글 작성하기</Heading>
 
       {/* 제목 */}
-      <FormControl mb={2}>
+      <FormControl mb={2} isInvalid={titleError}>
         <FormLabel>제목</FormLabel>
         <Input
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="추천 게시글의 제목을 입력해주세요."
         />
+        {/* isInvalid로 타이틀이 공백이거나 null일 경우 에러메시지 출력 */}
+        <FormErrorMessage>{titleError}</FormErrorMessage>
       </FormControl>
 
       {/* 링크 */}
