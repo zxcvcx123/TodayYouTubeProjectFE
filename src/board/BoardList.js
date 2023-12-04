@@ -234,14 +234,16 @@ function BoardList() {
                             <Text>{board.board_member_id}</Text>
                             <Text>{board.updated_at}</Text>
                             <Flex w={"100%"} justifyContent={"space-between"}>
-                              <Box>
-                                <FontAwesomeIcon icon={faThumbsUp} />{" "}
-                                {board.countlike}
-                              </Box>
-                              <Box>
-                                <FontAwesomeIcon icon={faComment} />{" "}
-                                {board.count_comment}
-                              </Box>
+                              <Flex>
+                                <Box mr={3}>
+                                  <FontAwesomeIcon icon={faThumbsUp} />{" "}
+                                  {board.countlike}
+                                </Box>
+                                <Box>
+                                  <FontAwesomeIcon icon={faComment} />{" "}
+                                  {board.count_comment}
+                                </Box>
+                              </Flex>
                               <Box>
                                 <Text>조회수 : {board.views}</Text>
                               </Box>
