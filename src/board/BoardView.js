@@ -112,34 +112,42 @@ function BoardView() {
 
       <Divider my={5} borderColor="grey" />
 
-      {/* 링크 */}
-      <FormControl mb={2}>
-        <FormLabel>유튜브 링크</FormLabel>
-        <Text>{board.link}</Text>
-        <Button onClick={() => window.open(board.link)}>
-          유튜브 영상으로 가기!
-        </Button>
-      </FormControl>
+      {/* 유튜브 링크가 없을 경우 유튜브 링크 및 영상이 보이지 않음 */}
+      {!board.link ? (
+        <Text>링크가 없네용</Text>
+      ) : (
+        <>
+          {/* 링크 */}
+          <FormControl mb={2}>
+            <FormLabel>유튜브 링크</FormLabel>
+            <Text>{board.link}</Text>
+            <Button onClick={() => window.open(board.link)}>
+              유튜브 영상으로 가기!
+            </Button>
+          </FormControl>
 
-      <Divider my={5} borderColor="grey" />
+          <Divider my={5} borderColor="grey" />
 
-      {/* 유튜브 썸네일 및 영상 출력 */}
-      <FormControl mb={2}>
-        <FormLabel>추천 유튜브 영상!</FormLabel>
-        <YoutubeInfo
-          link={board.link}
-          extraThumbnail={true}
-          thumbnailWidth={100}
-          thumbnailHeight={100}
-        />
-      </FormControl>
+          {/* 유튜브 썸네일 및 영상 출력 */}
+          <FormControl mb={2}>
+            <FormLabel>추천 유튜브 영상!</FormLabel>
+            <YoutubeInfo
+              link={board.link}
+              extraThumbnail={true}
+              thumbnailWidth={100}
+              thumbnailHeight={100}
+            />
+            {/* 유튜브 영상 출력 */}
+            <YoutubeInfo link={board.link} extraVideo={true} />
+          </FormControl>
+        </>
+      )}
+
       <Divider my={5} borderColor="grey" />
 
       {/* 본문 */}
       <FormControl mb={2}>
         <FormLabel>본문</FormLabel>
-        {/* 유튜브 영상 출력 */}
-        <YoutubeInfo link={board.link} extraVideo={true} />
         <Box border={"1px solid red"}>
           {/* CKEditor 본문 영역 onReady => 높이 설정 */}
           <CKEditor
