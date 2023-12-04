@@ -52,8 +52,8 @@ function YoutubeInfo({
               <Img
                 src={thumbnail}
                 alt="유튜브 썸네일"
-                w={thumbnailWidth}
-                h={thumbnailHeight}
+                maxW={thumbnailWidth}
+                maxH={thumbnailHeight}
               />
             </Tooltip>
           ) : (
