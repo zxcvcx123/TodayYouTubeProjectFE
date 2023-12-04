@@ -55,6 +55,7 @@ function BoardWrite() {
     }
   }, [titleError, contentError]);
 
+  // 작성 완료 버튼 클릭 ---------------------------------------------------
   function handleSubmit() {
     let uuSrc = getSrc();
 
