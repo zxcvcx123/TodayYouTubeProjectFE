@@ -10,11 +10,9 @@ function Chat(props) {
   const [content, setContent] = useState("");
   const [text, setText] = useState("");
   const [chatId, setChatId] = useState("");
-  const [chat, setChat] = useState([]);
+  //const [chat, setChat] = useState([]);
   const [setIdAccess, setSetIdAccess] = useState(false);
   const [connection, setConnection] = useState(true);
-
-  const [testVal, setTestVal] = useState(0);
 
   // http://localhost:3000/gs-guide-websocket 소켓 주소
   function connect() {
@@ -28,14 +26,19 @@ function Chat(props) {
         console.log(res);
         console.log(res._body);
         console.log(JSON.parse(res._body));
-        const newContent = JSON.parse(res._body);
 
         // === 두번 눌러야 나온걸 선생님이 해결해준 코드 ===
+        const newContent = JSON.parse(res._body);
         setContent(newContent);
-        const newChat = [...chat];
-        newChat.push(newContent.chat);
-        setChat(newChat);
+        // const newChat = [...chat];
+        // newChat.push(newContent.chat);
+        // setChat(newChat);
         // =========================================
+        if (newContent.chat !== null) {
+          document
+            .getElementById("chatArea")
+            .insertAdjacentHTML("beforeend", "<p>" + newContent.chat + "</p>");
+        }
       });
     });
   }
@@ -43,7 +46,7 @@ function Chat(props) {
   // 채팅내용
   function sendMsg() {
     stompClient.current.publish({
-      destination: "/app/hello",
+      destination: "/topic/greetings",
       body: JSON.stringify({ id: chatId, chat: text }),
     });
     //send("/app/hello", {}, JSON.stringify({ name: "테스트" }));
@@ -71,7 +74,7 @@ function Chat(props) {
 
   useEffect(() => {
     connect();
-    setChat([]);
+    //setChat([]);
   }, [connection]);
 
   // 채팅내용
@@ -82,17 +85,6 @@ function Chat(props) {
   // 아이디 입력
   function handleChatId(e) {
     setChatId(e.target.value);
-  }
-
-  function testBtn() {
-    stompClient.current.publish({
-      destination: "/app/hello",
-      body: JSON.stringify({ id: chatId, chat: text }),
-    });
-    //send("/app/hello", {}, JSON.stringify({ name: "테스트" }));
-    if (chatId.length > 0) {
-      setSetIdAccess(true);
-    }
   }
 
   return (
@@ -130,11 +122,8 @@ function Chat(props) {
                 border={"1px solid black"}
                 textIndent={"15px"}
                 h={"400px"}
-              >
-                {chat.map((item, index) => (
-                  <Text key={index}>{item}</Text>
-                ))}
-              </Box>
+                id="chatArea"
+              ></Box>
             </Center>
 
             <Center>
