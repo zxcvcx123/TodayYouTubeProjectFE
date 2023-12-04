@@ -28,7 +28,11 @@ function Chat(props) {
         console.log(res);
         console.log(res._body);
         console.log(JSON.parse(res._body));
-        setContent(JSON.parse(res._body));
+        const newContent = JSON.parse(res._body);
+        setContent(newContent);
+        const newChat = [...chat];
+        newChat.push(newContent.chat);
+        setChat(newChat);
       });
     });
   }
@@ -40,9 +44,6 @@ function Chat(props) {
       body: JSON.stringify({ id: chatId, chat: text }),
     });
     //send("/app/hello", {}, JSON.stringify({ name: "테스트" }));
-    const newChat = [...chat];
-    newChat.push(content.chat);
-    setChat(newChat);
   }
 
   // 아이디 등록하기
