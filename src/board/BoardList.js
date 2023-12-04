@@ -10,6 +10,13 @@ import {
   Center,
   Divider,
   Flex,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Radio,
   RadioGroup,
   SimpleGrid,
@@ -22,6 +29,7 @@ import {
   Thead,
   Tooltip,
   Tr,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import Pagination from "../page/Pagination";
@@ -52,6 +60,9 @@ function BoardList() {
   const [params] = useSearchParams();
   const location = useLocation();
 
+  // modal
+  const { isOpen, onClose, onOpen } = useDisclosure();
+
   // navigate
   const navigate = useNavigate();
 
@@ -78,7 +89,8 @@ function BoardList() {
     console.log(token.detectLogin);
     // 글쓰기 버튼 클릭시 로그인 되어 있지 않다면 로그인 창으로 이동
     if (!token.detectLogin) {
-      navigate("/member/login");
+      // navigate("/member/login");
+      onOpen();
     } else {
       navigate("/write");
     }
@@ -297,7 +309,26 @@ function BoardList() {
           </>
         )}
       </Box>
-      <Box></Box>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>로그인 필요</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>게시글을 쓰기 위해 로그인이 필요합니다.</ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="red" mr={3} onClick={onClose}>
+              Close
+            </Button>
+            <Button
+              colorScheme="blue"
+              onClick={() => navigate("/member/login")}
+            >
+              로그인하러 가기
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Flex>
   );
 }
