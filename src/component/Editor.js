@@ -4,6 +4,7 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Box, Button } from "@chakra-ui/react";
+import "./editorStyle.css"; // External CSS file
 
 const Editor = ({ uuid, setUuid, setContent1, data }) => {
   const customUploadAdapter = (loader) => {
@@ -44,19 +45,18 @@ const Editor = ({ uuid, setUuid, setContent1, data }) => {
           data={data || ""}
           config={{ extraPlugins: [uploadPlugin] }}
           onReady={(editor) => {
-            editor.ui.view.editable.element.style.height = "500px";
+            console.log("Ready.");
             // You can store the "editor" and use when it is needed.
             // console.log("Editor is ready to use!", editor);
           }}
           onChange={(event, editor) => {
             setContent1(editor.getData());
+            console.log("Change.");
             // console.log({ event, editor, content });
           }}
           onFocus={(event, editor) => {
-            editor.ui.view.editable.element.style.height = "500px";
-          }}
-          onBlur={(event, editor) => {
-            editor.ui.view.editable.element.style.height = "500px";
+            editor.ui.view.editable.element.style.minHeight = "500px";
+            console.log("Focus.");
           }}
         />
       </section>

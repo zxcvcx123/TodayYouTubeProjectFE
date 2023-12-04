@@ -29,7 +29,7 @@ function BoardWrite() {
   function handleSubmit() {
     let uuSrc = getSrc();
 
-    console.log(uuSrc);
+    console.log("저장 버튼 클릭됨");
 
     axios
       .postForm("/api/board/add", {
@@ -110,7 +110,7 @@ function BoardWrite() {
         작성 완료
       </Button>
 
-      {/* 저장 버튼 */}
+      {/* 취소 버튼 */}
       <Button onClick={() => navigate("/board/list")} colorScheme="red">
         취소
       </Button>
