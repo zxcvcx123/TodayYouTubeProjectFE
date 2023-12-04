@@ -22,7 +22,7 @@ import InquiryList from "./inquiry/InquiryList";
 import InquiryView from "./inquiry/InquiryView";
 import InquiryWrite from "./inquiry/InquiryWrite";
 import LoginProvider from "./component/LoginProvider";
-import MemberInfo from "./member/MemberInfo";
+import MemberInfo from "./member/memberInfo/MemberInfo";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(

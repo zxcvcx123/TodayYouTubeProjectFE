@@ -21,6 +21,7 @@ import { faBell } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useLocation, useNavigate } from "react-router-dom";
 import { DetectLoginContext } from "../component/LoginProvider";
+import MemberProfile from "../member/MemberProfile";
 
 Stack.propTypes = {
   p: PropTypes.number,
@@ -91,15 +92,7 @@ export function Nav() {
                 </Button>
                 <Menu w={200} size="md" variant="ghost">
                   <MenuButton>
-                    <HStack>
-                      <Flex width={"150px"}>
-                        <Avatar src="https://bit.ly/sage-adebayo" />
-                        <Box ml="3">
-                          <Text fontWeight="bold">{loginInfo.nickname}</Text>
-                          <Text fontSize="sm">{loginInfo.role_name}</Text>
-                        </Box>
-                      </Flex>
-                    </HStack>
+                    <MemberProfile />
                   </MenuButton>
                   <MenuList>
                     <MenuItem
