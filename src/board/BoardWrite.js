@@ -63,6 +63,7 @@ function BoardWrite() {
     if (!title || title.trim() === "") {
       console.log("제목을 입력해주세요. title은 null이거나 공백이면 안 됨.");
       setTitleError("제목을 입력해주세요. title은 null이거나 공백이면 안 됨.");
+      return;
     }
 
     if (!content || content.trim() === "") {
