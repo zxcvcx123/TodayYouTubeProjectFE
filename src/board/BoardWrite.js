@@ -68,6 +68,17 @@ function BoardWrite() {
     }
   }, [titleError, contentError]);
 
+  // title, content 의 문자열 길이가 0 이상일 경우 titleError 초기화
+  useEffect(() => {
+    if (title.trim().length > 0) {
+      setTitleError("");
+    }
+
+    if (content.trim().length > 0) {
+      setContentError("");
+    }
+  }, [title, content]);
+
   // 작성 완료 버튼 클릭 ---------------------------------------------------
   function handleSubmit() {
     let uuSrc = getSrc();

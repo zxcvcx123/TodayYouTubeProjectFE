@@ -11,17 +11,17 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
-import { useImmer } from "use-immer";
-import { Filednd } from "../file/Filednd";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
+import {useNavigate, useParams} from "react-router-dom";
+import {useImmer} from "use-immer";
+import {Filednd} from "../file/Filednd";
+import {CKEditor} from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import Editor from "../component/Editor";
 import {DetectLoginContext} from "../component/LoginProvider";
 
 function BoardEdit() {
   /* 로그인 정보 컨텍스트 */
-  const { token, handleLogout, loginInfo, validateToken } =
+  const {token, handleLogout, loginInfo, validateToken} =
     useContext(DetectLoginContext);
 
   /* use state */
@@ -35,7 +35,7 @@ function BoardEdit() {
   const [board, updateBoard] = useImmer(null);
 
   /* use params */
-  const { id } = useParams();
+  const {id} = useParams();
 
   /* use navigate */
   const navigate = useNavigate();
@@ -65,21 +65,21 @@ function BoardEdit() {
     if (titleError && contentError) {
       const errorElement = document.getElementById("title");
       if (errorElement) {
-        errorElement.scrollIntoView({ behavior: "smooth" });
+        errorElement.scrollIntoView({behavior: "smooth"});
       }
     } else {
       if (titleError) {
         // 오류 메시지가 있을 때 해당 영역으로 스크롤 이동
         const errorElement = document.getElementById("title");
         if (errorElement) {
-          errorElement.scrollIntoView({ behavior: "smooth" });
+          errorElement.scrollIntoView({behavior: "smooth"});
         }
       }
 
       if (contentError) {
         const errorElement = document.getElementById("content");
         if (errorElement) {
-          errorElement.scrollIntoView({ behavior: "smooth" });
+          errorElement.scrollIntoView({behavior: "smooth"});
         }
       }
     }
@@ -87,7 +87,7 @@ function BoardEdit() {
 
   // 게시글을 로딩중이라면 스피너 돌리기
   if (board === null) {
-    return <Spinner />;
+    return <Spinner/>;
   }
 
   // 게시글 수정 버튼 클릭 함수
@@ -150,6 +150,21 @@ function BoardEdit() {
   function handleBoardUpdate(e, updateField) {
     updateBoard((draft) => {
       draft[updateField] = e.target.value;
+
+      // title이 0 이상일 경우 titleError를 초기화
+      if (updateField === "title") {
+        console.log(draft[updateField]);
+        if (updateField.trim().length > 0) {
+          setTitleError("");
+        }
+      }
+      // content가 0 이상일 경우 contentError를 초기화
+      if (updateField === "content") {
+        console.log(draft[updateField]);
+        if (updateField.trim().length > 0) {
+          setContentError("");
+        }
+      }
     });
   }
 
@@ -158,13 +173,13 @@ function BoardEdit() {
       <Heading mb={5}>유튜브 추천 :: 게시글 수정하기</Heading>
 
       {/* 제목 */}
-        <FormControl mb={2} isInvalid={titleError}>
+      <FormControl mb={2} isInvalid={titleError}>
         <FormLabel id="title">제목</FormLabel>
         <Input
           value={board.title}
           onChange={(e) => handleBoardUpdate(e, "title")}
         />
-          <FormErrorMessage>{titleError}</FormErrorMessage>
+        <FormErrorMessage>{titleError}</FormErrorMessage>
       </FormControl>
 
       {/* 링크 */}
@@ -177,7 +192,7 @@ function BoardEdit() {
       </FormControl>
 
       {/* 본문 */}
-        <FormControl mb={2} isInvalid={contentError}>
+      <FormControl mb={2} isInvalid={contentError}>
         <FormLabel id="content">본문</FormLabel>
         <Box border={"1px solid red"}>
           {/* data={board.content} : 페이지 초기값을 설정한다. */}
@@ -185,11 +200,11 @@ function BoardEdit() {
           <Editor
             data={board.content}
             setContent1={(content) =>
-              handleBoardUpdate({ target: { value: content } }, "content")
+              handleBoardUpdate({target: {value: content}}, "content")
             }
           />
         </Box>
-          <FormErrorMessage>{contentError}</FormErrorMessage>
+        <FormErrorMessage>{contentError}</FormErrorMessage>
       </FormControl>
 
       {/* 파일 */}
