@@ -16,16 +16,19 @@ function YoutubeInfo({
   const [videoId, setVideoId] = useState(null);
 
   useEffect(() => {
-    // 유튜브 링크에서 동영상 ID 추출 (정규표현식 match 메서드)
-    const videoIdMatch = link.match(
-      /^(https?:\/\/)?(www\.)?(youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/,
-    );
+    // 링크가 유효한지 첫번째 검사 (null or isBlack)
+    if (link && link.trim() !== "") {
+      // 유튜브 링크에서 동영상 ID 추출 (정규표현식 match 메서드)
+      const videoIdMatch = link.match(
+        /^(https?:\/\/)?(www\.)?(youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/,
+      );
 
-    // 정규표현식 match 메서드 4번의 값으로 썸네일 추출
-    if (videoIdMatch && videoIdMatch[4]) {
-      const thumbnailUrl = `https://img.youtube.com/vi/${videoIdMatch[4]}/mqdefault.jpg`;
-      setThumbnail(thumbnailUrl);
-      setVideoId(videoIdMatch[4]);
+      // 정규표현식 match 메서드 4번의 값으로 썸네일 추출
+      if (videoIdMatch && videoIdMatch[4]) {
+        const thumbnailUrl = `https://img.youtube.com/vi/${videoIdMatch[4]}/mqdefault.jpg`;
+        setThumbnail(thumbnailUrl);
+        setVideoId(videoIdMatch[4]);
+      }
     }
   }, []);
 
