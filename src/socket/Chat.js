@@ -29,10 +29,13 @@ function Chat(props) {
         console.log(res._body);
         console.log(JSON.parse(res._body));
         const newContent = JSON.parse(res._body);
+
+        // === 두번 눌러야 나온걸 선생님이 해결해준 코드 ===
         setContent(newContent);
         const newChat = [...chat];
         newChat.push(newContent.chat);
         setChat(newChat);
+        // =========================================
       });
     });
   }
