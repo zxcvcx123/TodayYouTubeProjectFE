@@ -1,5 +1,5 @@
 import YouTube from "react-youtube";
-import { Img, Tooltip } from "@chakra-ui/react";
+import { Box, Img, Tooltip } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
 // 유튜브 정보 추출 컴포넌트 - 썸네일, 영상을 추출합니다.
@@ -52,20 +52,46 @@ function YoutubeInfo({
               }
               placement="top-end"
             >
-              <Img
-                src={thumbnail}
-                alt="유튜브 썸네일"
-                maxW={thumbnailWidth}
-                maxH={thumbnailHeight}
-              />
+              {/* 링크가 null일 경우 임시 박스 삽입 */}
+              {/* TODO : 임시 이미지 넣기 */}
+              {thumbnail ? (
+                <Img
+                  src={thumbnail}
+                  alt="유튜브 썸네일"
+                  maxW={thumbnailWidth}
+                  h={thumbnailHeight}
+                />
+              ) : (
+                <Box
+                  backgroundColor={"grey"}
+                  maxW={thumbnailWidth}
+                  h={thumbnailHeight}
+                >
+                  링크X 일 경우 임시 박스
+                </Box>
+              )}
             </Tooltip>
           ) : (
-            <Img
-              src={thumbnail}
-              alt="유튜브 썸네일"
-              w={thumbnailWidth}
-              h={thumbnailHeight}
-            />
+            <>
+              {/* 링크가 null일 경우 임시 박스 삽입 */}
+              {/* TODO : 임시 이미지 넣기 */}
+              {thumbnail ? (
+                <Img
+                  src={thumbnail}
+                  alt="유튜브 썸네일"
+                  maxW={thumbnailWidth}
+                  h={thumbnailHeight}
+                />
+              ) : (
+                <Box
+                  backgroundColor={"grey"}
+                  maxW={thumbnailWidth}
+                  h={thumbnailHeight}
+                >
+                  링크X 일 경우 임시 박스
+                </Box>
+              )}
+            </>
           )}
         </>
       )}
