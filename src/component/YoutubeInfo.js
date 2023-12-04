@@ -40,7 +40,7 @@ function YoutubeInfo({
       {/* toolTip 을 true로 하면 이미지에 마우스 호버 시 툴팁으로 2배 적용된 이미지가 표시 된다.*/}
       {extraThumbnail && (
         <>
-          {toolTip ? (
+          {toolTip && thumbnail !== null ? (
             <Tooltip
               label={
                 <Img
