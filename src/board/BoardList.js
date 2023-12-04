@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import {
   Box,
@@ -36,8 +36,13 @@ import {
 import { SearchComponent } from "../page/SearchComponent";
 import PageCount from "../page/PageCount";
 import pageCount from "../page/PageCount";
+import { DetectLoginContext } from "../component/LoginProvider";
 
 function BoardList() {
+  /* 로그인 정보 컨텍스트 */
+  const { token, handleLogout, loginInfo, validateToken } =
+    useContext(DetectLoginContext);
+
   // state
   const [boardList, setBoardList] = useState(null);
   // 빈 배열로 받으면 null 값 오류 안나옴
@@ -68,13 +73,24 @@ function BoardList() {
     setCurrentView("grid");
   };
 
+  // 글쓰기 버튼 클릭
+  function handleWriteClick() {
+    console.log(token.detectLogin);
+    // 글쓰기 버튼 클릭시 로그인 되어 있지 않다면 로그인 창으로 이동
+    if (!token.detectLogin) {
+      navigate("/member/login");
+    } else {
+      navigate("/write");
+    }
+  }
+
   return (
     <Flex justifyContent={"center"}>
       <Box>
         {/* ------------------------- 게시글 목록 상단 바 ------------------------- */}
         <Flex justifyContent={"space-between"} mb={5}>
           <Box>
-            <Button onClick={() => navigate("/write")} colorScheme="blue">
+            <Button onClick={handleWriteClick} colorScheme="blue">
               글쓰기
             </Button>
           </Box>
