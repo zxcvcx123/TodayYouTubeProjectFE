@@ -8,7 +8,6 @@ import {
   CardFooter,
   CardHeader,
   Center,
-  Divider,
   Flex,
   Modal,
   ModalBody,
@@ -17,10 +16,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Radio,
-  RadioGroup,
   SimpleGrid,
-  Stack,
   Table,
   Tbody,
   Td,
@@ -43,7 +39,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { SearchComponent } from "../page/SearchComponent";
 import PageCount from "../page/PageCount";
-import pageCount from "../page/PageCount";
 import { DetectLoginContext } from "../component/LoginProvider";
 
 function BoardList() {
@@ -86,7 +81,7 @@ function BoardList() {
 
   // 글쓰기 버튼 클릭
   function handleWriteClick() {
-    console.log(token.detectLogin);
+    console.log("token.detectLogin = " + token.detectLogin);
     // 글쓰기 버튼 클릭시 로그인 되어 있지 않다면 로그인 창으로 이동
     if (!token.detectLogin) {
       // navigate("/member/login");
