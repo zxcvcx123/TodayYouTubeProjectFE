@@ -20,11 +20,12 @@ import {
   useToast,
 } from "@chakra-ui/react";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import YouTube from "react-youtube";
 import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { DetectLoginContext } from "../component/LoginProvider";
 
 function ReplyCommentForm({
   comment_id,
@@ -180,6 +181,7 @@ export function BoardReplyComment({
   isReplyListOpen,
   setIsReplyFormOpen,
 }) {
+  const { token, loginInfo } = useContext(DetectLoginContext);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const replyIdRef = useRef(0);
 
@@ -204,7 +206,11 @@ export function BoardReplyComment({
     setIsReplyFormOpen(true);
 
     axios
-      .post("/api/comment/reply/add", reply_comment)
+      .post("/api/comment/reply/add", {
+        reply_comment: reply_comment.reply_comment,
+        comment_id: reply_comment.comment_id,
+        member_id: loginInfo.member_id,
+      })
       .then(() => {
         toast({
           description: "댓글이 등록되었습니다.",
