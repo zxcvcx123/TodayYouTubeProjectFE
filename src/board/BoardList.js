@@ -160,7 +160,7 @@ function BoardList() {
                           </Td>
                           <Td textAlign={"center"}>{board.countlike}</Td>
                           <Td textAlign={"center"}>{board.board_member_id}</Td>
-                          <Td textAlign={"center"}>{board.created_at}</Td>
+                          <Td textAlign={"center"}>{board.ago}</Td>
                           <Td textAlign={"center"}>{board.views}</Td>
                         </>
                       ) : (
@@ -232,7 +232,7 @@ function BoardList() {
                         <CardFooter p={"10px"}>
                           <Box w={"100%"}>
                             <Text>{board.board_member_id}</Text>
-                            <Text>{board.updated_at}</Text>
+                            <Text>{board.ago}</Text>
                             <Flex w={"100%"} justifyContent={"space-between"}>
                               <Flex>
                                 <Box mr={3}>
