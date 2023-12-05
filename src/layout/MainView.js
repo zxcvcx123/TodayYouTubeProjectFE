@@ -30,6 +30,7 @@ export function MainView() {
   const [category, setCategory] = useState("all");
   const [firstList, setFirstList] = useState(null);
   const [otherList, setOtherList] = useState(null);
+  const [dateSort, setDateSort] = useState("weekly");
 
   const params = new URLSearchParams();
   const navigate = useNavigate();
@@ -37,12 +38,13 @@ export function MainView() {
 
   useEffect(() => {
     params.set("c", category);
+    params.set("sort", dateSort);
     axios.get("/api?" + params).then((response) => {
       setFirstList(response.data.firstBoardList);
       setOtherList(response.data.otherBoardList);
       navigate("?" + params);
     });
-  }, [category]);
+  }, [category, dateSort]);
 
   function handleCategoryChange(e) {
     setCategory(e.target.value);
@@ -57,6 +59,10 @@ export function MainView() {
     return <Spinner />;
   }
   console.log(otherList);
+
+  function handleDateClick(e) {
+    setDateSort(e.target.value);
+  }
 
   // 임시메인
   return (
@@ -94,13 +100,24 @@ export function MainView() {
         <option value="C006">영화/드라마 게시판</option>
         <option value="C007">게임게시판</option>
       </Select>
+      <Flex ml={10} mb={3}>
+        <Button mr={2} value="daily" onClick={(e) => handleDateClick(e)}>
+          일간
+        </Button>
+        <Button mr={2} value="weekly" onClick={(e) => handleDateClick(e)}>
+          주간
+        </Button>
+        <Button value="monthly" onClick={(e) => handleDateClick(e)}>
+          월간
+        </Button>
+      </Flex>
       <Box color="white" ml={10}>
         <FontAwesomeIcon icon={faRankingStar} /> 주간 베스트 영상
         <Text fontSize="0.8rem" color="gray.400">
           - 한 주간 가장 추천을 많이 받은 영상들입니다.
         </Text>
       </Box>
-      <Center w="60%" h="70%" m="auto" mt={"-40px"}>
+      <Center w="60%" h="70%" m="auto" mt={"-95px"}>
         {firstList &&
           firstList.map((first) => (
             <Box width={"100%"} height="100%" key={first.id}>
