@@ -23,6 +23,7 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import editor from "../component/Editor";
 import { DetectLoginContext } from "../component/LoginProvider";
+import MemberProfile from "../member/MemberProfile";
 
 function BoardView() {
   /* 로그인 정보 컨텍스트 */
@@ -182,7 +183,7 @@ function BoardView() {
 
       {/* 제목 */}
       <FormControl mt={10} mb={2}>
-        <Text fontSize={"large"} as={"strong"} border={"1px solid black"}>
+        <Text fontSize={"xx-large"} as={"strong"} border={"1px solid black"}>
           {board.title}
         </Text>
         <Flex
@@ -190,11 +191,14 @@ function BoardView() {
           alignItems={"center"}
           border={"1px solid red"}
         >
-          <Text>
-            {board.board_member_id} | {board.updated_at}
-          </Text>
-          <BoardLike id={id} like={like} board={board} onClick={handleLike} />
-          <Text>| 조회수 : {board.views}</Text>
+          <Flex alignItems={"center"}>
+            <MemberProfile />
+            <Text>| {board.updated_at}</Text>
+          </Flex>
+          <Flex alignItems={"center"} gap={"5"}>
+            <BoardLike id={id} like={like} board={board} onClick={handleLike} />
+            <Text> | 조회수 : {board.views}</Text>
+          </Flex>
         </Flex>
       </FormControl>
 
