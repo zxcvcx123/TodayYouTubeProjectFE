@@ -84,7 +84,6 @@ function BoardList() {
     console.log("token.detectLogin = " + token.detectLogin);
     // 글쓰기 버튼 클릭시 로그인 되어 있지 않다면 로그인 창으로 이동
     if (!token.detectLogin) {
-      // navigate("/member/login");
       onOpen();
     } else {
       navigate("/write");

@@ -111,6 +111,7 @@ function BoardEdit() {
       return;
     }
 
+    // 수정 버튼 클릭시 loginInfo.member_id 같이 넘겨줌 => 로그인 상태 확인용.
     axios
       .putForm("/api/board/edit", {
         id: board.id,
