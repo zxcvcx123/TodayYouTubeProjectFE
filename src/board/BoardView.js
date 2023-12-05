@@ -209,28 +209,22 @@ function BoardView() {
         <Text>링크가 없네용</Text>
       ) : (
         <>
-          {/* 링크 */}
-          <FormControl mb={2}>
-            <FormLabel>유튜브 링크</FormLabel>
-            <Text>{board.link}</Text>
-            <Button onClick={() => window.open(board.link)}>
-              유튜브 영상으로 가기!
-            </Button>
-          </FormControl>
-
-          <Divider my={5} borderColor="grey" />
-
-          {/* 유튜브 썸네일 및 영상 출력 */}
+          {/* 유튜브 영상 출력 */}
           <FormControl mb={2}>
             <FormLabel>추천 유튜브 영상!</FormLabel>
-            <YoutubeInfo
-              link={board.link}
-              extraThumbnail={true}
-              thumbnailWidth={100}
-              thumbnailHeight={100}
-            />
             {/* 유튜브 영상 출력 */}
             <YoutubeInfo link={board.link} extraVideo={true} />
+            <Flex m={2} ml={0} gap={5}>
+              <Button onClick={() => window.open(board.link)} colorScheme="red">
+                유튜브 영상 페이지로 이동
+              </Button>
+              <Button
+                onClick={() => navigator.clipboard.writeText(board.link)}
+                colorScheme="blue"
+              >
+                유튜브 링크 복사
+              </Button>
+            </Flex>
           </FormControl>
         </>
       )}
@@ -239,7 +233,7 @@ function BoardView() {
 
       {/* 본문 */}
       <FormControl mb={2}>
-        <FormLabel>본문</FormLabel>
+        {/*<FormLabel>본문</FormLabel>*/}
         <Box border={"1px solid red"}>
           {/* CKEditor 본문 영역 onReady => 높이 설정 */}
           <CKEditor
