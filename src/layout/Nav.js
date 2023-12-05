@@ -36,6 +36,7 @@ export function Nav({ setSocket }) {
   const { token, handleLogout, loginInfo, validateToken } =
     useContext(DetectLoginContext);
   let navigate = useNavigate();
+  const location = useLocation();
 
   const stompClient = useRef(); // useRef로 connect()가 안끊기게하기
   function connect() {
@@ -43,13 +44,17 @@ export function Nav({ setSocket }) {
       transports: ["websocket", "xhr-streaming", "xhr-polling"],
     });
 
-    stompClient.current = Stomp.over(socket);
-    stompClient.current.connect({}, function (frame) {
-      console.log("소켓연결 성공: " + frame);
-      console.log(stompClient.current);
-      console.log(frame);
-      setSocket(stompClient);
-    });
+    console.log(stompClient.current);
+
+    if (!stompClient.current) {
+      stompClient.current = Stomp.over(socket);
+      stompClient.current.connect({}, function (frame) {
+        console.log("소켓연결 성공: " + frame);
+        console.log(stompClient.current);
+        console.log(frame);
+        setSocket(stompClient);
+      });
+    }
   }
 
   useEffect(() => {

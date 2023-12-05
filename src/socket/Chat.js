@@ -2,21 +2,90 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import * as SockJS from "sockjs-client";
 import * as StompJS from "@stomp/stompjs";
 import { Stomp } from "@stomp/stompjs";
-import { Box, Button, Center, Flex, Input, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Center,
+  Flex,
+  Input,
+  Spinner,
+  Text,
+} from "@chakra-ui/react";
 import { useOutletContext } from "react-router-dom";
+import { DetectLoginContext } from "../component/LoginProvider";
 
 function Chat() {
-  const { socket, test } = useOutletContext();
-  let stompClient = socket;
+  let stompClient;
 
+  const { token, loginInfo } = useContext(DetectLoginContext);
+  const { socket } = useOutletContext();
   const [text, setText] = useState("");
   const [chatId, setChatId] = useState("");
   //const [chat, setChat] = useState([]);
   const [setIdAccess, setSetIdAccess] = useState(false);
   const [connection, setConnection] = useState(true);
 
-  console.log(socket);
-  console.log(test);
+  stompClient = useRef();
+  const subscription = useRef(null);
+
+  useEffect(() => {
+    if (socket === null) {
+      reconnect();
+    } else {
+      getSocket();
+    }
+
+    if (token.detectLogin) {
+      setSetIdAccess(true);
+      setChatId(loginInfo.member_id);
+    }
+
+    console.log("rerender");
+  }, []);
+
+  if (socket !== null) {
+    stompClient = socket;
+  }
+
+  if (socket === null) {
+    return <Spinner />;
+  }
+
+  // 만약 redirect가 아닌 url로 직접 이동한거면 다시 연결 시도
+  function reconnect() {
+    let socket = new SockJS("http://localhost:3000/gs-guide-websocket", null, {
+      transports: ["websocket", "xhr-streaming", "xhr-polling"],
+    });
+
+    console.log(stompClient.current);
+
+    if (!stompClient.current) {
+      stompClient.current = Stomp.over(socket);
+      stompClient.current.connect({}, function (frame) {
+        console.log("소켓연결 성공: " + frame);
+        console.log(stompClient.current);
+        console.log(frame);
+        unSubscribe();
+        subscription.current = stompClient.current.subscribe(
+          "/topic/greetings",
+          (res) => {
+            JSON.parse(res.body);
+            console.log(JSON.parse(res._body));
+            const json = JSON.parse(res._body);
+
+            if (json.chat !== null) {
+              document
+                .getElementById("chatArea")
+                .insertAdjacentHTML(
+                  "beforeend",
+                  "<p>" + json.id + ": " + json.chat + "</p>",
+                );
+            }
+          },
+        );
+      });
+    }
+  }
 
   // 채팅내용
   function sendMsg() {
@@ -28,20 +97,15 @@ function Chat() {
 
   // 아이디 등록하기
   function sendId() {
-    // stompClient.current.publish({
-    //   destination: "/app/hello",
-    //   body: JSON.stringify({ id: chatId }),
-    // });
-
     if (chatId.length > 0) {
       setSetIdAccess(true);
     }
   }
 
   function disconnectSocket() {
-    // stompClient.current.disconnect();
-    // console.log("소켓통신 종료");
-    // console.log(stompClient.current);
+    stompClient.current.disconnect();
+    console.log("소켓통신 종료");
+    console.log(stompClient.current);
     setSetIdAccess(false);
     setConnection(false);
   }
@@ -55,6 +119,46 @@ function Chat() {
   function handleChatId(e) {
     setChatId(e.target.value);
   }
+
+  // 채팅창 가져오기
+  function getSocket() {
+    unSubscribe();
+    subscription.current = stompClient.current.subscribe(
+      "/topic/greetings",
+      (res) => {
+        JSON.parse(res.body);
+        console.log(JSON.parse(res._body));
+        const json = JSON.parse(res._body);
+
+        if (json.chat !== null) {
+          document
+            .getElementById("chatArea")
+            .insertAdjacentHTML(
+              "beforeend",
+              "<p>" + json.id + ": " + json.chat + "</p>",
+            );
+        }
+
+        // =========================================
+        // const newContent = JSON.parse(res._body);
+        // setContent(newContent);
+        // const newChat = [...chat];
+        // newChat.push(newContent.chat);
+        // setChat(newChat);
+        // =========================================
+
+        // return setChat((chatList) => [...chatList, json]);
+      },
+    );
+  }
+
+  // ===== 두번 연결 되니깐 한번은 끊어줌 =====
+  function unSubscribe() {
+    if (subscription.current !== null) {
+      subscription.current.unsubscribe();
+    }
+  }
+  // ========================================
 
   return (
     <>

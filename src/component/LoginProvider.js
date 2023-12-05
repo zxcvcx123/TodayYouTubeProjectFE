@@ -121,6 +121,10 @@ export function LoginProvider({ children }) {
 
   return (
     <>
+      {/* token: 토큰 정보 token.detectLogin (로그인 유무 확인)
+          handleLogout: 로그아웃 기능
+          loginInfo: 로그인 사용자 정보(memberId, nickname, role_id, email)
+      */}
       <DetectLoginContext.Provider
         value={{ token, handleLogout, loginInfo, validateToken }}
       >

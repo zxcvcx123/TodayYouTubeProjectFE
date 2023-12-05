@@ -26,46 +26,46 @@
 //   const [like, setLike] = useState(0);
 //
 //   //localhost:3000/gs-guide-websocket 소켓 주소
-//   function connect() {
-//     let socket = new SockJS("http://localhost:3000/gs-guide-websocket", null, {
-//       transports: ["websocket", "xhr-streaming", "xhr-polling"],
-//     });
+// function connect() {
+//   let socket = new SockJS("http://localhost:3000/gs-guide-websocket", null, {
+//     transports: ["websocket", "xhr-streaming", "xhr-polling"],
+//   });
 //
-//     stompClient.current = Stomp.over(socket);
-//     stompClient.current.connect(
-//       {
-//         header: {
-//           user: "홍길동",
-//         },
+//   stompClient.current = Stomp.over(socket);
+//   stompClient.current.connect(
+//     {
+//       header: {
+//         user: "홍길동",
 //       },
-//       function (frame) {
-//         console.log("소켓연결 성공: " + frame);
-//         console.log(stompClient.current);
+//     },
+//     function (frame) {
+//       console.log("소켓연결 성공: " + frame);
+//       console.log(stompClient.current);
 //
-//         stompClient.current.subscribe("/topic/greetings", (res) => {
-//           JSON.parse(res.body);
-//           console.log(JSON.parse(res._body));
-//           const json = JSON.parse(res._body);
-//           setLike(json.testlike);
-//           if (json.chat !== null) {
-//             document
-//               .getElementById("chatArea")
-//               .insertAdjacentHTML("beforeend", "<p>" + json.chat + "</p>");
-//           }
+//       stompClient.current.subscribe("/topic/greetings", (res) => {
+//         JSON.parse(res.body);
+//         console.log(JSON.parse(res._body));
+//         const json = JSON.parse(res._body);
+//         setLike(json.testlike);
+//         if (json.chat !== null) {
+//           document
+//             .getElementById("chatArea")
+//             .insertAdjacentHTML("beforeend", "<p>" + json.chat + "</p>");
+//         }
 //
-//           // =========================================
-//           // const newContent = JSON.parse(res._body);
-//           // setContent(newContent);
-//           // const newChat = [...chat];
-//           // newChat.push(newContent.chat);
-//           // setChat(newChat);
-//           // =========================================
+//         // =========================================
+//         // const newContent = JSON.parse(res._body);
+//         // setContent(newContent);
+//         // const newChat = [...chat];
+//         // newChat.push(newContent.chat);
+//         // setChat(newChat);
+//         // =========================================
 //
-//           // return setChat((chatList) => [...chatList, json]);
-//         });
-//       },
-//     );
-//   }
+//         // return setChat((chatList) => [...chatList, json]);
+//       });
+//     },
+//   );
+// }
 //
 //   // 채팅내용
 //   function sendMsg() {
