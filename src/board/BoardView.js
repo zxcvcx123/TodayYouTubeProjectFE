@@ -98,10 +98,14 @@ function BoardView() {
 
       {/* 제목 */}
       <FormControl mt={10} mb={2}>
-        <Text fontSize={"large"} as={"strong"}>
+        <Text fontSize={"large"} as={"strong"} border={"1px solid black"}>
           {board.title}
         </Text>
-        <Flex justifyContent={"space-between"}>
+        <Flex
+          justifyContent={"space-between"}
+          alignItems={"center"}
+          border={"1px solid red"}
+        >
           <Text>
             {board.board_member_id} | {board.updated_at}
           </Text>
