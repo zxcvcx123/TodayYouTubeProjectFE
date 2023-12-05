@@ -97,7 +97,7 @@ export function MainView() {
       <Box color="white" ml={10}>
         <FontAwesomeIcon icon={faRankingStar} /> 주간 베스트 영상
         <Text fontSize="0.8rem" color="gray.400">
-          - 한 주간 가장 추천을 많이 받는 영상들입니다.
+          - 한 주간 가장 추천을 많이 받은 영상들입니다.
         </Text>
       </Box>
       <Center w="60%" h="70%" m="auto" mt={"-40px"}>
