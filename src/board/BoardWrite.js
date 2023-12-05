@@ -120,15 +120,26 @@ function BoardWrite() {
       .catch((error) => {
         if (error.response.status === 400) {
           toast({
-            description: "게시글 유효성 검증에 실패했습니다.",
+            description:
+              "게시글 유효성 검증에 실패했습니다. 양식에 맞게 작성해주세요.",
             status: "error",
           });
-        } else {
+        }
+
+        if (error.response.status === 401) {
+          toast({
+            description: "권한 정보가 없습니다.",
+            status: "error",
+          });
+        }
+
+        if (error.response) {
           toast({
             description: "게시글 저장에 실패했습니다.",
             status: "error",
           });
         }
+
         console.log("error");
       })
       .finally(() => console.log("게시글 저장 끝"));
