@@ -177,6 +177,24 @@ function BoardView() {
     }
   }
 
+  // 링크 복사 버튼 클릭
+  function handleCopyClick() {
+    navigator.clipboard
+      .writeText(board.link)
+      .then(() => {
+        toast({
+          description: "링크가 복사되었습니다.",
+          status: "success",
+        });
+      })
+      .catch(() => {
+        toast({
+          description: "링크가 복사에 실패하였습니다 ㅠㅠ",
+          status: "error",
+        });
+      });
+  }
+
   return (
     <Box m={"50px 20% 20px 50px"}>
       <Heading>{board.id} 번 게시글 보기(임시 게시글 번호 확인용!!)</Heading>
@@ -218,10 +236,7 @@ function BoardView() {
               <Button onClick={() => window.open(board.link)} colorScheme="red">
                 유튜브 영상 페이지로 이동
               </Button>
-              <Button
-                onClick={() => navigator.clipboard.writeText(board.link)}
-                colorScheme="blue"
-              >
+              <Button onClick={handleCopyClick} colorScheme="blue">
                 유튜브 링크 복사
               </Button>
             </Flex>
