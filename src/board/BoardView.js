@@ -211,21 +211,23 @@ function BoardView() {
           </Box>
         </Box>
       )}
-      {/* 목록 버튼 */}
-      <Button colorScheme="blue" onClick={() => navigate("/board/list")}>
-        목록
-      </Button>
+      <Flex justifyContent={"space-between"}>
+        {/* 목록 버튼 */}
+        <Button colorScheme="blue" onClick={() => navigate("/board/list")}>
+          목록
+        </Button>
+        <Box>
+          {/* 수정 버튼 */}
+          <Button colorScheme="purple" onClick={handleEditClick} mr={"10px"}>
+            수정
+          </Button>
 
-      {/* 수정 버튼 */}
-      <Button colorScheme="purple" onClick={handleEditClick}>
-        수정
-      </Button>
-
-      {/* 삭제 버튼 */}
-      <Button colorScheme="red" onClick={handleDeleteClick}>
-        삭제
-      </Button>
-
+          {/* 삭제 버튼 */}
+          <Button colorScheme="red" onClick={handleDeleteClick}>
+            삭제
+          </Button>
+        </Box>
+      </Flex>
       {/* 댓글 영역 */}
       <BoardComment board_id={id} />
     </Box>
