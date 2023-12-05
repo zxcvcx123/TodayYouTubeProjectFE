@@ -31,6 +31,7 @@ export function MainView() {
   const [firstList, setFirstList] = useState(null);
   const [otherList, setOtherList] = useState(null);
   const [dateSort, setDateSort] = useState("weekly");
+  const [baseOnCurrent, setBaseOnCurrent] = useState("true");
 
   const params = new URLSearchParams();
   const navigate = useNavigate();
@@ -67,83 +68,98 @@ export function MainView() {
   // 임시메인
   return (
     <Box bg="black" w="100%" h="700px" p={4}>
-      {/*menulist 하던거*/}
-      {/*<Menu>*/}
-      {/*  <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>*/}
-      {/*    게시판 선택*/}
-      {/*  </MenuButton>*/}
-      {/*  <MenuList value={category} onChange={(e) => handleCategoryChange(e)}>*/}
-      {/*    <MenuOptionGroup title="게시판">*/}
-      {/*      <MenuItemOption value="all">전체</MenuItemOption>*/}
-      {/*      <MenuItemOption value="C003">먹방</MenuItemOption>*/}
-      {/*      <MenuItemOption value="C007">겜</MenuItemOption>*/}
-      {/*      <MenuItemOption value="C004">일상</MenuItemOption>*/}
-      {/*      <MenuItemOption value="C002">스포츠</MenuItemOption>*/}
-      {/*    </MenuOptionGroup>*/}
-      {/*  </MenuList>*/}
-      {/*</Menu>*/}
-      <Select
-        onChange={handleCategoryChange}
-        pos="absolute"
-        top="60"
-        left="10"
-        width="15%"
-        backgroundColor="white"
-        size="sm"
-        alignItems="center"
-      >
-        <option value="all">전체게시판</option>
-        <option value="C002">스포츠게시판</option>
-        <option value="C003">먹방게시판</option>
-        <option value="C004">일상게시판</option>
-        <option value="C005">요리게시판</option>
-        <option value="C006">영화/드라마 게시판</option>
-        <option value="C007">게임게시판</option>
-      </Select>
-      <Flex ml={10} mb={3}>
-        <Button mr={2} value="daily" onClick={(e) => handleDateClick(e)}>
-          일간
-        </Button>
-        <Button mr={2} value="weekly" onClick={(e) => handleDateClick(e)}>
-          주간
-        </Button>
-        <Button value="monthly" onClick={(e) => handleDateClick(e)}>
-          월간
-        </Button>
+      <Flex w="100%">
+        <Box w="20%" border={"1px"} borderColor="red">
+          {baseOnCurrent && (
+            <Flex ml={10} mb={3}>
+              <Button mr={2} value="daily" onClick={(e) => handleDateClick(e)}>
+                일간
+              </Button>
+              <Button mr={2} value="weekly" onClick={(e) => handleDateClick(e)}>
+                주간
+              </Button>
+              <Button value="monthly" onClick={(e) => handleDateClick(e)}>
+                월간
+              </Button>
+            </Flex>
+          )}
+          {baseOnCurrent || (
+            <Flex ml={10} mb={3}>
+              <Button mr={2} value="daily" onClick={(e) => handleDateClick(e)}>
+                하루
+              </Button>
+              <Button mr={2} value="weekly" onClick={(e) => handleDateClick(e)}>
+                이번주
+              </Button>
+              <Button value="monthly" onClick={(e) => handleDateClick(e)}>
+                이번달
+              </Button>
+            </Flex>
+          )}
+          <Box color="white" ml={10}>
+            <FontAwesomeIcon icon={faRankingStar} /> {dateSort} 베스트 영상
+            <Text fontSize="0.8rem" color="gray.400">
+              - {dateSort} 가장 추천을 많이 받은 영상들입니다.
+            </Text>
+          </Box>
+          <Select
+            onChange={handleCategoryChange}
+            width="80%"
+            backgroundColor="white"
+            ml={10}
+            size="sm"
+            alignItems="center"
+          >
+            <option value="all">전체게시판</option>
+            <option value="C002">스포츠게시판</option>
+            <option value="C003">먹방게시판</option>
+            <option value="C004">일상게시판</option>
+            <option value="C005">요리게시판</option>
+            <option value="C006">영화/드라마 게시판</option>
+            <option value="C007">게임게시판</option>
+          </Select>
+          <Box mt={50} ml={10}>
+            <Text color={"red.300"}>**둘 중에 하나만 사용할 예정**</Text>
+            <Button mb={1} onClick={() => setBaseOnCurrent(true)}>
+              현재날짜 기준으로 -7
+            </Button>
+            <Button onClick={() => setBaseOnCurrent(false)}>
+              현재날짜가 속한 요일,달 기준으로
+            </Button>
+          </Box>
+        </Box>
+
+        <Box border={"1px"} borderColor="blue">
+          <Box w="100%" h="70%" m="auto" ml={10}>
+            {firstList &&
+              firstList.map((first) => (
+                <Box width={"100%"} height="100%" key={first.id}>
+                  <YoutubeInfo
+                    link={first.link}
+                    extraVideo={true}
+                    opts={{ height: "470", width: "1050" }}
+                  />
+                </Box>
+              ))}
+          </Box>
+          <Box mt={5}>
+            <Flex w="100%" h="100%" m="auto" mt={2} justify="space-between">
+              {otherList &&
+                otherList.map((other) => (
+                  <Box w="22%" h={"50%"} key={other.id}>
+                    <YoutubeInfo
+                      link={other.link}
+                      extraVideo={true}
+                      opts={{ height: 180, width: 250 }}
+                    />
+                  </Box>
+                ))}
+            </Flex>
+          </Box>
+        </Box>
+
+        {/*<MainBoardList />*/}
       </Flex>
-      <Box color="white" ml={10}>
-        <FontAwesomeIcon icon={faRankingStar} /> 주간 베스트 영상
-        <Text fontSize="0.8rem" color="gray.400">
-          - 한 주간 가장 추천을 많이 받은 영상들입니다.
-        </Text>
-      </Box>
-      <Center w="60%" h="70%" m="auto" mt={"-95px"}>
-        {firstList &&
-          firstList.map((first) => (
-            <Box width={"100%"} height="100%" key={first.id}>
-              <YoutubeInfo
-                link={first.link}
-                extraVideo={true}
-                opts={{ height: "470", width: "1050" }}
-              />
-            </Box>
-          ))}
-      </Center>
-      <Center mt={5}>
-        <Flex w="70%" h="100%" m="auto" mt={2} justify="space-between">
-          {otherList &&
-            otherList.map((other) => (
-              <Box w="22%" h={"50%"} key={other.id}>
-                <YoutubeInfo
-                  link={other.link}
-                  extraVideo={true}
-                  opts={{ height: 180, width: 250 }}
-                />
-              </Box>
-            ))}
-        </Flex>
-      </Center>
-      {/*<MainBoardList />*/}
     </Box>
   );
 }

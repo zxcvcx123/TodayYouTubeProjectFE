@@ -9,15 +9,13 @@ function BoardLike({ like, board, onClick }) {
   // 게시물 조회시 좋아요 출력
 
   return (
-    <>
-      <Flex>
-        <Button onClick={onClick}>
-          {like.like && <FontAwesomeIcon icon={fullHeart} />}
-          {like.like || <FontAwesomeIcon icon={emptyHeart} />}
-        </Button>
-        <Heading>{board.countlike}</Heading>
-      </Flex>
-    </>
+    <Flex>
+      <Button onClick={onClick}>
+        {like.like && <FontAwesomeIcon icon={fullHeart} />}
+        {like.like || <FontAwesomeIcon icon={emptyHeart} />}
+      </Button>
+      <Heading>{board.countlike}</Heading>
+    </Flex>
   );
 }
 

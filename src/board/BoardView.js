@@ -26,7 +26,8 @@ function BoardView() {
   // state
   const [board, setBoard] = useState(null);
   const [thumbnail, setThumbnail] = useState(null);
-  const [like, setLike] = useState(0);
+  const [like, setLike] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploadFiles, setUploadFiles] = useState([]);
   // const [isReadOnly, setIsReadOnly] = useState(true);
 
@@ -44,7 +45,7 @@ function BoardView() {
         setBoard(response.data);
       })
       .finally(() => {});
-  }, []);
+  }, [isSubmitting]);
 
   // 초기 렌더링 파일 목록 가져오기
   useEffect(() => {
@@ -55,14 +56,20 @@ function BoardView() {
 
   // 초기 렌더링 좋아요 출력
   useEffect(() => {
-    axios
-      .get("/api/like/board/" + id)
-      .then((response) => {
-        setLike(response.data);
-      })
-      .catch(() => console.log("bad"))
-      .finally(() => console.log("완료"));
-  }, []);
+    if (!isSubmitting) {
+      axios
+        .get("/api/like/board/" + id)
+        .then((response) => {
+          setLike(response.data);
+        })
+        .catch(() => console.log("bad"))
+        .finally(() => console.log("완료"));
+    }
+  }, [isSubmitting]);
+
+  if (like == null) {
+    return <Spinner />;
+  }
 
   // board 불러오지 못할 시 로딩중 표시
   if (board === null) {
@@ -70,11 +77,15 @@ function BoardView() {
   }
 
   function handleLike() {
+    setIsSubmitting(true);
     axios
       .post("/api/like/board/" + id)
       .then((response) => setLike(response.data))
       .catch(() => console.log("bad"))
-      .finally(() => console.log("done"));
+      .finally(() => {
+        console.log("done");
+        setIsSubmitting(false);
+      });
   }
 
   function handleDelete() {
