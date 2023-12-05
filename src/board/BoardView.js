@@ -249,7 +249,7 @@ function BoardView() {
       {/* 본문 */}
       <FormControl mb={2}>
         {/*<FormLabel>본문</FormLabel>*/}
-        <Box border={"1px solid red"}>
+        <Box>
           {/* CKEditor 본문 영역 onReady => 높이 설정 */}
           <CKEditor
             disabled={"true"}
