@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -21,8 +21,13 @@ import YoutubeInfo from "../component/YoutubeInfo";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import editor from "../component/Editor";
+import { DetectLoginContext } from "../component/LoginProvider";
 
 function BoardView() {
+  /* 로그인 정보 컨텍스트 */
+  const { token, handleLogout, loginInfo, validateToken } =
+    useContext(DetectLoginContext);
+
   // state
   const [board, setBoard] = useState(null);
   const [thumbnail, setThumbnail] = useState(null);
@@ -77,7 +82,8 @@ function BoardView() {
       .finally(() => console.log("done"));
   }
 
-  function handleDelete() {
+  function handleDeleteClick() {
+    // TODO : 게시글 삭제 아이디 유효성 검증하기
     axios
       .put("/api/board/remove/" + id)
       .then(() => console.log("good"))
@@ -91,6 +97,22 @@ function BoardView() {
     width: "800px",
     height: "800px",
   };
+
+  // 수정 버튼 클릭
+  function handleEditClick() {
+    // 로그인 여부 검증
+    if (!token.detectLogin) {
+      window.alert("비로그인 사용자입니다.");
+      return;
+    }
+
+    // 작성자 본인 여부 검증
+    if (loginInfo.member_id === board.board_member_id) {
+      navigate("/board/edit/" + id);
+    } else {
+      window.alert("작성자 본인만 수정이 가능합니다.");
+    }
+  }
 
   return (
     <Box m={"50px 20% 20px 50px"}>
@@ -195,15 +217,12 @@ function BoardView() {
       </Button>
 
       {/* 수정 버튼 */}
-      <Button
-        colorScheme="purple"
-        onClick={() => navigate("/board/edit/" + id)}
-      >
+      <Button colorScheme="purple" onClick={handleEditClick}>
         수정
       </Button>
 
       {/* 삭제 버튼 */}
-      <Button colorScheme="red" onClick={handleDelete}>
+      <Button colorScheme="red" onClick={handleDeleteClick}>
         삭제
       </Button>
 
