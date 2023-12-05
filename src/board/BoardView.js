@@ -278,17 +278,19 @@ function BoardView() {
         <Button colorScheme="blue" onClick={() => navigate("/board/list")}>
           목록
         </Button>
-        <Box>
-          {/* 수정 버튼 */}
-          <Button colorScheme="purple" onClick={handleEditClick} mr={"10px"}>
-            수정
-          </Button>
+        {isAuthor && (
+          <Box>
+            {/* 수정 버튼 */}
+            <Button colorScheme="purple" onClick={handleEditClick} mr={"10px"}>
+              수정
+            </Button>
 
-          {/* 삭제 버튼 */}
-          <Button colorScheme="red" onClick={handleDeleteClick}>
-            삭제
-          </Button>
-        </Box>
+            {/* 삭제 버튼 */}
+            <Button colorScheme="red" onClick={handleDeleteClick}>
+              삭제
+            </Button>
+          </Box>
+        )}
       </Flex>
       {/* 댓글 영역 */}
       <BoardComment board_id={id} />
