@@ -9,6 +9,7 @@ import {
   Heading,
   Input,
   Textarea,
+  useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -33,6 +34,9 @@ function BoardWrite() {
 
   /* use navigate */
   let navigate = useNavigate();
+
+  /* use toast */
+  const toast = useToast();
 
   // 비로그인 상태로 글쓰기 경로 직접 접근시 경고 발생 후 로그인페이지로 이동
   useEffect(() => {
@@ -106,9 +110,28 @@ function BoardWrite() {
         uuSrc,
         board_member_id: loginInfo.member_id,
       })
-      .then(() => navigate("/board/list"))
-      .catch(() => console.log("error"))
-      .finally(() => {});
+      .then(() => {
+        toast({
+          description: "게시글 저장에 성공했습니다.",
+          status: "success",
+        });
+        navigate("/board/list");
+      })
+      .catch((error) => {
+        if (error.response.status === 400) {
+          toast({
+            description: "게시글 유효성 검증에 실패했습니다.",
+            status: "error",
+          });
+        } else {
+          toast({
+            description: "게시글 저장에 실패했습니다.",
+            status: "error",
+          });
+        }
+        console.log("error");
+      })
+      .finally(() => console.log("게시글 저장 끝"));
   }
 
   // 본문 영역 이미지 소스 코드 얻어오기
