@@ -67,6 +67,7 @@ function CommentItem({
   setCommentLike,
   onCommentLikeClick,
 }) {
+  const { token, loginInfo } = useContext(DetectLoginContext);
   const [isEditing, setIsEditing] = useState(false);
   const [commentEdited, setCommentEdited] = useState(comment.comment);
   const [isReplyFormOpen, setIsReplyFormOpen] = useState(false);
@@ -96,7 +97,7 @@ function CommentItem({
   function handleCommentLike() {
     axios
       .post("/api/comment/like", {
-        member_id: comment.member_id,
+        member_id: loginInfo.member_id,
         board_id: comment.board_id,
         comment_id: comment.id,
       })
