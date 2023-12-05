@@ -34,6 +34,8 @@ function BoardView() {
   const [thumbnail, setThumbnail] = useState(null);
   const [like, setLike] = useState(0);
   const [uploadFiles, setUploadFiles] = useState([]);
+  /* 작성자 본인이 맞는지 확인 하는 state */
+  const [isAuthor, setIsAuthor] = useState(false);
   // const [isReadOnly, setIsReadOnly] = useState(true);
 
   //URL 매개변수 추출
@@ -51,6 +53,11 @@ function BoardView() {
       .get("/api/board/id/" + id)
       .then((response) => {
         setBoard(response.data);
+
+        // 게시글 데이터를 가져온 후 작성자 여부를 확인하여 isAuthor 설정
+        if (loginInfo.member_id === response.data.board_member_id) {
+          setIsAuthor(true);
+        }
       })
       .finally(() => {});
   }, []);
@@ -89,7 +96,7 @@ function BoardView() {
   // 게시글 삭제 버튼 클릭
   function handleDeleteClick() {
     // 게시글 삭제 아이디 유효성 검증
-    if (loginInfo.member_id !== board.board_member_id) {
+    if (!isAuthor) {
       window.alert("작성자 본인만 삭제 가능합니다.");
       return;
     }
@@ -156,8 +163,8 @@ function BoardView() {
   // 수정 버튼 클릭
   function handleEditClick() {
     // 로그인 여부 검증
-    if (!token.detectLogin) {
-      window.alert("비로그인 사용자입니다.");
+    if (!isAuthor) {
+      window.alert("작성자 본인만 수정 가능합니다.");
       return;
     }
 
