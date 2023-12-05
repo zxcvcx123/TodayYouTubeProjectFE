@@ -99,6 +99,20 @@ function BoardEdit() {
   function handleSubmit() {
     let uuSrc = getSrc();
 
+    // 로그인 여부 검증
+    if (!token.detectLogin) {
+      window.alert("비로그인 사용자입니다.");
+      navigate("/member/login");
+      return;
+    }
+
+    // 작성자 본인 여부 검증
+    if (loginInfo.member_id === board.board_member_id) {
+      navigate("/board/edit/" + id);
+    } else {
+      window.alert("작성자 본인만 수정이 가능합니다.");
+    }
+
     if (!board.title || board.title.trim() === "") {
       console.log("제목을 입력해주세요. title은 null이거나 공백이면 안 됨.");
       setTitleError("제목을 입력해주세요. title은 null이거나 공백이면 안 됨.");
