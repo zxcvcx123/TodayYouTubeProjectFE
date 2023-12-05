@@ -109,6 +109,7 @@ function BoardView() {
           description: "삭제되었습니다.",
           status: "success",
         });
+        navigate("/board/list");
       })
       .catch((error) => {
         if (error.response.status === 403) {
