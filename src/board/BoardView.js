@@ -158,13 +158,7 @@ function BoardView() {
       {uploadFiles.length > 0 && (
         <Box mb={2}>
           <Text>파일 목록</Text>
-          <Box
-            border={"1px solid #edf1f6"}
-            h={"50px"}
-            display={"flex"}
-            alignItems={"center"}
-            gap={3}
-          >
+          <Box border={"1px solid #edf1f6"} h={"auto"} textIndent={"10px"}>
             {uploadFiles.map((fileList) => (
               <Link
                 key={fileList.id}

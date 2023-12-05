@@ -27,7 +27,7 @@ function BoardEdit() {
   const { id } = useParams();
 
   const navigate = useNavigate();
-
+  console.log("수정: " + editUploadFiles.length);
   // 초기 렌더링으로 게시물의 데이터를 가져와 상태를 업데이트 한다.
   useEffect(() => {
     axios
