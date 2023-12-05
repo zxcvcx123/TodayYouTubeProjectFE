@@ -88,7 +88,12 @@ function BoardView() {
 
   // 게시글 삭제 버튼 클릭
   function handleDeleteClick() {
-    // TODO : 게시글 삭제 아이디 유효성 검증하기
+    // 게시글 삭제 아이디 유효성 검증
+    if (loginInfo.member_id !== board.board_member_id) {
+      window.alert("작성자 본인만 삭제 가능합니다.");
+      return;
+    }
+
     axios
       .put("/api/board/remove/" + id, {
         id: board.id,
