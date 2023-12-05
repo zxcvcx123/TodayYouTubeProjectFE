@@ -268,16 +268,19 @@ export function BoardComment({ board_id }) {
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   const params = new URLSearchParams();
-
+  params.set("member_id", loginInfo.member_id);
   params.set("board_id", board_id);
 
   useEffect(() => {
-    if (!isSubmitting) {
-      axios.get("/api/comment/list?" + params).then((response) => {
-        setCommentList(response.data);
-      });
+    if (loginInfo.member_id !== "") {
+      console.log(loginInfo.member_id);
+      if (!isSubmitting) {
+        axios.get("/api/comment/list?" + params).then((response) => {
+          setCommentList(response.data);
+        });
+      }
     }
-  }, [isSubmitting]);
+  }, [isSubmitting, loginInfo]);
 
   function handleCommentLike(data) {
     setCommentList(
