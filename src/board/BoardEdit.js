@@ -1,8 +1,9 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Box,
   Button,
-  FormControl, FormErrorMessage,
+  FormControl,
+  FormErrorMessage,
   FormHelperText,
   FormLabel,
   Heading,
@@ -11,17 +12,17 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import axios from "axios";
-import {useNavigate, useParams} from "react-router-dom";
-import {useImmer} from "use-immer";
-import {Filednd} from "../file/Filednd";
-import {CKEditor} from "@ckeditor/ckeditor5-react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useImmer } from "use-immer";
+import { Filednd } from "../file/Filednd";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import Editor from "../component/Editor";
-import {DetectLoginContext} from "../component/LoginProvider";
+import { DetectLoginContext } from "../component/LoginProvider";
 
 function BoardEdit() {
   /* 로그인 정보 컨텍스트 */
-  const {token, handleLogout, loginInfo, validateToken} =
+  const { token, handleLogout, loginInfo, validateToken } =
     useContext(DetectLoginContext);
 
   /* use state */
@@ -35,7 +36,7 @@ function BoardEdit() {
   const [board, updateBoard] = useImmer(null);
 
   /* use params */
-  const {id} = useParams();
+  const { id } = useParams();
 
   /* use navigate */
   const navigate = useNavigate();
@@ -65,21 +66,21 @@ function BoardEdit() {
     if (titleError && contentError) {
       const errorElement = document.getElementById("title");
       if (errorElement) {
-        errorElement.scrollIntoView({behavior: "smooth"});
+        errorElement.scrollIntoView({ behavior: "smooth" });
       }
     } else {
       if (titleError) {
         // 오류 메시지가 있을 때 해당 영역으로 스크롤 이동
         const errorElement = document.getElementById("title");
         if (errorElement) {
-          errorElement.scrollIntoView({behavior: "smooth"});
+          errorElement.scrollIntoView({ behavior: "smooth" });
         }
       }
 
       if (contentError) {
         const errorElement = document.getElementById("content");
         if (errorElement) {
-          errorElement.scrollIntoView({behavior: "smooth"});
+          errorElement.scrollIntoView({ behavior: "smooth" });
         }
       }
     }
@@ -87,7 +88,7 @@ function BoardEdit() {
 
   // 게시글을 로딩중이라면 스피너 돌리기
   if (board === null) {
-    return <Spinner/>;
+    return <Spinner />;
   }
 
   // 게시글 수정 버튼 클릭 함수
@@ -119,6 +120,7 @@ function BoardEdit() {
         is_show: board.is_show,
         countlike: board.countlike,
         views: board.views,
+        login_member_id: loginInfo.member_id,
         uuSrc,
         uploadFiles,
       })
@@ -200,7 +202,7 @@ function BoardEdit() {
           <Editor
             data={board.content}
             setContent1={(content) =>
-              handleBoardUpdate({target: {value: content}}, "content")
+              handleBoardUpdate({ target: { value: content } }, "content")
             }
           />
         </Box>
