@@ -32,6 +32,9 @@ export function MainView() {
   const [otherList, setOtherList] = useState(null);
   const [dateSort, setDateSort] = useState("weekly");
   const [baseOnCurrent, setBaseOnCurrent] = useState("true");
+  const [isDay, setIsDay] = useState(false);
+  const [isWeek, setIsWeek] = useState(false);
+  const [isMonth, setIsMonth] = useState(false);
 
   const params = new URLSearchParams();
   const navigate = useNavigate();
@@ -69,32 +72,80 @@ export function MainView() {
   return (
     <Box bg="black" w="100%" h="700px" p={4}>
       <Flex w="100%">
-        <Box w="20%" border={"1px"} borderColor="red">
+        <Box w="20%">
           {baseOnCurrent && (
             <Flex ml={10} mb={3}>
-              <Button mr={2} value="daily" onClick={(e) => handleDateClick(e)}>
+              <Button
+                mr={2}
+                value="daily"
+                onClick={(e) => {
+                  handleDateClick(e);
+                }}
+              >
                 일간
               </Button>
-              <Button mr={2} value="weekly" onClick={(e) => handleDateClick(e)}>
+              <Button
+                mr={2}
+                value="weekly"
+                onClick={(e) => {
+                  handleDateClick(e);
+                }}
+              >
                 주간
               </Button>
-              <Button value="monthly" onClick={(e) => handleDateClick(e)}>
+              <Button
+                value="monthly"
+                onClick={(e) => {
+                  handleDateClick(e);
+                }}
+              >
                 월간
               </Button>
             </Flex>
           )}
           {baseOnCurrent || (
-            <Flex ml={10} mb={3}>
-              <Button mr={2} value="daily" onClick={(e) => handleDateClick(e)}>
-                하루
-              </Button>
-              <Button mr={2} value="weekly" onClick={(e) => handleDateClick(e)}>
-                이번주
-              </Button>
-              <Button value="monthly" onClick={(e) => handleDateClick(e)}>
-                이번달
-              </Button>
-            </Flex>
+            <Box>
+              <Flex ml={10} mb={3}>
+                <Button
+                  colorScheme={isDay ? "red" : "gray"}
+                  mr={2}
+                  value="daily"
+                  onClick={(e) => {
+                    setIsDay(true);
+                    setIsWeek(false);
+                    setIsMonth(false);
+                    handleDateClick(e);
+                  }}
+                >
+                  하루
+                </Button>
+                <Button
+                  colorScheme={isWeek ? "red" : "gray"}
+                  mr={2}
+                  value="weekly"
+                  onClick={(e) => {
+                    setIsDay(false);
+                    setIsWeek(true);
+                    setIsMonth(false);
+                    handleDateClick(e);
+                  }}
+                >
+                  이번주
+                </Button>
+                <Button
+                  colorScheme={isMonth ? "red" : "gray"}
+                  value="monthly"
+                  onClick={(e) => {
+                    setIsDay(false);
+                    setIsWeek(false);
+                    setIsMonth(true);
+                    handleDateClick(e);
+                  }}
+                >
+                  이번달
+                </Button>
+              </Flex>
+            </Box>
           )}
           <Box color="white" ml={10}>
             <FontAwesomeIcon icon={faRankingStar} /> {dateSort} 베스트 영상
@@ -129,18 +180,15 @@ export function MainView() {
           </Box>
         </Box>
 
-        <Box border={"1px"} borderColor="blue">
+        <Box>
           <Box w="100%" h="70%" m="auto" ml={10}>
-            {firstList &&
-              firstList.map((first) => (
-                <Box width={"100%"} height="100%" key={first.id}>
-                  <YoutubeInfo
-                    link={first.link}
-                    extraVideo={true}
-                    opts={{ height: "470", width: "1050" }}
-                  />
-                </Box>
-              ))}
+            <Box width={"100%"} height="100%" key={firstList.id}>
+              <YoutubeInfo
+                link={firstList.link}
+                extraVideo={true}
+                opts={{ height: "470", width: "1050" }}
+              />
+            </Box>
           </Box>
           <Box mt={5}>
             <Flex w="100%" h="100%" m="auto" mt={2} justify="space-between">
