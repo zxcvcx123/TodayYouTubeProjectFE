@@ -157,6 +157,7 @@ export function MainView() {
             onChange={handleCategoryChange}
             width="80%"
             backgroundColor="white"
+            mt={2}
             ml={10}
             size="sm"
             alignItems="center"
@@ -205,9 +206,11 @@ export function MainView() {
             </Flex>
           </Box>
         </Box>
-
-        {/*<MainBoardList />*/}
+        <Box color="white" mt={600} ml={50}>
+          {firstList.categoryName}게시판으로 이동하기 >
+        </Box>
       </Flex>
+      <MainBoardList />
     </Box>
   );
 }
