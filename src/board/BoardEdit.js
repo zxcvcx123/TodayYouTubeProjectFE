@@ -10,6 +10,7 @@ import {
   Input,
   Spinner,
   Textarea,
+  useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
@@ -40,6 +41,9 @@ function BoardEdit() {
 
   /* use navigate */
   const navigate = useNavigate();
+
+  /* use toast */
+  const toast = useToast();
 
   // 초기 렌더링으로 게시물의 데이터를 가져와 상태를 업데이트 한다.
   useEffect(() => {
@@ -124,8 +128,32 @@ function BoardEdit() {
         uuSrc,
         uploadFiles,
       })
-      .then(() => navigate("/board/list"))
-      .catch(() => console.log("bad"))
+      .then(() => {
+        navigate("/board/list");
+        toast({
+          description: "게시글 수정에 성공했습니다.",
+          status: "success",
+        });
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          toast({
+            description: "권한정보가 없습니다.",
+            status: "error",
+          });
+        } else if (error.response.status === 403) {
+          toast({
+            description: "접근 불가한 권한입니다.",
+            status: "error",
+          });
+        } else {
+          toast({
+            description: "게시글 수정에 실패하였습니다.",
+            status: "error",
+          });
+        }
+        console.log("bad");
+      })
       .finally(() => console.log("done"));
   }
 
