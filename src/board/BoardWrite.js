@@ -124,6 +124,7 @@ function BoardWrite() {
               "게시글 유효성 검증에 실패했습니다. 양식에 맞게 작성해주세요.",
             status: "error",
           });
+          return;
         }
 
         if (error.response.status === 401) {
@@ -131,6 +132,7 @@ function BoardWrite() {
             description: "권한 정보가 없습니다.",
             status: "error",
           });
+          return;
         }
 
         if (error.response) {
@@ -138,6 +140,7 @@ function BoardWrite() {
             description: "게시글 저장에 실패했습니다.",
             status: "error",
           });
+          return;
         }
 
         console.log("error");

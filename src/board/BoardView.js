@@ -11,6 +11,7 @@ import {
   Spinner,
   Text,
   Textarea,
+  useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -40,6 +41,9 @@ function BoardView() {
 
   // navigate
   const navigate = useNavigate();
+
+  /* use toast */
+  const toast = useToast();
 
   // 초기 렌더링
   useEffect(() => {
@@ -82,12 +86,57 @@ function BoardView() {
       .finally(() => console.log("done"));
   }
 
+  // 게시글 삭제 버튼 클릭
   function handleDeleteClick() {
     // TODO : 게시글 삭제 아이디 유효성 검증하기
     axios
-      .put("/api/board/remove/" + id)
-      .then(() => console.log("good"))
-      .catch(() => console.log("bad"))
+      .put("/api/board/remove/" + id, {
+        id: board.id,
+        title: board.title,
+        content: board.content,
+        link: board.link,
+        board_category_code: board.board_category_code,
+        board_member_id: board.board_member_id,
+        created_at: board.created_at,
+        updated_at: board.updated_at,
+        is_show: board.is_show,
+        countlike: board.countlike,
+        views: board.views,
+        login_member_id: loginInfo.member_id,
+      })
+      .then(() => {
+        toast({
+          description: "삭제되었습니다.",
+          status: "success",
+        });
+      })
+      .catch((error) => {
+        if (error.response.status === 403) {
+          toast({
+            description: "게시글 삭제는 작성자만 가능합니다.",
+            status: "error",
+          });
+          return;
+        }
+
+        if (error.response.status === 401) {
+          toast({
+            description: "권한 정보가 없습니다.",
+            status: "error",
+          });
+          return;
+        }
+
+        if (error.response) {
+          toast({
+            description: "게시글 삭제에 실패했습니다.",
+            status: "error",
+          });
+          return;
+        }
+
+        console.log("error");
+      })
       .finally(() => console.log("done"));
   }
 
