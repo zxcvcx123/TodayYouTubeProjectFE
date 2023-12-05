@@ -19,6 +19,7 @@ function Chat() {
 
   const { token, loginInfo } = useContext(DetectLoginContext);
   const { socket } = useOutletContext();
+
   const [text, setText] = useState("");
   const [chatId, setChatId] = useState("");
   //const [chat, setChat] = useState([]);
@@ -39,8 +40,6 @@ function Chat() {
       setSetIdAccess(true);
       setChatId(loginInfo.member_id);
     }
-
-    console.log("rerender");
   }, []);
 
   if (socket !== null) {

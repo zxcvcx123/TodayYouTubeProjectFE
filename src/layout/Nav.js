@@ -36,8 +36,8 @@ export function Nav({ setSocket }) {
   const { token, handleLogout, loginInfo, validateToken } =
     useContext(DetectLoginContext);
   let navigate = useNavigate();
-  const location = useLocation();
 
+  // 소켓 연결
   const stompClient = useRef(); // useRef로 connect()가 안끊기게하기
   function connect() {
     let socket = new SockJS("http://localhost:3000/gs-guide-websocket", null, {
@@ -46,6 +46,7 @@ export function Nav({ setSocket }) {
 
     console.log(stompClient.current);
 
+    // 이미 연결되어 있으면 한번 더 연결시키는거 방지
     if (!stompClient.current) {
       stompClient.current = Stomp.over(socket);
       stompClient.current.connect({}, function (frame) {
