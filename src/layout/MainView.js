@@ -49,7 +49,7 @@ export function MainView() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowSpinner(false);
-    }, 3000);
+    }, 5000);
     params.set("c", category);
     params.set("sort", dateSort);
     axios.get("/api?" + params).then((response) => {
@@ -63,6 +63,7 @@ export function MainView() {
   function handleCategoryChange(e) {
     setCategory(e.target.value);
   }
+
   //
   // if (firstList == null) {
   //   return <Spinner />
@@ -231,11 +232,11 @@ export function MainView() {
                 ))}
             </Flex>
           </Box>
-       <Button color="white" mt={600} ml={50} variant={"link"}>
-          {firstList.categoryName}게시판으로 이동하기 >
-        </Button>
-        </Flex>
-      </Center>
+          <Button color="white" mt={600} ml={50} variant={"link"}>
+            {firstList.categoryName}게시판으로 이동하기 >
+          </Button>
+        </Box>
+      </Flex>
       <MainBoardList />
     </Box>
   );

@@ -19,11 +19,9 @@ import YoutubeInfo from "../component/YoutubeInfo";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import editor from "../component/Editor";
-import { DetectLoginContext } from "../component/LoginProvider";
 import memberInfo from "../member/memberInfo/MemberInfo";
 import { DetectLoginContext } from "../component/LoginProvider";
 import MemberProfile from "../member/MemberProfile";
-
 
 function BoardView() {
   /* 로그인 정보 컨텍스트 */
@@ -48,14 +46,13 @@ function BoardView() {
 
   /* use toast */
   const toast = useToast();
-  
+
   //  ck에디터 설정 값 (toolbar 삭제함)
-const editorConfig = {
-  toolbar: [],
-  width: "800px",
-  height: "800px",
-};
-  
+  const editorConfig = {
+    toolbar: [],
+    width: "800px",
+    height: "800px",
+  };
 
   // 초기 렌더링
   useEffect(() => {
@@ -76,24 +73,23 @@ const editorConfig = {
     });
   }, []);
 
+  //   // junggji/메인게시판-일간월간랭킹순(지환)
+  //   // 초기 렌더링 좋아요 출력
+  //   useEffect(() => {
+  //     if (!isSubmitting) {
+  //       axios
+  //         .get("/api/like/board/" + id)
+  //         .then((response) => {
+  //           setLike(response.data);
+  //         })
+  //         .catch(() => console.log("bad"))
+  //         .finally(() => console.log("완료"));
+  //     }
+  //   }, [isSubmitting]);
 
-//   // junggji/메인게시판-일간월간랭킹순(지환)
-//   // 초기 렌더링 좋아요 출력
-//   useEffect(() => {
-//     if (!isSubmitting) {
-//       axios
-//         .get("/api/like/board/" + id)
-//         .then((response) => {
-//           setLike(response.data);
-//         })
-//         .catch(() => console.log("bad"))
-//         .finally(() => console.log("완료"));
-//     }
-//   }, [isSubmitting]);
-
-//   if (like == null) {
-//     return <Spinner />;
-//   }
+  //   if (like == null) {
+  //     return <Spinner />;
+  //   }
 
   // // 초기 렌더링 좋아요 출력
   // // BoardLike에서 대신 역할 수행중
@@ -113,24 +109,22 @@ const editorConfig = {
   //   }
   // }, [loginInfo]);
 
-
   // board 불러오지 못할 시 로딩중 표시
   if (board === null) {
     return <Spinner />;
   }
 
-//   junggji/메인게시판-일간월간랭킹순(지환)
-//   function handleLike() {
-//     setIsSubmitting(true);
-//     axios
-//       .post("/api/like/board/" + id)
-//       .then((response) => setLike(response.data))
-//       .catch(() => console.log("bad"))
-//       .finally(() => {
-//         console.log("done");
-//         setIsSubmitting(false);
-//       });
-
+  //   junggji/메인게시판-일간월간랭킹순(지환)
+  //   function handleLike() {
+  //     setIsSubmitting(true);
+  //     axios
+  //       .post("/api/like/board/" + id)
+  //       .then((response) => setLike(response.data))
+  //       .catch(() => console.log("bad"))
+  //       .finally(() => {
+  //         console.log("done");
+  //         setIsSubmitting(false);
+  //       });
 
   // // 소켓처리로 인해 주석처리
   // function handleLike() {
@@ -140,7 +134,6 @@ const editorConfig = {
   //     .catch(() => console.log("bad"))
   //     .finally(() => console.log("done"));
   // }
-
 
   // 게시글 삭제 버튼 클릭
   function handleDeleteClick() {
@@ -200,7 +193,6 @@ const editorConfig = {
         console.log("error");
       })
       .finally(() => console.log("done"));
-
   }
 
   // 수정 버튼 클릭
@@ -281,10 +273,9 @@ const editorConfig = {
           </Flex>
           {/* 좋아요, 조회수 */}
           <Flex alignItems={"center"} gap={"5"}>
-             <BoardLike id={id} like={like} board={board} />
+            <BoardLike id={id} like={like} board={board} />
             <Text> | 조회수 : {board.views}</Text>
           </Flex>
-
         </Flex>
       </FormControl>
 
