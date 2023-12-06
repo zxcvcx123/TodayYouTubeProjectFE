@@ -33,7 +33,8 @@ function BoardView() {
   // state
   const [board, setBoard] = useState(null);
   const [thumbnail, setThumbnail] = useState(null);
-  const [like, setLike] = useState(0);
+  const [like, setLike] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploadFiles, setUploadFiles] = useState([]);
   /* 작성자 본인이 맞는지 확인 하는 state */
   const [isAuthor, setIsAuthor] = useState(false);
@@ -66,7 +67,7 @@ const editorConfig = {
         setIsAuthor(true);
       }
     });
-  }, []);
+  }, [isSubmitting]);
 
   // 초기 렌더링 파일 목록 가져오기
   useEffect(() => {
@@ -74,6 +75,25 @@ const editorConfig = {
       setUploadFiles(response.data);
     });
   }, []);
+
+
+//   // junggji/메인게시판-일간월간랭킹순(지환)
+//   // 초기 렌더링 좋아요 출력
+//   useEffect(() => {
+//     if (!isSubmitting) {
+//       axios
+//         .get("/api/like/board/" + id)
+//         .then((response) => {
+//           setLike(response.data);
+//         })
+//         .catch(() => console.log("bad"))
+//         .finally(() => console.log("완료"));
+//     }
+//   }, [isSubmitting]);
+
+//   if (like == null) {
+//     return <Spinner />;
+//   }
 
   // // 초기 렌더링 좋아요 출력
   // // BoardLike에서 대신 역할 수행중
@@ -93,10 +113,23 @@ const editorConfig = {
   //   }
   // }, [loginInfo]);
 
+
   // board 불러오지 못할 시 로딩중 표시
   if (board === null) {
     return <Spinner />;
   }
+
+//   junggji/메인게시판-일간월간랭킹순(지환)
+//   function handleLike() {
+//     setIsSubmitting(true);
+//     axios
+//       .post("/api/like/board/" + id)
+//       .then((response) => setLike(response.data))
+//       .catch(() => console.log("bad"))
+//       .finally(() => {
+//         console.log("done");
+//         setIsSubmitting(false);
+//       });
 
 
   // // 소켓처리로 인해 주석처리
@@ -167,6 +200,7 @@ const editorConfig = {
         console.log("error");
       })
       .finally(() => console.log("done"));
+
   }
 
   // 수정 버튼 클릭

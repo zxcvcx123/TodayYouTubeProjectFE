@@ -9,6 +9,7 @@ function YoutubeInfo({
   extraVideo,
   thumbnailWidth = 320,
   thumbnailHeight = 180,
+  opts = { height: 360, width: 640 },
   toolTip,
 }) {
   // 상태 값
@@ -38,6 +39,7 @@ function YoutubeInfo({
       {/* 유튜브 썸네일 출력 => extraThumnail을 true로 설정 */}
       {/* thumbnailWidth, thumbnailHeight prop을 통해 길이 설정 가능, (기본값 320*180) */}
       {/* toolTip 을 true로 하면 이미지에 마우스 호버 시 툴팁으로 2배 적용된 이미지가 표시 된다.*/}
+      {/* opt prop을 통해 영상의 크기 설정 가능*/}
       {extraThumbnail && (
         <>
           {toolTip && thumbnail !== null ? (
@@ -96,7 +98,7 @@ function YoutubeInfo({
         </>
       )}
       {/* 유튜브 영상 출력 => extraVideo를 true로 설정 */}
-      {extraVideo && <YouTube videoId={videoId} />}
+      {extraVideo && <YouTube videoId={videoId} opts={opts} />}
     </div>
   );
 }
