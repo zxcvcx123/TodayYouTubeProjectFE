@@ -4,17 +4,14 @@ import {
   Button,
   FormControl,
   FormErrorMessage,
-  FormHelperText,
   FormLabel,
   Heading,
   Input,
-  Textarea,
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Filednd } from "../file/Filednd";
-import YouTube from "react-youtube";
 import Editor from "../component/Editor";
 import { DetectLoginContext } from "../component/LoginProvider";
 
@@ -48,7 +45,7 @@ function BoardWrite() {
 
   // useEffect를 사용하여 titleError가 변경(에러발생)될 때마다 스크롤이 제목 라벨으로 이동
   useEffect(() => {
-    // 동시에 발생했을 경우에는 title로 먼저 스크롤
+    // 동시에 발생했을 경우에는 title로 먼저 스크롤 된다.
     if (titleError && contentError) {
       const errorElement = document.getElementById("title");
       if (errorElement) {
@@ -62,7 +59,6 @@ function BoardWrite() {
           errorElement.scrollIntoView({ behavior: "smooth" });
         }
       }
-
       if (contentError) {
         const errorElement = document.getElementById("content");
         if (errorElement) {
@@ -72,7 +68,7 @@ function BoardWrite() {
     }
   }, [titleError, contentError]);
 
-  // title, content 의 문자열 길이가 0 이상일 경우 titleError 초기화
+  // title, content 의 문자열 길이가 0 이상일 경우 titleError 초기화 (타이핑 하는 순간 즉시)
   useEffect(() => {
     if (title.trim().length > 0) {
       setTitleError("");
@@ -89,12 +85,13 @@ function BoardWrite() {
 
     console.log("저장 버튼 클릭됨");
 
+    // 제목이 null이거나 공백일 경우 에러메시지 세팅 후 반환
     if (!title || title.trim() === "") {
       console.log("제목을 입력해주세요. title은 null이거나 공백이면 안 됨.");
       setTitleError("제목을 입력해주세요. title은 null이거나 공백이면 안 됨.");
       return;
     }
-
+    // 본문이 null이거나 공백일 경우 에러메시지 세팅 후 반환
     if (!content || content.trim() === "") {
       console.log("본문을 입력해주세요. 본문은 null이거나 공백이면 안 됨.");
       setContentError("본문을 입력해주세요. 본문은 null이거나 공백이면 안 됨.");
@@ -171,7 +168,7 @@ function BoardWrite() {
     <Box border={"2px solid black"} m={5}>
       <Heading mb={5}>유튜브 추천 :: 새 글 작성하기</Heading>
 
-      {/* 제목 */}
+      {/* -------------------- 제목 -------------------- */}
       <FormControl mb={2} isInvalid={titleError}>
         <FormLabel id="title">제목</FormLabel>
         <Input
@@ -183,7 +180,7 @@ function BoardWrite() {
         <FormErrorMessage>{titleError}</FormErrorMessage>
       </FormControl>
 
-      {/* 링크 */}
+      {/* -------------------- 링크 -------------------- */}
       <FormControl mb={2}>
         <FormLabel>링크</FormLabel>
         <Input
@@ -193,7 +190,7 @@ function BoardWrite() {
         />
       </FormControl>
 
-      {/* 본문 */}
+      {/* -------------------- 본문 -------------------- */}
       <FormControl mb={2} isInvalid={contentError}>
         <FormLabel id="content">본문</FormLabel>
         {/* CKEditor 본문 영역 */}
@@ -201,9 +198,10 @@ function BoardWrite() {
         <FormErrorMessage>{contentError}</FormErrorMessage>
       </FormControl>
 
-      {/* 파일 첨부 */}
+      {/* -------------------- 파일 첨부 -------------------- */}
       <Filednd setUploadFiles={setUploadFiles} uploadFiles={uploadFiles} />
 
+      {/* -------------------- 버튼 섹션 -------------------- */}
       {/* 저장 버튼 */}
       <Button onClick={handleSubmit} colorScheme="blue">
         작성 완료
