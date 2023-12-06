@@ -275,7 +275,13 @@ export function BoardComment({ board_id }) {
 
   useEffect(() => {
     if (loginInfo.member_id !== "") {
-      console.log(loginInfo.member_id);
+      if (!isSubmitting) {
+        axios.get("/api/comment/list?" + params).then((response) => {
+          setCommentList(response.data);
+        });
+      }
+      // 로그인 하지 않은 사용자도 댓글이 보이게
+    } else {
       if (!isSubmitting) {
         axios.get("/api/comment/list?" + params).then((response) => {
           setCommentList(response.data);
@@ -320,23 +326,21 @@ export function BoardComment({ board_id }) {
   }
 
   function handleDelete(comment) {
-    if (loginInfo.member_id === comment.member_id) {
-      setIsSubmitting(true);
+    setIsSubmitting(true);
 
-      axios
-        .delete("/api/comment/" + commentIdRef.current)
-        .then(() => {
-          toast({
-            description: "댓글이 삭제되었습니다.",
-            status: "success",
-          });
-        })
-        .catch(() => console.log("bad"))
-        .finally(() => {
-          setIsSubmitting(false);
-          onClose();
+    axios
+      .delete("/api/comment/" + commentIdRef.current)
+      .then(() => {
+        toast({
+          description: "댓글이 삭제되었습니다.",
+          status: "success",
         });
-    }
+      })
+      .catch(() => console.log("bad"))
+      .finally(() => {
+        setIsSubmitting(false);
+        onClose();
+      });
   }
 
   function handleCommentDeleteModalOpen(comment_id) {

@@ -23,7 +23,11 @@ import {
 import React, { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import YouTube from "react-youtube";
-import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPenToSquare,
+  faTrash,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { DetectLoginContext } from "../component/LoginProvider";
 
@@ -71,25 +75,23 @@ function ReplyCommentItem({
   const [replyEdited, setReplyEdited] = useState(reply_comment.reply_comment);
 
   function handleSubmit() {
-    if (loginInfo.member_id === reply_comment.member_id) {
-      setIsSubmitting(true);
-      axios
-        .put("/api/comment/reply/edit", {
-          id: reply_comment.id,
-          reply_comment: replyEdited,
-        })
-        .then(() => {
-          toast({
-            description: "댓글이 수정되었습니다.",
-            status: "success",
-          });
-        })
-        .catch((error) => console.log("bad"))
-        .finally(() => {
-          setIsSubmitting(false);
-          setIsEditing(false);
+    setIsSubmitting(true);
+    axios
+      .put("/api/comment/reply/edit", {
+        id: reply_comment.id,
+        reply_comment: replyEdited,
+      })
+      .then(() => {
+        toast({
+          description: "댓글이 수정되었습니다.",
+          status: "success",
         });
-    }
+      })
+      .catch((error) => console.log("bad"))
+      .finally(() => {
+        setIsSubmitting(false);
+        setIsEditing(false);
+      });
   }
 
   return (
@@ -118,7 +120,7 @@ function ReplyCommentItem({
                     colorScheme="gray"
                     onClick={() => setIsEditing(false)}
                   >
-                    취소
+                    <FontAwesomeIcon icon={faXmark} />
                   </Button>
                 )}
 
@@ -200,9 +202,9 @@ export function BoardReplyComment({
       const params = new URLSearchParams();
       params.set("reply_id", comment_id);
 
-      axios
-        .get("/api/comment/reply/list?" + params)
-        .then((response) => setReply_commentList(response.data));
+      axios.get("/api/comment/reply/list?" + params).then((response) => {
+        setReply_commentList(response.data);
+      });
     }
   }, [isSubmitting]);
 
