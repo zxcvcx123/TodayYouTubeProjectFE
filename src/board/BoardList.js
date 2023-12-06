@@ -132,6 +132,13 @@ function BoardList() {
     );
   }
 
+  // 게시물 클릭 (게시물 보기)
+  function handleBoardClick(boardId) {
+    navigate("/board/" + boardId);
+    // 조회수 증가 요청
+    axios.post("/api/board/" + boardId + "/increaseView");
+  }
+
   // -------------------------------------------------- 화면 렌더링 --------------------------------------------------
   return (
     <Flex justifyContent={"center"}>
@@ -183,7 +190,7 @@ function BoardList() {
                   boardList.map((board) => (
                     <Tr
                       key={board.id}
-                      onClick={() => navigate("/board/" + board.id)}
+                      onClick={() => handleBoardClick(board.id)}
                       _hover={{
                         backgroundColor: "lightcyan",
                         cursor: "pointer",
