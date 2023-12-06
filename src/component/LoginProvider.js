@@ -13,21 +13,8 @@ export function LoginProvider({ children }) {
   const location = useLocation();
   const [token, setToken] = useState({
     detectLogin: false,
-    accessToken: null,
-    refreshToken: null,
-    authorithy: null,
-    memberInfo: null,
   });
-  const [loginInfo, setLoginInfo] = useState({
-    id: "",
-    member_id: "",
-    nickname: "",
-    email: "",
-    phone_number: "",
-    birth_date: null,
-    role_name: "",
-    total_like: "",
-  });
+  const [loginInfo, setLoginInfo] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,7 +49,6 @@ export function LoginProvider({ children }) {
       },
     })
       .then((response) => {
-        console.log(response.data.id);
         setLoginInfo((prevState) => ({
           ...prevState,
           id: response.data.id,
@@ -78,6 +64,8 @@ export function LoginProvider({ children }) {
         setToken((prevState) => ({
           ...prevState, // 객체의 모든 속성을 새로운 객체에 복사
           detectLogin: true,
+          grantType: localStorage.getItem("grantType"),
+          accessToken: localStorage.getItem("accessToken"),
         }));
       })
       .catch((error) => {
