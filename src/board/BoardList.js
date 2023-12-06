@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import {
   Box,
@@ -8,12 +8,15 @@ import {
   CardFooter,
   CardHeader,
   Center,
-  Divider,
   Flex,
-  Radio,
-  RadioGroup,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   SimpleGrid,
-  Stack,
   Table,
   Tbody,
   Td,
@@ -22,6 +25,7 @@ import {
   Thead,
   Tooltip,
   Tr,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import Pagination from "../page/Pagination";
@@ -35,9 +39,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { SearchComponent } from "../page/SearchComponent";
 import PageCount from "../page/PageCount";
-import pageCount from "../page/PageCount";
+import { DetectLoginContext } from "../component/LoginProvider";
 
 function BoardList() {
+  /* 로그인 정보 컨텍스트 */
+  const { token, handleLogout, loginInfo, validateToken } =
+    useContext(DetectLoginContext);
+
   // state
   const [boardList, setBoardList] = useState(null);
   // 빈 배열로 받으면 null 값 오류 안나옴
@@ -46,6 +54,9 @@ function BoardList() {
 
   const [params] = useSearchParams();
   const location = useLocation();
+
+  // modal
+  const { isOpen, onClose, onOpen } = useDisclosure();
 
   // navigate
   const navigate = useNavigate();
@@ -68,19 +79,81 @@ function BoardList() {
     setCurrentView("grid");
   };
 
+  // 글쓰기 버튼 클릭
+  function handleWriteClick() {
+    console.log("token.detectLogin = " + token.detectLogin);
+    // 글쓰기 버튼 클릭시 로그인 되어 있지 않다면 로그인 창으로 이동
+    if (!token.detectLogin) {
+      onOpen();
+    } else {
+      navigate("/write");
+    }
+  }
+
+  // 리스트 형태 제목 렌더링
+  function renderListTitle(board) {
+    // 제목의 길이가 20자 이상일 경우 ...으로 자르고 툴팁으로 전체 제목을 표시
+    if (board.title.length > 20) {
+      return (
+        <Tooltip label={board.title}>
+          <Text>
+            {`${board.title.slice(0, 20)}...`}
+            <FontAwesomeIcon icon={faComment} /> {board.count_comment}
+          </Text>
+        </Tooltip>
+      );
+    }
+
+    // 일반적인 제목 표시 (툴팁 없음)
+    return (
+      <Text>
+        {board.title}
+        <FontAwesomeIcon icon={faComment} /> {board.count_comment}
+      </Text>
+    );
+  }
+
+  // 그리드 형태 제목 렌더링
+  function renderGreedTitle(board) {
+    // 제목의 길이가 15자 이상일 경우 ...으로 자르고 툴팁으로 전체 제목을 표시
+    if (board.title.length > 15) {
+      return (
+        <Tooltip label={board.title}>
+          <Text fontWeight={"bold"}>{`${board.title.slice(0, 15)}...`}</Text>
+        </Tooltip>
+      );
+    }
+
+    // 일반적인 제목 표시 (툴팁 없음)
+    return (
+      <Flex>
+        <Text fontWeight={"bold"}>{board.title}</Text>{" "}
+      </Flex>
+    );
+  }
+
+  // 게시물 클릭 (게시물 보기)
+  function handleBoardClick(boardId) {
+    navigate("/board/" + boardId);
+    // 조회수 증가 요청
+    axios.post("/api/board/" + boardId + "/increaseView");
+  }
+
+  // -------------------------------------------------- 화면 렌더링 --------------------------------------------------
   return (
     <Flex justifyContent={"center"}>
       <Box>
         {/* ------------------------- 게시글 목록 상단 바 ------------------------- */}
         <Flex justifyContent={"space-between"} mb={5}>
           <Box>
-            <Button onClick={() => navigate("/write")} colorScheme="blue">
+            <Button onClick={handleWriteClick} colorScheme="blue">
               글쓰기
             </Button>
           </Box>
           <Flex>
-            {/* 게시글 몇개씩 볼건지*/}
+            {/* 게시글 몇개씩 볼건지 */}
             <PageCount />
+            {/* ------------------------- 게시글 뷰 형태 선택 ------------------------- */}
             <Box ml={3}>
               <Tooltip label={"리스트 형태 보기"}>
                 <Button onClick={switchToListView}>
@@ -99,7 +172,7 @@ function BoardList() {
         {/* currentView에 따라 게시판 목록 형태가 달라짐 */}
         {currentView === "list" ? (
           <>
-            {/* -------------------- 리스트 형태 보기 -------------------------*/}
+            {/* ---------------------------------------- 리스트 형태 보기 ---------------------------------------------*/}
             <Table size={"sm"}>
               <Thead>
                 <Tr>
@@ -117,18 +190,21 @@ function BoardList() {
                   boardList.map((board) => (
                     <Tr
                       key={board.id}
-                      onClick={() => navigate("/board/" + board.id)}
+                      onClick={() => handleBoardClick(board.id)}
                       _hover={{
                         backgroundColor: "lightcyan",
                         cursor: "pointer",
                       }}
                     >
-                      {/* is_show = true 인 경우 */}
+                      {/* ------------------------- is_show = true 인 경우(리스트) ------------------------- */}
                       {board.is_show ? (
                         <>
+                          {/* 게시판 번호 출력 */}
                           <Td textAlign={"center"}>{board.id}</Td>
+                          {/* 썸네일, 제목 출력 */}
                           <Td>
                             <Flex align={"center"} gap={"10px"}>
+                              {/* 썸네일 출력 */}
                               <YoutubeInfo
                                 link={board.link}
                                 extraThumbnail={true}
@@ -137,35 +213,18 @@ function BoardList() {
                                 toolTip={true}
                               />
 
-                              {/* 길이가 길 경우 20자로 제한하고 나머지는 ...으로 표시 */}
-                              {/* 짤린 제목에 커서를 올릴 시 제목이 툴팁으로 나타남 */}
-                              {board.title.length > 20 ? (
-                                <Tooltip label={board.title}>
-                                  <Text>
-                                    {`${board.title.slice(0, 20)}...`}
-                                    {"    "}
-                                    <FontAwesomeIcon icon={faComment} />{" "}
-                                    {board.count_comment}
-                                  </Text>
-                                </Tooltip>
-                              ) : (
-                                <Text>
-                                  {board.title}
-                                  {"    "}
-                                  <FontAwesomeIcon icon={faComment} />{" "}
-                                  {board.count_comment}
-                                </Text>
-                              )}
+                              {/* 제목 출력 */}
+                              {renderListTitle(board)}
                             </Flex>
                           </Td>
                           <Td textAlign={"center"}>{board.countlike}</Td>
                           <Td textAlign={"center"}>{board.board_member_id}</Td>
-                          <Td textAlign={"center"}>{board.created_at}</Td>
+                          <Td textAlign={"center"}>{board.ago}</Td>
                           <Td textAlign={"center"}>{board.views}</Td>
                         </>
                       ) : (
                         <>
-                          {/* is_show = false 인 경우 */}
+                          {/* ------------------------- is_show = false 인 경우(리스트) ------------------------- */}
                           <Td textAlign={"center"}>{board.id}</Td>
                           <Td colSpan={5}>
                             <Text textAlign={"center"}>
@@ -178,6 +237,7 @@ function BoardList() {
                   ))}
               </Tbody>
             </Table>
+            {/* -------------------- 검색, 페이징 --------------------*/}
             <Center>
               <Box width={"70%"}>
                 <SearchComponent />
@@ -187,7 +247,7 @@ function BoardList() {
           </>
         ) : (
           <>
-            {/* -------------------- 그리드 형태 보기 -------------------------*/}
+            {/* ---------------------------------------- 그리드 형태 보기 ---------------------------------------------*/}
             <SimpleGrid columns={[1, 2, 3, 4, 5]} spacing={[4]}>
               {boardList &&
                 boardList.map((board) => (
@@ -202,10 +262,11 @@ function BoardList() {
                       cursor: "pointer",
                     }}
                   >
-                    {/* is_show = true 인 경우 */}
+                    {/* ------------------------- is_show = true 인 경우(그리드) ------------------------- */}
                     {board.is_show ? (
                       <>
                         <CardHeader p={"10px"}>
+                          {/* 썸네일 출력 */}
                           <YoutubeInfo
                             link={board.link}
                             extraThumbnail={true}
@@ -213,35 +274,29 @@ function BoardList() {
                             thumbnailHeight={150}
                           />
                         </CardHeader>
+
                         <CardBody p={"10px"}>
-                          {/* 길이가 길 경우 15자로 제한하고 나머지는 ...으로 표시 */}
-                          {/* 짤린 제목에 커서를 올릴 시 제목이 툴팁으로 나타남 */}
-                          {board.title.length > 15 ? (
-                            <Tooltip label={board.title}>
-                              <Text fontWeight={"bold"}>{`${board.title.slice(
-                                0,
-                                15,
-                              )}...`}</Text>
-                            </Tooltip>
-                          ) : (
-                            <Flex>
-                              <Text fontWeight={"bold"}>{board.title}</Text>{" "}
-                            </Flex>
-                          )}
+                          {/* 제목 출력 */}
+                          {renderGreedTitle(board)}
                         </CardBody>
+
                         <CardFooter p={"10px"}>
                           <Box w={"100%"}>
+                            {/* id, 작성일자 출력 */}
                             <Text>{board.board_member_id}</Text>
-                            <Text>{board.updated_at}</Text>
+                            <Text>{board.ago}</Text>
+                            {/* 좋아요, 댓글 갯수, 조회수 출력*/}
                             <Flex w={"100%"} justifyContent={"space-between"}>
-                              <Box>
-                                <FontAwesomeIcon icon={faThumbsUp} />{" "}
-                                {board.countlike}
-                              </Box>
-                              <Box>
-                                <FontAwesomeIcon icon={faComment} />{" "}
-                                {board.count_comment}
-                              </Box>
+                              <Flex>
+                                <Box mr={3}>
+                                  <FontAwesomeIcon icon={faThumbsUp} />{" "}
+                                  {board.countlike}
+                                </Box>
+                                <Box>
+                                  <FontAwesomeIcon icon={faComment} />{" "}
+                                  {board.count_comment}
+                                </Box>
+                              </Flex>
                               <Box>
                                 <Text>조회수 : {board.views}</Text>
                               </Box>
@@ -251,7 +306,7 @@ function BoardList() {
                       </>
                     ) : (
                       <>
-                        {/* is_show = false 인 경우 */}
+                        {/* ------------------------- is_show = false 인 경우(그리드) ------------------------- */}
                         <CardHeader p={"10px"}>
                           <YoutubeInfo
                             link={board.link}
@@ -272,6 +327,7 @@ function BoardList() {
                   </Card>
                 ))}
             </SimpleGrid>
+            {/* ------------------------- 검색, 페이징 섹션 ------------------------- */}
             <Box>
               <SearchComponent />
               <Pagination pageInfo={pageInfo} />
@@ -279,7 +335,28 @@ function BoardList() {
           </>
         )}
       </Box>
-      <Box></Box>
+
+      {/* ------------------------- 모달 (비로그인 사용자 글쓰기 버튼 클릭) ------------------------- */}
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>로그인 필요</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>게시글을 쓰기 위해 로그인이 필요합니다.</ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="red" mr={3} onClick={onClose}>
+              Close
+            </Button>
+            <Button
+              colorScheme="blue"
+              onClick={() => navigate("/member/login")}
+            >
+              로그인하러 가기
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Flex>
   );
 }
