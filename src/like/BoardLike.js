@@ -21,6 +21,8 @@ function BoardLike({ like, board, onClick, id }) {
   const subscription = useRef(null);
 
   const [countLike, setCountLike] = useState(null);
+  const [checkId, setCheckId] = useState(null);
+  const [arr, setArr] = useState([]);
 
   useEffect(() => {
     if (loginInfo.member_id !== "") {
@@ -31,14 +33,16 @@ function BoardLike({ like, board, onClick, id }) {
         })
         .then((response) => {
           setCountLike(response.data.countlike);
+          setCheckId(response.data.checkId);
+          console.log("axios: " + response.data.checkId);
         })
         .catch(() => console.log("bad"))
         .finally(() => console.log("완료"));
     }
 
-    if (socket !== null) {
-      getSocket();
-    }
+    // if (socket !== null) {
+    //   getSocket();
+    // }
   }, [loginInfo]);
 
   if (socket !== null) {
@@ -60,6 +64,7 @@ function BoardLike({ like, board, onClick, id }) {
 
   // 좋아요 가져오기
   function getSocket() {
+    console.log("BoardLike에서 소켓연결");
     unSubscribe();
     subscription.current = stompClient.current.subscribe(
       "/topic/like",
@@ -68,12 +73,16 @@ function BoardLike({ like, board, onClick, id }) {
         console.log(JSON.parse(res._body));
         const data = JSON.parse(res._body);
         setCountLike(data.countlike);
-        console.log("getSocket: " + countLike);
-        // return setChat((chatList) => [...chatList, json]);
+        setCheckId(data.checkId);
+        console.log(data);
+        // return setArr((arr) => [...arr, data.checkId]);
       },
     );
   }
 
+  // console.log("들어있는 값: " + checkId);
+  // console.log("현재 로그인 계정: " + loginInfo.member_id);
+  // console.log(arr);
   function sendLike() {
     stompClient.current.publish({
       destination: "/app/like/",
@@ -84,7 +93,14 @@ function BoardLike({ like, board, onClick, id }) {
   return (
     <>
       <Flex>
-        <Button onClick={sendLike}></Button>
+        <Button onClick={sendLike}>
+          {checkId !== null &&
+          checkId.find((list) => list === loginInfo.member_id) ? (
+            <FontAwesomeIcon icon={fullHeart} />
+          ) : (
+            <FontAwesomeIcon icon={emptyHeart} />
+          )}
+        </Button>
 
         <Heading>{countLike}</Heading>
       </Flex>

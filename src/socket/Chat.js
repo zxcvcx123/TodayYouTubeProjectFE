@@ -42,6 +42,7 @@ function Chat() {
 
   if (socket !== null) {
     stompClient = socket;
+    getSocket();
   }
 
   if (socket === null) {
