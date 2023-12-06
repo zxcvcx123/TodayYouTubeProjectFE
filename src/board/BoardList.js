@@ -90,7 +90,7 @@ function BoardList() {
     }
   }
 
-  // 리스트 형태 제목 렌더링 함수
+  // 리스트 형태 제목 렌더링
   function renderListTitle(board) {
     // 제목의 길이가 20자 이상일 경우 ...으로 자르고 툴팁으로 전체 제목을 표시
     if (board.title.length > 20) {
@@ -104,7 +104,7 @@ function BoardList() {
       );
     }
 
-    // 일반적인 제목을 표시 (툴팁 없음)
+    // 일반적인 제목 표시 (툴팁 없음)
     return (
       <Text>
         {board.title}
@@ -113,8 +113,9 @@ function BoardList() {
     );
   }
 
-  // 그리드 형태 제목 렌더링 함수
+  // 그리드 형태 제목 렌더링
   function renderGreedTitle(board) {
+    // 제목의 길이가 15자 이상일 경우 ...으로 자르고 툴팁으로 전체 제목을 표시
     if (board.title.length > 15) {
       return (
         <Tooltip label={board.title}>
@@ -122,6 +123,8 @@ function BoardList() {
         </Tooltip>
       );
     }
+
+    // 일반적인 제목 표시 (툴팁 없음)
     return (
       <Flex>
         <Text fontWeight={"bold"}>{board.title}</Text>{" "}
@@ -129,6 +132,7 @@ function BoardList() {
     );
   }
 
+  // -------------------------------------------------- 화면 렌더링 --------------------------------------------------
   return (
     <Flex justifyContent={"center"}>
       <Box>
