@@ -7,23 +7,26 @@ import {
   FormControl,
   FormLabel,
   Heading,
-  Img,
   Spinner,
   Text,
-  Textarea,
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { BoardComment } from "../comment/BoardComment";
 import BoardLike from "../like/BoardLike";
-import YouTube from "react-youtube";
 import YoutubeInfo from "../component/YoutubeInfo";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import editor from "../component/Editor";
 import { DetectLoginContext } from "../component/LoginProvider";
 import MemberProfile from "../member/MemberProfile";
+
+//  ck에디터 설정 값 (toolbar 삭제함)
+const editorConfig = {
+  toolbar: [],
+  width: "800px",
+  height: "800px",
+};
 
 function BoardView() {
   /* 로그인 정보 컨텍스트 */
@@ -50,17 +53,14 @@ function BoardView() {
 
   // 초기 렌더링
   useEffect(() => {
-    axios
-      .get("/api/board/id/" + id)
-      .then((response) => {
-        setBoard(response.data);
+    axios.get("/api/board/id/" + id).then((response) => {
+      setBoard(response.data);
 
-        // 게시글 데이터를 가져온 후 작성자 여부를 확인하여 isAuthor 설정
-        if (loginInfo.member_id === response.data.board_member_id) {
-          setIsAuthor(true);
-        }
-      })
-      .finally(() => {});
+      // 게시글 데이터를 가져온 후 작성자 여부를 확인하여 isAuthor 설정
+      if (loginInfo.member_id === response.data.board_member_id) {
+        setIsAuthor(true);
+      }
+    });
   }, []);
 
   // 초기 렌더링 파일 목록 가져오기
@@ -86,6 +86,7 @@ function BoardView() {
     return <Spinner />;
   }
 
+  // 좋아요 버튼 클릭
   function handleLike() {
     axios
       .post("/api/like/board/" + id)
@@ -96,7 +97,7 @@ function BoardView() {
 
   // 게시글 삭제 버튼 클릭
   function handleDeleteClick() {
-    // 게시글 삭제 아이디 유효성 검증
+    // 게시글 삭제 시 아이디 유효성 검증
     if (!isAuthor) {
       window.alert("작성자 본인만 삭제 가능합니다.");
       return;
@@ -154,13 +155,6 @@ function BoardView() {
       .finally(() => console.log("done"));
   }
 
-  //  ck에디터 설정 값 (toolbar 삭제함)
-  const editorConfig = {
-    toolbar: [],
-    width: "800px",
-    height: "800px",
-  };
-
   // 수정 버튼 클릭
   function handleEditClick() {
     // 로그인 여부 검증
@@ -195,24 +189,47 @@ function BoardView() {
       });
   }
 
+  // 유튜브 섹션 렌더링 여부 결정 함수
+  function renderYoutubeSection() {
+    if (!board.link) {
+      return <Text>링크가 없네용</Text>;
+    }
+
+    return (
+      <FormControl mb={2}>
+        <FormLabel>----- 추천 유튜브 영상 -----</FormLabel>
+        {/* 유튜브 영상 출력 */}
+        <YoutubeInfo link={board.link} extraVideo={true} />
+        <Flex m={2} ml={0} gap={5}>
+          <Button onClick={() => window.open(board.link)} colorScheme="red">
+            유튜브 영상 페이지로 이동
+          </Button>
+          <Button onClick={handleCopyClick} colorScheme="blue">
+            유튜브 링크 복사
+          </Button>
+        </Flex>
+      </FormControl>
+    );
+  }
+
   return (
     <Box m={"50px 20% 20px 50px"}>
       <Heading>{board.id} 번 게시글 보기(임시 게시글 번호 확인용!!)</Heading>
 
-      {/* 제목 */}
+      {/* -------------------- 상단 영역 -------------------- */}
       <FormControl mt={10} mb={2}>
-        <Text fontSize={"xx-large"} as={"strong"} border={"1px solid black"}>
+        {/* 제목 */}
+        <Text fontSize={"xx-large"} as={"strong"}>
           {board.title}
         </Text>
-        <Flex
-          justifyContent={"space-between"}
-          alignItems={"center"}
-          border={"1px solid red"}
-        >
+        <Flex justifyContent={"space-between"} alignItems={"center"}>
           <Flex alignItems={"center"}>
+            {/* 프로필 */}
             <MemberProfile />
+            {/* 일자 */}
             <Text>| {board.updated_at}</Text>
           </Flex>
+          {/* 좋아요, 조회수 */}
           <Flex alignItems={"center"} gap={"5"}>
             <BoardLike id={id} like={like} board={board} onClick={handleLike} />
             <Text> | 조회수 : {board.views}</Text>
@@ -222,31 +239,12 @@ function BoardView() {
 
       <Divider my={5} borderColor="grey" />
 
-      {/* 유튜브 링크가 없을 경우 유튜브 링크 및 영상이 보이지 않음 */}
-      {!board.link ? (
-        <Text>링크가 없네용</Text>
-      ) : (
-        <>
-          {/* 유튜브 영상 출력 */}
-          <FormControl mb={2}>
-            <FormLabel>추천 유튜브 영상!</FormLabel>
-            {/* 유튜브 영상 출력 */}
-            <YoutubeInfo link={board.link} extraVideo={true} />
-            <Flex m={2} ml={0} gap={5}>
-              <Button onClick={() => window.open(board.link)} colorScheme="red">
-                유튜브 영상 페이지로 이동
-              </Button>
-              <Button onClick={handleCopyClick} colorScheme="blue">
-                유튜브 링크 복사
-              </Button>
-            </Flex>
-          </FormControl>
-        </>
-      )}
+      {/* -------------------- 유튜브 섹션 -------------------- */}
+      {renderYoutubeSection()}
 
       <Divider my={5} borderColor="grey" />
 
-      {/* 본문 */}
+      {/* -------------------- 본문 -------------------- */}
       <FormControl mb={2}>
         {/*<FormLabel>본문</FormLabel>*/}
         <Box>
@@ -263,7 +261,7 @@ function BoardView() {
         </Box>
       </FormControl>
 
-      {/* 파일 리스트 */}
+      {/* -------------------- 파일 리스트 -------------------- */}
       {uploadFiles.length > 0 && (
         <Box mb={2}>
           <Text>파일 목록</Text>
@@ -286,6 +284,7 @@ function BoardView() {
           </Box>
         </Box>
       )}
+      {/* -------------------- 버튼 섹션 -------------------- */}
       <Flex justifyContent={"space-between"}>
         {/* 목록 버튼 */}
         <Button colorScheme="blue" onClick={() => navigate("/board/list")}>
@@ -305,7 +304,7 @@ function BoardView() {
           </Box>
         )}
       </Flex>
-      {/* 댓글 영역 */}
+      {/* -------------------- 댓글 영역 -------------------- */}
       <BoardComment board_id={id} />
     </Box>
   );
