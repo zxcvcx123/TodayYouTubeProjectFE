@@ -197,7 +197,9 @@ function BoardView() {
 
     return (
       <FormControl mb={2}>
-        <FormLabel>----- 추천 유튜브 영상 -----</FormLabel>
+        <FormLabel fontSize="xl" fontWeight="bold" color="purple.500">
+          추천 유튜브 영상
+        </FormLabel>
         {/* 유튜브 영상 출력 */}
         <YoutubeInfo link={board.link} extraVideo={true} />
         <Flex m={2} ml={0} gap={5}>
