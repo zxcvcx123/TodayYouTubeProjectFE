@@ -261,7 +261,7 @@ function MemberInfoMyInfo({ loginInfo }) {
                                           Platinum
                                         </Badge>
                                       </Td>
-                                      <Td>골드</Td>
+                                      <Td>플레티넘</Td>
                                       <Td>아직 안정함</Td>
                                     </Tr>
                                   </Tbody>
