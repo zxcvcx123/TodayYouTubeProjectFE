@@ -39,6 +39,7 @@ export function MainView() {
   const [isDay, setIsDay] = useState(false);
   const [isWeek, setIsWeek] = useState(false);
   const [isMonth, setIsMonth] = useState(false);
+  const [mainShowLink, setMainShowLink] = useState(null);
 
   const [showSpinner, setShowSpinner] = useState(true);
 
@@ -58,9 +59,10 @@ export function MainView() {
       navigate("?" + params);
       return () => clearTimeout(timer);
     });
-  }, [category, dateSort]);
+  }, [category, dateSort, mainShowLink]);
 
   function handleCategoryChange(e) {
+    setMainShowLink(null);
     setCategory(e.target.value);
   }
 
@@ -127,11 +129,12 @@ export function MainView() {
     setDateSort(e.target.value);
   }
 
+  console.log("출력될 링크:" + mainShowLink);
   // 임시메인
   return (
-    <Box bg="black" w="100%" h="700px" p={4}>
+    <Box bg="black" w="100%" h="900px" p={4}>
       <Flex w="100%">
-        <Box w="20%">
+        <Box w="18%">
           <Box>
             <Flex ml={10} mb={1} mt={3}>
               <Button
@@ -208,36 +211,77 @@ export function MainView() {
           {/*</Box>*/}
         </Box>
 
-        <Box>
-          <Box w="100%" h="70%" m="auto" ml={10}>
-            <Box width={"100%"} height="100%" key={firstList.id}>
+        <Box w={"85%"}>
+          <Flex
+            w="86%"
+            h="67%"
+            m="auto"
+            ml={10}
+            border={"1px"}
+            borderColor={"red"}
+          >
+            <Box width={"80%"} height="100%" key={mainShowLink}>
               <YoutubeInfo
-                link={firstList.link}
+                link={mainShowLink}
                 extraVideo={true}
-                opts={{ height: "470", width: "1050" }}
+                opts={{ height: 550, width: 1100 }}
               />
             </Box>
-          </Box>
-          <Box mt={5}>
-            <Flex w="100%" h="100%" m="auto" mt={2} justify="space-between">
-              {otherList &&
-                otherList.map((other) => (
-                  <Box w="22%" h={"50%"} key={other.id}>
-                    <YoutubeInfo
-                      link={other.link}
-                      extraVideo={true}
-                      opts={{ height: 180, width: 250 }}
-                    />
-                  </Box>
-                ))}
+            <Button w={"1%"} color="white" mt={300} ml={100} variant={"link"}>
+              {firstList.categoryName}게시판으로 이동하기 >
+            </Button>
+          </Flex>
+          <Box
+            ml={"-15%"}
+            w={"100%"}
+            mt={10}
+            h={"30%"}
+            border={"1px"}
+            borderColor={"blue"}
+          >
+            <Flex w="100%" h="100%">
+              <Box
+                key={firstList.link}
+                _hover={{ cursor: "pointer" }}
+                w={"30%"}
+                border={"1px"}
+                borderColor={"orange"}
+                onClick={() => setMainShowLink(firstList.link)}
+              >
+                <YoutubeInfo
+                  link={firstList.link}
+                  extraThumbnail={true}
+                  thumbnailWidth={400}
+                  thumbnailHeight={250}
+                />
+              </Box>
+              <Flex w={"80%"} ml={5}>
+                {otherList &&
+                  otherList.map((other) => (
+                    <Box
+                      w="25%"
+                      h="70%"
+                      key={other.id}
+                      mt={12}
+                      ml={5}
+                      border={"1px"}
+                      borderColor={"white"}
+                      onClick={() => setMainShowLink(other.link)}
+                    >
+                      <YoutubeInfo
+                        link={other.link}
+                        extraThumbnail={true}
+                        thumbnailWidth={250}
+                        thumbnailHeight={180}
+                      />
+                    </Box>
+                  ))}
+              </Flex>
             </Flex>
           </Box>
         </Box>
-        <Button color="white" mt={600} ml={50} variant={"link"}>
-          {firstList.categoryName}게시판으로 이동하기 >
-        </Button>
       </Flex>
-      <MainBoardList />
+      {/*<MainBoardList />*/}
     </Box>
   );
 }
