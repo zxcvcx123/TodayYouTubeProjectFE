@@ -14,7 +14,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import * as PropTypes from "prop-types";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { SearchMain } from "./SearchMain";
 import { faBell } from "@fortawesome/free-regular-svg-icons";
@@ -22,6 +22,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useLocation, useNavigate } from "react-router-dom";
 import { DetectLoginContext } from "../component/LoginProvider";
 import MemberProfile from "../member/MemberProfile";
+import * as SockJS from "sockjs-client";
+import { Stomp } from "@stomp/stompjs";
 
 Stack.propTypes = {
   p: PropTypes.number,
@@ -30,11 +32,47 @@ Stack.propTypes = {
   children: PropTypes.node,
 };
 
-export function Nav() {
+export function Nav({ setSocket }) {
   const { token, handleLogout, loginInfo, validateToken } =
     useContext(DetectLoginContext);
   let navigate = useNavigate();
-  const location = useLocation();
+
+  // 소켓 연결
+  const stompClient = useRef(); // useRef로 connect()가 안끊기게하기
+  const subscription = useRef(null);
+
+  function connect() {
+    let socket = new SockJS("http://localhost:3000/gs-guide-websocket", null, {
+      transports: ["websocket", "xhr-streaming", "xhr-polling"],
+    });
+
+    console.log(stompClient.current);
+
+    // 이미 연결되어 있으면 한번 더 연결시키는거 방지
+    if (!stompClient.current) {
+      stompClient.current = Stomp.over(socket);
+      stompClient.current.connect({}, function (frame) {
+        unSubscribe();
+        console.log("NAV에서 소켓연결 성공: " + frame);
+        console.log(stompClient.current);
+        console.log(frame);
+
+        setSocket(stompClient);
+      });
+    }
+  }
+
+  // ===== 두번 연결 되니깐 한번은 끊어줌 =====
+  function unSubscribe() {
+    if (subscription.current !== null) {
+      subscription.current.unsubscribe();
+    }
+  }
+  // ========================================
+
+  useEffect(() => {
+    connect();
+  }, []);
 
   return (
     <>
@@ -72,6 +110,7 @@ export function Nav() {
               <MenuItem>요리</MenuItem>
               <MenuItem>영화/드라마</MenuItem>
               <MenuItem>게임</MenuItem>
+              <MenuItem onClick={() => navigate("/chat")}>채팅</MenuItem>
               <Divider />
               <MenuItem onClick={() => navigate("/inquiry/list")}>
                 문의게시판

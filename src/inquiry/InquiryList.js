@@ -144,7 +144,7 @@ function InquiryList(props) {
                   <Td textAlign={"center"}>{inquiry.inquiry_category}</Td>
                   <Td textAlign={"center"}>{inquiry.title}</Td>
                   <Td textAlign={"center"}>{inquiry.inquiry_member_id}</Td>
-                  <Td textAlign={"center"}>{inquiry.created_at}</Td>
+                  <Td textAlign={"center"}>{inquiry.ago}</Td>
                   <Td textAlign={"center"}>{inquiry.answer_status}</Td>
                 </Tr>
               ))}
