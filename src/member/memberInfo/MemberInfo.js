@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { DetectLoginContext } from "../../component/LoginProvider";
 import axios from "axios";
 import "./MemberInfo.css";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import {
   Button,
   ButtonGroup,
@@ -32,38 +32,49 @@ import MemberInfoMyInfo from "./MemberInfoMyInfo";
 import MemberInfoMyBoardList from "./MemberInfoMyBoardList";
 import { MemberInfoMyFavoriteBoard } from "./MemberInfoMyFavoriteBoard";
 import YoutubeInfo from "../../component/YoutubeInfo";
+import MemberInfoPageNation from "./MemberInfoPageNation";
 
 function MemberInfo(props) {
-  const { loginInfo } = useContext(DetectLoginContext);
+  const { loginInfo, token } = useContext(DetectLoginContext);
   let navigate = useNavigate("");
   let toast = useToast();
   const [myInfo, setMyInfo] = useState(true);
   const [popMyBoardList, setPopMyBoardList] = useState(false);
   const [myBoardListDependency, setMyBoardListDependency] = useState(0);
   const [myFavoriteBoard, setMyFavoriteBoard] = useState(false);
-
+  const [pageNumberInformation, setPageNumberInformation] = useState(null);
   /* State*/
   const [myBoardList, setMyBoardList] = useState(null); // 글 리스트
   const [categoryOrdedBy, setCategoryOrdedBy] = useState("latest"); // 정렬 기준
   const [categoryTopics, setCategoryTopics] = useState("video"); // 리스트 기준
+  const [params] = useSearchParams();
+  const location = useLocation();
   /* react-router-dom */
-  const params = new URLSearchParams();
-  /* useEffect */
   useEffect(() => {
-    /* query string  */
+    const grantType = localStorage.getItem("grantType");
+    const accessToken = localStorage.getItem("accessToken");
     params.set("ob", categoryOrdedBy); // 정렬 기준
     params.set("ct", categoryTopics); // 리스트 기준
     params.set("member_id", loginInfo.member_id);
     axios
-      .get("/api/member/info/myBoardList?" + params.toString())
+      .get("/api/member/info/myBoardList?" + params, {
+        headers: {
+          Authorization: `${grantType} ${accessToken}`,
+        },
+      })
       .then((response) => {
         setMyBoardList(response.data.myBoardList);
+        setPageNumberInformation(response.data.pagingInformation);
+        console.log(response.data.pagingInformation);
       })
       .catch((error) => {
-        console.log(error);
+        toast({
+          description: "비정상적인 접근입니다.",
+          status: "error",
+        });
+        navigate("/");
       });
-  }, [myBoardListDependency]);
-
+  }, [myBoardListDependency, categoryOrdedBy, categoryTopics, location]);
   function handleMemberInfoMyInfo() {
     setMyInfo(true);
     setPopMyBoardList(false);
@@ -78,6 +89,7 @@ function MemberInfo(props) {
   }
 
   function handleMyBoardList() {
+    setMyBoardListDependency(1);
     setMyInfo(false);
     setPopMyBoardList(true);
     setMyFavoriteBoard(false);
@@ -174,9 +186,9 @@ function MemberInfo(props) {
                         setCategoryOrdedBy(e.target.value);
                       }}
                     >
-                      <option value="latest">최신 순</option>
-                      <option value="like">추천 순</option>
-                      <option value="views">조회수 순</option>
+                      <option value="latest">최신순</option>
+                      <option value="like">추천순</option>
+                      <option value="views">조회수순</option>
                     </Select>
                   </Flex>
                 </Flex>
@@ -193,47 +205,52 @@ function MemberInfo(props) {
                         </Stack>
                       </RadioGroup>
                     </Flex>
-                    <TableContainer>
-                      <Table size="sm">
-                        <Thead>
-                          <Tr fontSize={"15px"}>
-                            <Th>썸네일</Th>
-                            <Th>제목</Th>
-                            <Th>작성자</Th>
-                            <Th>작성일</Th>
-                            <Th>조회</Th>
-                            <Th>추천</Th>
-                          </Tr>
-                        </Thead>
-                        <Tbody>
-                          {myBoardList.map((myBoard) => (
-                            <Tr
-                              _hover={{
-                                cursor: "pointer",
-                              }}
-                              key={myBoard.id}
-                              onClick={() => navigate("/board/" + myBoard.id)}
-                            >
-                              <Td>
-                                {" "}
-                                <YoutubeInfo
-                                  link={myBoard.link}
-                                  extraThumbnail={true}
-                                  thumbnailWidth={120}
-                                  thumbnailHeight={70}
-                                />
-                              </Td>
-                              <Td>{myBoard.title}</Td>
-                              <Td>{myBoard.nickname}</Td>
-                              <Td>{myBoard.created_at}</Td>
-                              <Td>{myBoard.countlike}</Td>
-                              <Td>{myBoard.views}</Td>
+                    <Center>
+                      <TableContainer w={"100%"}>
+                        <Table size="sm">
+                          <Thead>
+                            <Tr fontSize={"15px"}>
+                              {categoryTopics !== "origin" && <Th>썸네일</Th>}
+                              <Th>제목</Th>
+                              <Th>작성자</Th>
+                              <Th>작성일</Th>
+                              <Th>추천수</Th>
+                              <Th>조회수</Th>
                             </Tr>
-                          ))}
-                        </Tbody>
-                        <Tfoot></Tfoot>
-                      </Table>
-                    </TableContainer>
+                          </Thead>
+                          <Tbody>
+                            {myBoardList.map((myBoard) => (
+                              <Tr
+                                _hover={{
+                                  cursor: "pointer",
+                                }}
+                                key={myBoard.id}
+                                onClick={() => navigate("/board/" + myBoard.id)}
+                              >
+                                {categoryTopics !== "origin" && (
+                                  <Td>
+                                    <YoutubeInfo
+                                      link={myBoard.link}
+                                      extraThumbnail={true}
+                                      thumbnailWidth={120}
+                                      thumbnailHeight={70}
+                                    />
+                                  </Td>
+                                )}
+                                <Td>{myBoard.title}</Td>
+                                <Td>{myBoard.nickname}</Td>
+                                <Td>{myBoard.created_at}</Td>
+                                <Td>{myBoard.countlike}</Td>
+                                <Td>{myBoard.views}</Td>
+                              </Tr>
+                            ))}
+                          </Tbody>
+                        </Table>
+                      </TableContainer>{" "}
+                    </Center>
+                    <MemberInfoPageNation
+                      pageNumberInformation={pageNumberInformation}
+                    />
                   </CardBody>
                 </Card>
               </Stack>

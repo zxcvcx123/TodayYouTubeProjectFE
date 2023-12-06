@@ -237,14 +237,14 @@ function MemberSignup(props) {
                       setCheckNicknameResult(false);
                       setNicknameMessage("3" + defaultLength);
                       setNickname(e.target.value);
-                      if (e.target.value.length > 2) {
+                      if (e.target.value.length >= 3) {
                         setNicknameMessage(defaultMessage);
                       }
                     }
                   }}
                 />
                 <Button
-                  isDisabled={nickname.length < 2 || !nickNameDisable}
+                  isDisabled={nickname.length <= 2 || !nickNameDisable}
                   onClick={() => {
                     handleDuplicated("nickname", nickname);
                   }}
