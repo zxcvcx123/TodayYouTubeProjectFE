@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -21,8 +21,13 @@ import YoutubeInfo from "../component/YoutubeInfo";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import editor from "../component/Editor";
+import { DetectLoginContext } from "../component/LoginProvider";
+import memberInfo from "../member/memberInfo/MemberInfo";
 
 function BoardView() {
+  // 계정 정보
+  const { loginInfo } = useContext(DetectLoginContext);
+
   // state
   const [board, setBoard] = useState(null);
   const [thumbnail, setThumbnail] = useState(null);
@@ -53,29 +58,37 @@ function BoardView() {
     });
   }, []);
 
-  // 초기 렌더링 좋아요 출력
-  useEffect(() => {
-    axios
-      .get("/api/like/board/" + id)
-      .then((response) => {
-        setLike(response.data);
-      })
-      .catch(() => console.log("bad"))
-      .finally(() => console.log("완료"));
-  }, []);
+  // // 초기 렌더링 좋아요 출력
+  // // BoardLike에서 대신 역할 수행중
+  // useEffect(() => {
+  //   if (loginInfo.member_id !== "") {
+  //     console.log(loginInfo.member_id);
+  //     axios
+  //       .post("/api/like/board", {
+  //         board_id: id,
+  //         member_id: loginInfo.member_id,
+  //       })
+  //       .then((response) => {
+  //         setLike(response.data);
+  //       })
+  //       .catch(() => console.log("bad"))
+  //       .finally(() => console.log("완료"));
+  //   }
+  // }, [loginInfo]);
 
   // board 불러오지 못할 시 로딩중 표시
   if (board === null) {
     return <Spinner />;
   }
 
-  function handleLike() {
-    axios
-      .post("/api/like/board/" + id)
-      .then((response) => setLike(response.data))
-      .catch(() => console.log("bad"))
-      .finally(() => console.log("done"));
-  }
+  // // 소켓처리로 인해 주석처리
+  // function handleLike() {
+  //   axios
+  //     .post("/api/like/board/" + id)
+  //     .then((response) => setLike(response.data))
+  //     .catch(() => console.log("bad"))
+  //     .finally(() => console.log("done"));
+  // }
 
   function handleDelete() {
     axios
@@ -105,7 +118,7 @@ function BoardView() {
           <Text>
             {board.board_member_id} | {board.updated_at}
           </Text>
-          <BoardLike id={id} like={like} board={board} onClick={handleLike} />
+          <BoardLike id={id} like={like} board={board} />
           <Text>| 조회수 : {board.views}</Text>
         </Flex>
       </FormControl>

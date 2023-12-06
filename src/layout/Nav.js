@@ -39,6 +39,8 @@ export function Nav({ setSocket }) {
 
   // 소켓 연결
   const stompClient = useRef(); // useRef로 connect()가 안끊기게하기
+  const subscription = useRef(null);
+
   function connect() {
     let socket = new SockJS("http://localhost:3000/gs-guide-websocket", null, {
       transports: ["websocket", "xhr-streaming", "xhr-polling"],
@@ -50,13 +52,23 @@ export function Nav({ setSocket }) {
     if (!stompClient.current) {
       stompClient.current = Stomp.over(socket);
       stompClient.current.connect({}, function (frame) {
-        console.log("소켓연결 성공: " + frame);
+        unSubscribe();
+        console.log("NAV에서 소켓연결 성공: " + frame);
         console.log(stompClient.current);
         console.log(frame);
+
         setSocket(stompClient);
       });
     }
   }
+
+  // ===== 두번 연결 되니깐 한번은 끊어줌 =====
+  function unSubscribe() {
+    if (subscription.current !== null) {
+      subscription.current.unsubscribe();
+    }
+  }
+  // ========================================
 
   useEffect(() => {
     connect();

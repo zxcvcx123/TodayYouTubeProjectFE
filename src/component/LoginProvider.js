@@ -1,12 +1,14 @@
 import React, { createContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
+import memberInfo from "../member/memberInfo/MemberInfo";
 
 export let DetectLoginContext = createContext(null);
 // 로그인 만료 시간
 const loginActivityTimeOut = 30 * 60 * 1000;
 // 사용자 활동을 감지 타이머
 let loginActivityTimer = null;
+
 export function LoginProvider({ children }) {
   const location = useLocation();
   const [token, setToken] = useState({
@@ -28,7 +30,10 @@ export function LoginProvider({ children }) {
   });
 
   useEffect(() => {
-    validateToken();
+    const fetchData = async () => {
+      validateToken();
+    };
+    fetchData();
   }, [location]);
 
   function validateToken() {

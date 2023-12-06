@@ -30,15 +30,13 @@ function Chat() {
   const subscription = useRef(null);
 
   useEffect(() => {
-    if (socket === null) {
-      reconnect();
-    } else {
-      getSocket();
-    }
-
     if (token.detectLogin) {
       setSetIdAccess(true);
       setChatId(loginInfo.member_id);
+    }
+
+    if (socket !== null) {
+      getSocket();
     }
   }, []);
 
@@ -48,42 +46,6 @@ function Chat() {
 
   if (socket === null) {
     return <Spinner />;
-  }
-
-  // 만약 redirect가 아닌 url로 직접 이동한거면 다시 연결 시도
-  function reconnect() {
-    let socket = new SockJS("http://localhost:3000/gs-guide-websocket", null, {
-      transports: ["websocket", "xhr-streaming", "xhr-polling"],
-    });
-
-    console.log(stompClient.current);
-
-    if (!stompClient.current) {
-      stompClient.current = Stomp.over(socket);
-      stompClient.current.connect({}, function (frame) {
-        console.log("소켓연결 성공: " + frame);
-        console.log(stompClient.current);
-        console.log(frame);
-        unSubscribe();
-        subscription.current = stompClient.current.subscribe(
-          "/topic/greetings",
-          (res) => {
-            JSON.parse(res.body);
-            console.log(JSON.parse(res._body));
-            const json = JSON.parse(res._body);
-
-            if (json.chat !== null) {
-              document
-                .getElementById("chatArea")
-                .insertAdjacentHTML(
-                  "beforeend",
-                  "<p>" + json.id + ": " + json.chat + "</p>",
-                );
-            }
-          },
-        );
-      });
-    }
   }
 
   // 채팅내용
@@ -121,6 +83,8 @@ function Chat() {
 
   // 채팅창 가져오기
   function getSocket() {
+    console.log("Chat에서 소켓 연결");
+
     unSubscribe();
     subscription.current = stompClient.current.subscribe(
       "/topic/greetings",
@@ -161,18 +125,18 @@ function Chat() {
 
   return (
     <>
-      {setIdAccess || (
-        <Center>
-          <Flex w={"50%"}>
-            <Input
-              value={chatId}
-              onChange={handleChatId}
-              placeholder="아이디를 입력해주세요"
-            />
-            <Button onClick={sendId}>입력</Button>
-          </Flex>
-        </Center>
-      )}
+      {/*{setIdAccess || (*/}
+      {/*  <Center>*/}
+      {/*    <Flex w={"50%"}>*/}
+      {/*      <Input*/}
+      {/*        value={chatId}*/}
+      {/*        onChange={handleChatId}*/}
+      {/*        placeholder="아이디를 입력해주세요"*/}
+      {/*      />*/}
+      {/*      <Button onClick={sendId}>입력</Button>*/}
+      {/*    </Flex>*/}
+      {/*  </Center>*/}
+      {/*)}*/}
       {setIdAccess && (
         <Center>
           <Box w={"50%"} h={"500px"}>
