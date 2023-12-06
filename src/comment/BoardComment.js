@@ -74,7 +74,6 @@ function CommentItem({
   const [isReplyListOpen, setIsReplyListOpen] = useState(false);
 
   const toast = useToast();
-  console.log(comment);
 
   function handleSubmit() {
     setIsSubmitting(true);
@@ -120,33 +119,35 @@ function CommentItem({
           <Text size="xs" as="sub">
             {comment.created_at}
           </Text>
-          <Flex gap={0.5}>
-            {isEditing || (
+          {loginInfo.member_id === comment.member_id && (
+            <Flex gap={0.5}>
+              {isEditing || (
+                <Button
+                  size="xs"
+                  colorScheme="purple"
+                  onClick={() => setIsEditing(true)}
+                >
+                  <FontAwesomeIcon icon={faPenToSquare} />
+                </Button>
+              )}
+              {isEditing && (
+                <Button
+                  size="xs"
+                  colorScheme="gray"
+                  onClick={() => setIsEditing(false)}
+                >
+                  <FontAwesomeIcon icon={faXmark} />
+                </Button>
+              )}
               <Button
+                onClick={() => onDeleteModalOpen(comment.id)}
+                colorScheme="red"
                 size="xs"
-                colorScheme="purple"
-                onClick={() => setIsEditing(true)}
               >
-                <FontAwesomeIcon icon={faPenToSquare} />
+                <FontAwesomeIcon icon={faTrash} />
               </Button>
-            )}
-            {isEditing && (
-              <Button
-                size="xs"
-                colorScheme="gray"
-                onClick={() => setIsEditing(false)}
-              >
-                <FontAwesomeIcon icon={faXmark} />
-              </Button>
-            )}
-            <Button
-              onClick={() => onDeleteModalOpen(comment.id)}
-              colorScheme="red"
-              size="xs"
-            >
-              <FontAwesomeIcon icon={faTrash} />
-            </Button>
-          </Flex>
+            </Flex>
+          )}
         </Flex>
       </Flex>
       <Flex justifyContent="space-between" alignItems="center">
@@ -174,7 +175,7 @@ function CommentItem({
                 colorScheme="blackAlpha"
                 onClick={() => setIsReplyListOpen(!isReplyListOpen)}
               >
-                <FontAwesomeIcon icon={faCommentDots} />
+                답글보기
               </Button>
 
               <Flex alignItems="center">
@@ -318,22 +319,24 @@ export function BoardComment({ board_id }) {
       .finally(() => setIsSubmitting(false));
   }
 
-  function handleDelete() {
-    setIsSubmitting(true);
+  function handleDelete(comment) {
+    if (loginInfo.member_id === comment.member_id) {
+      setIsSubmitting(true);
 
-    axios
-      .delete("/api/comment/" + commentIdRef.current)
-      .then(() => {
-        toast({
-          description: "댓글이 삭제되었습니다.",
-          status: "success",
+      axios
+        .delete("/api/comment/" + commentIdRef.current)
+        .then(() => {
+          toast({
+            description: "댓글이 삭제되었습니다.",
+            status: "success",
+          });
+        })
+        .catch(() => console.log("bad"))
+        .finally(() => {
+          setIsSubmitting(false);
+          onClose();
         });
-      })
-      .catch(() => console.log("bad"))
-      .finally(() => {
-        setIsSubmitting(false);
-        onClose();
-      });
+    }
   }
 
   function handleCommentDeleteModalOpen(comment_id) {

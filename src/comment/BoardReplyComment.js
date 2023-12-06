@@ -64,29 +64,32 @@ function ReplyCommentItem({
   onDeleteModalOpen,
   setIsSubmitting,
 }) {
+  const { token, loginInfo } = useContext(DetectLoginContext);
   const [isEditing, setIsEditing] = useState(false);
 
   const toast = useToast();
   const [replyEdited, setReplyEdited] = useState(reply_comment.reply_comment);
 
   function handleSubmit() {
-    setIsSubmitting(true);
-    axios
-      .put("/api/comment/reply/edit", {
-        id: reply_comment.id,
-        reply_comment: replyEdited,
-      })
-      .then(() => {
-        toast({
-          description: "댓글이 수정되었습니다.",
-          status: "success",
+    if (loginInfo.member_id === reply_comment.member_id) {
+      setIsSubmitting(true);
+      axios
+        .put("/api/comment/reply/edit", {
+          id: reply_comment.id,
+          reply_comment: replyEdited,
+        })
+        .then(() => {
+          toast({
+            description: "댓글이 수정되었습니다.",
+            status: "success",
+          });
+        })
+        .catch((error) => console.log("bad"))
+        .finally(() => {
+          setIsSubmitting(false);
+          setIsEditing(false);
         });
-      })
-      .catch((error) => console.log("bad"))
-      .finally(() => {
-        setIsSubmitting(false);
-        setIsEditing(false);
-      });
+    }
   }
 
   return (
@@ -97,36 +100,38 @@ function ReplyCommentItem({
         </Heading>
         <Flex gap={2} alignItems="center">
           <Text fontSize="xs">{reply_comment.created_at}</Text>
-          <Box>
-            <Flex gap={0.5}>
-              {isEditing || (
-                <Button
-                  size="xs"
-                  colorScheme="purple"
-                  onClick={() => setIsEditing(true)}
-                >
-                  <FontAwesomeIcon icon={faPenToSquare} />
-                </Button>
-              )}
-              {isEditing && (
-                <Button
-                  size="xs"
-                  colorScheme="gray"
-                  onClick={() => setIsEditing(false)}
-                >
-                  취소
-                </Button>
-              )}
+          {loginInfo.member_id === reply_comment.member_id && (
+            <Box>
+              <Flex gap={0.5}>
+                {isEditing || (
+                  <Button
+                    size="xs"
+                    colorScheme="purple"
+                    onClick={() => setIsEditing(true)}
+                  >
+                    <FontAwesomeIcon icon={faPenToSquare} />
+                  </Button>
+                )}
+                {isEditing && (
+                  <Button
+                    size="xs"
+                    colorScheme="gray"
+                    onClick={() => setIsEditing(false)}
+                  >
+                    취소
+                  </Button>
+                )}
 
-              <Button
-                onClick={() => onDeleteModalOpen(reply_comment.id)}
-                size="xs"
-                colorScheme="red"
-              >
-                <FontAwesomeIcon icon={faTrash} />
-              </Button>
-            </Flex>
-          </Box>
+                <Button
+                  onClick={() => onDeleteModalOpen(reply_comment.id)}
+                  size="xs"
+                  colorScheme="red"
+                >
+                  <FontAwesomeIcon icon={faTrash} />
+                </Button>
+              </Flex>
+            </Box>
+          )}
         </Flex>
       </Flex>
 
@@ -224,22 +229,24 @@ export function BoardReplyComment({
       });
   }
 
-  function handleReplyDelete() {
-    setIsSubmitting(true);
+  function handleReplyDelete(reply_comment) {
+    if (loginInfo.member_id === reply_comment.member_id) {
+      setIsSubmitting(true);
 
-    axios
-      .delete("/api/comment/reply/" + replyIdRef.current)
-      .then(() => {
-        toast({
-          description: "댓글이 삭제되었습니다.",
-          status: "success",
+      axios
+        .delete("/api/comment/reply/" + replyIdRef.current)
+        .then(() => {
+          toast({
+            description: "댓글이 삭제되었습니다.",
+            status: "success",
+          });
+        })
+        .catch((error) => console.log("bad"))
+        .finally(() => {
+          onClose();
+          setIsSubmitting(false);
         });
-      })
-      .catch((error) => console.log("bad"))
-      .finally(() => {
-        onClose();
-        setIsSubmitting(false);
-      });
+    }
   }
 
   function handleReplyDeleteModalOpen(reply_id) {

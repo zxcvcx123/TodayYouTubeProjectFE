@@ -67,7 +67,7 @@ export function MainView() {
           </Box>
         </Flex>
       </Center>
-      {/*<MainBoardList />*/}
+      <MainBoardList />
     </Box>
   );
 }
