@@ -258,7 +258,7 @@ function MemberInfoMyInfo({ loginInfo }) {
                                           backgroundColor={"#33FF33"}
                                           color="white"
                                         >
-                                          Platinum
+                                          PLATINUM
                                         </Badge>
                                       </Td>
                                       <Td>플레티넘</Td>
