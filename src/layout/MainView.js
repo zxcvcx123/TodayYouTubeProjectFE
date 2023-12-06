@@ -231,11 +231,11 @@ export function MainView() {
                 ))}
             </Flex>
           </Box>
-        </Box>
-        <Button color="white" mt={600} ml={50} variant={"link"}>
+       <Button color="white" mt={600} ml={50} variant={"link"}>
           {firstList.categoryName}게시판으로 이동하기 >
         </Button>
-      </Flex>
+        </Flex>
+      </Center>
       <MainBoardList />
     </Box>
   );

@@ -21,7 +21,7 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { BoardReplyComment } from "./BoardReplyComment";
 import { SmallAddIcon } from "@chakra-ui/icons";
@@ -37,8 +37,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
-import { faHeart } from "@fortawesome/free-regular-svg-icons";
+import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
+import { faHeart as faHeartRegular } from "@fortawesome/free-regular-svg-icons";
 import commentLike from "../like/CommentLike";
+import { DetectLoginContext } from "../component/LoginProvider";
 
 function CommentForm({ board_id, isSubmitting, onSubmit, setCommentLike }) {
   const [comment, setComment] = useState("");
@@ -63,7 +65,9 @@ function CommentItem({
   setIsSubmitting,
   isSubmitting,
   setCommentLike,
+  onCommentLikeClick,
 }) {
+  const { token, loginInfo } = useContext(DetectLoginContext);
   const [isEditing, setIsEditing] = useState(false);
   const [commentEdited, setCommentEdited] = useState(comment.comment);
   const [isReplyFormOpen, setIsReplyFormOpen] = useState(false);
@@ -92,11 +96,15 @@ function CommentItem({
   function handleCommentLike() {
     axios
       .post("/api/comment/like", {
-        member_id: comment.member_id,
+        member_id: loginInfo.member_id,
         board_id: comment.board_id,
         comment_id: comment.id,
       })
-      .then((response) => setCommentLike(response.data))
+      .then((response) => {
+        // setCommentLike(response.data);
+        onCommentLikeClick({ ...response.data, comment_id: comment.id });
+        console.log(response.data);
+      })
       .catch((error) => console.log("bad"))
       .finally(() => console.log("done"));
   }
@@ -111,33 +119,35 @@ function CommentItem({
           <Text size="xs" as="sub">
             {comment.created_at}
           </Text>
-          <Flex gap={0.5}>
-            {isEditing || (
+          {loginInfo.member_id === comment.member_id && (
+            <Flex gap={0.5}>
+              {isEditing || (
+                <Button
+                  size="xs"
+                  colorScheme="purple"
+                  onClick={() => setIsEditing(true)}
+                >
+                  <FontAwesomeIcon icon={faPenToSquare} />
+                </Button>
+              )}
+              {isEditing && (
+                <Button
+                  size="xs"
+                  colorScheme="gray"
+                  onClick={() => setIsEditing(false)}
+                >
+                  <FontAwesomeIcon icon={faXmark} />
+                </Button>
+              )}
               <Button
+                onClick={() => onDeleteModalOpen(comment.id)}
+                colorScheme="red"
                 size="xs"
-                colorScheme="purple"
-                onClick={() => setIsEditing(true)}
               >
-                <FontAwesomeIcon icon={faPenToSquare} />
+                <FontAwesomeIcon icon={faTrash} />
               </Button>
-            )}
-            {isEditing && (
-              <Button
-                size="xs"
-                colorScheme="gray"
-                onClick={() => setIsEditing(false)}
-              >
-                <FontAwesomeIcon icon={faXmark} />
-              </Button>
-            )}
-            <Button
-              onClick={() => onDeleteModalOpen(comment.id)}
-              colorScheme="red"
-              size="xs"
-            >
-              <FontAwesomeIcon icon={faTrash} />
-            </Button>
-          </Flex>
+            </Flex>
+          )}
         </Flex>
       </Flex>
       <Flex justifyContent="space-between" alignItems="center">
@@ -165,7 +175,7 @@ function CommentItem({
                 colorScheme="blackAlpha"
                 onClick={() => setIsReplyListOpen(!isReplyListOpen)}
               >
-                <FontAwesomeIcon icon={faCommentDots} />
+                답글보기
               </Button>
 
               <Flex alignItems="center">
@@ -175,7 +185,9 @@ function CommentItem({
                   colorScheme="red"
                   onClick={handleCommentLike}
                 >
-                  <FontAwesomeIcon icon={faHeart} />
+                  <FontAwesomeIcon
+                    icon={comment.likeHeart ? faHeartSolid : faHeartRegular}
+                  />
                 </Button>{" "}
                 <Text fontSize="x-small">{comment.count_comment_like}</Text>
               </Flex>
@@ -220,6 +232,7 @@ function CommentList({
   isSubmitting,
   setIsSubmitting,
   setCommentLike,
+  onCommentLikeClick,
 }) {
   return (
     <Card border="1px solid black" borderRadius="5" mt={3}>
@@ -235,6 +248,7 @@ function CommentList({
               setIsSubmitting={setIsSubmitting}
               onDeleteModalOpen={onDeleteModalOpen}
               setCommentLike={setCommentLike}
+              onCommentLikeClick={onCommentLikeClick}
             />
           ))}
         </Stack>
@@ -244,6 +258,7 @@ function CommentList({
 }
 
 export function BoardComment({ board_id }) {
+  const { token, loginInfo } = useContext(DetectLoginContext);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [commentLike, setCommentLike] = useState(null);
 
@@ -255,32 +270,62 @@ export function BoardComment({ board_id }) {
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   const params = new URLSearchParams();
+  params.set("member_id", loginInfo.member_id);
   params.set("board_id", board_id);
 
   useEffect(() => {
-    if (!isSubmitting) {
-      axios
-        .get("/api/comment/list?" + params)
-        .then((response) => setCommentList(response.data));
+    if (loginInfo.member_id !== "") {
+      if (!isSubmitting) {
+        axios.get("/api/comment/list?" + params).then((response) => {
+          setCommentList(response.data);
+        });
+      }
+      // 로그인 하지 않은 사용자도 댓글이 보이게
+    } else {
+      if (!isSubmitting) {
+        axios.get("/api/comment/list?" + params).then((response) => {
+          setCommentList(response.data);
+        });
+      }
     }
-  }, [isSubmitting]);
+  }, [isSubmitting, loginInfo]);
+
+  function handleCommentLike(data) {
+    setCommentList(
+      commentList.map((c) => {
+        if (c.id == data.comment_id) {
+          return {
+            ...c,
+            likeHeart: data.commentLike,
+            count_comment_like: data.countCommentLike,
+          };
+        } else {
+          return c;
+        }
+      }),
+    );
+  }
 
   function handleSubmit(comment) {
     setIsSubmitting(true);
-
+    console.log("실행 여부 확인");
     axios
-      .post("/api/comment/add", comment)
+      .post("/api/comment/add", {
+        comment: comment.comment,
+        board_id: comment.board_id,
+        member_id: loginInfo.member_id,
+      })
       .then(() => {
         toast({
           description: "댓글이 등록되었습니다.",
           status: "success",
         });
       })
-      .catch((error) => console.log("bad"))
+      .catch((error) => console.log(error))
       .finally(() => setIsSubmitting(false));
   }
 
-  function handleDelete() {
+  function handleDelete(comment) {
     setIsSubmitting(true);
 
     axios
@@ -319,6 +364,7 @@ export function BoardComment({ board_id }) {
         commentList={commentList}
         onDeleteModalOpen={handleCommentDeleteModalOpen}
         setCommentLike={setCommentLike}
+        onCommentLikeClick={handleCommentLike}
       />
 
       {/* 삭제 모달 */}

@@ -2,16 +2,40 @@ import {
   Box,
   Divider,
   Flex,
+  Heading,
   List,
   ListIcon,
   ListItem,
   OrderedList,
   Text,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Icon, createIcon } from "@chakra-ui/react";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import axios from "axios";
+import BoardList from "../board/BoardList";
 
 export function MainBoardList() {
+  // state
+  const [boardList, setBoardList] = useState(null);
+  // 빈 배열로 받으면 null 값 오류 안나옴
+  const [pageInfo, setPageInfo] = useState([]);
+  const [currentView, setCurrentView] = useState("list");
+
+  const [params] = useSearchParams();
+  const location = useLocation();
+
+  // navigate
+  const navigate = useNavigate();
+
+  // 초기 이펙트
+  useEffect(() => {
+    axios.get("/api/board/list?" + params).then((response) => {
+      setBoardList(response.data.boardList);
+      setPageInfo(response.data.pageInfo);
+    });
+  }, [location]);
+
   // chakra ui 버튼 커스텀
   const CircleIcon = (props) => (
     <Icon viewBox="0 0 200 200" {...props}>
@@ -66,145 +90,147 @@ export function MainBoardList() {
         </Box>
         <Box width="40%" border="1px" borderColor={"blue"} padding={6}>
           <Text fontSize="1.2rem" mb={"10px"}>
-            [관심남]님의 최신 글
+            통합 최다 조회수 글
           </Text>
           <List spacing={3}>
             <ListItem>
               <ListIcon as={CircleIcon} color="red.500" />
-              [관심남]님의 최신 첫 번째 글 title
+              통합 최다 조회 첫 번째 글 title
             </ListItem>
             <Divider />
             <ListItem>
               <ListIcon as={CircleIcon} />
-              [관심남]님의 최신 두 번째 글 title
+              통합 최다 조회 두 번째 글 title
             </ListItem>
             <Divider />
             <ListItem>
               <ListIcon as={CircleIcon} />
-              [관심남]님의 최신 세 번째 글 title
+              통합 최다 조회 세 번째 글 title
             </ListItem>
             <Divider />
             <ListItem>
               <ListIcon as={CircleIcon} />
-              [관심남]님의 최신 네 번째 글 title
+              통합 최다 조회 네 번째 글 title
             </ListItem>
             <Divider />
             <ListItem>
               <ListIcon as={CircleIcon} />
-              [관심남]님의 최신 다섯 번째 글 title
+              통합 최다 조회 다섯 번째 글 title
             </ListItem>
             <Divider />
           </List>
         </Box>
       </Flex>
+      <Box>
+        <Flex
+          width="80%"
+          m="auto"
+          mt={"50px"}
+          border="1px"
+          height={"300"}
+          justifyContent={"space-evenly"}
+        >
+          <Box width="27%" border="1px" borderColor={"blue"} padding={6}>
+            <Heading fontSize="1.2rem" mb={"10px"}>
+              스포츠
+            </Heading>
+            <List spacing={3}>
+              <ListItem>
+                <ListIcon as={CircleIcon} color="red.500" />
+                스포츠 첫 번째 글 title
+              </ListItem>
+              <Divider />
+              <ListItem>
+                <ListIcon as={CircleIcon} />
+                스포츠 두 번째 글 title
+              </ListItem>
+              <Divider />
+              <ListItem>
+                <ListIcon as={CircleIcon} />
+                스포츠 세 번째 글 title
+              </ListItem>
+              <Divider />
+              <ListItem>
+                <ListIcon as={CircleIcon} />
+                스포츠 네 번째 글 title
+              </ListItem>
+              <Divider />
+              <ListItem>
+                <ListIcon as={CircleIcon} />
+                스포츠 다섯 번째 글 title
+              </ListItem>
+              <Divider />
+            </List>
+          </Box>
+          <Box width="27%" border="1px" borderColor={"blue"} padding={6}>
+            <Text fontSize="1.2rem" mb={"10px"}>
+              먹방
+            </Text>
+            <List spacing={3}>
+              <ListItem>
+                <ListIcon as={CircleIcon} color="red.500" />
+                먹방 첫 번째 글 title
+              </ListItem>
+              <Divider />
+              <ListItem>
+                <ListIcon as={CircleIcon} />
+                먹방 두 번째 글 title
+              </ListItem>
+              <Divider />
+              <ListItem>
+                <ListIcon as={CircleIcon} />
+                먹방 세 번째 글 title
+              </ListItem>
+              <Divider />
+              <ListItem>
+                <ListIcon as={CircleIcon} />
+                먹방 네 번째 글 title
+              </ListItem>
+              <Divider />
+              <ListItem>
+                <ListIcon as={CircleIcon} />
+                먹방 다섯 번째 글 title
+              </ListItem>
+              <Divider />
+            </List>
+          </Box>
+          <Box width="27%" border="1px" borderColor={"blue"} padding={6}>
+            <Text fontSize="1.2rem" mb={"10px"}>
+              게임
+            </Text>
+            <List spacing={3}>
+              <ListItem>
+                <ListIcon as={CircleIcon} color="red.500" />
+                게임 첫 번째 글 title
+              </ListItem>
+              <Divider />
+              <ListItem>
+                <ListIcon as={CircleIcon} />
+                게임 두 번째 글 title
+              </ListItem>
+              <Divider />
+              <ListItem>
+                <ListIcon as={CircleIcon} />
+                게임 세 번째 글 title
+              </ListItem>
+              <Divider />
+              <ListItem>
+                <ListIcon as={CircleIcon} />
+                게임 네 번째 글 title
+              </ListItem>
+              <Divider />
+              <ListItem>
+                <ListIcon as={CircleIcon} />
+                게임 다섯 번째 글 title
+              </ListItem>
+              <Divider />
+            </List>
+          </Box>
+        </Flex>
+      </Box>
       <Flex
-        width="70%"
-        ml="15%"
-        mt={"50px"}
-        border="1px"
-        height={"300"}
-        justifyContent={"space-evenly"}
-      >
-        <Box width="27%" border="1px" borderColor={"blue"} padding={6}>
-          <Text fontSize="1.2rem" mb={"10px"}>
-            스포츠
-          </Text>
-          <List spacing={3}>
-            <ListItem>
-              <ListIcon as={CircleIcon} color="red.500" />
-              스포츠 첫 번째 글 title
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListIcon as={CircleIcon} />
-              스포츠 두 번째 글 title
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListIcon as={CircleIcon} />
-              스포츠 세 번째 글 title
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListIcon as={CircleIcon} />
-              스포츠 네 번째 글 title
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListIcon as={CircleIcon} />
-              스포츠 다섯 번째 글 title
-            </ListItem>
-            <Divider />
-          </List>
-        </Box>
-        <Box width="27%" border="1px" borderColor={"blue"} padding={6}>
-          <Text fontSize="1.2rem" mb={"10px"}>
-            먹방
-          </Text>
-          <List spacing={3}>
-            <ListItem>
-              <ListIcon as={CircleIcon} color="red.500" />
-              먹방 첫 번째 글 title
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListIcon as={CircleIcon} />
-              먹방 두 번째 글 title
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListIcon as={CircleIcon} />
-              먹방 세 번째 글 title
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListIcon as={CircleIcon} />
-              먹방 네 번째 글 title
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListIcon as={CircleIcon} />
-              먹방 다섯 번째 글 title
-            </ListItem>
-            <Divider />
-          </List>
-        </Box>
-        <Box width="27%" border="1px" borderColor={"blue"} padding={6}>
-          <Text fontSize="1.2rem" mb={"10px"}>
-            게임
-          </Text>
-          <List spacing={3}>
-            <ListItem>
-              <ListIcon as={CircleIcon} color="red.500" />
-              게임 첫 번째 글 title
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListIcon as={CircleIcon} />
-              게임 두 번째 글 title
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListIcon as={CircleIcon} />
-              게임 세 번째 글 title
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListIcon as={CircleIcon} />
-              게임 네 번째 글 title
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListIcon as={CircleIcon} />
-              게임 다섯 번째 글 title
-            </ListItem>
-            <Divider />
-          </List>
-        </Box>
-      </Flex>
-      <Flex
-        width="70%"
-        ml="15%"
+        width="80%"
+        m="auto"
         mt={"50px"}
         border="1px"
         height={"300"}

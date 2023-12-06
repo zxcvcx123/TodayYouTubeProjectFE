@@ -20,11 +20,16 @@ import {
   useToast,
 } from "@chakra-ui/react";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import YouTube from "react-youtube";
-import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPenToSquare,
+  faTrash,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { DetectLoginContext } from "../component/LoginProvider";
 
 function ReplyCommentForm({
   comment_id,
@@ -63,6 +68,7 @@ function ReplyCommentItem({
   onDeleteModalOpen,
   setIsSubmitting,
 }) {
+  const { token, loginInfo } = useContext(DetectLoginContext);
   const [isEditing, setIsEditing] = useState(false);
 
   const toast = useToast();
@@ -96,36 +102,38 @@ function ReplyCommentItem({
         </Heading>
         <Flex gap={2} alignItems="center">
           <Text fontSize="xs">{reply_comment.created_at}</Text>
-          <Box>
-            <Flex gap={0.5}>
-              {isEditing || (
-                <Button
-                  size="xs"
-                  colorScheme="purple"
-                  onClick={() => setIsEditing(true)}
-                >
-                  <FontAwesomeIcon icon={faPenToSquare} />
-                </Button>
-              )}
-              {isEditing && (
-                <Button
-                  size="xs"
-                  colorScheme="gray"
-                  onClick={() => setIsEditing(false)}
-                >
-                  취소
-                </Button>
-              )}
+          {loginInfo.member_id === reply_comment.member_id && (
+            <Box>
+              <Flex gap={0.5}>
+                {isEditing || (
+                  <Button
+                    size="xs"
+                    colorScheme="purple"
+                    onClick={() => setIsEditing(true)}
+                  >
+                    <FontAwesomeIcon icon={faPenToSquare} />
+                  </Button>
+                )}
+                {isEditing && (
+                  <Button
+                    size="xs"
+                    colorScheme="gray"
+                    onClick={() => setIsEditing(false)}
+                  >
+                    <FontAwesomeIcon icon={faXmark} />
+                  </Button>
+                )}
 
-              <Button
-                onClick={() => onDeleteModalOpen(reply_comment.id)}
-                size="xs"
-                colorScheme="red"
-              >
-                <FontAwesomeIcon icon={faTrash} />
-              </Button>
-            </Flex>
-          </Box>
+                <Button
+                  onClick={() => onDeleteModalOpen(reply_comment.id)}
+                  size="xs"
+                  colorScheme="red"
+                >
+                  <FontAwesomeIcon icon={faTrash} />
+                </Button>
+              </Flex>
+            </Box>
+          )}
         </Flex>
       </Flex>
 
@@ -180,6 +188,7 @@ export function BoardReplyComment({
   isReplyListOpen,
   setIsReplyFormOpen,
 }) {
+  const { token, loginInfo } = useContext(DetectLoginContext);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const replyIdRef = useRef(0);
 
@@ -193,9 +202,9 @@ export function BoardReplyComment({
       const params = new URLSearchParams();
       params.set("reply_id", comment_id);
 
-      axios
-        .get("/api/comment/reply/list?" + params)
-        .then((response) => setReply_commentList(response.data));
+      axios.get("/api/comment/reply/list?" + params).then((response) => {
+        setReply_commentList(response.data);
+      });
     }
   }, [isSubmitting]);
 
@@ -204,7 +213,11 @@ export function BoardReplyComment({
     setIsReplyFormOpen(true);
 
     axios
-      .post("/api/comment/reply/add", reply_comment)
+      .post("/api/comment/reply/add", {
+        reply_comment: reply_comment.reply_comment,
+        comment_id: reply_comment.comment_id,
+        member_id: loginInfo.member_id,
+      })
       .then(() => {
         toast({
           description: "댓글이 등록되었습니다.",
@@ -218,22 +231,24 @@ export function BoardReplyComment({
       });
   }
 
-  function handleReplyDelete() {
-    setIsSubmitting(true);
+  function handleReplyDelete(reply_comment) {
+    if (loginInfo.member_id === reply_comment.member_id) {
+      setIsSubmitting(true);
 
-    axios
-      .delete("/api/comment/reply/" + replyIdRef.current)
-      .then(() => {
-        toast({
-          description: "댓글이 삭제되었습니다.",
-          status: "success",
+      axios
+        .delete("/api/comment/reply/" + replyIdRef.current)
+        .then(() => {
+          toast({
+            description: "댓글이 삭제되었습니다.",
+            status: "success",
+          });
+        })
+        .catch((error) => console.log("bad"))
+        .finally(() => {
+          onClose();
+          setIsSubmitting(false);
         });
-      })
-      .catch((error) => console.log("bad"))
-      .finally(() => {
-        onClose();
-        setIsSubmitting(false);
-      });
+    }
   }
 
   function handleReplyDeleteModalOpen(reply_id) {
