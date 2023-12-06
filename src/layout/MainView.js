@@ -16,6 +16,11 @@ import {
   Select,
   Spinner,
   StatHelpText,
+  Card,
+  CardHeader,
+  Heading,
+  CardBody,
+  CardFooter,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { MainBoardList } from "./MainBoardList";
@@ -31,38 +36,91 @@ export function MainView() {
   const [firstList, setFirstList] = useState(null);
   const [otherList, setOtherList] = useState(null);
   const [dateSort, setDateSort] = useState("weekly");
-  const [baseOnCurrent, setBaseOnCurrent] = useState("true");
   const [isDay, setIsDay] = useState(false);
   const [isWeek, setIsWeek] = useState(false);
   const [isMonth, setIsMonth] = useState(false);
+
+  const [showSpinner, setShowSpinner] = useState(true);
 
   const params = new URLSearchParams();
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowSpinner(false);
+    }, 3000);
     params.set("c", category);
     params.set("sort", dateSort);
     axios.get("/api?" + params).then((response) => {
       setFirstList(response.data.firstBoardList);
       setOtherList(response.data.otherBoardList);
       navigate("?" + params);
+      return () => clearTimeout(timer);
     });
   }, [category, dateSort]);
 
   function handleCategoryChange(e) {
     setCategory(e.target.value);
   }
+  //
+  // if (firstList == null) {
+  //   return <Spinner />
+  // }
+  // console.log(firstList);
+  //
+  // if (otherList == null) {
+  //   return <Spinner />;
+  // }
+  // console.log(otherList);
 
-  if (firstList == null) {
-    return <Spinner />;
+  function handleHomeClick() {
+    setCategory("all");
+    setDateSort("monthly");
+    setIsMonth(true);
+    setIsDay(false);
+    setIsWeek(false);
+    navigate("/");
   }
-  console.log(firstList);
 
-  if (otherList == null) {
-    return <Spinner />;
+  if (firstList == null || otherList == null) {
+    return (
+      <>
+        {showSpinner && <Spinner />}
+        {showSpinner || (
+          <Card align="center" w={"60%"} m={"auto"} mt={100} variant={"filled"}>
+            <CardHeader>
+              <Heading size="md">
+                {dateSort} --> [ 아직 작성된 게시물이 없습니다. ]
+              </Heading>
+            </CardHeader>
+            <CardBody>
+              <Text>게시글을 올려서 추천을 받아보세요!</Text>
+            </CardBody>
+            <CardFooter>
+              <Button
+                mr={10}
+                color="black"
+                colorScheme="red"
+                variant={"outline"}
+                onClick={handleHomeClick}
+              >
+                홈으로 가기
+              </Button>
+              <Button
+                color="blueviolet"
+                colorScheme="red"
+                variant={"outline"}
+                onClick={() => navigate("/board/list")}
+              >
+                글 작성하러 가기!
+              </Button>
+            </CardFooter>
+          </Card>
+        )}
+      </>
+    );
   }
-  console.log(otherList);
 
   function handleDateClick(e) {
     setDateSort(e.target.value);
@@ -73,80 +131,48 @@ export function MainView() {
     <Box bg="black" w="100%" h="700px" p={4}>
       <Flex w="100%">
         <Box w="20%">
-          {baseOnCurrent && (
-            <Flex ml={10} mb={3}>
+          <Box>
+            <Flex ml={10} mb={1} mt={3}>
               <Button
+                colorScheme={isDay ? "red" : "gray"}
                 mr={2}
                 value="daily"
                 onClick={(e) => {
+                  setIsDay(true);
+                  setIsWeek(false);
+                  setIsMonth(false);
                   handleDateClick(e);
                 }}
               >
-                일간
+                하루
               </Button>
               <Button
+                colorScheme={isWeek ? "red" : "gray"}
                 mr={2}
                 value="weekly"
                 onClick={(e) => {
+                  setIsDay(false);
+                  setIsWeek(true);
+                  setIsMonth(false);
                   handleDateClick(e);
                 }}
               >
-                주간
+                이번주
               </Button>
               <Button
+                colorScheme={isMonth ? "red" : "gray"}
                 value="monthly"
                 onClick={(e) => {
+                  setIsDay(false);
+                  setIsWeek(false);
+                  setIsMonth(true);
                   handleDateClick(e);
                 }}
               >
-                월간
+                이번달
               </Button>
             </Flex>
-          )}
-          {baseOnCurrent || (
-            <Box>
-              <Flex ml={10} mb={3}>
-                <Button
-                  colorScheme={isDay ? "red" : "gray"}
-                  mr={2}
-                  value="daily"
-                  onClick={(e) => {
-                    setIsDay(true);
-                    setIsWeek(false);
-                    setIsMonth(false);
-                    handleDateClick(e);
-                  }}
-                >
-                  하루
-                </Button>
-                <Button
-                  colorScheme={isWeek ? "red" : "gray"}
-                  mr={2}
-                  value="weekly"
-                  onClick={(e) => {
-                    setIsDay(false);
-                    setIsWeek(true);
-                    setIsMonth(false);
-                    handleDateClick(e);
-                  }}
-                >
-                  이번주
-                </Button>
-                <Button
-                  colorScheme={isMonth ? "red" : "gray"}
-                  value="monthly"
-                  onClick={(e) => {
-                    setIsDay(false);
-                    setIsWeek(false);
-                    setIsMonth(true);
-                    handleDateClick(e);
-                  }}
-                >
-                  이번달
-                </Button>
-              </Flex>
-            </Box>
-          )}
+          </Box>
           <Box color="white" ml={10}>
             <FontAwesomeIcon icon={faRankingStar} /> {dateSort} 베스트 영상
             <Text fontSize="0.8rem" color="gray.400">
@@ -155,9 +181,9 @@ export function MainView() {
           </Box>
           <Select
             onChange={handleCategoryChange}
-            width="80%"
+            width="60%"
             backgroundColor="white"
-            mt={2}
+            mt={10}
             ml={10}
             size="sm"
             alignItems="center"
@@ -170,15 +196,15 @@ export function MainView() {
             <option value="C006">영화/드라마 게시판</option>
             <option value="C007">게임게시판</option>
           </Select>
-          <Box mt={50} ml={10}>
-            <Text color={"red.300"}>**둘 중에 하나만 사용할 예정**</Text>
-            <Button mb={1} onClick={() => setBaseOnCurrent(true)}>
-              현재날짜 기준으로 -7
-            </Button>
-            <Button onClick={() => setBaseOnCurrent(false)}>
-              현재날짜가 속한 요일,달 기준으로
-            </Button>
-          </Box>
+          {/*<Box mt={50} ml={10}>*/}
+          {/*  <Text color={"red.300"}>**둘 중에 하나만 사용할 예정**</Text>*/}
+          {/*  <Button mb={1} onClick={() => setBaseOnCurrent(true)}>*/}
+          {/*    현재날짜 기준으로 -7*/}
+          {/*  </Button>*/}
+          {/*  <Button onClick={() => setBaseOnCurrent(false)}>*/}
+          {/*    현재날짜가 속한 요일,달 기준으로*/}
+          {/*  </Button>*/}
+          {/*</Box>*/}
         </Box>
 
         <Box>
@@ -206,9 +232,9 @@ export function MainView() {
             </Flex>
           </Box>
         </Box>
-        <Box color="white" mt={600} ml={50}>
+        <Button color="white" mt={600} ml={50} variant={"link"}>
           {firstList.categoryName}게시판으로 이동하기 >
-        </Box>
+        </Button>
       </Flex>
       <MainBoardList />
     </Box>
