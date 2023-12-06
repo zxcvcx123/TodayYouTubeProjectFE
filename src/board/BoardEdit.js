@@ -197,18 +197,13 @@ function BoardEdit() {
       draft[updateField] = e.target.value;
 
       // title이 0 이상일 경우 titleError를 초기화
-      if (updateField === "title") {
-        console.log(draft[updateField]);
-        if (updateField.trim().length > 0) {
-          setTitleError("");
-        }
+      if (updateField === "title" && updateField.trim().length > 0) {
+        setTitleError("");
       }
+
       // content가 0 이상일 경우 contentError를 초기화
-      if (updateField === "content") {
-        console.log(draft[updateField]);
-        if (updateField.trim().length > 0) {
-          setContentError("");
-        }
+      if (updateField === "content" && updateField.trim().length > 0) {
+        setContentError("");
       }
     });
   }
@@ -217,7 +212,7 @@ function BoardEdit() {
     <Box border={"2px solid black"} m={5}>
       <Heading mb={5}>유튜브 추천 :: 게시글 수정하기</Heading>
 
-      {/* 제목 */}
+      {/* -------------------- 제목 -------------------- */}
       <FormControl mb={2} isInvalid={titleError}>
         <FormLabel id="title">제목</FormLabel>
         <Input
@@ -227,7 +222,7 @@ function BoardEdit() {
         <FormErrorMessage>{titleError}</FormErrorMessage>
       </FormControl>
 
-      {/* 링크 */}
+      {/* -------------------- 링크 -------------------- */}
       <FormControl mb={2}>
         <FormLabel>링크</FormLabel>
         <Input
@@ -236,7 +231,7 @@ function BoardEdit() {
         />
       </FormControl>
 
-      {/* 본문 */}
+      {/* -------------------- 본문 -------------------- */}
       <FormControl mb={2} isInvalid={contentError}>
         <FormLabel id="content">본문</FormLabel>
         <Box border={"1px solid red"}>
@@ -252,7 +247,7 @@ function BoardEdit() {
         <FormErrorMessage>{contentError}</FormErrorMessage>
       </FormControl>
 
-      {/* 파일 */}
+      {/* -------------------- 파일 -------------------- */}
       <Filednd
         editUploadFiles={editUploadFiles}
         setEditUploadFiles={setEditUploadFiles}
@@ -261,6 +256,7 @@ function BoardEdit() {
         uploadFiles={uploadFiles}
       />
 
+      {/* -------------------- 버튼 섹션 --------------------*/}
       {/* 저장 버튼 */}
       <Button onClick={handleSubmit} colorScheme="blue">
         수정 완료
