@@ -30,7 +30,7 @@ function Chat() {
   const subscription = useRef(null);
 
   useEffect(() => {
-    if (token.detectLogin) {
+    if (loginInfo.member_id !== "") {
       setSetIdAccess(true);
       setChatId(loginInfo.member_id);
     }
@@ -38,7 +38,7 @@ function Chat() {
     if (socket !== null) {
       getSocket();
     }
-  }, []);
+  }, [loginInfo]);
 
   if (socket !== null) {
     stompClient = socket;
