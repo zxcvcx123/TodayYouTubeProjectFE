@@ -11,7 +11,7 @@ import { DetectLoginContext } from "../component/LoginProvider";
 import axios from "axios";
 
 // 게시물 조회시 좋아요 출력
-function BoardLike({ like, board, onClick, id }) {
+function BoardLike({ id }) {
   const { loginInfo } = useContext(DetectLoginContext);
 
   // 소켓
@@ -21,29 +21,25 @@ function BoardLike({ like, board, onClick, id }) {
   const subscription = useRef(null);
 
   const [countLike, setCountLike] = useState(null);
-  const [checkId, setCheckId] = useState(null);
-  const [arr, setArr] = useState([]);
+  const [like, setLike] = useState(null);
 
   useEffect(() => {
-    if (loginInfo.member_id !== "") {
-      axios
-        .post("/api/like/board", {
-          board_id: id,
-          member_id: loginInfo.member_id,
-        })
-        .then((response) => {
-          setCountLike(response.data.countlike);
-          setCheckId(response.data.checkId);
-          console.log("axios: " + response.data.checkId);
-        })
-        .catch(() => console.log("bad"))
-        .finally(() => console.log("완료"));
-    }
+    axios
+      .post("/api/like/board", {
+        board_id: id,
+        member_id: localStorage.getItem("memberInfo"),
+      })
+      .then((response) => {
+        setCountLike(response.data.countlike);
+        setLike(response.data.like);
+      })
+      .catch(() => console.log("bad"))
+      .finally(() => console.log("완료"));
 
     // if (socket !== null) {
     //   getSocket();
     // }
-  }, [loginInfo]);
+  }, []);
 
   if (socket !== null) {
     stompClient = socket;
@@ -66,36 +62,55 @@ function BoardLike({ like, board, onClick, id }) {
   function getSocket() {
     console.log("BoardLike에서 소켓연결");
     unSubscribe();
+
     subscription.current = stompClient.current.subscribe(
       "/topic/like",
       (res) => {
-        JSON.parse(res.body);
-        console.log(JSON.parse(res._body));
-        const data = JSON.parse(res._body);
+        console.log(res.body);
+        const data = JSON.parse(res.body);
         setCountLike(data.countlike);
-        setCheckId(data.checkId);
-        console.log(data);
+
         // return setArr((arr) => [...arr, data.checkId]);
+      },
+    );
+
+    subscription.current = stompClient.current.subscribe(
+      "/queue/like/" + localStorage.getItem("memberInfo"),
+      (res1) => {
+        console.log(res1.body);
+        const data1 = JSON.parse(res1.body);
+        setLike(data1.like);
       },
     );
   }
 
-  // console.log("들어있는 값: " + checkId);
-  // console.log("현재 로그인 계정: " + loginInfo.member_id);
-  // console.log(arr);
-  function sendLike() {
+  function send() {
+    stompClient.current.publish({
+      destination: "/app/like/add/" + localStorage.getItem("memberInfo"),
+      body: JSON.stringify({
+        board_id: id,
+        member_id: localStorage.getItem("memberInfo"),
+      }),
+    });
+
     stompClient.current.publish({
       destination: "/app/like/",
-      body: JSON.stringify({ board_id: id, member_id: loginInfo.member_id }),
+      body: JSON.stringify({
+        board_id: id,
+        member_id: localStorage.getItem("memberInfo"),
+      }),
     });
   }
 
   return (
     <>
       <Flex>
-        <Button onClick={sendLike}>
-          {checkId !== null &&
-          checkId.find((list) => list === loginInfo.member_id) ? (
+        <Button
+          onClick={() => {
+            send();
+          }}
+        >
+          {like === 1 ? (
             <FontAwesomeIcon icon={fullHeart} />
           ) : (
             <FontAwesomeIcon icon={emptyHeart} />
