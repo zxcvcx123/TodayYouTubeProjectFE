@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Box,
   Button,
   FormControl,
+  FormErrorMessage,
   FormHelperText,
   FormLabel,
   Heading,
   Input,
   Spinner,
   Textarea,
+  useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
@@ -17,16 +19,31 @@ import { Filednd } from "../file/Filednd";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import Editor from "../component/Editor";
+import { DetectLoginContext } from "../component/LoginProvider";
 
 function BoardEdit() {
-  const [board, updateBoard] = useImmer(null);
+  /* 로그인 정보 컨텍스트 */
+  const { token, handleLogout, loginInfo, validateToken } =
+    useContext(DetectLoginContext);
+
+  /* use state */
   const [editUploadFiles, setEditUploadFiles] = useState([]);
   const [uploadFiles, setUploadFiles] = useState([]);
   const [mode, setMode] = useState("");
+  const [titleError, setTitleError] = useState("");
+  const [contentError, setContentError] = useState("");
 
+  /* use immer */
+  const [board, updateBoard] = useImmer(null);
+
+  /* use params */
   const { id } = useParams();
 
+  /* use navigate */
   const navigate = useNavigate();
+
+  /* use toast */
+  const toast = useToast();
 
   // 초기 렌더링으로 게시물의 데이터를 가져와 상태를 업데이트 한다.
   useEffect(() => {
@@ -47,6 +64,32 @@ function BoardEdit() {
       .finally();
   }, []);
 
+  // useEffect를 사용하여 titleError가 변경(에러발생)될 때마다 스크롤이 제목 라벨으로 이동
+  useEffect(() => {
+    // 동시에 발생했을 경우에는 title로 먼저 스크롤
+    if (titleError && contentError) {
+      const errorElement = document.getElementById("title");
+      if (errorElement) {
+        errorElement.scrollIntoView({ behavior: "smooth" });
+      }
+    } else {
+      if (titleError) {
+        // 오류 메시지가 있을 때 해당 영역으로 스크롤 이동
+        const errorElement = document.getElementById("title");
+        if (errorElement) {
+          errorElement.scrollIntoView({ behavior: "smooth" });
+        }
+      }
+
+      if (contentError) {
+        const errorElement = document.getElementById("content");
+        if (errorElement) {
+          errorElement.scrollIntoView({ behavior: "smooth" });
+        }
+      }
+    }
+  }, [titleError, contentError]);
+
   // 게시글을 로딩중이라면 스피너 돌리기
   if (board === null) {
     return <Spinner />;
@@ -56,6 +99,33 @@ function BoardEdit() {
   function handleSubmit() {
     let uuSrc = getSrc();
 
+    // 로그인 여부 검증
+    if (!token.detectLogin) {
+      window.alert("비로그인 사용자입니다.");
+      navigate("/member/login");
+      return;
+    }
+
+    // 작성자 본인 여부 검증
+    if (loginInfo.member_id === board.board_member_id) {
+      navigate("/board/edit/" + id);
+    } else {
+      window.alert("작성자 본인만 수정이 가능합니다.");
+    }
+
+    if (!board.title || board.title.trim() === "") {
+      console.log("제목을 입력해주세요. title은 null이거나 공백이면 안 됨.");
+      setTitleError("제목을 입력해주세요. title은 null이거나 공백이면 안 됨.");
+      return;
+    }
+
+    if (!board.content || board.content.trim() === "") {
+      console.log("본문을 입력해주세요. 본문은 null이거나 공백이면 안 됨.");
+      setContentError("본문을 입력해주세요. 본문은 null이거나 공백이면 안 됨.");
+      return;
+    }
+
+    // 수정 버튼 클릭시 loginInfo.member_id 같이 넘겨줌 => 로그인 상태 확인용.
     axios
       .putForm("/api/board/edit", {
         id: board.id,
@@ -69,11 +139,36 @@ function BoardEdit() {
         is_show: board.is_show,
         countlike: board.countlike,
         views: board.views,
+        login_member_id: loginInfo.member_id,
         uuSrc,
         uploadFiles,
       })
-      .then(() => navigate("/board/list"))
-      .catch(() => console.log("bad"))
+      .then(() => {
+        navigate("/board/list");
+        toast({
+          description: "게시글 수정에 성공했습니다.",
+          status: "success",
+        });
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          toast({
+            description: "권한정보가 없습니다.",
+            status: "error",
+          });
+        } else if (error.response.status === 403) {
+          toast({
+            description: "접근 불가한 권한입니다.",
+            status: "error",
+          });
+        } else {
+          toast({
+            description: "게시글 수정에 실패하였습니다.",
+            status: "error",
+          });
+        }
+        console.log("bad");
+      })
       .finally(() => console.log("done"));
   }
 
@@ -100,6 +195,16 @@ function BoardEdit() {
   function handleBoardUpdate(e, updateField) {
     updateBoard((draft) => {
       draft[updateField] = e.target.value;
+
+      // title이 0 이상일 경우 titleError를 초기화
+      if (updateField === "title" && updateField.trim().length > 0) {
+        setTitleError("");
+      }
+
+      // content가 0 이상일 경우 contentError를 초기화
+      if (updateField === "content" && updateField.trim().length > 0) {
+        setContentError("");
+      }
     });
   }
 
@@ -107,16 +212,17 @@ function BoardEdit() {
     <Box border={"2px solid black"} m={5}>
       <Heading mb={5}>유튜브 추천 :: 게시글 수정하기</Heading>
 
-      {/* 제목 */}
-      <FormControl mb={2}>
-        <FormLabel>제목</FormLabel>
+      {/* -------------------- 제목 -------------------- */}
+      <FormControl mb={2} isInvalid={titleError}>
+        <FormLabel id="title">제목</FormLabel>
         <Input
           value={board.title}
           onChange={(e) => handleBoardUpdate(e, "title")}
         />
+        <FormErrorMessage>{titleError}</FormErrorMessage>
       </FormControl>
 
-      {/* 링크 */}
+      {/* -------------------- 링크 -------------------- */}
       <FormControl mb={2}>
         <FormLabel>링크</FormLabel>
         <Input
@@ -125,9 +231,9 @@ function BoardEdit() {
         />
       </FormControl>
 
-      {/* 본문 */}
-      <FormControl mb={2}>
-        <FormLabel>본문</FormLabel>
+      {/* -------------------- 본문 -------------------- */}
+      <FormControl mb={2} isInvalid={contentError}>
+        <FormLabel id="content">본문</FormLabel>
         <Box border={"1px solid red"}>
           {/* data={board.content} : 페이지 초기값을 설정한다. */}
           {/* setContent1 : 사용자가 수정한 내용을 받아와 content 필드를 업데이트 한다. */}
@@ -138,9 +244,10 @@ function BoardEdit() {
             }
           />
         </Box>
+        <FormErrorMessage>{contentError}</FormErrorMessage>
       </FormControl>
 
-      {/* 파일 */}
+      {/* -------------------- 파일 -------------------- */}
       <Filednd
         editUploadFiles={editUploadFiles}
         setEditUploadFiles={setEditUploadFiles}
@@ -149,6 +256,7 @@ function BoardEdit() {
         uploadFiles={uploadFiles}
       />
 
+      {/* -------------------- 버튼 섹션 --------------------*/}
       {/* 저장 버튼 */}
       <Button onClick={handleSubmit} colorScheme="blue">
         수정 완료
