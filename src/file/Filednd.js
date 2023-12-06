@@ -34,8 +34,9 @@ export function Filednd({
   uploadFiles,
 }) {
   const [isActive, setIsActive] = useState(false);
-
   const [preViews, setPreviews] = useState([]);
+
+  let fileCheck = 0;
 
   // BoardEdit에서 넘어오는 값들
   const [fileKey, setFileKey] = useState("");
@@ -49,24 +50,48 @@ export function Filednd({
   useEffect(() => {
     // 파일이 있으면 동작 실행
     if (uploadFiles.length !== 0) {
-      // 새 배열 선언
-      const newPreviews = [];
-      // 반복문
-      for (let i = 0; i < uploadFiles.length; i++) {
-        // 파일리더 객체 선언
-        const reader = new FileReader();
-        // 파일리더의 onloadend 메소드 실행
-        reader.onloadend = () => {
-          // 파일을 읽은 값(reader.result)를 새 배열(newPreviews)에 추가
-          newPreviews.push(reader.result);
-          // 배열에 추가된 파일이랑 기존 파일이 같으면
-          if (newPreviews.length === uploadFiles.length) {
-            // 가공된 파일 배열을 새 state에 추가
-            setPreviews(newPreviews);
-          }
-        };
-        // html에 이미지를 미리보기 할 수 있게 url주소로 나옴
-        reader.readAsDataURL(uploadFiles[i]);
+      // 수정할 파일 개수와 새로 첨부할 파일 개수가 5개 초과 방지
+      if (editUploadFiles.length > 0) {
+        let max = editUploadFiles.length + uploadFiles.length;
+        if (max > 5) {
+          alert("파일은 최대 5개까지 첨부 가능합니다.");
+          let startIndex = 5 - editUploadFiles.length;
+          uploadFiles.splice(startIndex, uploadFiles.length - 1);
+          setUploadFiles(uploadFiles);
+        }
+      }
+
+      // 첨부할 파일 개수가 5개 초과 방지
+      if (uploadFiles.length > 5) {
+        alert("파일은 최대 5개까지 첨부 가능합니다.");
+        let num = uploadFiles.length - 5;
+        uploadFiles.splice(5, num);
+        setUploadFiles(uploadFiles);
+      }
+
+      // 첨부파일 개수 5개까지
+      if (uploadFiles.length < 6) {
+        // 새 배열 선언
+        const newPreviews = [];
+        // 반복문
+        for (let i = 0; i < uploadFiles.length; i++) {
+          // 파일리더 객체 선언
+          const reader = new FileReader();
+          // 파일리더의 onloadend 메소드 실행
+          reader.onloadend = () => {
+            // 파일을 읽은 값(reader.result)를 새 배열(newPreviews)에 추가
+            newPreviews.push(reader.result);
+            // 배열에 추가된 파일이랑 기존 파일이 같으면
+            if (newPreviews.length === uploadFiles.length) {
+              // 가공된 파일 배열을 새 state에 추가
+              console.log("new파일길이: " + newPreviews.length);
+              console.log("upload파일길이: " + uploadFiles.length);
+              setPreviews(newPreviews);
+            }
+          };
+          // html에 이미지를 미리보기 할 수 있게 url주소로 나옴
+          reader.readAsDataURL(uploadFiles[i]);
+        }
       }
     }
   }, [uploadFiles]);
@@ -96,12 +121,11 @@ export function Filednd({
   // 파일을 드래그해서 놓을 때
   function handleDrop(e) {
     e.preventDefault();
-    setUploadFiles(Array.from(e.dataTransfer.files));
+    setUploadFiles([...uploadFiles, ...Array.from(e.dataTransfer.files)]);
   }
 
   // 파일창 열려서 첨부할 때
   function handleUploadFile(e) {
-    setUploadFiles(e.target.files);
     setUploadFiles([...uploadFiles, ...e.target.files]);
   }
 
@@ -143,10 +167,10 @@ export function Filednd({
             gap={5}
           >
             {editUploadFiles.map((fileList) => (
-              <Card key={fileList.id} h={"100%"}>
+              <Card key={fileList.id} h={"100%"} w={"25%"}>
                 <CardBody
                   w={"100%"}
-                  h={"auto"}
+                  h={"100%"}
                   backgroundImage={fileList.fileurl}
                   backgroundSize={"100%"}
                 ></CardBody>
@@ -216,13 +240,17 @@ export function Filednd({
             {uploadFiles.length === 0 || (
               <Box id="image_container" display={"flex"} gap={2} h={"80%"}>
                 {preViews.map((preview, index) => (
-                  <Box key={index} display={"inline-block"} h={"80%"}>
+                  <Box key={index} display={"inline-block"} h={"80%"} w={"25%"}>
                     <Img
                       src={preview}
                       alt={`미리보기 ${index + 1}`}
                       h={"100%"}
+                      w={"100%"}
                     />
-                    <button onClick={() => removeUploadFile(index)}>
+                    <button
+                      style={{ width: "15%" }}
+                      onClick={() => removeUploadFile(index)}
+                    >
                       <FontAwesomeIcon
                         icon={faCircleXmark}
                         color="red"
@@ -234,7 +262,7 @@ export function Filednd({
               </Box>
             )}
             <Text lineHeight={"50px"}>
-              파일 용량은 최대 10MB, 1개당 1MB 까지 가능 합니다.
+              파일 용량은 최대 10MB, 1개당 1MB, 최대 5개까지 가능 합니다.
             </Text>
           </FormLabel>
         </FormControl>

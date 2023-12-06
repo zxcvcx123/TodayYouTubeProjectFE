@@ -51,8 +51,9 @@ const Editor = ({ uuid, setUuid, setContent1, data }) => {
           }}
           onChange={(event, editor) => {
             setContent1(editor.getData());
-            console.log("Change.");
-            // console.log({ event, editor, content });
+
+            const data1 = editor.getData();
+            console.log({ event, editor, data1 });
           }}
           onFocus={(event, editor) => {
             editor.ui.view.editable.element.style.minHeight = "500px";

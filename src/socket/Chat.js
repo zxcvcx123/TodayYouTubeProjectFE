@@ -1,43 +1,52 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import * as SockJS from "sockjs-client";
 import * as StompJS from "@stomp/stompjs";
-import { useParams } from "react-router-dom";
 import { Stomp } from "@stomp/stompjs";
-import { Box, Button, Center, Flex, Input, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Center,
+  Flex,
+  Input,
+  Spinner,
+  Text,
+} from "@chakra-ui/react";
+import { useOutletContext } from "react-router-dom";
+import { DetectLoginContext } from "../component/LoginProvider";
 
-function Chat(props) {
-  const stompClient = useRef(); // useRef로 connect()가 안끊기게하기
-  const [content, setContent] = useState("");
+function Chat() {
+  let stompClient;
+
+  const { token, loginInfo } = useContext(DetectLoginContext);
+  const { socket } = useOutletContext();
+
   const [text, setText] = useState("");
   const [chatId, setChatId] = useState("");
-  const [chat, setChat] = useState([]);
+  //const [chat, setChat] = useState([]);
   const [setIdAccess, setSetIdAccess] = useState(false);
   const [connection, setConnection] = useState(true);
 
-  const [testVal, setTestVal] = useState(0);
+  stompClient = useRef();
+  const subscription = useRef(null);
 
-  // http://localhost:3000/gs-guide-websocket 소켓 주소
-  function connect() {
-    let socket = new SockJS("http://localhost:3000/gs-guide-websocket");
-    stompClient.current = Stomp.over(socket);
-    stompClient.current.connect({}, function (frame) {
-      console.log("소켓연결 성공: " + frame);
-      console.log(stompClient.current);
-      stompClient.current.subscribe("/topic/greetings", (res) => {
-        JSON.parse(res.body);
-        console.log(res);
-        console.log(res._body);
-        console.log(JSON.parse(res._body));
-        const newContent = JSON.parse(res._body);
+  useEffect(() => {
+    if (loginInfo.member_id !== "") {
+      setSetIdAccess(true);
+      setChatId(loginInfo.member_id);
+    }
 
-        // === 두번 눌러야 나온걸 선생님이 해결해준 코드 ===
-        setContent(newContent);
-        const newChat = [...chat];
-        newChat.push(newContent.chat);
-        setChat(newChat);
-        // =========================================
-      });
-    });
+    if (socket !== null) {
+      getSocket();
+    }
+  }, [loginInfo]);
+
+  if (socket !== null) {
+    stompClient = socket;
+    getSocket();
+  }
+
+  if (socket === null) {
+    return <Spinner />;
   }
 
   // 채팅내용
@@ -46,16 +55,10 @@ function Chat(props) {
       destination: "/app/hello",
       body: JSON.stringify({ id: chatId, chat: text }),
     });
-    //send("/app/hello", {}, JSON.stringify({ name: "테스트" }));
   }
 
   // 아이디 등록하기
   function sendId() {
-    stompClient.current.publish({
-      destination: "/app/hello",
-      body: JSON.stringify({ id: chatId }),
-    });
-    //send("/app/hello", {}, JSON.stringify({ name: "테스트" }));
     if (chatId.length > 0) {
       setSetIdAccess(true);
     }
@@ -69,11 +72,6 @@ function Chat(props) {
     setConnection(false);
   }
 
-  useEffect(() => {
-    connect();
-    setChat([]);
-  }, [connection]);
-
   // 채팅내용
   function handleTextInput(e) {
     setText(e.target.value);
@@ -84,31 +82,62 @@ function Chat(props) {
     setChatId(e.target.value);
   }
 
-  function testBtn() {
-    stompClient.current.publish({
-      destination: "/app/hello",
-      body: JSON.stringify({ id: chatId, chat: text }),
-    });
-    //send("/app/hello", {}, JSON.stringify({ name: "테스트" }));
-    if (chatId.length > 0) {
-      setSetIdAccess(true);
+  // 채팅창 가져오기
+  function getSocket() {
+    console.log("Chat에서 소켓 연결");
+
+    unSubscribe();
+    subscription.current = stompClient.current.subscribe(
+      "/topic/greetings",
+      (res) => {
+        JSON.parse(res.body);
+        console.log(JSON.parse(res._body));
+        const json = JSON.parse(res._body);
+
+        if (json.chat !== null) {
+          document
+            .getElementById("chatArea")
+            .insertAdjacentHTML(
+              "beforeend",
+              "<p>" + json.id + ": " + json.chat + "</p>",
+            );
+        }
+
+        // =========================================
+        // const newContent = JSON.parse(res._body);
+        // setContent(newContent);
+        // const newChat = [...chat];
+        // newChat.push(newContent.chat);
+        // setChat(newChat);
+        // =========================================
+
+        // return setChat((chatList) => [...chatList, json]);
+      },
+    );
+  }
+
+  // ===== 두번 연결 되니깐 한번은 끊어줌 =====
+  function unSubscribe() {
+    if (subscription.current !== null) {
+      subscription.current.unsubscribe();
     }
   }
+  // ========================================
 
   return (
     <>
-      {setIdAccess || (
-        <Center>
-          <Flex w={"50%"}>
-            <Input
-              value={chatId}
-              onChange={handleChatId}
-              placeholder="아이디를 입력해주세요"
-            />
-            <Button onClick={sendId}>입력</Button>
-          </Flex>
-        </Center>
-      )}
+      {/*{setIdAccess || (*/}
+      {/*  <Center>*/}
+      {/*    <Flex w={"50%"}>*/}
+      {/*      <Input*/}
+      {/*        value={chatId}*/}
+      {/*        onChange={handleChatId}*/}
+      {/*        placeholder="아이디를 입력해주세요"*/}
+      {/*      />*/}
+      {/*      <Button onClick={sendId}>입력</Button>*/}
+      {/*    </Flex>*/}
+      {/*  </Center>*/}
+      {/*)}*/}
       {setIdAccess && (
         <Center>
           <Box w={"50%"} h={"500px"}>
@@ -119,7 +148,7 @@ function Chat(props) {
                 textAlign={"center"}
                 h={"50px"}
               >
-                {content.id}님 반갑습니다.
+                {chatId}님 반갑습니다.
               </Box>
             </Center>
 
@@ -130,11 +159,8 @@ function Chat(props) {
                 border={"1px solid black"}
                 textIndent={"15px"}
                 h={"400px"}
-              >
-                {chat.map((item, index) => (
-                  <Text key={index}>{item}</Text>
-                ))}
-              </Box>
+                id="chatArea"
+              ></Box>
             </Center>
 
             <Center>
