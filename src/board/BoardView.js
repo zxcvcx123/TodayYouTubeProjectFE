@@ -18,15 +18,12 @@ import BoardLike from "../like/BoardLike";
 import YoutubeInfo from "../component/YoutubeInfo";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import editor from "../component/Editor";
+import { DetectLoginContext } from "../component/LoginProvider";
+import memberInfo from "../member/memberInfo/MemberInfo";
 import { DetectLoginContext } from "../component/LoginProvider";
 import MemberProfile from "../member/MemberProfile";
 
-//  ck에디터 설정 값 (toolbar 삭제함)
-const editorConfig = {
-  toolbar: [],
-  width: "800px",
-  height: "800px",
-};
 
 function BoardView() {
   /* 로그인 정보 컨텍스트 */
@@ -50,6 +47,14 @@ function BoardView() {
 
   /* use toast */
   const toast = useToast();
+  
+  //  ck에디터 설정 값 (toolbar 삭제함)
+const editorConfig = {
+  toolbar: [],
+  width: "800px",
+  height: "800px",
+};
+  
 
   // 초기 렌더링
   useEffect(() => {
@@ -70,30 +75,39 @@ function BoardView() {
     });
   }, []);
 
-  // 초기 렌더링 좋아요 출력
-  useEffect(() => {
-    axios
-      .get("/api/like/board/" + id)
-      .then((response) => {
-        setLike(response.data);
-      })
-      .catch(() => console.log("bad"))
-      .finally(() => console.log("완료"));
-  }, []);
+  // // 초기 렌더링 좋아요 출력
+  // // BoardLike에서 대신 역할 수행중
+  // useEffect(() => {
+  //   if (loginInfo.member_id !== "") {
+  //     console.log(loginInfo.member_id);
+  //     axios
+  //       .post("/api/like/board", {
+  //         board_id: id,
+  //         member_id: loginInfo.member_id,
+  //       })
+  //       .then((response) => {
+  //         setLike(response.data);
+  //       })
+  //       .catch(() => console.log("bad"))
+  //       .finally(() => console.log("완료"));
+  //   }
+  // }, [loginInfo]);
 
   // board 불러오지 못할 시 로딩중 표시
   if (board === null) {
     return <Spinner />;
   }
 
-  // 좋아요 버튼 클릭
-  function handleLike() {
-    axios
-      .post("/api/like/board/" + id)
-      .then((response) => setLike(response.data))
-      .catch(() => console.log("bad"))
-      .finally(() => console.log("done"));
-  }
+
+  // // 소켓처리로 인해 주석처리
+  // function handleLike() {
+  //   axios
+  //     .post("/api/like/board/" + id)
+  //     .then((response) => setLike(response.data))
+  //     .catch(() => console.log("bad"))
+  //     .finally(() => console.log("done"));
+  // }
+
 
   // 게시글 삭제 버튼 클릭
   function handleDeleteClick() {
@@ -233,9 +247,10 @@ function BoardView() {
           </Flex>
           {/* 좋아요, 조회수 */}
           <Flex alignItems={"center"} gap={"5"}>
-            <BoardLike id={id} like={like} board={board} onClick={handleLike} />
+             <BoardLike id={id} like={like} board={board} />
             <Text> | 조회수 : {board.views}</Text>
           </Flex>
+
         </Flex>
       </FormControl>
 
@@ -267,13 +282,7 @@ function BoardView() {
       {uploadFiles.length > 0 && (
         <Box mb={2}>
           <Text>파일 목록</Text>
-          <Box
-            border={"1px solid #edf1f6"}
-            h={"50px"}
-            display={"flex"}
-            alignItems={"center"}
-            gap={3}
-          >
+          <Box border={"1px solid #edf1f6"} h={"auto"} textIndent={"10px"}>
             {uploadFiles.map((fileList) => (
               <Link
                 key={fileList.id}

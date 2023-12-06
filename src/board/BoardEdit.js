@@ -41,6 +41,7 @@ function BoardEdit() {
 
   /* use navigate */
   const navigate = useNavigate();
+  console.log("수정: " + editUploadFiles.length);
 
   /* use toast */
   const toast = useToast();
