@@ -206,7 +206,12 @@ function MemberInfoMyInfo({ loginInfo }) {
                                   <Tbody>
                                     <Tr>
                                       <Td>
-                                        <Badge colorScheme="">IRON</Badge>
+                                        <Badge
+                                          backgroundColor={"#663300"}
+                                          color={"white"}
+                                        >
+                                          IRON
+                                        </Badge>
                                       </Td>
                                       <Td>아이언</Td>
                                       <Td>아직 안정함</Td>
@@ -214,8 +219,8 @@ function MemberInfoMyInfo({ loginInfo }) {
                                     <Tr>
                                       <Td>
                                         <Badge
-                                          backgroundColor={"brown"}
-                                          color="black"
+                                          backgroundColor={"#996600"}
+                                          color="white"
                                         >
                                           BRONZE
                                         </Badge>
@@ -225,7 +230,12 @@ function MemberInfoMyInfo({ loginInfo }) {
                                     </Tr>
                                     <Tr>
                                       <Td>
-                                        <Badge color="white">SILVER</Badge>
+                                        <Badge
+                                          backgroundColor={"#CCCCCC"}
+                                          color="white"
+                                        >
+                                          SILVER
+                                        </Badge>
                                       </Td>
                                       <Td>실버</Td>
                                       <Td>아직 안정함</Td>
@@ -233,10 +243,22 @@ function MemberInfoMyInfo({ loginInfo }) {
                                     <Tr>
                                       <Td>
                                         <Badge
-                                          backgroundColor={"gold"}
+                                          backgroundColor={"#FFCC00"}
                                           color="white"
                                         >
                                           GOLD
+                                        </Badge>
+                                      </Td>
+                                      <Td>골드</Td>
+                                      <Td>아직 안정함</Td>
+                                    </Tr>
+                                    <Tr>
+                                      <Td>
+                                        <Badge
+                                          backgroundColor={"#33FF33"}
+                                          color="white"
+                                        >
+                                          Platinum
                                         </Badge>
                                       </Td>
                                       <Td>골드</Td>
