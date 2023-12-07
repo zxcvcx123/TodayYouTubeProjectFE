@@ -13,55 +13,37 @@ import {
 } from "@chakra-ui/react";
 import { useOutletContext } from "react-router-dom";
 import { DetectLoginContext } from "../component/LoginProvider";
+import { SocketContext } from "./Socket";
 
 function Chat() {
-  let stompClient;
-
-  const { token, loginInfo } = useContext(DetectLoginContext);
-  const { socket } = useOutletContext();
-
+  const { connectUser } = useContext(DetectLoginContext);
+  const { stompClient, chatId, chat } = useContext(SocketContext);
+  const { test } = useOutletContext();
   const [text, setText] = useState("");
-  const [chatId, setChatId] = useState("");
-  //const [chat, setChat] = useState([]);
   const [setIdAccess, setSetIdAccess] = useState(false);
   const [connection, setConnection] = useState(true);
 
-  stompClient = useRef();
-  const subscription = useRef(null);
-
   useEffect(() => {
-    if (loginInfo.member_id !== "") {
-      setSetIdAccess(true);
-      setChatId(loginInfo.member_id);
+    setSetIdAccess(true);
+    chatContent();
+  }, [chat]);
+
+  const chatContent = () => {
+    const chatArea = document.getElementById("chatArea");
+    if (chatArea) {
+      chatArea.insertAdjacentHTML(
+        "beforeend",
+        "<p>" + chatId + " : " + chat + "</p>",
+      );
     }
-
-    if (socket !== null) {
-      getSocket();
-    }
-  }, [loginInfo]);
-
-  if (socket !== null) {
-    stompClient = socket;
-    getSocket();
-  }
-
-  if (socket === null) {
-    return <Spinner />;
-  }
+  };
 
   // 채팅내용
   function sendMsg() {
     stompClient.current.publish({
       destination: "/app/hello",
-      body: JSON.stringify({ id: chatId, chat: text }),
+      body: JSON.stringify({ id: connectUser, chat: text }),
     });
-  }
-
-  // 아이디 등록하기
-  function sendId() {
-    if (chatId.length > 0) {
-      setSetIdAccess(true);
-    }
   }
 
   function disconnectSocket() {
@@ -77,67 +59,8 @@ function Chat() {
     setText(e.target.value);
   }
 
-  // 아이디 입력
-  function handleChatId(e) {
-    setChatId(e.target.value);
-  }
-
-  // 채팅창 가져오기
-  function getSocket() {
-    console.log("Chat에서 소켓 연결");
-
-    unSubscribe();
-    subscription.current = stompClient.current.subscribe(
-      "/topic/greetings",
-      (res) => {
-        JSON.parse(res.body);
-        console.log(JSON.parse(res._body));
-        const json = JSON.parse(res._body);
-
-        if (json.chat !== null) {
-          document
-            .getElementById("chatArea")
-            .insertAdjacentHTML(
-              "beforeend",
-              "<p>" + json.id + ": " + json.chat + "</p>",
-            );
-        }
-
-        // =========================================
-        // const newContent = JSON.parse(res._body);
-        // setContent(newContent);
-        // const newChat = [...chat];
-        // newChat.push(newContent.chat);
-        // setChat(newChat);
-        // =========================================
-
-        // return setChat((chatList) => [...chatList, json]);
-      },
-    );
-  }
-
-  // ===== 두번 연결 되니깐 한번은 끊어줌 =====
-  function unSubscribe() {
-    if (subscription.current !== null) {
-      subscription.current.unsubscribe();
-    }
-  }
-  // ========================================
-
   return (
     <>
-      {/*{setIdAccess || (*/}
-      {/*  <Center>*/}
-      {/*    <Flex w={"50%"}>*/}
-      {/*      <Input*/}
-      {/*        value={chatId}*/}
-      {/*        onChange={handleChatId}*/}
-      {/*        placeholder="아이디를 입력해주세요"*/}
-      {/*      />*/}
-      {/*      <Button onClick={sendId}>입력</Button>*/}
-      {/*    </Flex>*/}
-      {/*  </Center>*/}
-      {/*)}*/}
       {setIdAccess && (
         <Center>
           <Box w={"50%"} h={"500px"}>
@@ -148,7 +71,7 @@ function Chat() {
                 textAlign={"center"}
                 h={"50px"}
               >
-                {chatId}님 반갑습니다.
+                {connectUser}님 반갑습니다.
               </Box>
             </Center>
 
@@ -159,7 +82,6 @@ function Chat() {
                 border={"1px solid black"}
                 textIndent={"15px"}
                 h={"400px"}
-                id="chatArea"
               ></Box>
             </Center>
 

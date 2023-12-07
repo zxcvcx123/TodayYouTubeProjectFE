@@ -37,49 +37,6 @@ export function Nav({ setSocket }) {
     useContext(DetectLoginContext);
   let navigate = useNavigate();
 
-  // 소켓 연결
-  const stompClient = useRef(); // useRef로 connect()가 안끊기게하기
-  const subscription = useRef(null);
-
-  function connect() {
-    // 기존 연결방식
-    // let socket = new SockJS("http://localhost:3000/ws", null, {
-    //   transports: ["websocket", "xhr-streaming", "xhr-polling"],
-    // });
-
-    console.log(stompClient.current);
-
-    // 이미 연결되어 있으면 한번 더 연결시키는거 방지
-    // 추천 연결방식
-    if (!stompClient.current) {
-      stompClient.current = Stomp.over(function () {
-        return new SockJS("http://localhost:3000/ws", "ws", {
-          transports: ["websocket", "xhr-streaming", "xhr-polling"],
-        });
-      });
-      stompClient.current.connect({}, function (frame) {
-        unSubscribe();
-        console.log("NAV에서 소켓연결 성공: " + frame);
-        console.log(stompClient.current);
-        console.log(frame);
-
-        setSocket(stompClient);
-      });
-    }
-  }
-
-  // ===== 두번 연결 되니깐 한번은 끊어줌 =====
-  function unSubscribe() {
-    if (subscription.current !== null) {
-      subscription.current.unsubscribe();
-    }
-  }
-  // ========================================
-
-  useEffect(() => {
-    connect();
-  }, []);
-
   return (
     <>
       <Flex
