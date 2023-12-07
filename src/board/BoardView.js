@@ -43,6 +43,7 @@ function BoardView() {
 
   // 현재 URL 파악하기
   const location = useLocation();
+  const boardInfo = location.state;
 
   // 현재 URL에서 category 명 추출
   const currentParams = new URLSearchParams(location.search).get("category");
@@ -262,6 +263,9 @@ function BoardView() {
 
   return (
     <Box m={"50px 20% 20px 50px"}>
+      <Box mb={5}>
+        <Heading>{boardInfo} 게시판</Heading>
+      </Box>
       <Heading>{board.id} 번 게시글 보기(임시 게시글 번호 확인용!!)</Heading>
 
       {/* -------------------- 상단 영역 -------------------- */}
