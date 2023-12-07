@@ -139,6 +139,7 @@ function MemberInfo(props) {
                 onClick={handleMemberInfoMyInfo}
                 fontSize={"18px"}
                 className="myInfoBtn"
+                backgroundColor={"white"}
               >
                 내 정보
               </Button>
