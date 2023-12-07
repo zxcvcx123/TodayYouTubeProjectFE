@@ -9,25 +9,21 @@ import * as StompJS from "@stomp/stompjs";
 import { Stomp } from "@stomp/stompjs";
 import { DetectLoginContext } from "../component/LoginProvider";
 import axios from "axios";
+import { SocketContext } from "../socket/Socket";
 
 // 게시물 조회시 좋아요 출력
 function BoardLike({ id }) {
-  const { loginInfo } = useContext(DetectLoginContext);
+  const { connectUser } = useContext(DetectLoginContext);
+  const { stompClient, like, setLike, countLike, setCountLike } =
+    useContext(SocketContext);
 
-  // 소켓
-  let stompClient;
-  const { socket } = useOutletContext();
-  stompClient = useRef();
-  const subscription = useRef(null);
-
-  const [countLike, setCountLike] = useState(null);
-  const [like, setLike] = useState(null);
+  const { test } = useOutletContext();
 
   useEffect(() => {
     axios
       .post("/api/like/board", {
         board_id: id,
-        member_id: localStorage.getItem("memberInfo"),
+        member_id: connectUser,
       })
       .then((response) => {
         setCountLike(response.data.countlike);
@@ -35,61 +31,16 @@ function BoardLike({ id }) {
       })
       .catch(() => console.log("bad"))
       .finally(() => console.log("완료"));
+  }, [like, countLike]);
 
-    // if (socket !== null) {
-    //   getSocket();
-    // }
-  }, []);
-
-  if (socket !== null) {
-    stompClient = socket;
-    getSocket();
-  }
-
-  if (socket === null) {
-    return <Spinner />;
-  }
-
-  // ===== 두번 연결 되니깐 한번은 끊어줌 =====
-  function unSubscribe() {
-    if (subscription.current !== null) {
-      subscription.current.unsubscribe();
-    }
-  }
-  // ========================================
-
-  // 좋아요 가져오기
-  function getSocket() {
-    console.log("BoardLike에서 소켓연결");
-    unSubscribe();
-
-    subscription.current = stompClient.current.subscribe(
-      "/topic/like",
-      (res) => {
-        console.log(res.body);
-        const data = JSON.parse(res.body);
-        setCountLike(data.countlike);
-
-        // return setArr((arr) => [...arr, data.checkId]);
-      },
-    );
-
-    subscription.current = stompClient.current.subscribe(
-      "/queue/like/" + localStorage.getItem("memberInfo"),
-      (res1) => {
-        console.log(res1.body);
-        const data1 = JSON.parse(res1.body);
-        setLike(data1.like);
-      },
-    );
-  }
-
+  // 좋아요 눌렀을때 본인 하트 현황 확인
+  // 실시간으로 좋아요 갯수 최신화 하기
   function send() {
     stompClient.current.publish({
-      destination: "/app/like/add/" + localStorage.getItem("memberInfo"),
+      destination: "/app/like/add/" + connectUser,
       body: JSON.stringify({
         board_id: id,
-        member_id: localStorage.getItem("memberInfo"),
+        member_id: connectUser,
       }),
     });
 
@@ -97,7 +48,7 @@ function BoardLike({ id }) {
       destination: "/app/like/",
       body: JSON.stringify({
         board_id: id,
-        member_id: localStorage.getItem("memberInfo"),
+        member_id: connectUser,
       }),
     });
   }

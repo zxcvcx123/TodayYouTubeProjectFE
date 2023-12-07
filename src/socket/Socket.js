@@ -10,6 +10,10 @@ function Socket({ children }) {
   const [chatId, setChatId] = useState("");
   const [chat, setChat] = useState([]);
 
+  // 좋아요
+  const [countLike, setCountLike] = useState(null);
+  const [like, setLike] = useState(null);
+
   useEffect(() => {
     connect();
   }, []);
@@ -28,10 +32,12 @@ function Socket({ children }) {
     if (stompClient.current.connected === false) {
       stompClient.current.connect({}, () => {
         chatSocket(); // 채팅
+        boardLikeSocket(); // 좋아요
       });
     }
   }
 
+  // 채팅
   const chatSocket = () => {
     console.log("채팅연결 성공");
     stompClient.current.subscribe("/topic/greetings", (res) => {
@@ -43,8 +49,37 @@ function Socket({ children }) {
     });
   };
 
+  // 게시판 좋아요 실시간
+  const boardLikeSocket = () => {
+    console.log("BoardLike에서 소켓연결");
+    stompClient.current.subscribe("/topic/like", (res) => {
+      console.log(res.body);
+      const data = JSON.parse(res.body);
+      setCountLike(data.countlike);
+    });
+
+    stompClient.current.subscribe(
+      "/queue/like/" + localStorage.getItem("memberInfo"),
+      (res1) => {
+        console.log(res1.body);
+        const data1 = JSON.parse(res1.body);
+        setLike(data1.like);
+      },
+    );
+  };
+
   return (
-    <SocketContext.Provider value={{ stompClient, chat, chatId }}>
+    <SocketContext.Provider
+      value={{
+        stompClient,
+        chat,
+        chatId,
+        countLike,
+        setCountLike,
+        like,
+        setLike,
+      }}
+    >
       {children}
     </SocketContext.Provider>
   );
