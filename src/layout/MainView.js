@@ -61,6 +61,7 @@ export function MainView() {
         setFirstList(response.data.firstBoardList);
         setOtherList(response.data.otherBoardList);
         setMainShowLink(response.data.firstBoardList.link);
+        setLinkCategory(response.data.firstBoardList.categoryName);
         navigate("?" + params);
         return () => clearTimeout(timer);
       })
@@ -252,7 +253,7 @@ export function MainView() {
               />
             </Box>
             <Button w={"1%"} color="white" mt={300} ml={100} variant={"link"}>
-              {firstList.categoryName}게시판으로 이동하기 >
+              {linkCategory}게시판으로 이동하기 >
             </Button>
           </Flex>
           <Box
@@ -278,7 +279,7 @@ export function MainView() {
                   border={"1px"}
                   borderColor={"orange"}
                   onClick={() => {
-                    setLinkCategory(firstList.category);
+                    setLinkCategory(firstList.categoryName);
                     setMainShowLink(firstList.link);
                   }}
                 >
@@ -317,7 +318,10 @@ export function MainView() {
                         key={other.id}
                         border={"1px"}
                         borderColor={"orange"}
-                        onClick={() => setMainShowLink(other.link)}
+                        onClick={() => {
+                          setLinkCategory(other.categoryName);
+                          setMainShowLink(other.link);
+                        }}
                         _hover={{ cursor: "pointer" }}
                       >
                         <YoutubeInfo
