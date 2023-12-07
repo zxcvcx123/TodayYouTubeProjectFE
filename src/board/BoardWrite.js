@@ -172,6 +172,10 @@ function BoardWrite() {
 
   return (
     <Box border={"2px solid black"} m={5}>
+      <Box mb={5}>
+        <Heading>{boardInfo} 게시판</Heading>
+      </Box>
+
       <Heading mb={5}>유튜브 추천 :: 새 글 작성하기</Heading>
 
       {/* -------------------- 제목 -------------------- */}
