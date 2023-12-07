@@ -142,8 +142,8 @@ function BoardList() {
   // -------------------------------------------------- 화면 렌더링 --------------------------------------------------
   return (
     <Flex justifyContent={"center"}>
-      {/* ------------------------- 게시글 목록 상단 바 ------------------------- */}
       <Box>
+        {/* ------------------------- 게시글 목록 상단 바 ------------------------- */}
         <Flex justifyContent={"space-between"} mb={5}>
           <Box>
             <Button onClick={handleWriteClick} colorScheme="blue">
