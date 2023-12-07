@@ -89,7 +89,7 @@ function BoardList() {
     if (!token.detectLogin) {
       onOpen();
     } else {
-      navigate("/write");
+      navigate("/write", { state: boardInfo });
     }
   }
 
