@@ -9,6 +9,7 @@ import {
   CardHeader,
   Center,
   Flex,
+  Heading,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -51,6 +52,7 @@ function BoardList() {
   // 빈 배열로 받으면 null 값 오류 안나옴
   const [pageInfo, setPageInfo] = useState([]);
   const [currentView, setCurrentView] = useState("list");
+  const [boardInfo, setBoardInfo] = useState("");
 
   const [params] = useSearchParams();
   const location = useLocation();
@@ -66,6 +68,7 @@ function BoardList() {
     axios.get("/api/board/list?" + params).then((response) => {
       setBoardList(response.data.boardList);
       setPageInfo(response.data.pageInfo);
+      setBoardInfo(response.data.boardInfo);
     });
   }, [location]);
 
@@ -144,6 +147,9 @@ function BoardList() {
     <Flex justifyContent={"center"}>
       <Box>
         {/* ------------------------- 게시글 목록 상단 바 ------------------------- */}
+        <Box mb={5}>
+          <Heading>{boardInfo} 게시판</Heading>
+        </Box>
         <Flex justifyContent={"space-between"} mb={5}>
           <Box>
             <Button onClick={handleWriteClick} colorScheme="blue">
