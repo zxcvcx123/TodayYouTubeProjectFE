@@ -22,6 +22,8 @@ import {
 import axios from "axios";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import Editor from "../component/Editor";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowTurnUp } from "@fortawesome/free-solid-svg-icons";
 
 function InquiryView(props) {
   const [inquiry, setInquiry] = useState(null);
@@ -58,7 +60,7 @@ function InquiryView(props) {
   }
 
   function handleAnswerClick() {
-    navigate("");
+    navigate("/inquiry/answer/" + id);
   }
 
   return (
@@ -131,6 +133,26 @@ function InquiryView(props) {
           </ModalFooter>
         </ModalContent>
       </Modal>
+      <Box w={"80%"} m={"auto"}>
+        <Box ml={5} mt={5}>
+          <FontAwesomeIcon icon={faArrowTurnUp} rotation={90} size="2xl" />
+        </Box>
+        <FormControl mb={1}>
+          <FormLabel fontWeight={"bold"} ml={50}>
+            답변내용
+          </FormLabel>
+          <Textarea
+            padding={3}
+            size={"xl"}
+            h={"300px"}
+            border={"2px"}
+            value={inquiry.answerContent}
+            borderColor={"red"}
+            borderRadius={(2, 20)}
+            readOnly
+          ></Textarea>
+        </FormControl>
+      </Box>
     </Box>
   );
 }

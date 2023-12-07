@@ -80,7 +80,7 @@ export function MainView() {
       .then((response) => {
         setFirstList(response.data.firstBoardList);
         setOtherList(response.data.otherBoardList);
-        navigate("?" + params);
+        // navigate("?" + params);
         return () => clearTimeout(timer);
       })
       .catch(() => console.log("글이 없습니다."));

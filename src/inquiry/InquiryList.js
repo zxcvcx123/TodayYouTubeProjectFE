@@ -145,7 +145,15 @@ function InquiryList(props) {
                   <Td textAlign={"center"}>{inquiry.title}</Td>
                   <Td textAlign={"center"}>{inquiry.inquiry_member_id}</Td>
                   <Td textAlign={"center"}>{inquiry.ago}</Td>
-                  <Td textAlign={"center"}>{inquiry.answer_status}</Td>
+                  {(inquiry.answer_status === "답변완료" && (
+                    <Td backgroundColor={"green.300"} textAlign={"center"}>
+                      {inquiry.answer_status}
+                    </Td>
+                  )) || (
+                    <Td backgroundColor={"orange.300"} textAlign={"center"}>
+                      {inquiry.answer_status}
+                    </Td>
+                  )}
                 </Tr>
               ))}
           </Tbody>
