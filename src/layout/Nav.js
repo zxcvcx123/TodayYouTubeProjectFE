@@ -42,15 +42,21 @@ export function Nav({ setSocket }) {
   const subscription = useRef(null);
 
   function connect() {
-    let socket = new SockJS("http://localhost:3000/gs-guide-websocket", null, {
-      transports: ["websocket", "xhr-streaming", "xhr-polling"],
-    });
+    // 기존 연결방식
+    // let socket = new SockJS("http://localhost:3000/ws", null, {
+    //   transports: ["websocket", "xhr-streaming", "xhr-polling"],
+    // });
 
     console.log(stompClient.current);
 
     // 이미 연결되어 있으면 한번 더 연결시키는거 방지
+    // 추천 연결방식
     if (!stompClient.current) {
-      stompClient.current = Stomp.over(socket);
+      stompClient.current = Stomp.over(function () {
+        return new SockJS("http://localhost:3000/ws", "ws", {
+          transports: ["websocket", "xhr-streaming", "xhr-polling"],
+        });
+      });
       stompClient.current.connect({}, function (frame) {
         unSubscribe();
         console.log("NAV에서 소켓연결 성공: " + frame);
