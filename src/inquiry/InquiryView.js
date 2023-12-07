@@ -57,6 +57,10 @@ function InquiryView(props) {
       .finally(() => console.log("done"));
   }
 
+  function handleAnswerClick() {
+    navigate("");
+  }
+
   return (
     <Box width={"80%"} m={"auto"}>
       <FormControl mb={1}>
@@ -106,7 +110,7 @@ function InquiryView(props) {
       <Button colorScheme="red" onClick={onOpen}>
         삭제
       </Button>
-      <Button ml={20} colorScheme="green">
+      <Button ml={20} colorScheme="green" onClick={handleAnswerClick}>
         답변하기
       </Button>
 

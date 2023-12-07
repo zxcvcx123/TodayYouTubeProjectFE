@@ -39,7 +39,8 @@ export function MainView() {
   const [isDay, setIsDay] = useState(false);
   const [isWeek, setIsWeek] = useState(true);
   const [isMonth, setIsMonth] = useState(false);
-  const [mainShowLink, setMainShowLink] = useState();
+  const [mainShowLink, setMainShowLink] = useState(null);
+  const [linkCategory, setLinkCategory] = useState(null);
 
   const [showSpinner, setShowSpinner] = useState(true);
 
@@ -47,6 +48,7 @@ export function MainView() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // 첫번째 영상이 메인에 나오도록 --> category랑 dateSort값이 변경될때만 1위영상으로 출력
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowSpinner(false);
@@ -59,6 +61,24 @@ export function MainView() {
         setFirstList(response.data.firstBoardList);
         setOtherList(response.data.otherBoardList);
         setMainShowLink(response.data.firstBoardList.link);
+        navigate("?" + params);
+        return () => clearTimeout(timer);
+      })
+      .catch(() => console.log("글이 없습니다."));
+  }, [category, dateSort]);
+
+  // 나머지 영상 바뀔때 메인화면에 출력
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowSpinner(false);
+    }, 7000);
+    params.set("c", category);
+    params.set("sort", dateSort);
+    axios
+      .get("/api?" + params)
+      .then((response) => {
+        setFirstList(response.data.firstBoardList);
+        setOtherList(response.data.otherBoardList);
         navigate("?" + params);
         return () => clearTimeout(timer);
       })
@@ -257,7 +277,11 @@ export function MainView() {
                   h={"82%"}
                   border={"1px"}
                   borderColor={"orange"}
-                  onClick={() => setMainShowLink(firstList.link)}
+                  onClick={() => {
+                    setLinkCategory(firstList.category);
+                    setMainShowLink(firstList.link);
+                  }
+                  }
                 >
                   <YoutubeInfo
                     link={firstList.link}
