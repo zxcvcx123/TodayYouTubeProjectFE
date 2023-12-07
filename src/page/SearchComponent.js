@@ -9,17 +9,26 @@ import axios from "axios";
 export function SearchComponent() {
   const [keyword, setKeyword] = useState("");
   const [category, setCategory] = useState("all");
+  const [category2, setCategory2] = useState("");
   const navigate = useNavigate();
+  const [params, setParams] = useSearchParams();
+
+  useEffect(() => {
+    // URL에 category가 있는 경우 해당 값을 설정
+    if (params.has("category")) {
+      setCategory2(params.get("category"));
+    }
+  }, [params]);
 
   function handleSearchClick() {
     //   board/list?p=9&c=title&k=자바
     // board/list?p=9&title=테스트
+    const currentParams = new URLSearchParams(params);
 
-    const params = new URLSearchParams();
-    params.set("c", category);
-    params.set("k", keyword);
+    currentParams.set("c", category);
+    currentParams.set("k", keyword);
     // navigate("?p=" + page + "&" + category + "=" + keyword);
-    navigate("?" + params);
+    navigate("?" + currentParams);
   }
 
   return (
