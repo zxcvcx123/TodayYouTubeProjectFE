@@ -22,6 +22,7 @@ import {
 import axios from "axios";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import Editor from "../component/Editor";
+import ScrollToTop from "../util/ScrollToTop";
 
 function InquiryView(props) {
   const [inquiry, setInquiry] = useState(null);
@@ -124,6 +125,7 @@ function InquiryView(props) {
           </ModalFooter>
         </ModalContent>
       </Modal>
+      <ScrollToTop />
     </Box>
   );
 }

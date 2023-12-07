@@ -22,6 +22,7 @@ import editor from "../component/Editor";
 import memberInfo from "../member/memberInfo/MemberInfo";
 import { DetectLoginContext } from "../component/LoginProvider";
 import MemberProfile from "../member/MemberProfile";
+import ScrollToTop from "../util/ScrollToTop";
 
 function BoardView() {
   /* 로그인 정보 컨텍스트 */
@@ -342,6 +343,7 @@ function BoardView() {
       </Flex>
       {/* -------------------- 댓글 영역 -------------------- */}
       <BoardComment board_id={id} />
+      <ScrollToTop />
     </Box>
   );
 }

@@ -6,8 +6,8 @@ import {
   List,
   ListIcon,
   ListItem,
-  OrderedList,
   Text,
+  Tooltip,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { Icon, createIcon } from "@chakra-ui/react";
@@ -15,35 +15,44 @@ import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import BoardList from "../board/BoardList";
 
-export function MainBoardList() {
-  // state
-  const [boardList, setBoardList] = useState(null);
-  // 빈 배열로 받으면 null 값 오류 안나옴
-  const [pageInfo, setPageInfo] = useState([]);
-  const [currentView, setCurrentView] = useState("list");
-
-  const [params] = useSearchParams();
-  const location = useLocation();
-
-  // navigate
-  const navigate = useNavigate();
-
-  // 초기 이펙트
-  useEffect(() => {
-    axios.get("/api/board/list?" + params).then((response) => {
-      setBoardList(response.data.boardList);
-      setPageInfo(response.data.pageInfo);
-    });
-  }, [location]);
-
+export function MainBoardList({
+  mainBoardList2,
+  mainBoardList3,
+  mainBoardList4,
+  mainBoardList5,
+  mainBoardList6,
+  mainBoardList7,
+  mainRecommendBoardList,
+  mainHitsBoardList,
+}) {
   // chakra ui 버튼 커스텀
-  const CircleIcon = (props) => (
+  const CircleIcon = ({ color, ...props }) => (
     <Icon viewBox="0 0 200 200" {...props}>
       <path
-        fill="currentColor"
+        fill={color}
         d="M 100, 100 m -75, 0 a 75,75 0 1,0 150,0 a 75,75 0 1,0 -150,0"
       />
     </Icon>
+  );
+
+  const navigate = useNavigate();
+
+  const handleBoardPost = (postId) => {
+    navigate(`/board/${postId}`);
+  };
+
+
+
+  const renderListItem = (board, index) => (
+    <ListItem
+      _hover={{ bg: "gray.100", cursor: "pointer" }}
+      key={index}
+      onClick={() => handleBoardPost(board.id)}
+      alignItems="center"
+    >
+      <ListIcon as={CircleIcon} color={`blue.${index * 100}`} mb={"3px"} />
+      <Tooltip label={board.title}>{`${board.title.slice(0, 20)}`}</Tooltip>
+    </ListItem>
   );
 
   return (
@@ -57,67 +66,29 @@ export function MainBoardList() {
         justifyContent={"space-around"}
       >
         <Box width="40%" border="1px" borderColor={"blue"} padding={6}>
-          <Text fontSize="1.2rem" mb={"10px"}>
+          <Heading fontWeight="bold" fontSize="1.2rem" mt={"-10px"} mb={"10px"}>
             통합 최다 추천글
-          </Text>
-          <List spacing={3}>
-            <ListItem>
-              <ListIcon as={CircleIcon} color="red.500" />
-              통합 최다 추천글 첫 번째 글 title
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListIcon as={CircleIcon} />
-              통합 최다 추천글 두 번째 글 title
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListIcon as={CircleIcon} />
-              통합 최다 추천글 세 번째 글 title
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListIcon as={CircleIcon} />
-              통합 최다 추천글 네 번째 글 title
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListIcon as={CircleIcon} />
-              통합 최다 추천글 다섯 번째 글 title
-            </ListItem>
-            <Divider />
+          </Heading>
+          <List mt={"20px"} spacing={3}>
+            {mainRecommendBoardList.map((board, index) => (
+              <>
+                {index > 0 && <Divider key={`divider-${index}`} />}
+                {renderListItem(board, index)}
+              </>
+            ))}
           </List>
         </Box>
         <Box width="40%" border="1px" borderColor={"blue"} padding={6}>
-          <Text fontSize="1.2rem" mb={"10px"}>
+          <Heading fontWeight="bold" fontSize="1.2rem" mt={"-10px"} mb={"10px"}>
             통합 최다 조회수 글
-          </Text>
-          <List spacing={3}>
-            <ListItem>
-              <ListIcon as={CircleIcon} color="red.500" />
-              통합 최다 조회 첫 번째 글 title
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListIcon as={CircleIcon} />
-              통합 최다 조회 두 번째 글 title
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListIcon as={CircleIcon} />
-              통합 최다 조회 세 번째 글 title
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListIcon as={CircleIcon} />
-              통합 최다 조회 네 번째 글 title
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListIcon as={CircleIcon} />
-              통합 최다 조회 다섯 번째 글 title
-            </ListItem>
-            <Divider />
+          </Heading>
+          <List mt={"20px"} spacing={3}>
+            {mainHitsBoardList.map((board, index) => (
+              <>
+                {index > 0 && <Divider key={`divider-${index}`} />}
+                {renderListItem(board, index)}
+              </>
+            ))}
           </List>
         </Box>
       </Flex>
@@ -131,99 +102,57 @@ export function MainBoardList() {
           justifyContent={"space-evenly"}
         >
           <Box width="27%" border="1px" borderColor={"blue"} padding={6}>
-            <Heading fontSize="1.2rem" mb={"10px"}>
-              스포츠
+            <Heading
+              fontWeight="bold"
+              fontSize="1.2rem"
+              mt={"-10px"}
+              mb={"10px"}
+            >
+              스포츠 게시판 최신글
             </Heading>
-            <List spacing={3}>
-              <ListItem>
-                <ListIcon as={CircleIcon} color="red.500" />
-                스포츠 첫 번째 글 title
-              </ListItem>
-              <Divider />
-              <ListItem>
-                <ListIcon as={CircleIcon} />
-                스포츠 두 번째 글 title
-              </ListItem>
-              <Divider />
-              <ListItem>
-                <ListIcon as={CircleIcon} />
-                스포츠 세 번째 글 title
-              </ListItem>
-              <Divider />
-              <ListItem>
-                <ListIcon as={CircleIcon} />
-                스포츠 네 번째 글 title
-              </ListItem>
-              <Divider />
-              <ListItem>
-                <ListIcon as={CircleIcon} />
-                스포츠 다섯 번째 글 title
-              </ListItem>
-              <Divider />
+            <List mt={"20px"} spacing={3}>
+              {mainBoardList2.map((board, index) => (
+                <>
+                  {index > 0 && <Divider key={`divider-${index}`} />}
+                  {renderListItem(board, index)}
+                </>
+              ))}
             </List>
           </Box>
           <Box width="27%" border="1px" borderColor={"blue"} padding={6}>
-            <Text fontSize="1.2rem" mb={"10px"}>
-              먹방
-            </Text>
-            <List spacing={3}>
-              <ListItem>
-                <ListIcon as={CircleIcon} color="red.500" />
-                먹방 첫 번째 글 title
-              </ListItem>
-              <Divider />
-              <ListItem>
-                <ListIcon as={CircleIcon} />
-                먹방 두 번째 글 title
-              </ListItem>
-              <Divider />
-              <ListItem>
-                <ListIcon as={CircleIcon} />
-                먹방 세 번째 글 title
-              </ListItem>
-              <Divider />
-              <ListItem>
-                <ListIcon as={CircleIcon} />
-                먹방 네 번째 글 title
-              </ListItem>
-              <Divider />
-              <ListItem>
-                <ListIcon as={CircleIcon} />
-                먹방 다섯 번째 글 title
-              </ListItem>
-              <Divider />
+            <Heading
+              fontWeight="bold"
+              fontSize="1.2rem"
+              mt={"-10px"}
+              mb={"10px"}
+            >
+              먹방 게시판 최신글
+            </Heading>
+            <List mt={"20px"} spacing={3}>
+              {mainBoardList3.map((board, index) => (
+                <>
+                  {index > 0 && <Divider key={`divider-${index}`} />}
+                  {renderListItem(board, index)}
+                </>
+              ))}
             </List>
           </Box>
           <Box width="27%" border="1px" borderColor={"blue"} padding={6}>
-            <Text fontSize="1.2rem" mb={"10px"}>
-              게임
-            </Text>
-            <List spacing={3}>
-              <ListItem>
-                <ListIcon as={CircleIcon} color="red.500" />
-                게임 첫 번째 글 title
-              </ListItem>
-              <Divider />
-              <ListItem>
-                <ListIcon as={CircleIcon} />
-                게임 두 번째 글 title
-              </ListItem>
-              <Divider />
-              <ListItem>
-                <ListIcon as={CircleIcon} />
-                게임 세 번째 글 title
-              </ListItem>
-              <Divider />
-              <ListItem>
-                <ListIcon as={CircleIcon} />
-                게임 네 번째 글 title
-              </ListItem>
-              <Divider />
-              <ListItem>
-                <ListIcon as={CircleIcon} />
-                게임 다섯 번째 글 title
-              </ListItem>
-              <Divider />
+            <Heading
+              fontWeight="bold"
+              fontSize="1.2rem"
+              mt={"-10px"}
+              mb={"10px"}
+            >
+              게임 게시판 최신글
+            </Heading>
+            <List mt={"20px"} spacing={3}>
+              {mainBoardList7.map((board, index) => (
+                <>
+                  {index > 0 && <Divider key={`divider-${index}`} />}
+                  {renderListItem(board, index)}
+                </>
+              ))}
             </List>
           </Box>
         </Flex>
@@ -237,99 +166,42 @@ export function MainBoardList() {
         justifyContent={"space-evenly"}
       >
         <Box width="27%" border="1px" borderColor={"blue"} padding={6}>
-          <Text fontSize="1.2rem" mb={"10px"}>
-            일상
-          </Text>
-          <List spacing={3}>
-            <ListItem>
-              <ListIcon as={CircleIcon} color="red.500" />
-              일상 첫 번째 글 title
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListIcon as={CircleIcon} />
-              일상 두 번째 글 title
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListIcon as={CircleIcon} />
-              일상 세 번째 글 title
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListIcon as={CircleIcon} />
-              일상 네 번째 글 title
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListIcon as={CircleIcon} />
-              일상 다섯 번째 글 title
-            </ListItem>
-            <Divider />
+          <Heading fontWeight="bold" fontSize="1.2rem" mt={"-10px"} mb={"10px"}>
+            일상 게시판 최신글
+          </Heading>
+          <List mt={"20px"} spacing={3}>
+            {mainBoardList4.map((board, index) => (
+              <>
+                {index > 0 && <Divider key={`divider-${index}`} />}
+                {renderListItem(board, index)}
+              </>
+            ))}
           </List>
         </Box>
         <Box width="27%" border="1px" borderColor={"blue"} padding={6}>
-          <Text fontSize="1.2rem" mb={"10px"}>
-            영화/드라마
-          </Text>
-          <List spacing={3}>
-            <ListItem>
-              <ListIcon as={CircleIcon} color="red.500" />
-              영화/드라마 첫 번째 글 title
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListIcon as={CircleIcon} />
-              영화/드라마 두 번째 글 title
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListIcon as={CircleIcon} />
-              영화/드라마 세 번째 글 title
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListIcon as={CircleIcon} />
-              영화/드라마 네 번째 글 title
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListIcon as={CircleIcon} />
-              영화/드라마 다섯 번째 글 title
-            </ListItem>
-            <Divider />
+          <Heading fontWeight="bold" fontSize="1.2rem" mt={"-10px"} mb={"10px"}>
+            영화/드라마 게시판 최신글
+          </Heading>
+          <List mt={"20px"} spacing={3}>
+            {mainBoardList6.map((board, index) => (
+              <>
+                {index > 0 && <Divider key={`divider-${index}`} />}
+                {renderListItem(board, index)}
+              </>
+            ))}
           </List>
         </Box>
         <Box width="27%" border="1px" borderColor={"blue"} padding={6}>
-          <Text fontSize="1.2rem" mb={"10px"}>
-            패션
-          </Text>
-          <List spacing={3}>
-            <ListItem>
-              <ListIcon as={CircleIcon} color="red.500" />
-              패션 첫 번째 글 title
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListIcon as={CircleIcon} />
-              패션 두 번째 글 title
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListIcon as={CircleIcon} />
-              패션 세 번째 글 title
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListIcon as={CircleIcon} />
-              패션 네 번째 글 title
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListIcon as={CircleIcon} />
-              패션 다섯 번째 글 title
-            </ListItem>
-            <Divider />
+          <Heading fontWeight="bold" fontSize="1.2rem" mt={"-10px"} mb={"10px"}>
+            요리 게시판 최신글
+          </Heading>
+          <List mt={"20px"} spacing={3}>
+            {mainBoardList5.map((board, index) => (
+              <>
+                {index > 0 && <Divider key={`divider-${index}`} />}
+                {renderListItem(board, index)}
+              </>
+            ))}
           </List>
         </Box>
       </Flex>
