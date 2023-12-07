@@ -104,6 +104,9 @@ export function Nav({ setSocket }) {
               <ChevronDownIcon />
             </MenuButton>
             <MenuList>
+              <MenuItem onClick={() => navigate("board/list?category=notice")}>
+                공지
+              </MenuItem>
               <MenuItem onClick={() => navigate("board/list?category=sports")}>
                 스포츠
               </MenuItem>
