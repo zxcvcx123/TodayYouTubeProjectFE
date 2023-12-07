@@ -29,6 +29,9 @@ function BoardWrite() {
   const [titleError, setTitleError] = useState("");
   const [contentError, setContentError] = useState("");
 
+  const location = useLocation();
+  const boardInfo = location.state;
+
   /* use navigate */
   let navigate = useNavigate();
 
