@@ -280,8 +280,7 @@ export function MainView() {
                   onClick={() => {
                     setLinkCategory(firstList.category);
                     setMainShowLink(firstList.link);
-                  }
-                  }
+                  }}
                 >
                   <YoutubeInfo
                     link={firstList.link}
