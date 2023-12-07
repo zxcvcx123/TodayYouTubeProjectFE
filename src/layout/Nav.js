@@ -104,12 +104,24 @@ export function Nav({ setSocket }) {
               <ChevronDownIcon />
             </MenuButton>
             <MenuList>
-              <MenuItem onClick={() => navigate("board/list")}>스포츠</MenuItem>
-              <MenuItem>먹방</MenuItem>
-              <MenuItem>일상</MenuItem>
-              <MenuItem>요리</MenuItem>
-              <MenuItem>영화/드라마</MenuItem>
-              <MenuItem>게임</MenuItem>
+              <MenuItem onClick={() => navigate("board/list/sports")}>
+                스포츠
+              </MenuItem>
+              <MenuItem onClick={() => navigate("board/list/mukbang")}>
+                먹방
+              </MenuItem>
+              <MenuItem onClick={() => navigate("board/list/daily")}>
+                일상
+              </MenuItem>
+              <MenuItem onClick={() => navigate("board/list/cooking")}>
+                요리
+              </MenuItem>
+              <MenuItem onClick={() => navigate("board/list/movie")}>
+                영화/드라마
+              </MenuItem>
+              <MenuItem onClick={() => navigate("board/list/game")}>
+                게임
+              </MenuItem>
               <MenuItem onClick={() => navigate("/chat")}>채팅</MenuItem>
               <Divider />
               <MenuItem onClick={() => navigate("/inquiry/list")}>
