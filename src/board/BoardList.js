@@ -89,7 +89,10 @@ function BoardList() {
     if (!token.detectLogin) {
       onOpen();
     } else {
-      navigate("/write", { state: boardInfo });
+      const currentParams = new URLSearchParams(location.search).get(
+        "category",
+      );
+      navigate("/write?category=" + currentParams, { state: boardInfo });
     }
   }
 
