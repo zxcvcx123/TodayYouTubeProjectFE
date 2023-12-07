@@ -41,8 +41,6 @@ export function MainBoardList({
     navigate(`/board/${postId}`);
   };
 
-
-
   const renderListItem = (board, index) => (
     <ListItem
       _hover={{ bg: "gray.100", cursor: "pointer" }}
