@@ -33,6 +33,9 @@ function BoardWrite() {
   const location = useLocation();
   const boardInfo = location.state;
 
+  /* 현재 쿼리스트링의 category 명 가져오기 */
+  const currentParams = new URLSearchParams(location.search).get("category");
+
   /* use navigate */
   let navigate = useNavigate();
 
@@ -120,7 +123,7 @@ function BoardWrite() {
           description: "게시글 저장에 성공했습니다.",
           status: "success",
         });
-        navigate("/board/list");
+        navigate("/board/list?category=" + currentParams);
       })
       .catch((error) => {
         if (error.response.status === 400) {
@@ -220,7 +223,10 @@ function BoardWrite() {
       </Button>
 
       {/* 취소 버튼 */}
-      <Button onClick={() => navigate("/board/list")} colorScheme="red">
+      <Button
+        onClick={() => navigate("/board/list?category=" + currentParams)}
+        colorScheme="red"
+      >
         취소
       </Button>
     </Box>
