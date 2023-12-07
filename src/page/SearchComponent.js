@@ -9,14 +9,13 @@ import axios from "axios";
 export function SearchComponent() {
   const [keyword, setKeyword] = useState("");
   const [type, setType] = useState("all");
-  const [category, setCategory] = useState("");
   const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
 
   useEffect(() => {
     // URL에 category가 있는 경우 해당 값을 설정
     if (params.has("category")) {
-      setCategory(params.get("category"));
+      params.get("category");
     }
   }, [params]);
 
