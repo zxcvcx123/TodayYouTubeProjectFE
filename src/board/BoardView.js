@@ -12,7 +12,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { BoardComment } from "../comment/BoardComment";
 import BoardLike from "../like/BoardLike";
 import YoutubeInfo from "../component/YoutubeInfo";
@@ -40,6 +40,12 @@ function BoardView() {
 
   //URL 매개변수 추출
   const { id } = useParams();
+
+  // 현재 URL 파악하기
+  const location = useLocation();
+
+  // 현재 URL에서 category 명 추출
+  const currentParams = new URLSearchParams(location.search).get("category");
 
   // navigate
   const navigate = useNavigate();
@@ -323,7 +329,10 @@ function BoardView() {
       {/* -------------------- 버튼 섹션 -------------------- */}
       <Flex justifyContent={"space-between"}>
         {/* 목록 버튼 */}
-        <Button colorScheme="blue" onClick={() => navigate("/board/list")}>
+        <Button
+          colorScheme="blue"
+          onClick={() => navigate("/board/list?category=" + currentParams)}
+        >
           목록
         </Button>
         {isAuthor && (
