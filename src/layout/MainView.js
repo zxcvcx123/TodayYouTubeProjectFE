@@ -225,7 +225,7 @@ export function MainView() {
                   <Box w="22%" h={"50%"} key={other.id}>
                     <YoutubeInfo
                       link={other.link}
-                      extraVideo={true}
+                      extraThumbnail={true}
                       opts={{ height: 180, width: 250 }}
                     />
                   </Box>
