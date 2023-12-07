@@ -21,7 +21,7 @@ export function SearchComponent() {
   }, [params]);
 
   function handleSearchClick() {
-    //   board/list?p=9&c=title&k=자바
+    // board/list?p=9&c=title&k=자바
     // board/list?p=9&title=테스트
     const currentParams = new URLSearchParams(params);
 
