@@ -29,9 +29,6 @@ function BoardWrite() {
   const [titleError, setTitleError] = useState("");
   const [contentError, setContentError] = useState("");
 
-  const location = useLocation();
-  const boardInfo = location.state;
-
   /* use navigate */
   let navigate = useNavigate();
 
@@ -112,7 +109,6 @@ function BoardWrite() {
         uploadFiles,
         uuSrc,
         board_member_id: loginInfo.member_id,
-        name_eng: boardInfo,
       })
       .then(() => {
         toast({
