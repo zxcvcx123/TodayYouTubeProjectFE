@@ -112,6 +112,7 @@ function BoardWrite() {
         uploadFiles,
         uuSrc,
         board_member_id: loginInfo.member_id,
+        name_eng: boardInfo,
       })
       .then(() => {
         toast({
