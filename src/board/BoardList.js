@@ -142,7 +142,9 @@ function BoardList() {
 
   // 게시물 클릭 (게시물 보기)
   function handleBoardClick(boardId) {
-    navigate("/board/" + boardId + "?category=" + currentParams);
+    navigate("/board/" + boardId + "?category=" + currentParams, {
+      state: boardInfo,
+    });
     // 조회수 증가 요청
     axios.post("/api/board/" + boardId + "/increaseView");
   }
