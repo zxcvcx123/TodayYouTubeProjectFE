@@ -29,7 +29,7 @@ import { AddIcon, ChevronDownIcon, HamburgerIcon } from "@chakra-ui/icons";
 import { useLocation, useNavigate } from "react-router-dom";
 import YoutubeInfo from "../component/YoutubeInfo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRankingStar } from "@fortawesome/free-solid-svg-icons";
+import { faRankingStar, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 
 export function MainView() {
   const [category, setCategory] = useState("all");
@@ -37,9 +37,9 @@ export function MainView() {
   const [otherList, setOtherList] = useState(null);
   const [dateSort, setDateSort] = useState("weekly");
   const [isDay, setIsDay] = useState(false);
-  const [isWeek, setIsWeek] = useState(false);
+  const [isWeek, setIsWeek] = useState(true);
   const [isMonth, setIsMonth] = useState(false);
-  const [mainShowLink, setMainShowLink] = useState(null);
+  const [mainShowLink, setMainShowLink] = useState();
 
   const [showSpinner, setShowSpinner] = useState(true);
 
@@ -50,19 +50,23 @@ export function MainView() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowSpinner(false);
-    }, 5000);
+    }, 7000);
     params.set("c", category);
     params.set("sort", dateSort);
-    axios.get("/api?" + params).then((response) => {
-      setFirstList(response.data.firstBoardList);
-      setOtherList(response.data.otherBoardList);
-      navigate("?" + params);
-      return () => clearTimeout(timer);
-    });
+    axios
+      .get("/api?" + params)
+      .then((response) => {
+        setFirstList(response.data.firstBoardList);
+        setOtherList(response.data.otherBoardList);
+        setMainShowLink(response.data.firstBoardList.link);
+        navigate("?" + params);
+        return () => clearTimeout(timer);
+      })
+      .catch(() => console.log("글이 없습니다."));
   }, [category, dateSort, mainShowLink]);
 
   function handleCategoryChange(e) {
-    setMainShowLink(null);
+    // setMainShowLink(null);
     setCategory(e.target.value);
   }
 
@@ -129,11 +133,11 @@ export function MainView() {
     setDateSort(e.target.value);
   }
 
-  console.log("출력될 링크:" + mainShowLink);
+  // console.log("출력될 링크:" + mainShowLink);
   // 임시메인
   return (
-    <Box bg="black" w="100%" h="900px" p={4}>
-      <Flex w="100%">
+    <Box bg="black" w="100%" h="2180px" p={4} border={"1px"} borderColor="pink">
+      <Flex w="100%" mb="200px">
         <Box w="18%">
           <Box>
             <Flex ml={10} mb={1} mt={3}>
@@ -232,48 +236,74 @@ export function MainView() {
             </Button>
           </Flex>
           <Box
-            ml={"-15%"}
+            ml={"-10%"}
             w={"100%"}
-            mt={10}
-            h={"30%"}
+            mt={6}
+            h={"37%"}
             border={"1px"}
             borderColor={"blue"}
           >
             <Flex w="100%" h="100%">
-              <Box
-                key={firstList.link}
-                _hover={{ cursor: "pointer" }}
-                w={"30%"}
-                border={"1px"}
-                borderColor={"orange"}
-                onClick={() => setMainShowLink(firstList.link)}
-              >
-                <YoutubeInfo
-                  link={firstList.link}
-                  extraThumbnail={true}
-                  thumbnailWidth={400}
-                  thumbnailHeight={250}
-                />
+              <Box>
+                <Flex h={"15%"} color={"white"} fontSize={"1.5rem"}>
+                  <Text variant={"outline"} color={"wthie"} ml={10}>
+                    1위
+                  </Text>
+                </Flex>
+                <Box
+                  key={firstList.link}
+                  _hover={{ cursor: "pointer" }}
+                  w={"100%"}
+                  h={"82%"}
+                  border={"1px"}
+                  borderColor={"orange"}
+                  onClick={() => setMainShowLink(firstList.link)}
+                >
+                  <YoutubeInfo
+                    link={firstList.link}
+                    extraThumbnail={true}
+                    thumbnailWidth={400}
+                    thumbnailHeight={250}
+                  />
+                </Box>
               </Box>
               <Flex w={"80%"} ml={5}>
                 {otherList &&
                   otherList.map((other) => (
                     <Box
-                      w="25%"
-                      h="70%"
-                      key={other.id}
-                      mt={12}
-                      ml={5}
+                      w={"25%"}
                       border={"1px"}
                       borderColor={"white"}
-                      onClick={() => setMainShowLink(other.link)}
+                      key={other.id}
                     >
-                      <YoutubeInfo
-                        link={other.link}
-                        extraThumbnail={true}
-                        thumbnailWidth={250}
-                        thumbnailHeight={180}
-                      />
+                      <Box
+                        h={"20%"}
+                        color={"white"}
+                        key={other.link}
+                        ml={12}
+                        fontSize={"1.2rem"}
+                        mt={"20px"}
+                        mb={"25px"}
+                      >
+                        <br />
+                        {otherList.indexOf(other) + 2}위
+                      </Box>
+                      <Box
+                        w="100%"
+                        h="60%"
+                        key={other.id}
+                        border={"1px"}
+                        borderColor={"orange"}
+                        onClick={() => setMainShowLink(other.link)}
+                        _hover={{ cursor: "pointer" }}
+                      >
+                        <YoutubeInfo
+                          link={other.link}
+                          extraThumbnail={true}
+                          thumbnailWidth={250}
+                          thumbnailHeight={180}
+                        />
+                      </Box>
                     </Box>
                   ))}
               </Flex>
@@ -281,7 +311,7 @@ export function MainView() {
           </Box>
         </Box>
       </Flex>
-      {/*<MainBoardList />*/}
+      <MainBoardList />
     </Box>
   );
 }

@@ -16,26 +16,6 @@ import axios from "axios";
 import BoardList from "../board/BoardList";
 
 export function MainBoardList() {
-  // state
-  const [boardList, setBoardList] = useState(null);
-  // 빈 배열로 받으면 null 값 오류 안나옴
-  const [pageInfo, setPageInfo] = useState([]);
-  const [currentView, setCurrentView] = useState("list");
-
-  const [params] = useSearchParams();
-  const location = useLocation();
-
-  // navigate
-  const navigate = useNavigate();
-
-  // 초기 이펙트
-  useEffect(() => {
-    axios.get("/api/board/list?" + params).then((response) => {
-      setBoardList(response.data.boardList);
-      setPageInfo(response.data.pageInfo);
-    });
-  }, [location]);
-
   // chakra ui 버튼 커스텀
   const CircleIcon = (props) => (
     <Icon viewBox="0 0 200 200" {...props}>

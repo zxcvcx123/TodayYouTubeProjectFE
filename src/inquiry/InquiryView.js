@@ -106,6 +106,9 @@ function InquiryView(props) {
       <Button colorScheme="red" onClick={onOpen}>
         삭제
       </Button>
+      <Button ml={20} colorScheme="green">
+        답변하기
+      </Button>
 
       {/* 삭제 모달 */}
       <Modal isOpen={isOpen} onClose={onClose}>
