@@ -10,7 +10,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { Filednd } from "../file/Filednd";
 import Editor from "../component/Editor";
 import { DetectLoginContext } from "../component/LoginProvider";
@@ -29,6 +29,7 @@ function BoardWrite() {
   const [titleError, setTitleError] = useState("");
   const [contentError, setContentError] = useState("");
 
+  /* useLocation */
   const location = useLocation();
   const boardInfo = location.state;
 
