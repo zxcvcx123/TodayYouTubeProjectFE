@@ -55,7 +55,12 @@ function BoardList() {
   const [boardInfo, setBoardInfo] = useState("");
 
   const [params] = useSearchParams();
+
+  // 현재 URL 파악하기
   const location = useLocation();
+
+  // 현재 URL에서 category 명 추출
+  const currentParams = new URLSearchParams(location.search).get("category");
 
   // modal
   const { isOpen, onClose, onOpen } = useDisclosure();
@@ -89,9 +94,6 @@ function BoardList() {
     if (!token.detectLogin) {
       onOpen();
     } else {
-      const currentParams = new URLSearchParams(location.search).get(
-        "category",
-      );
       navigate("/write?category=" + currentParams, { state: boardInfo });
     }
   }
@@ -140,7 +142,7 @@ function BoardList() {
 
   // 게시물 클릭 (게시물 보기)
   function handleBoardClick(boardId) {
-    navigate("/board/" + boardId);
+    navigate("/board/" + boardId + "?category=" + currentParams);
     // 조회수 증가 요청
     axios.post("/api/board/" + boardId + "/increaseView");
   }
