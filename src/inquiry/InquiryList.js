@@ -1,6 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
   Box,
   Button,
   Divider,
@@ -23,8 +27,12 @@ import {
 import { defineStyle, defineStyleConfig } from "@chakra-ui/react";
 import { extendTheme } from "@chakra-ui/react";
 import Pagination from "../page/Pagination";
+import { DetectLoginContext } from "../component/LoginProvider";
 
 function InquiryList(props) {
+  const { token, handleLogout, loginInfo, validateToken } =
+    useContext(DetectLoginContext);
+
   const [inquiryList, setInquiryList] = useState(null);
   const [pageInfo, setPageInfo] = useState([]);
 
@@ -33,14 +41,46 @@ function InquiryList(props) {
   const location = useLocation();
 
   useEffect(() => {
-    axios.get("/api/inquiry/list?" + params).then((response) => {
-      setInquiryList(response.data.inquiryList);
-      setPageInfo(response.data.pageInfo);
-    });
+    axios
+      .post("/api/inquiry/list?" + params, {
+        login_member_id: loginInfo.member_id,
+        role_name: loginInfo.role_name,
+      })
+      .then((response) => {
+        setInquiryList(response.data.inquiryList);
+        setPageInfo(response.data.pageInfo);
+      });
   }, [location]);
 
   if (inquiryList == null) {
     return <Spinner />;
+  }
+
+  if (!token.detectLogin) {
+    return (
+      <Box w={"80%"} m={"auto"}>
+        <Alert
+          status="warning"
+          variant="subtle"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          textAlign="center"
+          height="200px"
+        >
+          <AlertIcon boxSize="40px" mr={0} />
+          <AlertTitle mt={4} mb={1} fontSize="lg">
+            로그인이 필요한 서비스입니다!
+          </AlertTitle>
+          <AlertDescription maxWidth="sm">
+            문의게시판의 글을 보시려면 로그인 하세요.
+          </AlertDescription>
+          <Button mt={5} onClick={() => navigate("/member/login")}>
+            로그인
+          </Button>
+        </Alert>
+      </Box>
+    );
   }
 
   return (
