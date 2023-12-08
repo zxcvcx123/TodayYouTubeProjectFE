@@ -6,6 +6,7 @@ import {
   AlertTitle,
   Box,
   Button,
+  Flex,
   FormControl,
   FormLabel,
   Input,
@@ -101,23 +102,23 @@ function InquiryView(props) {
   console.log(inquiry);
 
   return (
-    <Box width={"80%"} m={"auto"}>
-      <FormControl mb={1}>
-        <FormLabel fontWeight={"bold"} ml={3}>
-          문의유형
-        </FormLabel>
+    <Box width={"60%"} m={"auto"}>
+      <Flex mb={1} w={"100%"} mb={4}>
+        <Box fontWeight={"bold"} ml={3} w={"10%"}>
+          문의유형 :
+        </Box>
         <Input
           value={inquiry.inquiry_category}
           size={"sm"}
-          width={"30%"}
+          width={"70%"}
           borderColor={"black.300"}
           readOnly
         ></Input>
-      </FormControl>
-      <FormControl mb={1}>
-        <FormLabel fontWeight={"bold"} ml={3}>
-          제목
-        </FormLabel>
+      </Flex>
+      <Flex mb={1} mb={4}>
+        <Box fontWeight={"bold"} ml={3} w={"10%"}>
+          제 목 :
+        </Box>
         <Input
           type="text"
           width={"70%"}
@@ -125,13 +126,14 @@ function InquiryView(props) {
           readOnly
           borderColor={"black.300"}
         ></Input>
-      </FormControl>
+      </Flex>
       {/*<Editor />*/}
-      <FormControl mb={1}>
-        <FormLabel fontWeight={"bold"} ml={3}>
-          문의내용
-        </FormLabel>
+      <Flex mb={1} mb={4}>
+        <Box fontWeight={"bold"} ml={3} w={"10%"}>
+          문의내용 :
+        </Box>
         <Textarea
+          w={"70%"}
           padding={3}
           size={"xl"}
           h={"300px"}
@@ -139,7 +141,7 @@ function InquiryView(props) {
           borderColor={"black.300"}
           readOnly
         ></Textarea>
-      </FormControl>
+      </Flex>
       <Button
         colorScheme="blue"
         onClick={() => navigate("/inquiry/edit/" + id)}
