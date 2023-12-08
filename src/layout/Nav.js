@@ -23,9 +23,9 @@ import {
 } from "@chakra-ui/react";
 import * as PropTypes from "prop-types";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { ChevronDownIcon } from "@chakra-ui/icons";
+import { ChevronDownIcon, CloseIcon } from "@chakra-ui/icons";
 import { SearchMain } from "./SearchMain";
-import { faBell } from "@fortawesome/free-regular-svg-icons";
+import { faBell, faCircleXmark } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { DetectLoginContext } from "../component/LoginProvider";
@@ -34,6 +34,7 @@ import * as SockJS from "sockjs-client";
 import { Stomp } from "@stomp/stompjs";
 import { SocketContext } from "../socket/Socket";
 import axios from "axios";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 Stack.propTypes = {
   p: PropTypes.number,
@@ -43,12 +44,14 @@ Stack.propTypes = {
 };
 
 export function Nav({ setSocket }) {
+  let navigate = useNavigate();
+  let location = useLocation();
+
   const { token, handleLogout, loginInfo, validateToken } =
     useContext(DetectLoginContext);
-  let navigate = useNavigate();
-  const { alarmList, setAlarmList } = useContext(SocketContext);
-  const [alarm, setAlarm] = useState([]);
-  const [alarmCount, setAlarmCount] = useState(null);
+
+  const { stompClient, alarmList, setAlarmList, alarmCount, setAlarmCount } =
+    useContext(SocketContext);
 
   useEffect(() => {
     axios
@@ -56,7 +59,8 @@ export function Nav({ setSocket }) {
         userId: localStorage.getItem("memberInfo"),
       })
       .then((res) => {
-        setAlarm(res.data);
+        setAlarmList(res.data);
+        console.log(res.data);
       })
       .catch()
       .finally();
@@ -67,11 +71,25 @@ export function Nav({ setSocket }) {
       })
       .then((res) => {
         setAlarmCount(res.data);
+        console.log(res.data);
       })
       .catch()
       .finally();
-  }, []);
-  console.log(alarm);
+  }, [location]);
+
+  function handleAllRead() {}
+
+  // 알람 개별 읽기
+  function handleRead(id, boardid) {
+    navigate("/board/" + boardid);
+
+    axios
+      .post("http://localhost:3000/api/alarmread", { id: id })
+      .then()
+      .catch()
+      .finally();
+  }
+
   return (
     <>
       <Flex
@@ -162,16 +180,47 @@ export function Nav({ setSocket }) {
                   </PopoverTrigger>
                   <PopoverContent w={"350px"} h={"300px"} overflowY={"scroll"}>
                     <PopoverArrow />
-                    <PopoverCloseButton />
+                    <PopoverCloseButton size={5} />
                     <PopoverHeader>
-                      최근 알람 | 전부 읽음, 전부 삭제
+                      <Flex justifyContent={"space-between"} w={"88%"}>
+                        <Text>최근 알람</Text>
+                        <Flex alignItems={"flex-end"} gap={3}>
+                          <Link style={{ fontSize: "small", color: "blue" }}>
+                            전부읽음
+                          </Link>
+                          <Link
+                            style={{
+                              fontSize: "small",
+                              color: "blue",
+                            }}
+                          >
+                            전부삭제
+                          </Link>
+                        </Flex>
+                      </Flex>
                     </PopoverHeader>
-                    {alarm.map((list) => (
-                      <PopoverBody>
-                        <Link to={"/board/" + list.board_id}>
-                          {list.board_title}에 {list.sender_member_id}님이
-                          댓글을 남겼습니다. {list.ago}
-                        </Link>
+
+                    {alarmList.map((list) => (
+                      <PopoverBody borderBottomWidth={2}>
+                        <Flex alignItems={"center"}>
+                          <Text
+                            _hover={{ cursor: "pointer" }}
+                            onClick={() => {
+                              handleRead(list.id, list.board_id);
+                            }}
+                            style={{
+                              color: list._alarm === false ? "blue" : "gray",
+                            }}
+                          >
+                            {list.board_title}에 {list.sender_member_id}님이
+                            댓글을 남겼습니다.
+                            <Text color={"black"}>{list.ago}</Text>
+                          </Text>
+
+                          <Box>
+                            <FontAwesomeIcon icon={faXmark} />
+                          </Box>
+                        </Flex>
                       </PopoverBody>
                     ))}
                   </PopoverContent>
