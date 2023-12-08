@@ -69,6 +69,11 @@ function BoardView() {
     axios.get("/api/board/id/" + id).then((response) => {
       setBoard(response.data);
 
+      if (!response.data.is_show) {
+        navigate("board/list?category=notice");
+        window.alert("삭제된 게시물입니다.");
+      }
+
       // 게시글 데이터를 가져온 후 작성자 여부를 확인하여 isAuthor 설정
       if (loginInfo.member_id === response.data.board_member_id) {
         setIsAuthor(true);
