@@ -215,7 +215,7 @@ function BoardList() {
                       {board.is_show ? (
                         <>
                           {/* 게시판 번호 출력 */}
-                          <Td textAlign={"center"}>{board.id}</Td>
+                          <Td textAlign={"center"}>{board.rownum}</Td>
                           {/* 썸네일, 제목 출력 */}
                           <Td>
                             <Flex align={"center"} gap={"10px"}>
@@ -240,7 +240,7 @@ function BoardList() {
                       ) : (
                         <>
                           {/* ------------------------- is_show = false 인 경우(리스트) ------------------------- */}
-                          <Td textAlign={"center"}>{board.id}</Td>
+                          <Td textAlign={"center"}>{board.rownum}</Td>
                           <Td colSpan={5}>
                             <Text textAlign={"center"}>
                               삭제된 게시물입니다.
