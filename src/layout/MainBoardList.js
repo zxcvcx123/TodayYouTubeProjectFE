@@ -1,6 +1,11 @@
 import {
   Box,
+  Card,
+  CardBody,
+  CardHeader,
+  ChakraProvider,
   Divider,
+  extendTheme,
   Flex,
   Heading,
   List,
@@ -14,6 +19,9 @@ import { Icon, createIcon } from "@chakra-ui/react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import BoardList from "../board/BoardList";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
+import { InfoOutlineIcon } from "@chakra-ui/icons";
 
 export function MainBoardList({
   mainBoardList2,
@@ -30,7 +38,7 @@ export function MainBoardList({
     <Icon viewBox="0 0 200 200" {...props}>
       <path
         fill={color}
-        d="M 100, 100 m -75, 0 a 75,75 0 1,0 150,0 a 75,75 0 1,0 -150,0"
+        // d="M 100, 100 m -75, 0 a 75,75 0 1,0 150,0 a 75,75 0 1,0 -150,0"
       />
     </Icon>
   );
@@ -43,72 +51,91 @@ export function MainBoardList({
 
   const renderListItem = (board, index) => (
     <ListItem
-      _hover={{ bg: "gray.100", cursor: "pointer" }}
+      _hover={{ cursor: "pointer" }}
       key={index}
       onClick={() => handleBoardPost(board.id)}
       alignItems="center"
     >
-      <ListIcon as={CircleIcon} color={`blue.${index * 100}`} mb={"3px"} />
-      <Tooltip label={board.title}>{`${board.title.slice(0, 20)}`}</Tooltip>
+      <ListIcon as={CircleIcon} color={"whitesmoke"} mb={"3px"} />
+      <Tooltip label={board.title}>
+        <Text
+          _hover={{ textDecoration: "underline" }}
+          display="inline"
+          whiteSpace="nowrap"
+          overflow="hidden"
+          textOverflow="ellipsis"
+        >
+          {`${board.title.slice(0, 20)}`}
+        </Text>
+      </Tooltip>
     </ListItem>
   );
 
   return (
     <Box>
-      <Flex
-        width="70%"
-        m="auto"
-        mt={"50px"}
-        border="1px"
-        height={"300"}
-        justifyContent={"space-around"}
-      >
-        <Box width="40%" border="1px" borderColor={"blue"} padding={6}>
-          <Heading fontWeight="bold" fontSize="1.2rem" mt={"-10px"} mb={"10px"}>
-            통합 최다 추천글
-          </Heading>
-          <List mt={"20px"} spacing={3}>
-            {mainRecommendBoardList.map((board, index) => (
-              <>
-                {index > 0 && <Divider key={`divider-${index}`} />}
-                {renderListItem(board, index)}
-              </>
-            ))}
-          </List>
-        </Box>
-        <Box width="40%" border="1px" borderColor={"blue"} padding={6}>
-          <Heading fontWeight="bold" fontSize="1.2rem" mt={"-10px"} mb={"10px"}>
-            통합 최다 조회수 글
-          </Heading>
-          <List mt={"20px"} spacing={3}>
-            {mainHitsBoardList.map((board, index) => (
-              <>
-                {index > 0 && <Divider key={`divider-${index}`} />}
-                {renderListItem(board, index)}
-              </>
-            ))}
-          </List>
-        </Box>
+      <Flex width="80%" m="auto" mt={"100px"} justifyContent={"space-around"}>
+        <Card width="40%" borderTopRadius={10}>
+          <CardHeader width="100%" bg="blackAlpha.50" borderTopRadius={10}>
+            <Heading width="100%" fontWeight="bold" fontSize="1.2rem">
+              통합 최다 추천글
+            </Heading>
+          </CardHeader>
+          <CardBody
+            mt={"-10px"}
+            spacing={2}
+            bg={"white"}
+            borderBottomRadius={10}
+            boxShadow="lg"
+          >
+            <List width={"100%"} spacing={2}>
+              {mainRecommendBoardList.map((board, index) => (
+                <>
+                  {index > 0 && <Divider key={`divider-${index}`} />}
+                  {renderListItem(board, index)}
+                </>
+              ))}
+            </List>
+          </CardBody>
+        </Card>
+        <Card width="40%" borderTopRadius={10}>
+          <CardHeader width="100%" bg="blackAlpha.50" borderTopRadius={10}>
+            <Heading width="100%" fontWeight="bold" fontSize="1.2rem">
+              통합 최다 조회수 글
+            </Heading>
+          </CardHeader>
+          <CardBody
+            mt={"-10px"}
+            spacing={2}
+            bg={"white"}
+            borderBottomRadius={10}
+            boxShadow="lg"
+          >
+            <List width={"100%"} spacing={2}>
+              {mainHitsBoardList.map((board, index) => (
+                <>
+                  {index > 0 && <Divider key={`divider-${index}`} />}
+                  {renderListItem(board, index)}
+                </>
+              ))}
+            </List>
+          </CardBody>
+        </Card>
       </Flex>
-      <Box>
-        <Flex
-          width="80%"
-          m="auto"
-          mt={"50px"}
-          border="1px"
-          height={"300"}
-          justifyContent={"space-evenly"}
-        >
-          <Box width="27%" border="1px" borderColor={"blue"} padding={6}>
-            <Heading
-              fontWeight="bold"
-              fontSize="1.2rem"
-              mt={"-10px"}
-              mb={"10px"}
-            >
+
+      <Flex width="80%" m="auto" mt={"50px"} justifyContent={"space-evenly"}>
+        <Card width="27%" borderTopRadius={10}>
+          <CardHeader width="100%" bg="blackAlpha.50" borderTopRadius={10}>
+            <Heading width="100%" fontWeight="bold" fontSize="1.2rem">
               스포츠 게시판 최신글
             </Heading>
-            <List mt={"20px"} spacing={3}>
+          </CardHeader>
+          <CardBody
+            mt={"-10px"}
+            bg={"white"}
+            borderBottomRadius={10}
+            boxShadow="lg"
+          >
+            <List mt={"10px"} spacing={2}>
               {mainBoardList2.map((board, index) => (
                 <>
                   {index > 0 && <Divider key={`divider-${index}`} />}
@@ -116,17 +143,21 @@ export function MainBoardList({
                 </>
               ))}
             </List>
-          </Box>
-          <Box width="27%" border="1px" borderColor={"blue"} padding={6}>
-            <Heading
-              fontWeight="bold"
-              fontSize="1.2rem"
-              mt={"-10px"}
-              mb={"10px"}
-            >
+          </CardBody>
+        </Card>
+        <Card width="27%" borderTopRadius={10}>
+          <CardHeader width="100%" bg="blackAlpha.50" borderTopRadius={10}>
+            <Heading width="100%" fontWeight="bold" fontSize="1.2rem">
               먹방 게시판 최신글
             </Heading>
-            <List mt={"20px"} spacing={3}>
+          </CardHeader>
+          <CardBody
+            mt={"-10px"}
+            bg={"white"}
+            borderBottomRadius={10}
+            boxShadow="lg"
+          >
+            <List mt={"10px"} spacing={2}>
               {mainBoardList3.map((board, index) => (
                 <>
                   {index > 0 && <Divider key={`divider-${index}`} />}
@@ -134,17 +165,22 @@ export function MainBoardList({
                 </>
               ))}
             </List>
-          </Box>
-          <Box width="27%" border="1px" borderColor={"blue"} padding={6}>
-            <Heading
-              fontWeight="bold"
-              fontSize="1.2rem"
-              mt={"-10px"}
-              mb={"10px"}
-            >
+          </CardBody>
+        </Card>
+        <Card width="27%" borderTopRadius={10}>
+          <CardHeader width="100%" bg="blackAlpha.50" borderTopRadius={10}>
+            <Heading width="100%" fontWeight="bold" fontSize="1.2rem">
               게임 게시판 최신글
+              <InfoOutlineIcon />
             </Heading>
-            <List mt={"20px"} spacing={3}>
+          </CardHeader>
+          <CardBody
+            mt={"-10px"}
+            bg={"white"}
+            borderBottomRadius={10}
+            boxShadow="lg"
+          >
+            <List mt={"10px"} spacing={2}>
               {mainBoardList7.map((board, index) => (
                 <>
                   {index > 0 && <Divider key={`divider-${index}`} />}
@@ -152,56 +188,77 @@ export function MainBoardList({
                 </>
               ))}
             </List>
-          </Box>
-        </Flex>
-      </Box>
-      <Flex
-        width="80%"
-        m="auto"
-        mt={"50px"}
-        border="1px"
-        height={"300"}
-        justifyContent={"space-evenly"}
-      >
-        <Box width="27%" border="1px" borderColor={"blue"} padding={6}>
-          <Heading fontWeight="bold" fontSize="1.2rem" mt={"-10px"} mb={"10px"}>
-            일상 게시판 최신글
-          </Heading>
-          <List mt={"20px"} spacing={3}>
-            {mainBoardList4.map((board, index) => (
-              <>
-                {index > 0 && <Divider key={`divider-${index}`} />}
-                {renderListItem(board, index)}
-              </>
-            ))}
-          </List>
-        </Box>
-        <Box width="27%" border="1px" borderColor={"blue"} padding={6}>
-          <Heading fontWeight="bold" fontSize="1.2rem" mt={"-10px"} mb={"10px"}>
-            영화/드라마 게시판 최신글
-          </Heading>
-          <List mt={"20px"} spacing={3}>
-            {mainBoardList6.map((board, index) => (
-              <>
-                {index > 0 && <Divider key={`divider-${index}`} />}
-                {renderListItem(board, index)}
-              </>
-            ))}
-          </List>
-        </Box>
-        <Box width="27%" border="1px" borderColor={"blue"} padding={6}>
-          <Heading fontWeight="bold" fontSize="1.2rem" mt={"-10px"} mb={"10px"}>
-            요리 게시판 최신글
-          </Heading>
-          <List mt={"20px"} spacing={3}>
-            {mainBoardList5.map((board, index) => (
-              <>
-                {index > 0 && <Divider key={`divider-${index}`} />}
-                {renderListItem(board, index)}
-              </>
-            ))}
-          </List>
-        </Box>
+          </CardBody>
+        </Card>
+      </Flex>
+
+      <Flex width="80%" m="auto" mt={"50px"} justifyContent={"space-evenly"}>
+        <Card width="27%" borderTopRadius={10}>
+          <CardHeader width="100%" bg="blackAlpha.50" borderTopRadius={10}>
+            <Heading width="100%" fontWeight="bold" fontSize="1.2rem">
+              일상 게시판 최신글
+            </Heading>
+          </CardHeader>
+          <CardBody
+            mt={"-10px"}
+            bg={"white"}
+            borderBottomRadius={10}
+            boxShadow="lg"
+          >
+            <List mt={"10px"} spacing={2}>
+              {mainBoardList4.map((board, index) => (
+                <>
+                  {index > 0 && <Divider key={`divider-${index}`} />}
+                  {renderListItem(board, index)}
+                </>
+              ))}
+            </List>
+          </CardBody>
+        </Card>
+        <Card width="27%" borderTopRadius={10}>
+          <CardHeader width="100%" bg="blackAlpha.50" borderTopRadius={10}>
+            <Heading width="100%" fontWeight="bold" fontSize="1.2rem">
+              영화/드라마 게시판 최신글
+            </Heading>
+          </CardHeader>
+          <CardBody
+            mt={"-10px"}
+            bg={"white"}
+            borderBottomRadius={10}
+            boxShadow="lg"
+          >
+            <List mt={"10px"} spacing={2}>
+              {mainBoardList6.map((board, index) => (
+                <>
+                  {index > 0 && <Divider key={`divider-${index}`} />}
+                  {renderListItem(board, index)}
+                </>
+              ))}
+            </List>
+          </CardBody>
+        </Card>
+        <Card width="27%" borderTopRadius={10}>
+          <CardHeader width="100%" bg="blackAlpha.50" borderTopRadius={10}>
+            <Heading width="100%" fontWeight="bold" fontSize="1.2rem">
+              요리 게시판 최신글
+            </Heading>
+          </CardHeader>
+          <CardBody
+            mt={"-10px"}
+            bg={"white"}
+            borderBottomRadius={10}
+            boxShadow="lg"
+          >
+            <List mt={"10px"} spacing={2}>
+              {mainBoardList5.map((board, index) => (
+                <>
+                  {index > 0 && <Divider key={`divider-${index}`} />}
+                  {renderListItem(board, index)}
+                </>
+              ))}
+            </List>
+          </CardBody>
+        </Card>
       </Flex>
     </Box>
   );
