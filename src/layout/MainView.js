@@ -119,7 +119,10 @@ export function MainView() {
           <Card align="center" w={"60%"} m={"auto"} mt={100} variant={"filled"}>
             <CardHeader>
               <Heading size="md">
-                {dateSort} --> [ 아직 작성된 게시물이 없습니다. ]
+                [ {dateSort == "daily" && "오늘은 "}
+                {dateSort == "weekly" && "이번주엔 "}
+                {dateSort == "monthly" && "이번달엔 "}
+                아직 작성된 게시물이 없어요! ]
               </Heading>
             </CardHeader>
             <CardBody>

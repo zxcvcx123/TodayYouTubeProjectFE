@@ -50,7 +50,7 @@ function InquiryView(props) {
       .then((response) => setInquiry(response.data));
   }, []);
 
-  if (inquiry == null) {
+  if (inquiry == null || loginInfo == null) {
     return <Spinner />;
   }
   if (!token.detectLogin) {
@@ -142,18 +142,22 @@ function InquiryView(props) {
           readOnly
         ></Textarea>
       </Flex>
-      <Button
-        colorScheme="blue"
-        onClick={() => navigate("/inquiry/edit/" + id)}
-      >
-        수정
-      </Button>
-      <Button colorScheme="red" onClick={onOpen}>
-        삭제
-      </Button>
-      <Button ml={20} colorScheme="green" onClick={handleAnswerClick}>
-        답변하기
-      </Button>
+      {loginInfo.role_name == "운영자" && (
+        <Box>
+          <Button
+            colorScheme="blue"
+            onClick={() => navigate("/inquiry/edit/" + id)}
+          >
+            수정
+          </Button>
+          <Button colorScheme="red" onClick={onOpen}>
+            삭제
+          </Button>
+          <Button ml={20} colorScheme="green" onClick={handleAnswerClick}>
+            답변하기
+          </Button>
+        </Box>
+      )}
 
       {/* 삭제 모달 */}
       <Modal isOpen={isOpen} onClose={onClose}>

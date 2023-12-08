@@ -41,20 +41,18 @@ function InquiryList(props) {
   const location = useLocation();
 
   useEffect(() => {
-    // const timer = setTimeout(() => {
-    //   setShowSpinner(false);
-    // }, 2000);
-
-    axios
-      .post("/api/inquiry/list?" + params, {
-        login_member_id: loginInfo.member_id,
-        role_name: loginInfo.role_name,
-      })
-      .then((response) => {
-        setInquiryList(response.data.inquiryList);
-        setPageInfo(response.data.pageInfo);
-      });
-  }, [location]);
+    if (loginInfo !== null) {
+      axios
+        .post("/api/inquiry/list?" + params, {
+          login_member_id: loginInfo.member_id,
+          role_name: loginInfo.role_name,
+        })
+        .then((response) => {
+          setInquiryList(response.data.inquiryList);
+          setPageInfo(response.data.pageInfo);
+        });
+    }
+  }, [location, params, loginInfo]);
 
   if (inquiryList == null || loginInfo == null) {
     return <Spinner />;
@@ -120,7 +118,7 @@ function InquiryList(props) {
           <Divider />
         </Box>
 
-        <Table size={"sm"}>
+        <Table size={"sm"} mb={5}>
           <Thead>
             <Tr>
               <Th textAlign={"center"}>번호</Th>
@@ -201,11 +199,19 @@ function InquiryList(props) {
                   <Td textAlign={"center"}>{inquiry.inquiry_member_id}</Td>
                   <Td textAlign={"center"}>{inquiry.ago}</Td>
                   {(inquiry.answer_status === "답변완료" && (
-                    <Td backgroundColor={"green.300"} textAlign={"center"}>
+                    <Td
+                      backgroundColor={"green.300"}
+                      textAlign={"center"}
+                      fontWeight="bold"
+                    >
                       {inquiry.answer_status}
                     </Td>
                   )) || (
-                    <Td backgroundColor={"orange.300"} textAlign={"center"}>
+                    <Td
+                      backgroundColor={"orange.300"}
+                      textAlign={"center"}
+                      fontWeight="bold"
+                    >
                       {inquiry.answer_status}
                     </Td>
                   )}
