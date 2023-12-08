@@ -11,6 +11,7 @@ import {
   HStack,
   Spinner,
   Text,
+  Tooltip,
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
@@ -283,7 +284,11 @@ function BoardView() {
               <Flex width={"150px"}>
                 <Avatar src="https://i.imgur.com/lmSDJtn.jpeg" />
                 <Box ml="3">
-                  <Text fontWeight="bold">{board.nickname}</Text>
+                  <Tooltip label={board.nickname} placement="top-start">
+                    <Text fontWeight="bold">
+                      {board.nickname.slice(0, 8)}...
+                    </Text>
+                  </Tooltip>
                   <Text fontSize="sm">{board.role_name}</Text>
                 </Box>
               </Flex>
