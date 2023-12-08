@@ -1,5 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
   Box,
   Button,
   FormControl,
@@ -24,8 +28,12 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import Editor from "../component/Editor";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowTurnUp } from "@fortawesome/free-solid-svg-icons";
+import { DetectLoginContext } from "../component/LoginProvider";
 
 function InquiryView(props) {
+  const { token, handleLogout, loginInfo, validateToken } =
+    useContext(DetectLoginContext);
+
   const [inquiry, setInquiry] = useState(null);
 
   const navigate = useNavigate();
@@ -43,6 +51,33 @@ function InquiryView(props) {
 
   if (inquiry == null) {
     return <Spinner />;
+  }
+  if (!token.detectLogin) {
+    return (
+      <Box w={"80%"} m={"auto"}>
+        <Alert
+          // colorScheme="red"
+          status="warning"
+          variant="subtle"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          textAlign="center"
+          height="200px"
+        >
+          <AlertIcon boxSize="40px" mr={0} />
+          <AlertTitle mt={4} mb={1} fontSize="lg">
+            로그인이 필요한 서비스입니다!
+          </AlertTitle>
+          <AlertDescription maxWidth="sm">
+            문의게시판의 글을 보시려면 로그인 하세요.
+          </AlertDescription>
+          <Button mt={5} onClick={() => navigate("/member/login")}>
+            로그인
+          </Button>
+        </Alert>
+      </Box>
+    );
   }
 
   function handleDeleteButton() {

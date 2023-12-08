@@ -41,6 +41,10 @@ function InquiryList(props) {
   const location = useLocation();
 
   useEffect(() => {
+    // const timer = setTimeout(() => {
+    //   setShowSpinner(false);
+    // }, 2000);
+
     axios
       .post("/api/inquiry/list?" + params, {
         login_member_id: loginInfo.member_id,
@@ -52,14 +56,16 @@ function InquiryList(props) {
       });
   }, [location]);
 
-  if (inquiryList == null) {
+  if (inquiryList == null || loginInfo == null) {
     return <Spinner />;
   }
 
+  // 로그인 안했을시 로그인화면으로 이동
   if (!token.detectLogin) {
     return (
       <Box w={"80%"} m={"auto"}>
         <Alert
+          // colorScheme="red"
           status="warning"
           variant="subtle"
           flexDirection="column"
