@@ -202,54 +202,41 @@ function BoardList() {
 
               <Tbody>
                 {boardList &&
-                  boardList.map((board) => (
-                    <Tr
-                      key={board.id}
-                      onClick={() => handleBoardClick(board.id)}
-                      _hover={{
-                        backgroundColor: "lightcyan",
-                        cursor: "pointer",
-                      }}
-                    >
-                      {/* ------------------------- is_show = true 인 경우(리스트) ------------------------- */}
-                      {board.is_show ? (
-                        <>
-                          {/* 게시판 번호 출력 */}
-                          <Td textAlign={"center"}>{board.rownum}</Td>
-                          {/* 썸네일, 제목 출력 */}
-                          <Td>
-                            <Flex align={"center"} gap={"10px"}>
-                              {/* 썸네일 출력 */}
-                              <YoutubeInfo
-                                link={board.link}
-                                extraThumbnail={true}
-                                thumbnailWidth={120}
-                                thumbnailHeight={70}
-                                toolTip={true}
-                              />
+                  boardList
+                    .filter((board) => board.is_show)
+                    .map((board) => (
+                      <Tr
+                        key={board.id}
+                        onClick={() => handleBoardClick(board.id)}
+                        _hover={{
+                          backgroundColor: "lightcyan",
+                          cursor: "pointer",
+                        }}
+                      >
+                        {/* 게시판 번호 출력 */}
+                        <Td textAlign={"center"}>{board.rownum}</Td>
+                        {/* 썸네일, 제목 출력 */}
+                        <Td>
+                          <Flex align={"center"} gap={"10px"}>
+                            {/* 썸네일 출력 */}
+                            <YoutubeInfo
+                              link={board.link}
+                              extraThumbnail={true}
+                              thumbnailWidth={120}
+                              thumbnailHeight={70}
+                              toolTip={true}
+                            />
 
-                              {/* 제목 출력 */}
-                              {renderListTitle(board)}
-                            </Flex>
-                          </Td>
-                          <Td textAlign={"center"}>{board.countlike}</Td>
-                          <Td textAlign={"center"}>{board.board_member_id}</Td>
-                          <Td textAlign={"center"}>{board.ago}</Td>
-                          <Td textAlign={"center"}>{board.views}</Td>
-                        </>
-                      ) : (
-                        <>
-                          {/* ------------------------- is_show = false 인 경우(리스트) ------------------------- */}
-                          {/*<Td textAlign={"center"}>{board.rownum}</Td>
-                          <Td colSpan={5}>
-                            <Text textAlign={"center"}>
-                              삭제된 게시물입니다.
-                            </Text>
-                          </Td>*/}
-                        </>
-                      )}
-                    </Tr>
-                  ))}
+                            {/* 제목 출력 */}
+                            {renderListTitle(board)}
+                          </Flex>
+                        </Td>
+                        <Td textAlign={"center"}>{board.countlike}</Td>
+                        <Td textAlign={"center"}>{board.board_member_id}</Td>
+                        <Td textAlign={"center"}>{board.ago}</Td>
+                        <Td textAlign={"center"}>{board.views}</Td>
+                      </Tr>
+                    ))}
               </Tbody>
             </Table>
             {/* -------------------- 검색, 페이징 --------------------*/}
