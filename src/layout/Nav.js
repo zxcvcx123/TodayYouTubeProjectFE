@@ -170,7 +170,7 @@ export function Nav({ setSocket }) {
                       <PopoverBody>
                         <Link to={"/board/" + list.board_id}>
                           {list.board_title}에 {list.sender_member_id}님이
-                          댓글을 남겼습니다.
+                          댓글을 남겼습니다. {list.ago}
                         </Link>
                       </PopoverBody>
                     ))}

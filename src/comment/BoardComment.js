@@ -302,11 +302,11 @@ export function BoardComment({ board_id, boardData }) {
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   const params = new URLSearchParams();
-  params.set("member_id", loginInfo.member_id);
+  params.set("member_id", localStorage.getItem("memberInfo"));
   params.set("board_id", board_id);
 
   useEffect(() => {
-    if (loginInfo.member_id !== "") {
+    if (localStorage.getItem("memberInfo") !== "") {
       if (!isSubmitting) {
         axios.get("/api/comment/list?" + params).then((response) => {
           setCommentList(response.data);
