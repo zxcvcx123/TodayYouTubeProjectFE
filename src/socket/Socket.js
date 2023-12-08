@@ -1,9 +1,19 @@
-import React, { createContext, useEffect, useRef, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { Stomp } from "@stomp/stompjs";
 import * as SockJS from "sockjs-client";
 import { Spinner } from "@chakra-ui/react";
+import { DetectLoginContext } from "../component/LoginProvider";
 
 function Socket({ children }) {
+  // 로그인 유저 정보 받아오기
+  const { connectUser } = useContext(DetectLoginContext);
+
   // Stomp JS: https://stomp-js.github.io/stomp-websocket/codo/extra/docs-src/Usage.md.html#toc_5
   // Stomp JS: https://stomp-js.github.io/api-docs/latest/index.html
 
@@ -22,7 +32,7 @@ function Socket({ children }) {
   const [like, setLike] = useState(null);
 
   // 알람
-  const [, set] = useState();
+  const [alarmList, setAlarmList] = useState([]);
 
   useEffect(() => {
     connect();
@@ -80,8 +90,8 @@ function Socket({ children }) {
 
     // 좋아요 실시간 최신화
     stompClient.current.subscribe("/topic/like", (res) => {
-      console.log(res.body);
       const data = JSON.parse(res.body);
+
       setCountLike(data.countlike);
     });
 
@@ -89,8 +99,8 @@ function Socket({ children }) {
     stompClient.current.subscribe(
       "/queue/like/" + localStorage.getItem("memberInfo"),
       (res) => {
-        console.log(res.body);
         const data = JSON.parse(res.body);
+        console.log(data);
         setLike(data.like);
       },
     );
@@ -100,11 +110,14 @@ function Socket({ children }) {
   const boardCommentAlramSocket = () => {
     console.log("댓글 알람 소켓연결");
 
-    stompClient.current.subscribe("/queue/comment/alarm/" + "abcd", (res1) => {
-      console.log(res1.body);
-      const data1 = JSON.parse(res1.body);
-      setLike(data1.like);
-    });
+    stompClient.current.subscribe(
+      "/queue/comment/alarm/" + localStorage.getItem("memberInfo"),
+      (res) => {
+        const data = JSON.parse(res.body);
+        console.log(data);
+        setAlarmList(data);
+      },
+    );
   };
 
   return (
@@ -118,6 +131,8 @@ function Socket({ children }) {
         setCountLike,
         like,
         setLike,
+        alarmList,
+        setAlarmList,
       }}
     >
       {children}

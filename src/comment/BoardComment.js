@@ -51,7 +51,7 @@ function CommentForm({
   boardData,
 }) {
   const { connectUser } = useContext(DetectLoginContext);
-  const { stompClient } = useContext(SocketContext);
+  const { stompClient, setToId } = useContext(SocketContext);
 
   const [comment, setComment] = useState("");
 
@@ -67,7 +67,7 @@ function CommentForm({
         sender_member_id: connectUser,
         receiver_member_id: boardData.board_member_id,
         board_id: board_id,
-        alarm_category: boardData.board_category_code,
+        board_title: boardData.board_title,
       }),
     });
   }
