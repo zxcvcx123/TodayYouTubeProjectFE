@@ -252,84 +252,60 @@ function BoardList() {
             {/* ---------------------------------------- 그리드 형태 보기 ---------------------------------------------*/}
             <SimpleGrid columns={[1, 2, 3, 4, 5]} spacing={[4]}>
               {boardList &&
-                boardList.map((board) => (
-                  <>
-                    {/* ------------------------- is_show = true 인 경우(그리드) ------------------------- */}
-                    {board.is_show ? (
-                      <Card
-                        key={board.id}
-                        w={"270px"}
-                        h={"300px"}
-                        border={"1px solid lightgray"}
-                        onClick={() => navigate("/board/" + board.id)}
-                        _hover={{
-                          backgroundColor: "lightcyan",
-                          cursor: "pointer",
-                        }}
-                      >
-                        <CardHeader p={"10px"}>
-                          {/* 썸네일 출력 */}
-                          <YoutubeInfo
-                            link={board.link}
-                            extraThumbnail={true}
-                            thumbnailWidth={250}
-                            thumbnailHeight={150}
-                          />
-                        </CardHeader>
+                boardList
+                  .filter((board) => board.is_show)
+                  .map((board) => (
+                    <Card
+                      key={board.id}
+                      w={"270px"}
+                      h={"300px"}
+                      border={"1px solid lightgray"}
+                      onClick={() => navigate("/board/" + board.id)}
+                      _hover={{
+                        backgroundColor: "lightcyan",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <CardHeader p={"10px"}>
+                        {/* 썸네일 출력 */}
+                        <YoutubeInfo
+                          link={board.link}
+                          extraThumbnail={true}
+                          thumbnailWidth={250}
+                          thumbnailHeight={150}
+                        />
+                      </CardHeader>
 
-                        <CardBody p={"10px"}>
-                          {/* 제목 출력 */}
-                          {renderGreedTitle(board)}
-                        </CardBody>
+                      <CardBody p={"10px"}>
+                        {/* 제목 출력 */}
+                        {renderGreedTitle(board)}
+                      </CardBody>
 
-                        <CardFooter p={"10px"}>
-                          <Box w={"100%"}>
-                            {/* id, 작성일자 출력 */}
-                            <Text>{board.board_member_id}</Text>
-                            <Text>{board.ago}</Text>
-                            {/* 좋아요, 댓글 갯수, 조회수 출력*/}
-                            <Flex w={"100%"} justifyContent={"space-between"}>
-                              <Flex>
-                                <Box mr={3}>
-                                  <FontAwesomeIcon icon={faThumbsUp} />{" "}
-                                  {board.countlike}
-                                </Box>
-                                <Box>
-                                  <FontAwesomeIcon icon={faComment} />{" "}
-                                  {board.count_comment}
-                                </Box>
-                              </Flex>
+                      <CardFooter p={"10px"}>
+                        <Box w={"100%"}>
+                          {/* id, 작성일자 출력 */}
+                          <Text>{board.board_member_id}</Text>
+                          <Text>{board.ago}</Text>
+                          {/* 좋아요, 댓글 갯수, 조회수 출력*/}
+                          <Flex w={"100%"} justifyContent={"space-between"}>
+                            <Flex>
+                              <Box mr={3}>
+                                <FontAwesomeIcon icon={faThumbsUp} />{" "}
+                                {board.countlike}
+                              </Box>
                               <Box>
-                                <Text>조회수 : {board.views}</Text>
+                                <FontAwesomeIcon icon={faComment} />{" "}
+                                {board.count_comment}
                               </Box>
                             </Flex>
-                          </Box>
-                        </CardFooter>
-                      </Card>
-                    ) : (
-                      <>
-                        {/* ------------------------- is_show = false 인 경우(그리드) ------------------------- */}
-                        {/*<Card>*/}
-                        {/*  <CardHeader p={"10px"}>*/}
-                        {/*    <YoutubeInfo*/}
-                        {/*      link={board.link}*/}
-                        {/*      extraThumbnail={true}*/}
-                        {/*      thumbnailWidth={120}*/}
-                        {/*      thumbnailHeight={70}*/}
-                        {/*      toolTip={true}*/}
-                        {/*    />*/}
-                        {/*  </CardHeader>*/}
-                        {/*  <CardBody p={"10px"}>*/}
-                        {/*    <Text color={"red"}>삭제됨</Text>*/}
-                        {/*  </CardBody>*/}
-                        {/*  <CardFooter p={"10px"}>*/}
-                        {/*    <Text color={"red"}>삭제됨</Text>*/}
-                        {/*  </CardFooter>*/}
-                        {/*</Card>*/}
-                      </>
-                    )}
-                  </>
-                ))}
+                            <Box>
+                              <Text>조회수 : {board.views}</Text>
+                            </Box>
+                          </Flex>
+                        </Box>
+                      </CardFooter>
+                    </Card>
+                  ))}
             </SimpleGrid>
             {/* ------------------------- 검색, 페이징 섹션 ------------------------- */}
             <Box>
