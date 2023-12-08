@@ -81,6 +81,7 @@ export function Nav({ setSocket }) {
         w="80%"
         alignItems="center"
         justifyContent={"space-around"}
+        bg="blackAlpha.100"
       >
         <Button
           borderStyle={"solid"}

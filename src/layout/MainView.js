@@ -52,7 +52,6 @@ export function MainView() {
   const [mainRecommendBoardList, setMainRecommendBoardList] = useState(null);
   const [mainHitsBoardList, setMainHitsBoardList] = useState(null);
 
-
   const [showSpinner, setShowSpinner] = useState(true);
 
   const params = new URLSearchParams();
@@ -67,9 +66,7 @@ export function MainView() {
     params.set("c", category);
     params.set("sort", dateSort);
 
-
     axios.get("/api?" + params).then((response) => {
-  
       setFirstList(response.data.firstBoardList);
       setOtherList(response.data.otherBoardList);
       setMainShowLink(response.data.firstBoardList.link);
@@ -85,7 +82,6 @@ export function MainView() {
       // navigate("?" + params);
       return () => clearTimeout(timer);
     });
-
   }, [category, dateSort]);
 
   // 나머지 영상 바뀔때 메인화면에 출력
@@ -180,8 +176,8 @@ export function MainView() {
   // console.log("출력될 링크:" + mainShowLink);
   // 임시메인
   return (
-    <Box bg="black" w="100%" h="2180px" p={4} border={"1px"} borderColor="pink">
-      <Flex w="100%" mb="200px">
+    <Box w="100%" h="2180px" p={4} border={"1px"} borderColor="pink">
+      <Flex w="100%" mb="200px" bg="black">
         <Box w="18%">
           <Box>
             <Flex ml={10} mb={1} mt={3}>
@@ -316,10 +312,7 @@ export function MainView() {
                 </Box>
               </Box>
               <Flex w={"80%"} ml={5}>
-                {
-                
-                
-                &&
+                {otherList !== null &&
                   otherList.map((other) => (
                     <Box
                       w={"25%"}
@@ -361,7 +354,6 @@ export function MainView() {
                     </Box>
                   ))}
               </Flex>
-
             </Flex>
           </Box>
         </Box>
