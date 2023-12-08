@@ -39,8 +39,19 @@ export function MainView() {
   const [isDay, setIsDay] = useState(false);
   const [isWeek, setIsWeek] = useState(true);
   const [isMonth, setIsMonth] = useState(false);
+
   const [mainShowLink, setMainShowLink] = useState(null);
   const [linkCategory, setLinkCategory] = useState(null);
+
+  const [mainBoardList2, setMainBoardList2] = useState(null);
+  const [mainBoardList3, setMainBoardList3] = useState(null);
+  const [mainBoardList4, setMainBoardList4] = useState(null);
+  const [mainBoardList5, setMainBoardList5] = useState(null);
+  const [mainBoardList6, setMainBoardList6] = useState(null);
+  const [mainBoardList7, setMainBoardList7] = useState(null);
+  const [mainRecommendBoardList, setMainRecommendBoardList] = useState(null);
+  const [mainHitsBoardList, setMainHitsBoardList] = useState(null);
+
 
   const [showSpinner, setShowSpinner] = useState(true);
 
@@ -55,17 +66,26 @@ export function MainView() {
     }, 7000);
     params.set("c", category);
     params.set("sort", dateSort);
-    axios
-      .get("/api?" + params)
-      .then((response) => {
-        setFirstList(response.data.firstBoardList);
-        setOtherList(response.data.otherBoardList);
-        setMainShowLink(response.data.firstBoardList.link);
-        setLinkCategory(response.data.firstBoardList.categoryName);
-        navigate("?" + params);
-        return () => clearTimeout(timer);
-      })
-      .catch(() => console.log("글이 없습니다."));
+
+
+    axios.get("/api?" + params).then((response) => {
+  
+      setFirstList(response.data.firstBoardList);
+      setOtherList(response.data.otherBoardList);
+      setMainShowLink(response.data.firstBoardList.link);
+      setLinkCategory(response.data.firstBoardList.categoryName);
+      setMainBoardList2(response.data.mainBoardList2);
+      setMainBoardList3(response.data.mainBoardList3);
+      setMainBoardList4(response.data.mainBoardList4);
+      setMainBoardList5(response.data.mainBoardList5);
+      setMainBoardList6(response.data.mainBoardList6);
+      setMainBoardList7(response.data.mainBoardList7);
+      setMainRecommendBoardList(response.data.mainRecommendBoardList);
+      setMainHitsBoardList(response.data.mainHitsBoardList);
+      // navigate("?" + params);
+      return () => clearTimeout(timer);
+    });
+
   }, [category, dateSort]);
 
   // 나머지 영상 바뀔때 메인화면에 출력
@@ -341,7 +361,16 @@ export function MainView() {
           </Box>
         </Box>
       </Flex>
-      <MainBoardList />
+      <MainBoardList
+        mainBoardList2={mainBoardList2}
+        mainBoardList3={mainBoardList3}
+        mainBoardList4={mainBoardList4}
+        mainBoardList5={mainBoardList5}
+        mainBoardList6={mainBoardList6}
+        mainBoardList7={mainBoardList7}
+        mainHitsBoardList={mainHitsBoardList}
+        mainRecommendBoardList={mainRecommendBoardList}
+      />
     </Box>
   );
 }

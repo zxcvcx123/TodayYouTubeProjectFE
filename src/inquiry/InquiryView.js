@@ -27,9 +27,13 @@ import {
 import axios from "axios";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import Editor from "../component/Editor";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowTurnUp } from "@fortawesome/free-solid-svg-icons";
 import { DetectLoginContext } from "../component/LoginProvider";
+
+import ScrollToTop from "../util/ScrollToTop";
+
 
 function InquiryView(props) {
   const { token, handleLogout, loginInfo, validateToken } =
@@ -176,6 +180,7 @@ function InquiryView(props) {
           </ModalFooter>
         </ModalContent>
       </Modal>
+
       <Box w={"80%"} m={"auto"}>
         <Box ml={5} mt={5}>
           <FontAwesomeIcon icon={faArrowTurnUp} rotation={90} size="2xl" />
@@ -196,6 +201,9 @@ function InquiryView(props) {
           ></Textarea>
         </FormControl>
       </Box>
+
+      <ScrollToTop />
+
     </Box>
   );
 }
