@@ -41,18 +41,48 @@ import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faHeartRegular } from "@fortawesome/free-regular-svg-icons";
 import commentLike from "../like/CommentLike";
 import { DetectLoginContext } from "../component/LoginProvider";
+import { SocketContext } from "../socket/Socket";
 
-function CommentForm({ board_id, isSubmitting, onSubmit, setCommentLike }) {
+function CommentForm({
+  board_id,
+  isSubmitting,
+  onSubmit,
+  setCommentLike,
+  boardData,
+}) {
+  const { connectUser } = useContext(DetectLoginContext);
+  const { stompClient, setToId } = useContext(SocketContext);
+
   const [comment, setComment] = useState("");
 
   function handleSubmit() {
     onSubmit({ board_id, comment });
   }
 
+  // 댓글작성시 알람기능
+  function send(comment) {
+    stompClient.current.publish({
+      destination: "/app/comment/sendalarm/" + connectUser,
+      body: JSON.stringify({
+        sender_member_id: connectUser,
+        receiver_member_id: boardData.board_member_id,
+        board_id: board_id,
+        board_title: boardData.board_title,
+      }),
+    });
+  }
+
   return (
     <Flex>
       <Textarea value={comment} onChange={(e) => setComment(e.target.value)} />
-      <Button isDisabled={isSubmitting} h="80px" onClick={handleSubmit}>
+      <Button
+        isDisabled={isSubmitting}
+        h="80px"
+        onClick={() => {
+          //handleSubmit();
+          send();
+        }}
+      >
         쓰기
       </Button>
     </Flex>
@@ -68,6 +98,7 @@ function CommentItem({
   onCommentLikeClick,
 }) {
   const { token, loginInfo } = useContext(DetectLoginContext);
+
   const [isEditing, setIsEditing] = useState(false);
   const [commentEdited, setCommentEdited] = useState(comment.comment);
   const [isReplyFormOpen, setIsReplyFormOpen] = useState(false);
@@ -257,8 +288,9 @@ function CommentList({
   );
 }
 
-export function BoardComment({ board_id }) {
+export function BoardComment({ board_id, boardData }) {
   const { token, loginInfo } = useContext(DetectLoginContext);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [commentLike, setCommentLike] = useState(null);
 
@@ -306,6 +338,7 @@ export function BoardComment({ board_id }) {
     );
   }
 
+  // 댓글 쓰기 버튼
   function handleSubmit(comment) {
     setIsSubmitting(true);
     console.log("실행 여부 확인");
@@ -324,6 +357,8 @@ export function BoardComment({ board_id }) {
       .catch((error) => console.log(error))
       .finally(() => setIsSubmitting(false));
   }
+
+  // 댓글 알람가게 하기
 
   function handleDelete(comment) {
     setIsSubmitting(true);
@@ -345,7 +380,6 @@ export function BoardComment({ board_id }) {
 
   function handleCommentDeleteModalOpen(comment_id) {
     commentIdRef.current = comment_id;
-
     onOpen();
   }
 
@@ -356,6 +390,7 @@ export function BoardComment({ board_id }) {
         isSubmitting={isSubmitting}
         onSubmit={handleSubmit}
         setCommentLike={setCommentLike}
+        boardData={boardData}
       />
       <CommentList
         board_id={board_id}
