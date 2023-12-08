@@ -275,6 +275,7 @@ export function MainView() {
                 opts={{ height: 550, width: 1100 }}
               />
             </Box>
+
             <Button w={"1%"} color="white" mt={300} ml={100} variant={"link"}>
               {linkCategory}게시판으로 이동하기 >
             </Button>
@@ -315,7 +316,10 @@ export function MainView() {
                 </Box>
               </Box>
               <Flex w={"80%"} ml={5}>
-                {otherList &&
+                {
+                
+                
+                &&
                   otherList.map((other) => (
                     <Box
                       w={"25%"}
@@ -357,6 +361,7 @@ export function MainView() {
                     </Box>
                   ))}
               </Flex>
+
             </Flex>
           </Box>
         </Box>

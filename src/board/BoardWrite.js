@@ -10,7 +10,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { Filednd } from "../file/Filednd";
 import Editor from "../component/Editor";
 import { DetectLoginContext } from "../component/LoginProvider";
@@ -29,6 +29,13 @@ function BoardWrite() {
   const [titleError, setTitleError] = useState("");
   const [contentError, setContentError] = useState("");
 
+  /* useLocation */
+  const location = useLocation();
+  const boardInfo = location.state;
+
+  /* 현재 쿼리스트링의 category 명 가져오기 */
+  const currentParams = new URLSearchParams(location.search).get("category");
+
   /* use navigate */
   let navigate = useNavigate();
 
@@ -37,11 +44,14 @@ function BoardWrite() {
 
   // 비로그인 상태로 글쓰기 경로 직접 접근시 경고 발생 후 로그인페이지로 이동
   useEffect(() => {
-    if (!token.detectLogin) {
-      window.alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-      navigate("/member/login");
+    if (loginInfo == null) {
+      if (!token.detectLogin) {
+        window.alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+        navigate("/member/login");
+      }
     }
-  }, []);
+    console.log(boardInfo);
+  }, [loginInfo]);
 
   // useEffect를 사용하여 titleError가 변경(에러발생)될 때마다 스크롤이 제목 라벨으로 이동
   useEffect(() => {
@@ -106,13 +116,14 @@ function BoardWrite() {
         uploadFiles,
         uuSrc,
         board_member_id: loginInfo.member_id,
+        name_eng: boardInfo,
       })
       .then(() => {
         toast({
           description: "게시글 저장에 성공했습니다.",
           status: "success",
         });
-        navigate("/board/list");
+        navigate("/board/list?category=" + currentParams);
       })
       .catch((error) => {
         if (error.response.status === 400) {
@@ -166,6 +177,10 @@ function BoardWrite() {
 
   return (
     <Box border={"2px solid black"} m={5}>
+      <Box mb={5}>
+        <Heading>{boardInfo} 게시판</Heading>
+      </Box>
+
       <Heading mb={5}>유튜브 추천 :: 새 글 작성하기</Heading>
 
       {/* -------------------- 제목 -------------------- */}
@@ -208,7 +223,10 @@ function BoardWrite() {
       </Button>
 
       {/* 취소 버튼 */}
-      <Button onClick={() => navigate("/board/list")} colorScheme="red">
+      <Button
+        onClick={() => navigate("/board/list?category=" + currentParams)}
+        colorScheme="red"
+      >
         취소
       </Button>
     </Box>

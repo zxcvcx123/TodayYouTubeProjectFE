@@ -8,27 +8,31 @@ import axios from "axios";
 
 export function SearchComponent() {
   const [keyword, setKeyword] = useState("");
-  const [category, setCategory] = useState("all");
+  const [type, setType] = useState("all");
   const navigate = useNavigate();
+  const [params, setParams] = useSearchParams();
+
+  useEffect(() => {
+    // URL에 category가 있는 경우 해당 값을 설정
+    if (params.has("category")) {
+      params.get("category");
+    }
+  }, [params]);
 
   function handleSearchClick() {
-    //   board/list?p=9&c=title&k=자바
+    // board/list?p=9&c=title&k=자바
     // board/list?p=9&title=테스트
+    const currentParams = new URLSearchParams(params);
 
-    const params = new URLSearchParams();
-    params.set("c", category);
-    params.set("k", keyword);
-    // navigate("?p=" + page + "&" + category + "=" + keyword);
-    navigate("?" + params);
+    currentParams.set("t", type);
+    currentParams.set("k", keyword);
+    // navigate("?p=" + page + "&" + type + "=" + keyword);
+    navigate("?" + currentParams);
   }
 
   return (
     <Flex mt={5} mb={5} width="100%" alignItems="center">
-      <Select
-        size="sm"
-        width="45%"
-        onChange={(e) => setCategory(e.target.value)}
-      >
+      <Select size="sm" width="45%" onChange={(e) => setType(e.target.value)}>
         <option value="all">제목+내용</option>
         <option value="title">제목</option>
         <option value="content">내용</option>

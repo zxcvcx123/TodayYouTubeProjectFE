@@ -9,6 +9,7 @@ import {
   CardHeader,
   Center,
   Flex,
+  Heading,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -52,9 +53,15 @@ function BoardList() {
   // 빈 배열로 받으면 null 값 오류 안나옴
   const [pageInfo, setPageInfo] = useState([]);
   const [currentView, setCurrentView] = useState("list");
+  const [boardInfo, setBoardInfo] = useState("");
 
   const [params] = useSearchParams();
+
+  // 현재 URL 파악하기
   const location = useLocation();
+
+  // 현재 URL에서 category 명 추출
+  const currentParams = new URLSearchParams(location.search).get("category");
 
   // modal
   const { isOpen, onClose, onOpen } = useDisclosure();
@@ -67,6 +74,7 @@ function BoardList() {
     axios.get("/api/board/list?" + params).then((response) => {
       setBoardList(response.data.boardList);
       setPageInfo(response.data.pageInfo);
+      setBoardInfo(response.data.boardInfo);
     });
   }, [location]);
 
@@ -87,7 +95,7 @@ function BoardList() {
     if (!token.detectLogin) {
       onOpen();
     } else {
-      navigate("/write");
+      navigate("/write?category=" + currentParams, { state: boardInfo });
     }
   }
 
@@ -135,7 +143,9 @@ function BoardList() {
 
   // 게시물 클릭 (게시물 보기)
   function handleBoardClick(boardId) {
-    navigate("/board/" + boardId);
+    navigate("/board/" + boardId + "?category=" + currentParams, {
+      state: boardInfo,
+    });
     // 조회수 증가 요청
     axios.post("/api/board/" + boardId + "/increaseView");
   }
@@ -145,6 +155,9 @@ function BoardList() {
     <Flex justifyContent={"center"}>
       <Box>
         {/* ------------------------- 게시글 목록 상단 바 ------------------------- */}
+        <Box mb={5}>
+          <Heading>{boardInfo} 게시판</Heading>
+        </Box>
         <Flex justifyContent={"space-between"} mb={5}>
           <Box>
             <Button onClick={handleWriteClick} colorScheme="blue">
@@ -152,8 +165,9 @@ function BoardList() {
             </Button>
           </Box>
           <Flex>
-            {/* 게시글 몇개씩 볼건지 */}
+            {/* 한 페이지 출력 갯수 설정 (5, 10, 20) */}
             <PageCount />
+
             {/* ------------------------- 게시글 뷰 형태 선택 ------------------------- */}
             <Box ml={3}>
               <Tooltip label={"리스트 형태 보기"}>
@@ -170,6 +184,7 @@ function BoardList() {
           </Flex>
         </Flex>
 
+        {/* ------------------------- 게시글 목록 본문 ------------------------- */}
         {/* currentView에 따라 게시판 목록 형태가 달라짐 */}
         {currentView === "list" ? (
           <>
@@ -188,54 +203,42 @@ function BoardList() {
 
               <Tbody>
                 {boardList &&
-                  boardList.map((board) => (
-                    <Tr
-                      key={board.id}
-                      onClick={() => handleBoardClick(board.id)}
-                      _hover={{
-                        backgroundColor: "lightcyan",
-                        cursor: "pointer",
-                      }}
-                    >
-                      {/* ------------------------- is_show = true 인 경우(리스트) ------------------------- */}
-                      {board.is_show ? (
-                        <>
-                          {/* 게시판 번호 출력 */}
-                          <Td textAlign={"center"}>{board.id}</Td>
-                          {/* 썸네일, 제목 출력 */}
-                          <Td>
-                            <Flex align={"center"} gap={"10px"}>
-                              {/* 썸네일 출력 */}
-                              <YoutubeInfo
-                                link={board.link}
-                                extraThumbnail={true}
-                                thumbnailWidth={120}
-                                thumbnailHeight={70}
-                                toolTip={true}
-                              />
+                  boardList
+                    /* board.is_show=true 만 필터 */
+                    .filter((board) => board.is_show)
+                    .map((board) => (
+                      <Tr
+                        key={board.id}
+                        onClick={() => handleBoardClick(board.id)}
+                        _hover={{
+                          backgroundColor: "lightcyan",
+                          cursor: "pointer",
+                        }}
+                      >
+                        {/* 게시판 번호 출력 */}
+                        <Td textAlign={"center"}>{board.rownum}</Td>
+                        {/* 썸네일, 제목 출력 */}
+                        <Td>
+                          <Flex align={"center"} gap={"10px"}>
+                            {/* 썸네일 출력 */}
+                            <YoutubeInfo
+                              link={board.link}
+                              extraThumbnail={true}
+                              thumbnailWidth={120}
+                              thumbnailHeight={70}
+                              toolTip={true}
+                            />
 
-                              {/* 제목 출력 */}
-                              {renderListTitle(board)}
-                            </Flex>
-                          </Td>
-                          <Td textAlign={"center"}>{board.countlike}</Td>
-                          <Td textAlign={"center"}>{board.board_member_id}</Td>
-                          <Td textAlign={"center"}>{board.ago}</Td>
-                          <Td textAlign={"center"}>{board.views}</Td>
-                        </>
-                      ) : (
-                        <>
-                          {/* ------------------------- is_show = false 인 경우(리스트) ------------------------- */}
-                          <Td textAlign={"center"}>{board.id}</Td>
-                          <Td colSpan={5}>
-                            <Text textAlign={"center"}>
-                              삭제된 게시물입니다.
-                            </Text>
-                          </Td>
-                        </>
-                      )}
-                    </Tr>
-                  ))}
+                            {/* 제목 출력 */}
+                            {renderListTitle(board)}
+                          </Flex>
+                        </Td>
+                        <Td textAlign={"center"}>{board.countlike}</Td>
+                        <Td textAlign={"center"}>{board.board_member_id}</Td>
+                        <Td textAlign={"center"}>{board.ago}</Td>
+                        <Td textAlign={"center"}>{board.views}</Td>
+                      </Tr>
+                    ))}
               </Tbody>
             </Table>
             {/* -------------------- 검색, 페이징 --------------------*/}
@@ -251,82 +254,61 @@ function BoardList() {
             {/* ---------------------------------------- 그리드 형태 보기 ---------------------------------------------*/}
             <SimpleGrid columns={[1, 2, 3, 4, 5]} spacing={[4]}>
               {boardList &&
-                boardList.map((board) => (
-                  <Card
-                    key={board.id}
-                    w={"270px"}
-                    h={"300px"}
-                    border={"1px solid lightgray"}
-                    onClick={() => navigate("/board/" + board.id)}
-                    _hover={{
-                      backgroundColor: "lightcyan",
-                      cursor: "pointer",
-                    }}
-                  >
-                    {/* ------------------------- is_show = true 인 경우(그리드) ------------------------- */}
-                    {board.is_show ? (
-                      <>
-                        <CardHeader p={"10px"}>
-                          {/* 썸네일 출력 */}
-                          <YoutubeInfo
-                            link={board.link}
-                            extraThumbnail={true}
-                            thumbnailWidth={250}
-                            thumbnailHeight={150}
-                          />
-                        </CardHeader>
+                boardList
+                  /* board.is_show=true 만 필터 */
+                  .filter((board) => board.is_show)
+                  .map((board) => (
+                    <Card
+                      key={board.id}
+                      w={"270px"}
+                      h={"300px"}
+                      border={"1px solid lightgray"}
+                      onClick={() => navigate("/board/" + board.id)}
+                      _hover={{
+                        backgroundColor: "lightcyan",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <CardHeader p={"10px"}>
+                        {/* 썸네일 출력 */}
+                        <YoutubeInfo
+                          link={board.link}
+                          extraThumbnail={true}
+                          thumbnailWidth={250}
+                          thumbnailHeight={150}
+                        />
+                      </CardHeader>
 
-                        <CardBody p={"10px"}>
-                          {/* 제목 출력 */}
-                          {renderGreedTitle(board)}
-                        </CardBody>
+                      <CardBody p={"10px"}>
+                        {/* 제목 출력 */}
+                        {renderGreedTitle(board)}
+                      </CardBody>
 
-                        <CardFooter p={"10px"}>
-                          <Box w={"100%"}>
-                            {/* id, 작성일자 출력 */}
-                            <Text>{board.board_member_id}</Text>
-                            <Text>{board.ago}</Text>
-                            {/* 좋아요, 댓글 갯수, 조회수 출력*/}
-                            <Flex w={"100%"} justifyContent={"space-between"}>
-                              <Flex>
-                                <Box mr={3}>
-                                  <FontAwesomeIcon icon={faThumbsUp} />{" "}
-                                  {board.countlike}
-                                </Box>
-                                <Box>
-                                  <FontAwesomeIcon icon={faComment} />{" "}
-                                  {board.count_comment}
-                                </Box>
-                              </Flex>
+                      <CardFooter p={"10px"}>
+                        <Box w={"100%"}>
+                          {/* id, 작성일자 출력 */}
+                          <Text>{board.board_member_id}</Text>
+                          <Text>{board.ago}</Text>
+                          {/* 좋아요, 댓글 갯수, 조회수 출력*/}
+                          <Flex w={"100%"} justifyContent={"space-between"}>
+                            <Flex>
+                              <Box mr={3}>
+                                <FontAwesomeIcon icon={faThumbsUp} />{" "}
+                                {board.countlike}
+                              </Box>
                               <Box>
-                                <Text>조회수 : {board.views}</Text>
+                                <FontAwesomeIcon icon={faComment} />{" "}
+                                {board.count_comment}
                               </Box>
                             </Flex>
-                          </Box>
-                        </CardFooter>
-                      </>
-                    ) : (
-                      <>
-                        {/* ------------------------- is_show = false 인 경우(그리드) ------------------------- */}
-                        <CardHeader p={"10px"}>
-                          <YoutubeInfo
-                            link={board.link}
-                            extraThumbnail={true}
-                            thumbnailWidth={120}
-                            thumbnailHeight={70}
-                            toolTip={true}
-                          />
-                        </CardHeader>
-                        <CardBody p={"10px"}>
-                          <Text color={"red"}>삭제됨</Text>
-                        </CardBody>
-                        <CardFooter p={"10px"}>
-                          <Text color={"red"}>삭제됨</Text>
-                        </CardFooter>
-                      </>
-                    )}
-                  </Card>
-                ))}
+                            <Box>
+                              <Text>조회수 : {board.views}</Text>
+                            </Box>
+                          </Flex>
+                        </Box>
+                      </CardFooter>
+                    </Card>
+                  ))}
             </SimpleGrid>
             {/* ------------------------- 검색, 페이징 섹션 ------------------------- */}
             <Box>

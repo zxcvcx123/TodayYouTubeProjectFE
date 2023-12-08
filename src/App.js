@@ -24,6 +24,9 @@ import InquiryWrite from "./inquiry/InquiryWrite";
 import LoginProvider from "./component/LoginProvider";
 import MemberInfo from "./member/memberInfo/MemberInfo";
 import InquiryEdit from "./inquiry/InquiryEdit";
+
+import AdminMain from "./admin/AdminMain";
+
 import InquiryAnswer from "./inquiry/InquiryAnswer";
 import ScrollToTop from "./util/ScrollToTop";
 
@@ -49,6 +52,7 @@ const routes = createBrowserRouter(
       <Route path={"member/info"} element={<MemberInfo />} />
       <Route path={"editor"} element={<Editor />} />
       <Route path="chat" element={<Chat />} />
+      <Route path="admin/*" element={<AdminMain />} />
     </Route>,
   ),
 );

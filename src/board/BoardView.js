@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import {
+  Avatar,
   Box,
   Button,
   Divider,
@@ -7,12 +8,14 @@ import {
   FormControl,
   FormLabel,
   Heading,
+  HStack,
   Spinner,
   Text,
+  Tooltip,
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { BoardComment } from "../comment/BoardComment";
 import BoardLike from "../like/BoardLike";
 import YoutubeInfo from "../component/YoutubeInfo";
@@ -40,6 +43,13 @@ function BoardView() {
   //URL 매개변수 추출
   const { id } = useParams();
 
+  // 현재 URL 파악하기
+  const location = useLocation();
+  const boardInfo = location.state;
+
+  // 현재 URL에서 category 명 추출
+  const currentParams = new URLSearchParams(location.search).get("category");
+
   // navigate
   const navigate = useNavigate();
 
@@ -57,6 +67,11 @@ function BoardView() {
   useEffect(() => {
     axios.get("/api/board/id/" + id).then((response) => {
       setBoard(response.data);
+
+      if (!response.data.is_show) {
+        navigate("board/list?category=notice");
+        window.alert("삭제된 게시물입니다.");
+      }
 
       // 게시글 데이터를 가져온 후 작성자 여부를 확인하여 isAuthor 설정
       if (connectUser === response.data.board_member_id) {
@@ -198,6 +213,9 @@ function BoardView() {
 
   return (
     <Box m={"50px 20% 20px 50px"}>
+      <Box mb={5}>
+        <Heading>{boardInfo} 게시판</Heading>
+      </Box>
       <Heading>{board.id} 번 게시글 보기(임시 게시글 번호 확인용!!)</Heading>
 
       {/* -------------------- 상단 영역 -------------------- */}
@@ -209,7 +227,20 @@ function BoardView() {
         <Flex justifyContent={"space-between"} alignItems={"center"}>
           <Flex alignItems={"center"}>
             {/* 프로필 */}
-            <MemberProfile />
+            <HStack>
+              <Flex width={"150px"}>
+                <Avatar src="https://i.imgur.com/lmSDJtn.jpeg" />
+                <Box ml="3">
+                  <Tooltip label={board.nickname} placement="top-start">
+                    <Text fontWeight="bold">
+                      {board.nickname.slice(0, 8)}...
+                    </Text>
+                  </Tooltip>
+                  <Text fontSize="sm">{board.role_name}</Text>
+                </Box>
+              </Flex>
+            </HStack>
+
             {/* 일자 */}
             <Text>| {board.updated_at}</Text>
           </Flex>
@@ -265,7 +296,10 @@ function BoardView() {
       {/* -------------------- 버튼 섹션 -------------------- */}
       <Flex justifyContent={"space-between"}>
         {/* 목록 버튼 */}
-        <Button colorScheme="blue" onClick={() => navigate("/board/list")}>
+        <Button
+          colorScheme="blue"
+          onClick={() => navigate("/board/list?category=" + currentParams)}
+        >
           목록
         </Button>
         {isAuthor && (
