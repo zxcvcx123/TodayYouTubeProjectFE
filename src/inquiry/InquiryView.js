@@ -1,7 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
   Box,
   Button,
+  Flex,
   FormControl,
   FormLabel,
   Input,
@@ -22,9 +27,18 @@ import {
 import axios from "axios";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import Editor from "../component/Editor";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowTurnUp } from "@fortawesome/free-solid-svg-icons";
+import { DetectLoginContext } from "../component/LoginProvider";
+
 import ScrollToTop from "../util/ScrollToTop";
 
+
 function InquiryView(props) {
+  const { token, handleLogout, loginInfo, validateToken } =
+    useContext(DetectLoginContext);
+
   const [inquiry, setInquiry] = useState(null);
 
   const navigate = useNavigate();
@@ -40,8 +54,35 @@ function InquiryView(props) {
       .then((response) => setInquiry(response.data));
   }, []);
 
-  if (inquiry == null) {
+  if (inquiry == null || loginInfo == null) {
     return <Spinner />;
+  }
+  if (!token.detectLogin) {
+    return (
+      <Box w={"80%"} m={"auto"}>
+        <Alert
+          // colorScheme="red"
+          status="warning"
+          variant="subtle"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          textAlign="center"
+          height="200px"
+        >
+          <AlertIcon boxSize="40px" mr={0} />
+          <AlertTitle mt={4} mb={1} fontSize="lg">
+            로그인이 필요한 서비스입니다!
+          </AlertTitle>
+          <AlertDescription maxWidth="sm">
+            문의게시판의 글을 보시려면 로그인 하세요.
+          </AlertDescription>
+          <Button mt={5} onClick={() => navigate("/member/login")}>
+            로그인
+          </Button>
+        </Alert>
+      </Box>
+    );
   }
 
   function handleDeleteButton() {
@@ -58,24 +99,30 @@ function InquiryView(props) {
       .finally(() => console.log("done"));
   }
 
+  function handleAnswerClick() {
+    navigate("/inquiry/answer/" + id);
+  }
+
+  console.log(inquiry);
+
   return (
-    <Box width={"80%"} m={"auto"}>
-      <FormControl mb={1}>
-        <FormLabel fontWeight={"bold"} ml={3}>
-          문의유형
-        </FormLabel>
+    <Box width={"60%"} m={"auto"}>
+      <Flex mb={1} w={"100%"} mb={4}>
+        <Box fontWeight={"bold"} ml={3} w={"10%"}>
+          문의유형 :
+        </Box>
         <Input
           value={inquiry.inquiry_category}
           size={"sm"}
-          width={"30%"}
+          width={"70%"}
           borderColor={"black.300"}
           readOnly
         ></Input>
-      </FormControl>
-      <FormControl mb={1}>
-        <FormLabel fontWeight={"bold"} ml={3}>
-          제목
-        </FormLabel>
+      </Flex>
+      <Flex mb={1} mb={4}>
+        <Box fontWeight={"bold"} ml={3} w={"10%"}>
+          제 목 :
+        </Box>
         <Input
           type="text"
           width={"70%"}
@@ -83,13 +130,14 @@ function InquiryView(props) {
           readOnly
           borderColor={"black.300"}
         ></Input>
-      </FormControl>
+      </Flex>
       {/*<Editor />*/}
-      <FormControl mb={1}>
-        <FormLabel fontWeight={"bold"} ml={3}>
-          문의내용
-        </FormLabel>
+      <Flex mb={1} mb={4}>
+        <Box fontWeight={"bold"} ml={3} w={"10%"}>
+          문의내용 :
+        </Box>
         <Textarea
+          w={"70%"}
           padding={3}
           size={"xl"}
           h={"300px"}
@@ -97,16 +145,23 @@ function InquiryView(props) {
           borderColor={"black.300"}
           readOnly
         ></Textarea>
-      </FormControl>
-      <Button
-        colorScheme="blue"
-        onClick={() => navigate("/inquiry/edit/" + id)}
-      >
-        수정
-      </Button>
-      <Button colorScheme="red" onClick={onOpen}>
-        삭제
-      </Button>
+      </Flex>
+      {loginInfo.role_name == "운영자" && (
+        <Box>
+          <Button
+            colorScheme="blue"
+            onClick={() => navigate("/inquiry/edit/" + id)}
+          >
+            수정
+          </Button>
+          <Button colorScheme="red" onClick={onOpen}>
+            삭제
+          </Button>
+          <Button ml={20} colorScheme="green" onClick={handleAnswerClick}>
+            답변하기
+          </Button>
+        </Box>
+      )}
 
       {/* 삭제 모달 */}
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -125,7 +180,30 @@ function InquiryView(props) {
           </ModalFooter>
         </ModalContent>
       </Modal>
+
+      <Box w={"80%"} m={"auto"}>
+        <Box ml={5} mt={5}>
+          <FontAwesomeIcon icon={faArrowTurnUp} rotation={90} size="2xl" />
+        </Box>
+        <FormControl mb={1}>
+          <FormLabel fontWeight={"bold"} ml={50}>
+            답변내용
+          </FormLabel>
+          <Textarea
+            padding={3}
+            size={"xl"}
+            h={"300px"}
+            border={"2px"}
+            value={inquiry.answerContent}
+            borderColor={"red"}
+            borderRadius={(2, 20)}
+            readOnly
+          ></Textarea>
+        </FormControl>
+      </Box>
+
       <ScrollToTop />
+
     </Box>
   );
 }

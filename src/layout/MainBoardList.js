@@ -23,6 +23,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import { InfoOutlineIcon } from "@chakra-ui/icons";
 
+
 export function MainBoardList({
   mainBoardList2,
   mainBoardList3,
@@ -33,6 +34,7 @@ export function MainBoardList({
   mainRecommendBoardList,
   mainHitsBoardList,
 }) {
+
   // chakra ui 버튼 커스텀
   const CircleIcon = ({ color, ...props }) => (
     <Icon viewBox="0 0 200 200" {...props}>

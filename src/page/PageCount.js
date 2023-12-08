@@ -19,16 +19,15 @@ function PageCount(props) {
 
   useEffect(() => {
     params.set("s", pageCount);
+    params.set("p", 1);
     navigate("?" + params);
   }, [pageCount]);
 
   return (
     <Box>
-      <Select onChange={(e) => setPageCount(e.target.value)}>
+      <Select defaultValue={10} onChange={(e) => setPageCount(e.target.value)}>
         <option value={5}>5개씩 보기</option>
-        <option selected value={10}>
-          10개씩 보기
-        </option>
+        <option value={10}>10개씩 보기</option>
         <option value={20}>20개씩 보기</option>
       </Select>
     </Box>

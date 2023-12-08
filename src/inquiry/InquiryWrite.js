@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import axios from "axios";
 import {
   Box,
@@ -15,14 +15,19 @@ import {
   ModalHeader,
   ModalOverlay,
   Select,
+  Spinner,
   Textarea,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import Editor from "../component/Editor";
+import { DetectLoginContext } from "../component/LoginProvider";
 
 function InquiryWrite(props) {
+  const { token, handleLogout, loginInfo, validateToken } =
+    useContext(DetectLoginContext);
+
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [inquiry_category, setInquiry_category] = useState(null);
@@ -34,7 +39,12 @@ function InquiryWrite(props) {
 
   function handleWriteButton() {
     axios
-      .post("/api/inquiry/write", { title, content, inquiry_category })
+      .post("/api/inquiry/write", {
+        title,
+        content,
+        inquiry_category,
+        inquiry_member_id: loginInfo.member_id,
+      })
       .then(() => {
         navigate("/inquiry/list");
         toast({
@@ -49,6 +59,9 @@ function InquiryWrite(props) {
         }),
       )
       .finally(() => console.log("done"));
+  }
+  if (loginInfo == null) {
+    return <Spinner />;
   }
 
   return (
