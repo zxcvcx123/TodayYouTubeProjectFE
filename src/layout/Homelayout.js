@@ -10,8 +10,8 @@ export function HomeLayout() {
   let test = "테스트1";
   return (
     <LoginProvider>
-      <Box>
-        <Socket>
+      <Box bg="blackAlpha.200">
+         <Socket>
           <Nav />
           <Outlet context={{ test }} />
         </Socket>

@@ -24,7 +24,7 @@ import InquiryWrite from "./inquiry/InquiryWrite";
 import LoginProvider from "./component/LoginProvider";
 import MemberInfo from "./member/memberInfo/MemberInfo";
 import InquiryEdit from "./inquiry/InquiryEdit";
-
+import ScrollToTop from "./util/ScrollToTop";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(

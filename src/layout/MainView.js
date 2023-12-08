@@ -39,6 +39,14 @@ export function MainView() {
   const [isDay, setIsDay] = useState(false);
   const [isWeek, setIsWeek] = useState(false);
   const [isMonth, setIsMonth] = useState(false);
+  const [mainBoardList2, setMainBoardList2] = useState(null);
+  const [mainBoardList3, setMainBoardList3] = useState(null);
+  const [mainBoardList4, setMainBoardList4] = useState(null);
+  const [mainBoardList5, setMainBoardList5] = useState(null);
+  const [mainBoardList6, setMainBoardList6] = useState(null);
+  const [mainBoardList7, setMainBoardList7] = useState(null);
+  const [mainRecommendBoardList, setMainRecommendBoardList] = useState(null);
+  const [mainHitsBoardList, setMainHitsBoardList] = useState(null);
 
   const [showSpinner, setShowSpinner] = useState(true);
 
@@ -55,7 +63,15 @@ export function MainView() {
     axios.get("/api?" + params).then((response) => {
       setFirstList(response.data.firstBoardList);
       setOtherList(response.data.otherBoardList);
-      navigate("?" + params);
+      setMainBoardList2(response.data.mainBoardList2);
+      setMainBoardList3(response.data.mainBoardList3);
+      setMainBoardList4(response.data.mainBoardList4);
+      setMainBoardList5(response.data.mainBoardList5);
+      setMainBoardList6(response.data.mainBoardList6);
+      setMainBoardList7(response.data.mainBoardList7);
+      setMainRecommendBoardList(response.data.mainRecommendBoardList);
+      setMainHitsBoardList(response.data.mainHitsBoardList);
+      // navigate("?" + params);
       return () => clearTimeout(timer);
     });
   }, [category, dateSort]);
@@ -237,7 +253,16 @@ export function MainView() {
           {firstList.categoryName}게시판으로 이동하기 >
         </Button>
       </Flex>
-      <MainBoardList />
+      <MainBoardList
+        mainBoardList2={mainBoardList2}
+        mainBoardList3={mainBoardList3}
+        mainBoardList4={mainBoardList4}
+        mainBoardList5={mainBoardList5}
+        mainBoardList6={mainBoardList6}
+        mainBoardList7={mainBoardList7}
+        mainHitsBoardList={mainHitsBoardList}
+        mainRecommendBoardList={mainRecommendBoardList}
+      />
     </Box>
   );
 }

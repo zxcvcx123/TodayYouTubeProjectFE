@@ -40,6 +40,7 @@ import {
 import { SearchComponent } from "../page/SearchComponent";
 import PageCount from "../page/PageCount";
 import { DetectLoginContext } from "../component/LoginProvider";
+import ScrollToTop from "../util/ScrollToTop";
 
 function BoardList() {
   /* 로그인 정보 컨텍스트 */

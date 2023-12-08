@@ -20,6 +20,7 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { DetectLoginContext } from "../component/LoginProvider";
 import MemberProfile from "../member/MemberProfile";
+import ScrollToTop from "../util/ScrollToTop";
 
 function BoardView() {
   /* 로그인 정보 컨텍스트 */
@@ -282,7 +283,12 @@ function BoardView() {
         )}
       </Flex>
       {/* -------------------- 댓글 영역 -------------------- */}
-      <BoardComment board_id={id} boardData={board} />
+
+        <BoardComment board_id={id} boardData={board} />
+      <ScrollToTop />
+
+    
+
     </Box>
   );
 }
