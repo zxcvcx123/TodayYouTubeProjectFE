@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import {
+  Avatar,
   Box,
   Button,
   Divider,
@@ -7,6 +8,7 @@ import {
   FormControl,
   FormLabel,
   Heading,
+  HStack,
   Spinner,
   Text,
   useToast,
@@ -277,7 +279,16 @@ function BoardView() {
         <Flex justifyContent={"space-between"} alignItems={"center"}>
           <Flex alignItems={"center"}>
             {/* 프로필 */}
-            <MemberProfile />
+            <HStack>
+              <Flex width={"150px"}>
+                <Avatar src="https://i.imgur.com/lmSDJtn.jpeg" />
+                <Box ml="3">
+                  <Text fontWeight="bold">{board.nickname}</Text>
+                  <Text fontSize="sm">{board.role_name}</Text>
+                </Box>
+              </Flex>
+            </HStack>
+
             {/* 일자 */}
             <Text>| {board.updated_at}</Text>
           </Flex>
