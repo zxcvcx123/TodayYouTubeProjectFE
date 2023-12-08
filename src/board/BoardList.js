@@ -240,12 +240,12 @@ function BoardList() {
                       ) : (
                         <>
                           {/* ------------------------- is_show = false 인 경우(리스트) ------------------------- */}
-                          <Td textAlign={"center"}>{board.rownum}</Td>
+                          {/*<Td textAlign={"center"}>{board.rownum}</Td>
                           <Td colSpan={5}>
                             <Text textAlign={"center"}>
                               삭제된 게시물입니다.
                             </Text>
-                          </Td>
+                          </Td>*/}
                         </>
                       )}
                     </Tr>
@@ -266,20 +266,20 @@ function BoardList() {
             <SimpleGrid columns={[1, 2, 3, 4, 5]} spacing={[4]}>
               {boardList &&
                 boardList.map((board) => (
-                  <Card
-                    key={board.id}
-                    w={"270px"}
-                    h={"300px"}
-                    border={"1px solid lightgray"}
-                    onClick={() => navigate("/board/" + board.id)}
-                    _hover={{
-                      backgroundColor: "lightcyan",
-                      cursor: "pointer",
-                    }}
-                  >
+                  <>
                     {/* ------------------------- is_show = true 인 경우(그리드) ------------------------- */}
                     {board.is_show ? (
-                      <>
+                      <Card
+                        key={board.id}
+                        w={"270px"}
+                        h={"300px"}
+                        border={"1px solid lightgray"}
+                        onClick={() => navigate("/board/" + board.id)}
+                        _hover={{
+                          backgroundColor: "lightcyan",
+                          cursor: "pointer",
+                        }}
+                      >
                         <CardHeader p={"10px"}>
                           {/* 썸네일 출력 */}
                           <YoutubeInfo
@@ -318,28 +318,30 @@ function BoardList() {
                             </Flex>
                           </Box>
                         </CardFooter>
-                      </>
+                      </Card>
                     ) : (
                       <>
                         {/* ------------------------- is_show = false 인 경우(그리드) ------------------------- */}
-                        <CardHeader p={"10px"}>
-                          <YoutubeInfo
-                            link={board.link}
-                            extraThumbnail={true}
-                            thumbnailWidth={120}
-                            thumbnailHeight={70}
-                            toolTip={true}
-                          />
-                        </CardHeader>
-                        <CardBody p={"10px"}>
-                          <Text color={"red"}>삭제됨</Text>
-                        </CardBody>
-                        <CardFooter p={"10px"}>
-                          <Text color={"red"}>삭제됨</Text>
-                        </CardFooter>
+                        {/*<Card>*/}
+                        {/*  <CardHeader p={"10px"}>*/}
+                        {/*    <YoutubeInfo*/}
+                        {/*      link={board.link}*/}
+                        {/*      extraThumbnail={true}*/}
+                        {/*      thumbnailWidth={120}*/}
+                        {/*      thumbnailHeight={70}*/}
+                        {/*      toolTip={true}*/}
+                        {/*    />*/}
+                        {/*  </CardHeader>*/}
+                        {/*  <CardBody p={"10px"}>*/}
+                        {/*    <Text color={"red"}>삭제됨</Text>*/}
+                        {/*  </CardBody>*/}
+                        {/*  <CardFooter p={"10px"}>*/}
+                        {/*    <Text color={"red"}>삭제됨</Text>*/}
+                        {/*  </CardFooter>*/}
+                        {/*</Card>*/}
                       </>
                     )}
-                  </Card>
+                  </>
                 ))}
             </SimpleGrid>
             {/* ------------------------- 검색, 페이징 섹션 ------------------------- */}
