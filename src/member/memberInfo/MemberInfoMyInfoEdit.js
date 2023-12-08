@@ -24,6 +24,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Spinner,
   Stack,
   StackDivider,
   Text,
@@ -38,12 +39,12 @@ import {
   validateEmail,
 } from "../memberUtil/memberSignUpMethods";
 import { isDisabled } from "@testing-library/user-event/dist/utils";
+import { useNavigate } from "react-router-dom";
 
 function MemberInfoMyInfoEdit({ loginInfo }) {
   const [timer, setTimer] = useState(null);
-  /* Modal */
-  const initialRef = React.useRef(null);
-  const finalRef = React.useRef(null);
+  const [spinner, setSpinner] = useState(true);
+
   /* 회원 상태 */
   const defaultNickname = loginInfo.nickname;
   const [changeNickname, setChangeNickname] = useState(defaultNickname);
@@ -71,10 +72,14 @@ function MemberInfoMyInfoEdit({ loginInfo }) {
   /* 비밀번호 폼 상태 */
   const [show, setShow] = React.useState(false);
   const [showCheck, setShowCheck] = React.useState(false);
+  /* Modal */
+  const initialRef = React.useRef(null);
+  const finalRef = React.useRef(null);
   const handleClick = () => setShow(!show);
   const handleCheckClick = () => setShowCheck(!showCheck);
   let toast = useToast();
 
+  const navigate = useNavigate();
   const CustomOverlay = () => (
     <ModalOverlay
       bg="blackAlpha.300"
@@ -125,14 +130,54 @@ function MemberInfoMyInfoEdit({ loginInfo }) {
   }
 
   function handleEditMemberInfo() {
+    setSpinner(false);
     if (
       !isNicknameChanged &&
-      isEmailChanged &&
-      isPasswordChanged &&
-      isPasswordCheckChanged &&
-      isPhoneNumberChanged
+      !isEmailChanged &&
+      !isPasswordChanged &&
+      !isPasswordCheckChanged &&
+      !isPhoneNumberChanged
     ) {
-      axios.patch();
+      const grantType = localStorage.getItem("grantType");
+      const accessToken = localStorage.getItem("accessToken");
+
+      axios
+        .patch(
+          "/api/member/info/update",
+          {
+            member_id: loginInfo.member_id,
+            password: changePassword,
+            nickname: changeNickname,
+            email: changeEmail,
+            phone_number: changePhoneNumber,
+          },
+          {
+            headers: {
+              Authorization: `${grantType} ${accessToken}`,
+            },
+          },
+        )
+        .then((response) => {
+          toast({
+            description: "변경이 완료되었습니다",
+            status: "success",
+          });
+        })
+        .catch((error) => {
+          toast({
+            description: "변경에 실패하였습니다. 다시 시도해주세요",
+            status: "error",
+          });
+        })
+        .finally(() => {
+          navigate("/");
+          setSpinner(true);
+        });
+    } else {
+      toast({
+        description: "처리되지 않은 작업이 있습니다",
+        status: "warning",
+      });
     }
   }
 
@@ -306,7 +351,7 @@ function MemberInfoMyInfoEdit({ loginInfo }) {
                                   if (e.target.value.length >= 8) {
                                     setPasswordMessage("안전검사가 필요합니다");
                                   }
-                                  if (e.target.value === "") {
+                                  if (e.target.value.length == 0) {
                                     setIsPasswordChanged(false);
                                   }
                                 }
@@ -341,9 +386,9 @@ function MemberInfoMyInfoEdit({ loginInfo }) {
                               value={changePasswordCheck}
                               onChange={(e) => {
                                 if (!e.target.value.includes(" ")) {
-                                  setIsPasswordChanged(true);
+                                  setIsPasswordCheckChanged(true);
                                   setChangePasswordCheck(e.target.value);
-                                  if (e.target.value === "") {
+                                  if (e.target.value.length == 0) {
                                     setIsPasswordCheckChanged(false);
                                   }
                                 }
@@ -364,7 +409,7 @@ function MemberInfoMyInfoEdit({ loginInfo }) {
                           <FormErrorMessage>
                             비밀번호가 일치하지 않습니다
                           </FormErrorMessage>
-                        ) : !(isPasswordChanged && isPasswordCheckChanged) ? (
+                        ) : isPasswordChanged && isPasswordCheckChanged ? (
                           <FormErrorMessage>
                             안전검사가 필요합니다.
                           </FormErrorMessage>
@@ -475,8 +520,14 @@ function MemberInfoMyInfoEdit({ loginInfo }) {
           >
             저장
           </Button>
-          <Button variant="ghost" colorScheme="blue">
-            삭제
+          <Button
+            variant="ghost"
+            colorScheme="blue"
+            onClick={() => {
+              navigate("/");
+            }}
+          >
+            취소
           </Button>
         </ButtonGroup>
         <Modal
@@ -498,9 +549,13 @@ function MemberInfoMyInfoEdit({ loginInfo }) {
               <Text fontSize={"20px"}>변경 사항을 적용하시겠습니까?</Text>
             </ModalBody>
             <ModalFooter>
-              <Button colorScheme="blue" onClick={handleEditMemberInfo}>
-                저장
-              </Button>
+              {spinner ? (
+                <Button colorScheme="blue" onClick={handleEditMemberInfo}>
+                  저장
+                </Button>
+              ) : (
+                <Spinner />
+              )}
             </ModalFooter>
           </ModalContent>
         </Modal>

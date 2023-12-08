@@ -21,6 +21,7 @@ import {
   Thead,
   Tooltip,
   Tr,
+  Text,
   useDisclosure,
 } from "@chakra-ui/react";
 
@@ -58,7 +59,7 @@ function MemberInfoMyInfoPopover(props) {
                 <Tr>
                   <Th>배지</Th>
                   <Th>등급</Th>
-                  <Th>조건</Th>
+                  <Th>누적 조건</Th>
                 </Tr>
               </Thead>
               <Tbody>
@@ -71,7 +72,11 @@ function MemberInfoMyInfoPopover(props) {
                   <Td color={"#663300"} fontWeight={"bold"}>
                     아이언
                   </Td>
-                  <Td>아직 안정함</Td>
+                  <Td p={0}>
+                    <Text fontSize={"16px"}>
+                      <div className="levelUpCondition">회원가입</div>
+                    </Text>
+                  </Td>
                 </Tr>
                 <Tr>
                   <Td>
@@ -82,7 +87,12 @@ function MemberInfoMyInfoPopover(props) {
                   <Td color="#996600" fontWeight={"bold"}>
                     브론즈
                   </Td>
-                  <Td>아직 안정함</Td>
+                  <Td p={0}>
+                    {" "}
+                    <Text fontSize={"16px"}>
+                      <div className="levelUpCondition">게시글 2, 댓글 5</div>
+                    </Text>
+                  </Td>
                 </Tr>
                 <Tr>
                   <Td>
@@ -93,7 +103,12 @@ function MemberInfoMyInfoPopover(props) {
                   <Td color="#CCCCCC" fontWeight={"bold"}>
                     실버
                   </Td>
-                  <Td>아직 안정함</Td>
+                  <Td p={0}>
+                    {" "}
+                    <Text fontSize={"16px"}>
+                      <div className="levelUpCondition">게시글 5, 댓글 10</div>
+                    </Text>
+                  </Td>
                 </Tr>
                 <Tr>
                   <Td>
@@ -104,7 +119,18 @@ function MemberInfoMyInfoPopover(props) {
                   <Td color="#FFCC00" fontWeight={"bold"}>
                     골드
                   </Td>
-                  <Td>아직 안정함</Td>
+                  <Td p={0}>
+                    {" "}
+                    <Text fontSize={"16px"}>
+                      <div
+                        className="levelUpCondition"
+                        style={{ marginBottom: "5px" }}
+                      >
+                        게시글 20, 댓글 40
+                      </div>
+                      <div className="levelUpCondition">좋아요 10</div>
+                    </Text>
+                  </Td>
                 </Tr>
                 <Tr>
                   <Td>
@@ -115,7 +141,20 @@ function MemberInfoMyInfoPopover(props) {
                   <Td color="#33FF33" fontWeight={"bold"}>
                     플레티넘
                   </Td>
-                  <Td>아직 안정함</Td>
+                  <Td p={0}>
+                    {" "}
+                    <Text fontSize={"16px"}>
+                      <div
+                        className="levelUpCondition"
+                        style={{ marginBottom: "5px" }}
+                      >
+                        게시글 50, 댓글 75
+                      </div>
+                      <div className="levelUpCondition">
+                        좋아요 50, 조회수 1000
+                      </div>
+                    </Text>
+                  </Td>
                 </Tr>
                 <Tr>
                   <Td>
@@ -126,7 +165,19 @@ function MemberInfoMyInfoPopover(props) {
                   <Td color="#00FFFF" fontWeight={"bold"}>
                     다이아
                   </Td>
-                  <Td>아직 안정함</Td>
+                  <Td p={0}>
+                    <Text fontSize={"16px"}>
+                      <div
+                        className="levelUpCondition"
+                        style={{ marginBottom: "5px" }}
+                      >
+                        게시글 75, 댓글 100
+                      </div>
+                      <div className="levelUpCondition">
+                        좋아요 100, 조회수 5000
+                      </div>
+                    </Text>
+                  </Td>
                 </Tr>
                 <Tr>
                   <Td>
@@ -137,7 +188,19 @@ function MemberInfoMyInfoPopover(props) {
                   <Td color="#CC66FF" fontWeight={"bold"}>
                     마스터
                   </Td>
-                  <Td>아직 안정함</Td>
+                  <Td p={0}>
+                    <Text fontSize={"16px"}>
+                      <div
+                        className="levelUpCondition"
+                        style={{ marginBottom: "5px" }}
+                      >
+                        게시글 300, 댓글 500
+                      </div>
+                      <div className="levelUpCondition">
+                        좋아요 1000, 조회수 20000
+                      </div>
+                    </Text>
+                  </Td>
                 </Tr>
                 <Tr>
                   <Td>
@@ -148,7 +211,19 @@ function MemberInfoMyInfoPopover(props) {
                   <Td color="#FF3366" fontWeight={"bold"}>
                     그랜드마스터
                   </Td>
-                  <Td>아직 안정함</Td>
+                  <Td p={0}>
+                    <Text fontSize={"16px"}>
+                      <div
+                        className="levelUpCondition"
+                        style={{ marginBottom: "5px" }}
+                      >
+                        게시글 500, 댓글 1000
+                      </div>
+                      <div className="levelUpCondition">
+                        좋아요 5000, 조회수 100000
+                      </div>
+                    </Text>
+                  </Td>
                 </Tr>
                 <Tr>
                   <Td>
@@ -159,7 +234,19 @@ function MemberInfoMyInfoPopover(props) {
                   <Td color="red" fontWeight={"bold"}>
                     챌린저
                   </Td>
-                  <Td>아직 안정함</Td>
+                  <Td p={0}>
+                    <Text fontSize={"16px"}>
+                      <div
+                        className="levelUpCondition"
+                        style={{ marginBottom: "5px" }}
+                      >
+                        게시글 500, 댓글 1000
+                      </div>
+                      <div className="levelUpCondition">
+                        좋아요 10000, 조회수 500000
+                      </div>
+                    </Text>
+                  </Td>
                 </Tr>
               </Tbody>
               <Tfoot></Tfoot>

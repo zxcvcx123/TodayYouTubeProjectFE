@@ -1,8 +1,5 @@
 import React, { useState } from "react";
 import {
-  Alert,
-  AlertIcon,
-  Badge,
   Box,
   Button,
   ButtonGroup,
@@ -15,7 +12,6 @@ import {
   FormErrorMessage,
   FormLabel,
   Heading,
-  Icon,
   Input,
   Modal,
   ModalBody,
@@ -24,28 +20,10 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Popover,
-  PopoverArrow,
-  PopoverBody,
-  PopoverCloseButton,
-  PopoverContent,
-  PopoverFooter,
-  PopoverHeader,
-  PopoverTrigger,
   Spinner,
   Stack,
   StackDivider,
-  Table,
-  TableCaption,
-  TableContainer,
-  Tbody,
-  Td,
   Text,
-  Tfoot,
-  Th,
-  Thead,
-  Tooltip,
-  Tr,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
@@ -134,57 +112,149 @@ function MemberInfoMyInfo({ loginInfo }) {
   return (
     <>
       {!isMemberInfoEditValidated ? (
-        <Card w={"80%"} p={"20px"} boxShadow={"none"}>
+        <Card w={"80%"} p={"20px"} boxShadow={"none"} minWidth="1200px">
           <CardBody>
             <Stack mt="6" spacing="3">
               <Card mt={"5"}>
                 <CardBody>
                   <Stack divider={<StackDivider />} spacing="4">
-                    <Box>
-                      <Heading size="s" textTransform="uppercase">
-                        아이디
-                      </Heading>
-                      <Text pl={2} mt={1} pt="2" fontSize="sm">
-                        {loginInfo.member_id}
-                      </Text>
-                    </Box>
-                    <Box>
-                      <Heading size="s" textTransform="uppercase">
-                        닉네임
-                      </Heading>
-                      <Text pl={2} mt={1} pt="2" fontSize="sm">
-                        {loginInfo.nickname}
-                      </Text>
-                    </Box>
-                    <Box>
-                      <Heading size="s" textTransform="uppercase">
-                        이메일
-                      </Heading>
-                      <Text pl={2} mt={1} pt="2" fontSize="sm">
-                        {loginInfo.email}
-                      </Text>
-                    </Box>
-                    <Box>
-                      {/* ---------------------------등급 ------------------------------*/}
-                      <Flex alignItems={"center"}>
-                        <Heading size="s" textTransform="uppercase">
-                          등급
-                        </Heading>
-                        <MemberInfoMyInfoPopover />
+                    <Flex w={"100%"}>
+                      <Flex w={"50%"} borderRight={"1px solid #E2E4E8"} mr={4}>
+                        <Box>
+                          <Heading size="s" textTransform="uppercase">
+                            아이디
+                          </Heading>
+                          <Text pl={2} mt={1} pt="2" fontSize="sm">
+                            {loginInfo.member_id}
+                          </Text>
+                        </Box>
                       </Flex>
-                      <Text pl={2} mt={1} pt="2" fontSize="sm">
-                        {loginInfo.role_name}
-                      </Text>
-                    </Box>
-                    {/* ------------------------------------------------------------*/}
-                    <Box>
-                      <Heading size="s" textTransform="uppercase">
-                        내가 받은 좋아요
-                      </Heading>
-                      <Text pl={2} mt={1} pt="2" fontSize="sm">
-                        {loginInfo.total_like}
-                      </Text>
-                    </Box>
+                      <Flex w={"50%"}>
+                        <Box>
+                          <Heading size="s" textTransform="uppercase">
+                            닉네임
+                          </Heading>
+                          <Text pl={2} mt={1} pt="2" fontSize="sm">
+                            {loginInfo.nickname}
+                          </Text>
+                        </Box>
+                      </Flex>
+                    </Flex>
+                    <Flex w={"100%"}>
+                      <Flex w={"50%"} borderRight={"1px solid #E2E4E8"} mr={4}>
+                        <Box>
+                          <Heading size="s" textTransform="uppercase">
+                            이메일
+                          </Heading>
+                          <Text pl={2} mt={1} pt="2" fontSize="sm">
+                            {loginInfo.email}
+                          </Text>
+                        </Box>
+                      </Flex>
+                      <Flex w={"50%"}>
+                        <Box>
+                          <Heading size="s" textTransform="uppercase">
+                            전화번호
+                          </Heading>
+                          <Text pl={2} mt={1} pt="2" fontSize="sm">
+                            {loginInfo.phone_number}
+                          </Text>
+                        </Box>
+                      </Flex>
+                    </Flex>
+                    <Flex w={"100%"}>
+                      <Flex w={"50%"} borderRight={"1px solid #E2E4E8"} mr={4}>
+                        <Box>
+                          <Heading size="s" textTransform="uppercase">
+                            생년월일
+                          </Heading>
+                          <Text pl={2} mt={1} pt="2" fontSize="sm">
+                            {loginInfo.birth_date}
+                          </Text>
+                        </Box>
+                      </Flex>
+                      <Flex w={"50%"}>
+                        <Box>
+                          <Heading size="s" textTransform="uppercase">
+                            성별
+                          </Heading>
+                          <Text pl={2} mt={1} pt="2" fontSize="sm">
+                            {loginInfo.gender === "m" ? "남자" : "여자"}
+                          </Text>
+                        </Box>
+                      </Flex>
+                    </Flex>
+                    <Flex w={"100%"}>
+                      <Flex w={"50%"} borderRight={"1px solid #E2E4E8"} mr={4}>
+                        <Box>
+                          {/* ---------------------------등급 ------------------------------*/}
+                          <Flex alignItems={"center"}>
+                            <Heading size="s" textTransform="uppercase">
+                              등급
+                            </Heading>
+                            <MemberInfoMyInfoPopover />
+                          </Flex>
+                          <Text pl={2} mt={1} pt="2" fontSize="sm">
+                            {loginInfo.role_name}
+                          </Text>
+                        </Box>
+                      </Flex>
+                      <Flex w={"50%"} borderRight={"1px solid #E2E4E8"} mr={4}>
+                        <Box>
+                          <Heading size="s" textTransform="uppercase">
+                            내가 받은 좋아요
+                          </Heading>
+                          <Text pl={2} mt={1} pt="2" fontSize="sm">
+                            {loginInfo.total_like}
+                          </Text>
+                        </Box>
+                      </Flex>
+                    </Flex>
+                    {/* --------------------------- ------------------------------*/}
+                    <Flex w={"100%"}>
+                      <Flex w={"50%"} borderRight={"1px solid #E2E4E8"} mr={4}>
+                        <Box>
+                          <Flex alignItems={"center"}>
+                            <Heading size="s" textTransform="uppercase">
+                              게시글 수
+                            </Heading>
+                          </Flex>
+                          <Text pl={2} mt={1} pt="2" fontSize="sm">
+                            {loginInfo.total_board}
+                          </Text>
+                        </Box>
+                      </Flex>
+                      <Flex w={"50%"} borderRight={"1px solid #E2E4E8"} mr={4}>
+                        <Box>
+                          <Heading size="s" textTransform="uppercase">
+                            댓글 수
+                          </Heading>
+                          <Text pl={2} mt={1} pt="2" fontSize="sm">
+                            {loginInfo.total_comment}
+                          </Text>
+                        </Box>
+                      </Flex>
+                    </Flex>
+                    <Flex w={"100%"}>
+                      <Flex w={"50%"} borderRight={"1px solid #E2E4E8"} mr={4}>
+                        <Box>
+                          <Flex alignItems={"center"}>
+                            <Heading size="s" textTransform="uppercase">
+                              누적 조회수
+                            </Heading>
+                          </Flex>
+                          <Text pl={2} mt={1} pt="2" fontSize="sm">
+                            {loginInfo.total_views}
+                          </Text>
+                        </Box>
+                      </Flex>
+                      <Flex w={"50%"} borderRight={"1px solid #E2E4E8"} mr={4}>
+                        <Box>
+                          <Heading size="s" textTransform="uppercase"></Heading>
+                          <Text pl={2} mt={1} pt="2" fontSize="sm"></Text>
+                        </Box>
+                      </Flex>
+                    </Flex>
                   </Stack>
                 </CardBody>
               </Card>
@@ -254,13 +324,17 @@ function MemberInfoMyInfo({ loginInfo }) {
                 </ModalBody>
 
                 <ModalFooter>
-                  <Button
-                    colorScheme="blue"
-                    mr={3}
-                    onClick={handleMemberInfoEditValidatePassword}
-                  >
-                    확인
-                  </Button>
+                  {!isSubmitting ? (
+                    <Button
+                      colorScheme="blue"
+                      mr={3}
+                      onClick={handleMemberInfoEditValidatePassword}
+                    >
+                      확인
+                    </Button>
+                  ) : (
+                    <Spinner />
+                  )}
                   <Button
                     onClick={() => {
                       setEditMemberInfoPassword("");

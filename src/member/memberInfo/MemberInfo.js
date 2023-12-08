@@ -4,8 +4,8 @@ import axios from "axios";
 import "./MemberInfo.css";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import {
+  Box,
   Button,
-  ButtonGroup,
   Card,
   CardBody,
   CardFooter,
@@ -14,6 +14,7 @@ import {
   Flex,
   Heading,
   Image,
+  Input,
   Radio,
   RadioGroup,
   Select,
@@ -22,17 +23,17 @@ import {
   TableContainer,
   Tbody,
   Td,
-  Tfoot,
   Th,
   Thead,
   Tr,
   useToast,
 } from "@chakra-ui/react";
 import MemberInfoMyInfo from "./MemberInfoMyInfo";
-import MemberInfoMyBoardList from "./MemberInfoMyBoardList";
 import { MemberInfoMyFavoriteBoard } from "./MemberInfoMyFavoriteBoard";
 import YoutubeInfo from "../../component/YoutubeInfo";
 import MemberInfoPageNation from "./MemberInfoPageNation";
+import { AttachmentIcon } from "@chakra-ui/icons";
+import { MemberInfoProfile } from "./MemberInfoProfile";
 
 function MemberInfo(props) {
   const { loginInfo, token } = useContext(DetectLoginContext);
@@ -119,16 +120,17 @@ function MemberInfo(props) {
   return (
     <>
       <Flex w={"100%"} h={"100%"}>
-        <Card w={"20%"} bg={"#2d3748"} boxShadow={"none"}>
+        <Card
+          w={"350px"}
+          minWidth={"350px"}
+          bg={"#323232"}
+          boxShadow={"none"}
+          position={"sticky"}
+        >
           <Center>
-            <Image
-              mt={"10"}
-              mb={"20"}
-              borderRadius="full"
-              boxSize="200px"
-              src="https://bit.ly/sage-adebayo"
-              alt="Dan Abramov"
-            />
+            <Box mt={10} mb={20}>
+              <MemberInfoProfile />
+            </Box>
           </Center>
           <Flex flexDirection={"column"} w={"100%"} alignItems={"flex-end"}>
             <div className="divBtn">
@@ -167,14 +169,14 @@ function MemberInfo(props) {
                 color={"white"}
                 className="myFavoriteBoardBtn"
               >
-                좋아요 한 글
+                내 미니 홈피
               </Button>
             </div>
           </Flex>
         </Card>
         {myInfo && <MemberInfoMyInfo loginInfo={loginInfo} />}
         {popMyBoardList && (
-          <Card w={"80%"} p={"20px"} boxShadow={"none"}>
+          <Card minWidth="1200px" w={"80%"} p={"20px"} boxShadow={"none"}>
             <CardBody>
               <Stack mt="6" spacing="3">
                 <Flex justifyContent={"space-between"}>

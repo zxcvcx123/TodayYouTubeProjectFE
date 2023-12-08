@@ -4,11 +4,13 @@ import { Avatar, Badge, Box, Flex, HStack, Text } from "@chakra-ui/react";
 
 function MemberProfile(props) {
   const { loginInfo } = useContext(DetectLoginContext);
+  const memberImage = loginInfo.image_url;
+  console.log(memberImage);
   return (
     <>
       <HStack>
         <Flex width={"200px"}>
-          <Avatar src="https://bit.ly/sage-adebayo" />
+          <Avatar src={memberImage} />
           <Box ml="3">
             {loginInfo.role_name === "아이언" && (
               <Badge backgroundColor={"#663300"} color={"white"}>
