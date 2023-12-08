@@ -10,6 +10,14 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverCloseButton,
+  PopoverContent,
+  PopoverFooter,
+  PopoverHeader,
+  PopoverTrigger,
   Stack,
   Text,
 } from "@chakra-ui/react";
@@ -19,11 +27,13 @@ import { ChevronDownIcon } from "@chakra-ui/icons";
 import { SearchMain } from "./SearchMain";
 import { faBell } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { DetectLoginContext } from "../component/LoginProvider";
 import MemberProfile from "../member/MemberProfile";
 import * as SockJS from "sockjs-client";
 import { Stomp } from "@stomp/stompjs";
+import { SocketContext } from "../socket/Socket";
+import axios from "axios";
 
 Stack.propTypes = {
   p: PropTypes.number,
@@ -36,44 +46,32 @@ export function Nav({ setSocket }) {
   const { token, handleLogout, loginInfo, validateToken } =
     useContext(DetectLoginContext);
   let navigate = useNavigate();
-
-  // 소켓 연결
-  const stompClient = useRef(); // useRef로 connect()가 안끊기게하기
-  const subscription = useRef(null);
-
-  function connect() {
-    let socket = new SockJS("http://localhost:3000/gs-guide-websocket", null, {
-      transports: ["websocket", "xhr-streaming", "xhr-polling"],
-    });
-
-    console.log(stompClient.current);
-
-    // 이미 연결되어 있으면 한번 더 연결시키는거 방지
-    if (!stompClient.current) {
-      stompClient.current = Stomp.over(socket);
-      stompClient.current.connect({}, function (frame) {
-        unSubscribe();
-        console.log("NAV에서 소켓연결 성공: " + frame);
-        console.log(stompClient.current);
-        console.log(frame);
-
-        setSocket(stompClient);
-      });
-    }
-  }
-
-  // ===== 두번 연결 되니깐 한번은 끊어줌 =====
-  function unSubscribe() {
-    if (subscription.current !== null) {
-      subscription.current.unsubscribe();
-    }
-  }
-  // ========================================
+  const { alarmList, setAlarmList } = useContext(SocketContext);
+  const [alarm, setAlarm] = useState([]);
+  const [alarmCount, setAlarmCount] = useState(null);
 
   useEffect(() => {
-    connect();
-  }, []);
+    axios
+      .post("http://localhost:3000/api/websocket/alarmlist", {
+        userId: localStorage.getItem("memberInfo"),
+      })
+      .then((res) => {
+        setAlarm(res.data);
+      })
+      .catch()
+      .finally();
 
+    axios
+      .post("http://localhost:3000/api/websocket/alarmcount", {
+        userId: localStorage.getItem("memberInfo"),
+      })
+      .then((res) => {
+        setAlarmCount(res.data);
+      })
+      .catch()
+      .finally();
+  }, []);
+  console.log(alarm);
   return (
     <>
       <Flex
@@ -137,13 +135,47 @@ export function Nav({ setSocket }) {
           <SearchMain />
         </Box>
 
-        <Flex gap={10} mar>
+        <Flex gap={10} ml={2}>
           <Flex gap={6} justifyContent={"center"} alignItems={"center"}>
             {token.detectLogin ? (
               <>
-                <Button w={70} size="md" variant="ghost">
-                  <FontAwesomeIcon fontSize={"20px"} icon={faBell} />
-                </Button>
+                <Popover gutter={10}>
+                  <PopoverTrigger>
+                    <Button variant={"ghost"}>
+                      {alarmCount > 0 ? (
+                        <FontAwesomeIcon
+                          fontSize={"20px"}
+                          icon={faBell}
+                          color="gold"
+                        />
+                      ) : (
+                        <FontAwesomeIcon fontSize={"20px"} icon={faBell} />
+                      )}
+                      {alarmCount > 99 && <Text>"99..."</Text>}
+                      {alarmCount === 0 || alarmCount === null ? (
+                        <Text></Text>
+                      ) : (
+                        <Text>{alarmCount}</Text>
+                      )}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent w={"350px"} h={"300px"} overflowY={"scroll"}>
+                    <PopoverArrow />
+                    <PopoverCloseButton />
+                    <PopoverHeader>
+                      최근 알람 | 전부 읽음, 전부 삭제
+                    </PopoverHeader>
+                    {alarm.map((list) => (
+                      <PopoverBody>
+                        <Link to={"/board/" + list.board_id}>
+                          {list.board_title}에 {list.sender_member_id}님이
+                          댓글을 남겼습니다.
+                        </Link>
+                      </PopoverBody>
+                    ))}
+                  </PopoverContent>
+                </Popover>
+
                 <Menu w={200} size="md" variant="ghost">
                   <MenuButton>
                     <MemberProfile />

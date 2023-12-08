@@ -21,14 +21,13 @@ import BoardLike from "../like/BoardLike";
 import YoutubeInfo from "../component/YoutubeInfo";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import editor from "../component/Editor";
-import memberInfo from "../member/memberInfo/MemberInfo";
 import { DetectLoginContext } from "../component/LoginProvider";
 import MemberProfile from "../member/MemberProfile";
+import ScrollToTop from "../util/ScrollToTop";
 
 function BoardView() {
   /* 로그인 정보 컨텍스트 */
-  const { token, handleLogout, loginInfo, validateToken } =
+  const { token, handleLogout, loginInfo, validateToken, connectUser } =
     useContext(DetectLoginContext);
 
   // state
@@ -75,7 +74,7 @@ function BoardView() {
       }
 
       // 게시글 데이터를 가져온 후 작성자 여부를 확인하여 isAuthor 설정
-      if (loginInfo.member_id === response.data.board_member_id) {
+      if (connectUser === response.data.board_member_id) {
         setIsAuthor(true);
       }
     });
@@ -88,67 +87,10 @@ function BoardView() {
     });
   }, []);
 
-  //   // junggji/메인게시판-일간월간랭킹순(지환)
-  //   // 초기 렌더링 좋아요 출력
-  //   useEffect(() => {
-  //     if (!isSubmitting) {
-  //       axios
-  //         .get("/api/like/board/" + id)
-  //         .then((response) => {
-  //           setLike(response.data);
-  //         })
-  //         .catch(() => console.log("bad"))
-  //         .finally(() => console.log("완료"));
-  //     }
-  //   }, [isSubmitting]);
-
-  //   if (like == null) {
-  //     return <Spinner />;
-  //   }
-
-  // // 초기 렌더링 좋아요 출력
-  // // BoardLike에서 대신 역할 수행중
-  // useEffect(() => {
-  //   if (loginInfo.member_id !== "") {
-  //     console.log(loginInfo.member_id);
-  //     axios
-  //       .post("/api/like/board", {
-  //         board_id: id,
-  //         member_id: loginInfo.member_id,
-  //       })
-  //       .then((response) => {
-  //         setLike(response.data);
-  //       })
-  //       .catch(() => console.log("bad"))
-  //       .finally(() => console.log("완료"));
-  //   }
-  // }, [loginInfo]);
-
   // board 불러오지 못할 시 로딩중 표시
   if (board === null) {
     return <Spinner />;
   }
-
-  //   junggji/메인게시판-일간월간랭킹순(지환)
-  //   function handleLike() {
-  //     setIsSubmitting(true);
-  //     axios
-  //       .post("/api/like/board/" + id)
-  //       .then((response) => setLike(response.data))
-  //       .catch(() => console.log("bad"))
-  //       .finally(() => {
-  //         console.log("done");
-  //         setIsSubmitting(false);
-  //       });
-
-  // // 소켓처리로 인해 주석처리
-  // function handleLike() {
-  //   axios
-  //     .post("/api/like/board/" + id)
-  //     .then((response) => setLike(response.data))
-  //     .catch(() => console.log("bad"))
-  //     .finally(() => console.log("done"));
-  // }
 
   // 게시글 삭제 버튼 클릭
   function handleDeleteClick() {
@@ -171,7 +113,7 @@ function BoardView() {
         is_show: board.is_show,
         countlike: board.countlike,
         views: board.views,
-        login_member_id: loginInfo.member_id,
+        login_member_id: connectUser,
       })
       .then(() => {
         toast({
@@ -219,7 +161,7 @@ function BoardView() {
     }
 
     // 작성자 본인 여부 검증
-    if (loginInfo.member_id === board.board_member_id) {
+    if (connectUser === board.board_member_id) {
       navigate("/board/edit/" + id);
     } else {
       window.alert("작성자 본인만 수정이 가능합니다.");
@@ -375,7 +317,12 @@ function BoardView() {
         )}
       </Flex>
       {/* -------------------- 댓글 영역 -------------------- */}
-      <BoardComment board_id={id} />
+
+        <BoardComment board_id={id} boardData={board} />
+      <ScrollToTop />
+
+    
+
     </Box>
   );
 }

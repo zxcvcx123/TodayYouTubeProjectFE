@@ -16,6 +16,9 @@ export function LoginProvider({ children }) {
   });
   const [loginInfo, setLoginInfo] = useState({});
 
+  //정모가 필요해서 만듬
+  const [connectUser, setConnectUser] = useState("");
+
   useEffect(() => {
     const fetchData = async () => {
       validateToken();
@@ -29,6 +32,10 @@ export function LoginProvider({ children }) {
     const authority = localStorage.getItem("authority");
     const memberInfo = localStorage.getItem("memberInfo");
     console.log(memberInfo);
+
+    // 정모가 필요해서 만듬
+    setConnectUser(localStorage.getItem("memberInfo"));
+
     // 응답 인터셉터
     axios.interceptors.response.use(
       (response) => response,
@@ -57,8 +64,13 @@ export function LoginProvider({ children }) {
           email: response.data.email,
           phone_number: response.data.phone_number,
           birth_date: response.data.birth_date,
+          gender: response.data.gender,
           role_name: response.data.role_name,
           total_like: response.data.total_like,
+          total_board: response.data.total_board,
+          total_comment: response.data.total_comment,
+          total_views: response.data.total_views,
+          image_url: response.data.url,
         }));
 
         setToken((prevState) => ({
@@ -70,17 +82,7 @@ export function LoginProvider({ children }) {
       })
       .catch((error) => {
         localStorage.clear();
-        setLoginInfo((prevState) => ({
-          ...prevState,
-          id: "",
-          member_id: "",
-          nickname: "",
-          email: "",
-          phone_number: "",
-          birth_date: null,
-          role_name: "",
-          total_like: "",
-        }));
+        setLoginInfo(null);
         setToken((prevState) => ({
           ...prevState,
           detectLogin: false,
@@ -91,16 +93,7 @@ export function LoginProvider({ children }) {
   // 사용자 활동을 감지
 
   const handleLogout = () => {
-    setLoginInfo(() => ({
-      id: "",
-      member_id: "",
-      nickname: "",
-      email: "",
-      phone_number: "",
-      birth_date: null,
-      role_name: "",
-      total_like: "",
-    }));
+    setLoginInfo(null);
 
     setToken({
       detectLogin: false,
@@ -119,7 +112,7 @@ export function LoginProvider({ children }) {
           loginInfo: 로그인 사용자 정보(memberId, nickname, role_id, email)
       */}
       <DetectLoginContext.Provider
-        value={{ token, handleLogout, loginInfo, validateToken }}
+        value={{ token, handleLogout, loginInfo, validateToken, connectUser }}
       >
         {children}
       </DetectLoginContext.Provider>

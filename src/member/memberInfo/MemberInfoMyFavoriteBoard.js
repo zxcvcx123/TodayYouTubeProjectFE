@@ -19,7 +19,7 @@ export function MemberInfoMyFavoriteBoard({ loginInfo }) {
       <Card w={"80%"} p={"20px"} boxShadow={"none"}>
         <CardBody>
           <Stack mt="6" spacing="3">
-            <Heading size="xl">내가 좋아요 한 글</Heading>
+            <Heading size="xl">내 미니 홈피</Heading>
           </Stack>
         </CardBody>
         <Divider color={"gray"} />
