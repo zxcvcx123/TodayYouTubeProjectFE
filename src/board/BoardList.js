@@ -203,6 +203,7 @@ function BoardList() {
               <Tbody>
                 {boardList &&
                   boardList
+                    /* board.is_show=true 만 필터 */
                     .filter((board) => board.is_show)
                     .map((board) => (
                       <Tr
@@ -253,6 +254,7 @@ function BoardList() {
             <SimpleGrid columns={[1, 2, 3, 4, 5]} spacing={[4]}>
               {boardList &&
                 boardList
+                  /* board.is_show=true 만 필터 */
                   .filter((board) => board.is_show)
                   .map((board) => (
                     <Card
