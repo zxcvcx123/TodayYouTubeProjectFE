@@ -17,7 +17,7 @@ import { SocketContext } from "./Socket";
 
 function Chat() {
   const { connectUser } = useContext(DetectLoginContext);
-  const { stompClient, chatId, chat } = useContext(SocketContext);
+  const { stompClient, IsConnected, chatId, chat } = useContext(SocketContext);
   const { test } = useOutletContext();
   const [text, setText] = useState("");
   const [setIdAccess, setSetIdAccess] = useState(false);
@@ -87,9 +87,15 @@ function Chat() {
 
             <Center>
               <Flex w={"100%"} h={"50px"}>
-                <Input value={text} onChange={handleTextInput} />
-                <Button onClick={sendMsg}>입력</Button>
-                <Button onClick={disconnectSocket}>종료</Button>
+                {IsConnected === true ? (
+                  <>
+                    <Input value={text} onChange={handleTextInput} />
+                    <Button onClick={sendMsg}>입력</Button>
+                    <Button onClick={disconnectSocket}>종료</Button>
+                  </>
+                ) : (
+                  <Spinner />
+                )}
               </Flex>
             </Center>
           </Box>

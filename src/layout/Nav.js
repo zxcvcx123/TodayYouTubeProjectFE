@@ -10,6 +10,14 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverCloseButton,
+  PopoverContent,
+  PopoverFooter,
+  PopoverHeader,
+  PopoverTrigger,
   Stack,
   Text,
 } from "@chakra-ui/react";
@@ -85,13 +93,62 @@ export function Nav({ setSocket }) {
           <SearchMain />
         </Box>
 
-        <Flex gap={10} mar>
+        <Flex gap={10} ml={2}>
           <Flex gap={6} justifyContent={"center"} alignItems={"center"}>
             {token.detectLogin ? (
               <>
-                <Button w={70} size="md" variant="ghost">
-                  <FontAwesomeIcon fontSize={"20px"} icon={faBell} />
-                </Button>
+                <Popover gutter={10}>
+                  <PopoverTrigger>
+                    <Button variant={"ghost"}>
+                      <FontAwesomeIcon fontSize={"20px"} icon={faBell} />
+                      <Text>99..</Text>
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent w={"350px"} h={"300px"} overflowY={"scroll"}>
+                    <PopoverArrow />
+                    <PopoverCloseButton />
+                    <PopoverHeader>
+                      최근 알람 | 전부 읽음, 전부 삭제
+                    </PopoverHeader>
+                    <PopoverBody>
+                      어떤게시물에 누구누구님이 댓글을 달았습니다.
+                    </PopoverBody>
+                    <PopoverBody>
+                      어떤게시물에 누구누구님이 댓글을 달았습니다.
+                    </PopoverBody>
+                    <PopoverBody>
+                      어떤게시물에 누구누구님이 댓글을 달았습니다.
+                    </PopoverBody>
+                    <PopoverBody>
+                      어떤게시물에 누구누구님이 댓글을 달았습니다.
+                    </PopoverBody>
+                    <PopoverBody>
+                      어떤게시물에 누구누구님이 댓글을 달았습니다.
+                    </PopoverBody>
+                    <PopoverBody>
+                      어떤게시물에 누구누구님이 댓글을 달았습니다.
+                    </PopoverBody>
+                    <PopoverBody>
+                      어떤게시물에 누구누구님이 댓글을 달았습니다.
+                    </PopoverBody>
+                    <PopoverBody>
+                      어떤게시물에 누구누구님이 댓글을 달았습니다.
+                    </PopoverBody>
+                    <PopoverBody>
+                      어떤게시물에 누구누구님이 댓글을 달았습니다.
+                    </PopoverBody>
+                    <PopoverBody>
+                      어떤게시물에 누구누구님이 댓글을 달았습니다.
+                    </PopoverBody>
+                    <PopoverBody>
+                      어떤게시물에 누구누구님이 댓글을 달았습니다.
+                    </PopoverBody>
+                    <PopoverBody>
+                      어떤게시물에 누구누구님이 댓글을 달았습니다.
+                    </PopoverBody>
+                  </PopoverContent>
+                </Popover>
+
                 <Menu w={200} size="md" variant="ghost">
                   <MenuButton>
                     <MemberProfile />
