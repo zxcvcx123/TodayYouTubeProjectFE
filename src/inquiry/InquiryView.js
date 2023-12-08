@@ -63,6 +63,8 @@ function InquiryView(props) {
     navigate("/inquiry/answer/" + id);
   }
 
+  console.log(inquiry);
+
   return (
     <Box width={"80%"} m={"auto"}>
       <FormControl mb={1}>

@@ -14,21 +14,30 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import {
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { defineStyle, defineStyleConfig } from "@chakra-ui/react";
 import { extendTheme } from "@chakra-ui/react";
+import Pagination from "../page/Pagination";
 
 function InquiryList(props) {
   const [inquiryList, setInquiryList] = useState(null);
+  const [pageInfo, setPageInfo] = useState([]);
 
   const navigate = useNavigate();
   const [params] = useSearchParams();
+  const location = useLocation();
 
   useEffect(() => {
-    axios
-      .get("/api/inquiry/list?" + params)
-      .then((response) => setInquiryList(response.data));
-  }, []);
+    axios.get("/api/inquiry/list?" + params).then((response) => {
+      setInquiryList(response.data.inquiryList);
+      setPageInfo(response.data.pageInfo);
+    });
+  }, [location]);
 
   if (inquiryList == null) {
     return <Spinner />;
@@ -158,6 +167,7 @@ function InquiryList(props) {
               ))}
           </Tbody>
         </Table>
+        <Pagination pageInfo={pageInfo} />
       </Box>
     </Box>
   );
