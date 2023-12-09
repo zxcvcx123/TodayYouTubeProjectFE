@@ -1,7 +1,17 @@
 import React from "react";
+import {Sidenav} from "./Sidenav";
+import {Box, Flex} from "@chakra-ui/react";
+import {BarChart} from "./BarChart";
 
 function AdminMain() {
-  return <div>어드민</div>;
+  return (
+    <Flex>
+      <Sidenav/>
+      <Box>
+        <BarChart chartData={}/>
+      </Box>
+    </Flex>
+  );
 }
 
 export default AdminMain;
