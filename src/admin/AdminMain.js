@@ -8,15 +8,17 @@ function AdminMain() {
   const [boardData, setBoardData] = useState({
     labels: [1,2,3,4],
     datasets:[{
-      label: "board",
+      label: "boardData",
       data: [20,10,30,50]
     }]
   });
 
-  // useEffect(() => {
-  //   axios.get("/api/admin/board")
-  //     .then(response => console.log(response.data));
-  // }, []);
+  useEffect(() => {
+    axios.get("/api/admin/board")
+      .then(response => {
+        setBoardData(response.data.boardList);
+      });
+  }, []);
 
 
   return (
