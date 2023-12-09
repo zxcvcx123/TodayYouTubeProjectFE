@@ -3,5 +3,5 @@ import React, {useState} from "react";
 import { Chart as ChartJS } from "chart.js/auto"
 
 export function BarChart({chartData}) {
-  return <Bar data={chartData}/>;
+  return <Bar data={chartData} style={{width:'500px'}} />;
 }
