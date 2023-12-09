@@ -6,7 +6,9 @@ import {BarChart} from "./BarChart";
 function AdminMain() {
   return (
     <Flex>
+      {/* ---------- 사이드 바 ----------*/}
       <Sidenav/>
+      {/* ---------- 메인 ----------*/}
       <Box>
         <BarChart chartData={}/>
       </Box>
