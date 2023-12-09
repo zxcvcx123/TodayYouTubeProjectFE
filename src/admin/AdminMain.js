@@ -6,17 +6,25 @@ import axios from "axios";
 
 function AdminMain() {
   const [boardData, setBoardData] = useState({
-    labels: [1,2,3,4],
+    labels: [],
     datasets:[{
-      label: "boardData",
-      data: [20,10,30,50]
+      label: "",
+      data: []
     }]
   });
 
   useEffect(() => {
     axios.get("/api/admin/board")
       .then(response => {
-        setBoardData(response.data.boardList);
+        const dataFromBoardList = response.data.boardList;
+
+        setBoardData({
+          labels: dataFromBoardList.map(data => data.name_eng),
+          datasets:[{
+            label: "카테고리 별 글 작성",
+            data: dataFromBoardList.map(data => data.count_category_board)
+          }]
+        });
       });
   }, []);
 
