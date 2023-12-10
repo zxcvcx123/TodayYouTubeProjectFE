@@ -47,7 +47,7 @@ function MemberInfoMyInfoPopover(props) {
           />
         </Tooltip>
       </PopoverTrigger>
-      <PopoverContent w={"500px"}>
+      <PopoverContent w={"500px"} position={"fixed"}>
         <PopoverHeader fontWeight="semibold" p={"20px"} fontSize={"20px"}>
           회원 등급표
         </PopoverHeader>
@@ -65,7 +65,11 @@ function MemberInfoMyInfoPopover(props) {
               <Tbody>
                 <Tr>
                   <Td>
-                    <Badge backgroundColor={"#663300"} color={"white"}>
+                    <Badge
+                      backgroundColor={"#663300"}
+                      color={"white"}
+                      borderRadius={"8px"}
+                    >
                       IRON
                     </Badge>
                   </Td>
@@ -80,7 +84,11 @@ function MemberInfoMyInfoPopover(props) {
                 </Tr>
                 <Tr>
                   <Td>
-                    <Badge backgroundColor={"#996600"} color="white">
+                    <Badge
+                      backgroundColor={"#996600"}
+                      color="white"
+                      borderRadius={"8px"}
+                    >
                       BRONZE
                     </Badge>
                   </Td>
@@ -96,7 +104,11 @@ function MemberInfoMyInfoPopover(props) {
                 </Tr>
                 <Tr>
                   <Td>
-                    <Badge backgroundColor={"#CCCCCC"} color="white">
+                    <Badge
+                      backgroundColor={"#CCCCCC"}
+                      color="white"
+                      borderRadius={"8px"}
+                    >
                       SILVER
                     </Badge>
                   </Td>
@@ -112,7 +124,11 @@ function MemberInfoMyInfoPopover(props) {
                 </Tr>
                 <Tr>
                   <Td>
-                    <Badge backgroundColor={"#FFCC00"} color="white">
+                    <Badge
+                      backgroundColor={"#FFCC00"}
+                      color="white"
+                      borderRadius={"8px"}
+                    >
                       GOLD
                     </Badge>
                   </Td>
@@ -134,7 +150,11 @@ function MemberInfoMyInfoPopover(props) {
                 </Tr>
                 <Tr>
                   <Td>
-                    <Badge backgroundColor={"#33FF33"} color="white">
+                    <Badge
+                      backgroundColor={"#33FF33"}
+                      color="white"
+                      borderRadius={"8px"}
+                    >
                       PLATINUM
                     </Badge>
                   </Td>
@@ -158,7 +178,11 @@ function MemberInfoMyInfoPopover(props) {
                 </Tr>
                 <Tr>
                   <Td>
-                    <Badge backgroundColor={"#00FFFF"} color="white">
+                    <Badge
+                      backgroundColor={"#00FFFF"}
+                      color="white"
+                      borderRadius={"8px"}
+                    >
                       DIAMOND
                     </Badge>
                   </Td>
@@ -181,7 +205,11 @@ function MemberInfoMyInfoPopover(props) {
                 </Tr>
                 <Tr>
                   <Td>
-                    <Badge backgroundColor={"#CC66FF"} color="white">
+                    <Badge
+                      backgroundColor={"#CC66FF"}
+                      color="white"
+                      borderRadius={"8px"}
+                    >
                       MASTER
                     </Badge>
                   </Td>
@@ -204,7 +232,11 @@ function MemberInfoMyInfoPopover(props) {
                 </Tr>
                 <Tr>
                   <Td>
-                    <Badge backgroundColor={"#FF3366"} color="white">
+                    <Badge
+                      backgroundColor={"#FF3366"}
+                      color="white"
+                      borderRadius={"8px"}
+                    >
                       GRANDMASTER
                     </Badge>
                   </Td>
@@ -227,7 +259,11 @@ function MemberInfoMyInfoPopover(props) {
                 </Tr>
                 <Tr>
                   <Td>
-                    <Badge backgroundColor={"black"} color="red">
+                    <Badge
+                      backgroundColor={"black"}
+                      color="red"
+                      borderRadius={"8px"}
+                    >
                       CHALLENGER
                     </Badge>
                   </Td>

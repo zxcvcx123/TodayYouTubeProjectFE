@@ -119,7 +119,7 @@ function MemberInfo(props) {
 
   return (
     <>
-      <Flex w={"100%"} h={"100%"}>
+      <Flex w={"100%"} h={"100%"} minHeight={"750px"}>
         <Card
           w={"350px"}
           minWidth={"350px"}
