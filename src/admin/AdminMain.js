@@ -1,33 +1,42 @@
 import React, {useEffect, useState} from "react";
 import {Sidenav} from "./Sidenav";
-import {Box, Flex} from "@chakra-ui/react";
+import {Box, Flex, Spinner} from "@chakra-ui/react";
 import {BarChart} from "./BarChart";
 import axios from "axios";
 
 function AdminMain() {
-  const [boardData, setBoardData] = useState({
-    labels: [],
-    datasets:[{
-      label: "",
-      data: []
-    }]
-  });
+  const [countCategoryBoard, setCountCategoryBoard] = useState(null);
+  const [countCategoryGender, setCountCategoryGender] = useState(null);
 
   useEffect(() => {
     axios.get("/api/admin/board")
       .then(response => {
         const dataFromBoardList = response.data.boardList;
 
-        setBoardData({
+        setCountCategoryBoard({
           labels: dataFromBoardList.map(data => data.name_eng),
-          datasets:[{
+          datasets: [{
             label: "카테고리 별 글 작성",
             data: dataFromBoardList.map(data => data.count_category_board)
+          }]
+        });
+
+        setCountCategoryGender({
+          labels: dataFromBoardList.map(data => data.name_eng),
+          datasets: [{
+            label: "남성",
+            data: dataFromBoardList.map(data => data.count_category_members_man)
+          }, {
+            label: "여성",
+            data: dataFromBoardList.map(data => data.count_category_members_woman)
           }]
         });
       });
   }, []);
 
+  if (countCategoryBoard == null) {
+    return <Spinner/>;
+  }
 
   return (
     <Flex>
@@ -35,7 +44,8 @@ function AdminMain() {
       <Sidenav/>
       {/* ---------- 메인 ----------*/}
       <Box>
-        <BarChart chartData={boardData}/>
+        <BarChart chartData={countCategoryBoard}/>
+        <BarChart chartData={countCategoryGender}/>
       </Box>
     </Flex>
   );
