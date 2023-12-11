@@ -11,7 +11,7 @@ import {
   Spinner,
   Stack,
   StackDivider,
-  Text
+  Text, VStack
 } from "@chakra-ui/react";
 import {BarChart} from "./BarChart";
 import axios from "axios";
@@ -53,6 +53,7 @@ function AdminMain() {
         setUserWriteRankDataList(response.data.userWriteRankDataList);
         setUserLikeRankDataList(response.data.userLikeRankDataList);
         setUserCommentRankDataList(response.data.userCommentRankDataList);
+        setIsLoading(false);
       })
   }, []);
 
@@ -155,6 +156,10 @@ function AdminMain() {
     return <Spinner/>;
   }
 
+  if (isLoading) {
+    return <Spinner/>;
+  }
+
   return (
     <Flex>
       {/* ---------- 사이드 바 ----------*/}
@@ -183,29 +188,115 @@ function AdminMain() {
             </Flex>
           </Box>
         </Flex>
+        <Flex gap={2}>
+          {/* ---------- 게시글 작성 순위 ---------- */}
+          <Card w={"250px"} p={"10px"} alignItems={"center"}>
+            <CardHeader>
+              <Heading size='sm'>게시글 작성 순위</Heading>
+            </CardHeader>
 
-        {/* ---------- 게시글 작성 순위 ---------- */}
-        <Card w={"300px"}>
-          <CardHeader>
-            <Heading size='md'>게시글 작성 순위</Heading>
-          </CardHeader>
+            {userWriteRankDataList.slice(0, 5).map((data) => (
+              <Box key={data.member_id}>
+                <VStack>
+                  <Flex w={"200px"} mb={1}>
+                    <Badge fontSize='xs' mr={2} variant={"outline"}
+                           colorScheme={
+                             data.write_rank === 1
+                               ? "yellow"
+                               : data.write_rank === 2
+                                 ? "blue"
+                                 : data.write_rank === 3
+                                   ? "orange"
+                                   : "white" // 기본 색상
+                           }>
+                      {data.write_rank}위
+                    </Badge>
+                    <Box minW={"100px"}>
+                      <Heading size='xs'>
+                        {data.member_id}
+                      </Heading>
+                    </Box>
+                    <Text fontSize='xs'>
+                      {data.write_count}개
+                    </Text>
+                  </Flex>
+                </VStack>
+              </Box>
+            ))}
+          </Card>
 
-          <CardBody>
-            <Stack divider={<StackDivider/>} spacing='4'>
-              <Flex>
-                <Badge fontSize='xs' border={"1px solid black"}>
-                  순위(숫자)
-                </Badge>
-                <Heading size='xs' border={"1px solid black"}>
-                  닉네임
-                </Heading>
-                <Text fontSize='xs' border={"1px solid black"}>
-                  게시글 작성 수
-                </Text>
-              </Flex>
-            </Stack>
-          </CardBody>
-        </Card>
+          {/* ---------- 좋아요 작성 순위 ---------- */}
+          <Card w={"250px"} p={"10px"} alignItems={"center"}>
+            <CardHeader>
+              <Heading size='sm'>좋아요 작성 순위</Heading>
+            </CardHeader>
+
+            {userLikeRankDataList.slice(0, 5).map((data) => (
+              <Box key={data.member_id}>
+                <VStack>
+                  <Flex w={"200px"} mb={1}>
+                    <Badge fontSize='xs' mr={2} variant={"outline"}
+                           colorScheme={
+                             data.like_rank === 1
+                               ? "yellow"
+                               : data.like_rank === 2
+                                 ? "blue"
+                                 : data.like_rank === 3
+                                   ? "orange"
+                                   : "white" // 기본 색상
+                           }>
+                      {data.like_rank}위
+                    </Badge>
+                    <Box minW={"100px"}>
+                      <Heading size='xs'>
+                        {data.member_id}
+                      </Heading>
+                    </Box>
+                    <Text fontSize='xs'>
+                      {data.like_count}개
+                    </Text>
+                  </Flex>
+                </VStack>
+              </Box>
+            ))}
+          </Card>
+
+          {/* ---------- 댓글 작성 순위 ---------- */}
+          <Card w={"250px"} p={"10px"} alignItems={"center"}>
+            <CardHeader>
+              <Heading size='sm'>댓글 작성 순위</Heading>
+            </CardHeader>
+
+            {userCommentRankDataList.slice(0, 5).map((data) => (
+              <Box key={data.member_id}>
+                <VStack>
+                  <Flex w={"200px"} mb={1}>
+                    <Badge fontSize='xs' mr={2} variant={"outline"}
+                           colorScheme={
+                             data.comment_rank === 1
+                               ? "yellow"
+                               : data.comment_rank === 2
+                                 ? "blue"
+                                 : data.comment_rank === 3
+                                   ? "orange"
+                                   : "white" // 기본 색상
+                           }>
+                      {data.comment_rank}위
+                    </Badge>
+                    <Box minW={"100px"}>
+                      <Heading size='xs'>
+                        {data.member_id}
+                      </Heading>
+                    </Box>
+                    <Text fontSize='xs'>
+                      {data.comment_count}개
+                    </Text>
+                  </Flex>
+                </VStack>
+              </Box>
+            ))}
+          </Card>
+        </Flex>
       </Box>
     </Flex>
   );
