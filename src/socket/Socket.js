@@ -130,6 +130,26 @@ function Socket({ children }) {
         setAlarmCount(data);
       },
     );
+
+    // 답변 알람
+    stompClient.current.subscribe(
+      "/queue/inquiry/alarm/" + localStorage.getItem("memberInfo"),
+      (res) => {
+        const data = JSON.parse(res.body);
+        console.log(data);
+        setAlarmList(data);
+      },
+    );
+
+    // 답변 개수
+    stompClient.current.subscribe(
+      "/queue/inquiry/alarm/count/" + localStorage.getItem("memberInfo"),
+      (res) => {
+        const data = JSON.parse(res.body);
+        console.log(data);
+        setAlarmCount(data);
+      },
+    );
   };
 
   return (
