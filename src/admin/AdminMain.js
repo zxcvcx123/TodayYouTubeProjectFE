@@ -39,7 +39,7 @@ function AdminMain() {
         setCountCategoryView({
           labels: dataFromBoardList.map(data => data.name_eng),
           datasets: [{
-            label: "카테고리 별 게시글 수",
+            label: "카테고리 별 조회수",
             data: dataFromBoardList.map(data => data.count_category_view),
             fill: true,
             backgroundColor: "rgba(75,192,192,0.2)",
@@ -106,6 +106,8 @@ function AdminMain() {
           <Box>
             <BarChart chartData={countCategoryBoard}/>
             <BarChart chartData={countCategoryGender}/>
+          </Box>
+          <Box>
             <LineChart chartData={countCategoryView}/>
           </Box>
           <Box bg={"whitesmoke"} h={"100%"} borderRadius={"30px"} p={"10px"}>
