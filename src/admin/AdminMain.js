@@ -63,6 +63,7 @@ function AdminMain() {
             fill: true,
             backgroundColor: "rgba(75,192,192,0.2)",
             borderColor: "rgba(75,192,192,1)",
+            tension: 0.3
           }]
         });
 
