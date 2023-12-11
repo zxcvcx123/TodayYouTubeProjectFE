@@ -31,6 +31,7 @@ import InquiryAnswer from "./inquiry/InquiryAnswer";
 import ScrollToTop from "./util/ScrollToTop";
 import AdminReport from "./admin/AdminReport";
 import VoteWrite from "./vote/VoteWrite";
+import VoteView from "./vote/VoteView";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -43,6 +44,7 @@ const routes = createBrowserRouter(
       <Route path="board/list" element={<BoardList />} />
       <Route path="board/edit/:id" element={<BoardEdit />} />
       <Route path="board/vote/write" element={<VoteWrite />} />
+      <Route path="board/vote/:id" element={<VoteView />} />
       <Route path="inquiry/list" element={<InquiryList />} />
       <Route path="inquiry/write" element={<InquiryWrite />} />
       <Route path="inquiry/:id" element={<InquiryView />} />
