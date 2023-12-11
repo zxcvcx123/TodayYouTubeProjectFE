@@ -48,6 +48,7 @@ function MiniHomepyMiddleContent({
                   newBoardList={newBoardList}
                 />
               )}
+
               {name === "LIST" && (
                 <MiniHomepyList
                   loginMember={loginMember}
