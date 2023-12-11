@@ -3,5 +3,12 @@ import React, {useState} from "react";
 import { Chart as ChartJS } from "chart.js/auto"
 
 export function BarChart({chartData}) {
-  return <Bar data={chartData} style={{width:'500px'}} />;
+  const options = {
+    interaction: {
+      mode: "index",
+      intersect: false,
+    }
+  }
+
+  return <Bar data={chartData} options={options} style={{width:'500px'}} />;
 }
