@@ -99,9 +99,6 @@ function AdminMain() {
               label: categoryData.map(data => data.name_eng),
               data: [categoryData.map(data => data.count_category_members_man),
                 categoryData.map(data => data.count_category_members_woman)],
-              options: {
-                cutoutPercentage: 65
-              }
             }]
           };
         };
