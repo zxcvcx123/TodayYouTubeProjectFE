@@ -8,7 +8,7 @@ import {
   Text,
   Textarea,
 } from "@chakra-ui/react";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { DetectLoginContext } from "../../component/LoginProvider";
 import { HomepyMemberContext } from "./MiniHomepy";
 import MemberRoleBadge from "./minihomepy-util/MemberRoleBadge";
@@ -25,8 +25,34 @@ export function MiniHomepyLeftContainer({ member, introduce, setIntroduce }) {
 
   /*-----------------------------------------------------------*/
   const [editIntroduce, setEditIntroduce] = useState(false);
+  const [introduceColors, setIntroduceColors] = useState([]);
+  useEffect(() => {
+    let nonSpaceCharCount = 0;
 
-  // 소개문 수정
+    setIntroduceColors(
+      Array.from(introduce).map((char, index) => {
+        if (char !== " ") {
+          const color = nonSpaceCharCount % 2 === 0 ? "#41A541" : "tomato";
+          nonSpaceCharCount++;
+          return color;
+        }
+        return null;
+      }),
+    );
+  }, [introduce]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIntroduceColors((currentColors) =>
+        currentColors.map(
+          (color) => color && (color === "#41A541" ? "tomato" : "#41A541"),
+        ),
+      );
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   function handleIntroduceEdit() {
     const loginMemberId = loginInfo.member_id;
     axios
@@ -140,7 +166,14 @@ export function MiniHomepyLeftContainer({ member, introduce, setIntroduce }) {
                 fontSize={"20px"}
                 color={"#dcdcdc"}
               >
-                {introduce}
+                {introduce.split("").map((char, index) => (
+                  <span
+                    style={{ color: introduceColors[index] || "inherit" }}
+                    key={index}
+                  >
+                    {char}
+                  </span>
+                ))}
               </Box>
             )}
           </Box>

@@ -1,7 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Jua&family=Song+Myung&family=Teko&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Do+Hyeon&family=Gasoek+One&family=Jua&family=Song+Myung&family=Teko&family=Ultra&display=swap');
 .text{
     font-family: 'Jua', sans-serif;
     font-family: 'Single Day', cursive;
 
+}
+
+iframe{
+    border-radius: 30px;
 }

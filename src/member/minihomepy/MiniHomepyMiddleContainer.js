@@ -1,35 +1,92 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouseUser } from "@fortawesome/free-solid-svg-icons/faHouseUser";
-import {
-  faArrowRightToBracket,
-  faComments,
-} from "@fortawesome/free-solid-svg-icons";
+import { faBookOpen, faComments } from "@fortawesome/free-solid-svg-icons";
 import { faHeart } from "@fortawesome/free-regular-svg-icons/faHeart";
 import "./minihomepy-styles/content.css";
-import { Text } from "@chakra-ui/react";
 import { ArrowForwardIcon, HamburgerIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
+import { MiniHomepyList } from "./MiniHomepyList";
+import { Box, Center, Text } from "@chakra-ui/react";
+import { MiniHomepyHome } from "./MiniHomepyHome";
 
-function MiniHomepyMiddleContent({ name }) {
+function MiniHomepyMiddleContent({
+  name,
+  loginMember,
+  member_id,
+  topRankBoardList,
+  newBoardList,
+  categoryOrdedBy,
+  setCategoryOrdedBy,
+  boardListAll,
+}) {
   return (
     <>
-      <div className="popup">
-        <h2>{name}</h2>
-        {name === "Home" && <Text>홈이다!!!!!!</Text>}
-        {name === "Hello" && <Text>안녕이다!!!!!!</Text>}
-        {/* 여기에 각 팝업의 내용을 추가 */}
-      </div>
+      <Box
+        w={"100%"}
+        h={"100%"}
+        bg={"transparent"}
+        sx={{
+          overflowY: "scroll",
+          "::-webkit-scrollbar": {
+            display: "none",
+          },
+        }}
+      >
+        <div className="popup">
+          <Text fontSize={"25px"} w={"100%"} color={"#BC55EF"}></Text>
+          <Center
+            h={"95%"}
+            display={"flex"}
+            justifyContent={"center"}
+            alignItems={"flex-start"}
+          >
+            <Box w={"95%"} h={"100%"}>
+              {name === "HOME" && (
+                <MiniHomepyHome
+                  topRankBoardList={topRankBoardList}
+                  newBoardList={newBoardList}
+                />
+              )}
+              {name === "LIST" && (
+                <MiniHomepyList
+                  loginMember={loginMember}
+                  member_id={member_id}
+                  categoryOrdedBy={categoryOrdedBy}
+                  setCategoryOrdedBy={setCategoryOrdedBy}
+                  boardListAll={boardListAll}
+                />
+              )}
+              {name === "MESSAGE" && (
+                <MiniHomepyList
+                  topRankBoardList={topRankBoardList}
+                  newBoardList={newBoardList}
+                  loginMember={loginMember}
+                  member_id={member_id}
+                />
+              )}
+            </Box>
+          </Center>
+          {/* 여기에 각 팝업의 내용을 추가 */}
+        </div>
+      </Box>
     </>
   );
 }
 
-export function MiniHomepyMiddleContainer() {
+export function MiniHomepyMiddleContainer({
+  loginMember,
+  member_id,
+  topRankBoardList,
+  newBoardList,
+  categoryOrdedBy,
+  setCategoryOrdedBy,
+  boardListAll,
+}) {
   let navigate = useNavigate();
   useEffect(() => {
     const list = document.querySelectorAll(".list");
     function activeLink() {
-      console.log("실행됨!");
       list.forEach((item) => {
         item.classList.remove("active");
       });
@@ -46,7 +103,7 @@ export function MiniHomepyMiddleContainer() {
     };
   }, []);
 
-  const [activePopup, setActivePopup] = useState("Home");
+  const [activePopup, setActivePopup] = useState("HOME");
 
   // 팝업을 표시하는 함수
   const showPopup = (popupName) => {
@@ -55,7 +112,18 @@ export function MiniHomepyMiddleContainer() {
 
   return (
     <>
-      {activePopup && <MiniHomepyMiddleContent name={activePopup} />}
+      {activePopup && (
+        <MiniHomepyMiddleContent
+          name={activePopup}
+          loginMember={loginMember}
+          member_id={member_id}
+          topRankBoardList={topRankBoardList}
+          newBoardList={newBoardList}
+          categoryOrdedBy={categoryOrdedBy}
+          setCategoryOrdedBy={setCategoryOrdedBy}
+          boardListAll={boardListAll}
+        />
+      )}
 
       <div className="container">
         <div className="navigation">
@@ -69,37 +137,42 @@ export function MiniHomepyMiddleContainer() {
             <li
               className="list active"
               onClick={() => {
-                showPopup("Home");
+                showPopup("HOME");
               }}
             >
               <a href="#">
                 <span className="icon">
                   <FontAwesomeIcon icon={faHouseUser} />
                 </span>
-                <span className="text">Home</span>
+                <span className="text">HOME</span>
                 <span className="circle"></span>
               </a>
             </li>{" "}
             <li
               className="list"
               onClick={() => {
-                showPopup("Hello");
+                showPopup("LIST");
+              }}
+            >
+              <a href="#">
+                <span className="icon">
+                  <FontAwesomeIcon icon={faBookOpen} />
+                </span>
+                <span className="text">LIST</span>
+                <span className="circle"></span>
+              </a>
+            </li>{" "}
+            <li
+              className="list"
+              onClick={() => {
+                showPopup("MESSAGE");
               }}
             >
               <a href="#">
                 <span className="icon">
                   <FontAwesomeIcon icon={faComments} />
                 </span>
-                <span className="text">Profile</span>
-                <span className="circle"></span>
-              </a>
-            </li>{" "}
-            <li className="list">
-              <a href="#">
-                <span className="icon">
-                  <FontAwesomeIcon icon={faComments} />
-                </span>
-                <span className="text">Message</span>
+                <span className="text">MESSAGE</span>
                 <span className="circle"></span>
               </a>
             </li>{" "}

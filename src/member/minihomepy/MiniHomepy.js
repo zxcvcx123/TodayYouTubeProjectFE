@@ -6,14 +6,16 @@ import "./minihomepy-styles/reset.css";
 import Snowflake from "./Snowflake";
 import { DetectLoginContext } from "../../component/LoginProvider";
 import { MiniHomepyLeftContainer } from "./MiniHomepyLeftContainer";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { MiniHomepyRightContainer } from "./MiniHomepyRightContainer";
 
 export let HomepyMemberContext = createContext(null);
 
 export function MiniHomepy(props) {
+  // 로그인 정보
   const { loginInfo } = useContext(DetectLoginContext);
+  // 미니홈피 정보
   const [member, setMember] = useState();
   const [miniHomepyInfo, setMiniHomepyInfo] = useState(null);
   const [introduce, setIntroduce] = useState("");
@@ -21,13 +23,22 @@ export function MiniHomepy(props) {
   const [totalViews, setTotalViews] = useState(null);
   const [bgm, setBgm] = useState(null);
   const { member_id } = useParams();
+  const [topRankBoardList, setTopRankBoardList] = useState(null);
+  const [newBoardList, setNewBoardList] = useState(null);
   let navigate = useNavigate();
   let toast = useToast();
-  // 각 링크에 대한 팝업 상태
+
+  // board list
+  const [boardListAll, setBoardListAll] = useState(null);
+  const [categoryOrdedBy, setCategoryOrdedBy] = useState("latest"); // 정렬 기준
+  const [params] = useSearchParams();
+  // 로그인 정보
   const grantType = localStorage.getItem("grantType");
   const accessToken = localStorage.getItem("accessToken");
   const loginMember = localStorage.getItem("memberInfo");
+  let originBgmValue = "";
 
+  /*미니홈피 정보*/
   useEffect(() => {
     axios
       .get("/api/member/minihomepy/member_id/" + member_id, {
@@ -76,6 +87,7 @@ export function MiniHomepy(props) {
       });
   }, []);
 
+  /* 미니 홈피 콘텐츠 정보 */
   useEffect(() => {
     axios
       .get("/api/member/minihomepy/member_id/info/" + member_id, {
@@ -88,8 +100,7 @@ export function MiniHomepy(props) {
         setTodayViews(response.data.today_visitors);
         setTotalViews(response.data.total_visitors);
         setBgm(response.data.bgm_link);
-        console.log(response.data.bgm_link);
-        console.log(bgm);
+        originBgmValue = response.data.bgm_link;
       })
       .catch((error) => {
         console.log(bgm);
@@ -97,11 +108,40 @@ export function MiniHomepy(props) {
   }, []);
 
   useEffect(() => {
-    if (loginInfo !== null) {
-      axios.post("/api/member/minihomepy/view", {
-        member_id: member_id,
-        login_member_id: loginMember,
+    axios
+      .get("/api/member/minihomepy/boardlist/member_id/" + member_id)
+      .then((response) => {
+        setTopRankBoardList(response.data.topBoardList);
+        setNewBoardList(response.data.newBoardList);
+        console.log(topRankBoardList);
       });
+  }, []);
+
+  useEffect(() => {
+    params.set("ob", categoryOrdedBy); // 정렬 기준
+    params.set("member_id", member_id);
+    axios
+      .get("/api/member/minihomepy/boardlist/all?" + params)
+      .then((response) => {
+        setBoardListAll(response.data.boardListAll);
+      });
+  }, [categoryOrdedBy]);
+
+  /* 방문자 수 정보 */
+  useEffect(() => {
+    if (loginInfo !== null) {
+      axios
+        .post("/api/member/minihomepy/view", {
+          member_id: member_id,
+          login_member_id: loginMember,
+        })
+        .catch(() => {
+          toast({
+            description: "존재하지 않는 회원입니다.",
+            status: "warning",
+          });
+          navigate("/");
+        });
     }
   }, []);
 
@@ -183,20 +223,35 @@ export function MiniHomepy(props) {
               flexDirection={"column"}
               justifyContent={"flex-end"}
               alignItems={"center"}
+              fontFamily={"'Song Myung', serif;"}
+              mr={"10px"}
             >
-              <MiniHomepyMiddleContainer />
+              <MiniHomepyMiddleContainer
+                loginMember={loginMember}
+                member_id={member_id}
+                topRankBoardList={topRankBoardList}
+                newBoardList={newBoardList}
+                categoryOrdedBy={categoryOrdedBy}
+                setCategoryOrdedBy={setCategoryOrdedBy}
+                boardListAll={boardListAll}
+              />
             </Box>
             <Box
               w={"25%"}
               h={"95%"}
               borderRadius={"20px"}
-              backgroundColor={"red"}
+              backgroundColor={"transparent"}
             >
               <MiniHomepyRightContainer
                 todayViews={todayViews}
                 totalViews={totalViews}
                 videoId={videoId}
                 bgmOpts={bgmOpts}
+                loginMember={loginMember}
+                member_id={member_id}
+                setBgm={setBgm}
+                bgm={bgm}
+                originBgmValue={originBgmValue}
               />
             </Box>
           </Box>

@@ -15,6 +15,15 @@
     border-bottom-right-radius: 20px;
 }
 
+.popup{
+    height: 100%;
+}
+.middleContentImage{
+    width:100%;
+}
+.middleContentImage img{
+    border-radius: 20px;
+}
 .navigation{
     position: relative;
     width:540px;
@@ -119,7 +128,7 @@
     height:20px;
     background-color: transparent;
     border-top-right-radius: 20px;
-    box-shadow: 1px -10px 0  #243a4f;
+    box-shadow: 1px -10px 0  transparent;
 }
 
 .indicator::after{
@@ -131,7 +140,7 @@
     height: 20px;
     background-color: transparent;
     border-top-left-radius: 20px;
-    box-shadow: -1px -10px 0  #243a4f;
+    box-shadow: -1px -10px 0  transparent;
 }
 
 .navigation ul li:nth-child(1).active ~ .indicator{
