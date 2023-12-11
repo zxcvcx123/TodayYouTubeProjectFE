@@ -6,7 +6,19 @@ export function LineChart({chartData}) {
   const options = {
     interaction: {
       intersect: false,
-    }
+    },
+    scales: {
+      x: {
+        grid: {
+          display: false,
+        },
+      },
+      y: {
+        grid: {
+          display: false,
+        },
+      },
+    },
   }
 
   return <Line data={chartData} options={options} style={{width: '500px'}}/>;
