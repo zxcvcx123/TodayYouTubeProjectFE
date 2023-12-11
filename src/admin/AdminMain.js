@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Sidenav} from "./Sidenav";
-import {Box, Flex, Spinner} from "@chakra-ui/react";
+import {Box, Flex, Spinner, Text} from "@chakra-ui/react";
 import {BarChart} from "./BarChart";
 import axios from "axios";
 import {DoughnutChart} from "./DoughnutChart";
@@ -105,16 +105,34 @@ function AdminMain() {
             <BarChart chartData={countCategoryGender}/>
             <LineChart chartData={countCategoryView}/>
           </Box>
-          <Box>
-            <Flex columns={3} width={"200px"}>
-              <DoughnutChart chartData={countCategoryGenderSports}/>
-              <DoughnutChart chartData={countCategoryGenderMukbang}/>
-              <DoughnutChart chartData={countCategoryGenderDaily}/>
+          <Box bg={"whitesmoke"} h={"100%"} borderRadius={"30px"} p={"10px"}>
+            <Flex mb={"10px"}>
+              <Box width={"150px"} alignItems={"center"}>
+                <Text textAlign={"center"}>스포츠</Text>
+                <DoughnutChart chartData={countCategoryGenderSports}/>
+              </Box>
+              <Box width={"150px"} alignItems={"center"}>
+                <Text textAlign={"center"}>먹방</Text>
+                <DoughnutChart chartData={countCategoryGenderMukbang}/>
+              </Box>
+              <Box width={"150px"} alignItems={"center"}>
+                <Text textAlign={"center"}>일상</Text>
+                <DoughnutChart chartData={countCategoryGenderDaily}/>
+              </Box>
             </Flex>
-            <Flex columns={3} width={"200px"}>
-              <DoughnutChart chartData={countCategoryGenderCooking}/>
-              <DoughnutChart chartData={countCategoryGenderMovie}/>
-              <DoughnutChart chartData={countCategoryGenderGame}/>
+            <Flex>
+              <Box width={"150px"} alignItems={"center"}>
+                <Text textAlign={"center"}>요리</Text>
+                <DoughnutChart chartData={countCategoryGenderCooking}/>
+              </Box>
+              <Box width={"150px"} alignItems={"center"}>
+                <Text textAlign={"center"}>영화/드라마</Text>
+                <DoughnutChart chartData={countCategoryGenderMovie}/>
+              </Box>
+              <Box width={"150px"} alignItems={"center"}>
+                <Text textAlign={"center"}>게임</Text>
+                <DoughnutChart chartData={countCategoryGenderGame}/>
+              </Box>
             </Flex>
           </Box>
         </Flex>
