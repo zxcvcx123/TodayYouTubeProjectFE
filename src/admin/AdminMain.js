@@ -30,9 +30,16 @@ function AdminMain() {
   const [countCategoryGenderGame, setCountCategoryGenderGame] = useState(null);
 
   useEffect(() => {
+    axios.get("/api/admin/user")
+      .then(response => {
+        const dataFromUserList = response.data.userDataList;
+      })
+  }, []);
+
+  useEffect(() => {
     axios.get("/api/admin/board")
       .then(response => {
-        const dataFromBoardList = response.data.boardList;
+        const dataFromBoardList = response.data.boardDataList;
 
         // ------------------- 카테고리 별 게시글 수 (바) -------------------
         setCountCategoryBoard({
