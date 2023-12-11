@@ -6,6 +6,14 @@ import axios from "axios";
 import {DoughnutChart} from "./DoughnutChart";
 import {LineChart} from "./LineChart";
 
+// 도넛 차트 출력 형식
+const DoughnutChartBox = ({ title, chartData }) => (
+  <Box width={"150px"} alignItems={"center"}>
+    <Text textAlign={"center"}>{title}</Text>
+    <DoughnutChart chartData={chartData}/>
+  </Box>
+);
+
 function AdminMain() {
   /* 카테고리 별 게시글 수 */
   const [countCategoryBoard, setCountCategoryBoard] = useState(null);
@@ -137,32 +145,14 @@ function AdminMain() {
           </Box>
           <Box bg={"whitesmoke"} h={"100%"} borderRadius={"30px"} p={"10px"}>
             <Flex mb={"10px"}>
-              <Box width={"150px"} alignItems={"center"}>
-                <Text textAlign={"center"}>스포츠</Text>
-                <DoughnutChart chartData={countCategoryGenderSports}/>
-              </Box>
-              <Box width={"150px"} alignItems={"center"}>
-                <Text textAlign={"center"}>먹방</Text>
-                <DoughnutChart chartData={countCategoryGenderMukbang}/>
-              </Box>
-              <Box width={"150px"} alignItems={"center"}>
-                <Text textAlign={"center"}>일상</Text>
-                <DoughnutChart chartData={countCategoryGenderDaily}/>
-              </Box>
+              <DoughnutChartBox title="스포츠" chartData={countCategoryGenderSports} />
+              <DoughnutChartBox title="먹방" chartData={countCategoryGenderMukbang} />
+              <DoughnutChartBox title="일상" chartData={countCategoryGenderDaily} />
             </Flex>
             <Flex>
-              <Box width={"150px"} alignItems={"center"}>
-                <Text textAlign={"center"}>요리</Text>
-                <DoughnutChart chartData={countCategoryGenderCooking}/>
-              </Box>
-              <Box width={"150px"} alignItems={"center"}>
-                <Text textAlign={"center"}>영화/드라마</Text>
-                <DoughnutChart chartData={countCategoryGenderMovie}/>
-              </Box>
-              <Box width={"150px"} alignItems={"center"}>
-                <Text textAlign={"center"}>게임</Text>
-                <DoughnutChart chartData={countCategoryGenderGame}/>
-              </Box>
+              <DoughnutChartBox title="요리" chartData={countCategoryGenderCooking} />
+              <DoughnutChartBox title="영화/드라마" chartData={countCategoryGenderMovie} />
+              <DoughnutChartBox title="게임" chartData={countCategoryGenderGame} />
             </Flex>
           </Box>
         </Flex>
