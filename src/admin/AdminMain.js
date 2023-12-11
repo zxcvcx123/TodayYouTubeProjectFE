@@ -1,6 +1,18 @@
 import React, {useEffect, useState} from "react";
 import {Sidenav} from "./Sidenav";
-import {Box, Card, CardBody, CardHeader, Flex, Heading, Spinner, Stack, StackDivider, Text} from "@chakra-ui/react";
+import {
+  Badge,
+  Box,
+  Card,
+  CardBody,
+  CardHeader,
+  Flex,
+  Heading,
+  Spinner,
+  Stack,
+  StackDivider,
+  Text
+} from "@chakra-ui/react";
 import {BarChart} from "./BarChart";
 import axios from "axios";
 import {DoughnutChart} from "./DoughnutChart";
@@ -173,11 +185,14 @@ function AdminMain() {
           <CardBody>
             <Stack divider={<StackDivider />} spacing='4'>
               <Flex>
+                <Badge fontSize='xs' border={"1px solid black"}>
+                  순위(숫자)
+                </Badge>
                 <Heading size='xs' border={"1px solid black"}>
-                  Summary
+                  닉네임
                 </Heading>
                 <Text fontSize='xs' border={"1px solid black"}>
-                  View a
+                  게시글 작성 수
                 </Text>
               </Flex>
             </Stack>
