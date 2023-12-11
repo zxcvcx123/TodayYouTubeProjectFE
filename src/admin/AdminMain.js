@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Sidenav} from "./Sidenav";
-import {Box, Flex, Spinner, Text} from "@chakra-ui/react";
+import {Box, Card, CardBody, CardHeader, Flex, Heading, Spinner, Stack, StackDivider, Text} from "@chakra-ui/react";
 import {BarChart} from "./BarChart";
 import axios from "axios";
 import {DoughnutChart} from "./DoughnutChart";
@@ -32,7 +32,9 @@ function AdminMain() {
   useEffect(() => {
     axios.get("/api/admin/user")
       .then(response => {
-        const dataFromUserList = response.data.userDataList;
+        const userWriteRankDataList = response.data.userWriteRankDataList;
+        const userLikeRankDataList = response.data.userLikeRankDataList;
+        const userCommentRankDataList = response.data.userCommentRankDataList;
       })
   }, []);
 
@@ -163,6 +165,24 @@ function AdminMain() {
             </Flex>
           </Box>
         </Flex>
+        <Card w={"300px"}>
+          <CardHeader>
+            <Heading size='md'>게시글 작성 순위</Heading>
+          </CardHeader>
+
+          <CardBody>
+            <Stack divider={<StackDivider />} spacing='4'>
+              <Flex>
+                <Heading size='xs' border={"1px solid black"}>
+                  Summary
+                </Heading>
+                <Text fontSize='xs' border={"1px solid black"}>
+                  View a
+                </Text>
+              </Flex>
+            </Stack>
+          </CardBody>
+        </Card>
       </Box>
     </Flex>
   );
