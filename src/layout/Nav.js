@@ -18,6 +18,7 @@ import {
   PopoverFooter,
   PopoverHeader,
   PopoverTrigger,
+  Spinner,
   Stack,
   Text,
 } from "@chakra-ui/react";
@@ -50,13 +51,21 @@ export function Nav({ setSocket }) {
   const { token, handleLogout, loginInfo, validateToken } =
     useContext(DetectLoginContext);
 
-  const { stompClient, alarmList, setAlarmList, alarmCount, setAlarmCount } =
-    useContext(SocketContext);
+  const {
+    stompClient,
+    IsConnected,
+    alarmList,
+    setAlarmList,
+    alarmCount,
+    setAlarmCount,
+  } = useContext(SocketContext);
+
+  const connectUser = localStorage.getItem("memberInfo");
 
   useEffect(() => {
     axios
       .post("http://localhost:3000/api/websocket/alarmlist", {
-        userId: localStorage.getItem("memberInfo"),
+        userId: connectUser,
       })
       .then((res) => {
         setAlarmList(res.data);
@@ -67,7 +76,7 @@ export function Nav({ setSocket }) {
 
     axios
       .post("http://localhost:3000/api/websocket/alarmcount", {
-        userId: localStorage.getItem("memberInfo"),
+        userId: connectUser,
       })
       .then((res) => {
         setAlarmCount(res.data);
@@ -77,7 +86,15 @@ export function Nav({ setSocket }) {
       .finally();
   }, [location]);
 
-  function handleAllRead() {}
+  function handleRandomView() {
+    axios
+      .get("http://localhost:3000/api/board/random")
+      .then((res) => {
+        navigate("board/" + res.data.id + "?category=" + res.data.name_eng);
+      })
+      .catch()
+      .finally();
+  }
 
   // 알람 개별 읽기
   function handleRead(id, boardid) {
@@ -88,6 +105,38 @@ export function Nav({ setSocket }) {
       .then()
       .catch()
       .finally();
+  }
+
+  // 알람 모두 읽기
+  function handleAllRead() {
+    stompClient.current.publish({
+      destination: "/app/comment/alarm/allread/" + connectUser,
+    });
+  }
+
+  // 알람 개별 제거
+  function handleDeleteAlarm(id) {
+    // mode 통해서 전부 제거(ALL), 일부 제거
+    stompClient.current.publish({
+      destination: "/app/comment/alarm/delete",
+      body: JSON.stringify({
+        id: id,
+        userId: connectUser,
+        mode: "ONE",
+      }),
+    });
+  }
+
+  // 알람 전부 제거
+  function handleDeletAllAlarm() {
+    // mode 통해서 전부 제거(ALL), 일부 제거
+    stompClient.current.publish({
+      destination: "/app/comment/alarm/delete",
+      body: JSON.stringify({
+        userId: connectUser,
+        mode: "ALL",
+      }),
+    });
   }
 
   return (
@@ -112,8 +161,14 @@ export function Nav({ setSocket }) {
           로고
         </Button>
         <Flex>
-          <Button w={120} borderStyle={"solid"} size="md" variant="ghost">
-            TOP
+          <Button
+            onClick={handleRandomView}
+            w={120}
+            borderStyle={"solid"}
+            size="md"
+            variant="ghost"
+          >
+            오늘 뭐 볼까?
           </Button>
           <Menu>
             <MenuButton as={Button} w={120} size="md" variant="ghost">
@@ -185,44 +240,57 @@ export function Nav({ setSocket }) {
                       <Flex justifyContent={"space-between"} w={"88%"}>
                         <Text>최근 알람</Text>
                         <Flex alignItems={"flex-end"} gap={3}>
-                          <Link style={{ fontSize: "small", color: "blue" }}>
+                          <Text
+                            _hover={{ cursor: "pointer" }}
+                            onClick={handleAllRead}
+                            style={{ fontSize: "small", color: "blue" }}
+                          >
                             전부읽음
-                          </Link>
-                          <Link
+                          </Text>
+                          <Text
+                            _hover={{ cursor: "pointer" }}
+                            onClick={handleDeletAllAlarm}
                             style={{
                               fontSize: "small",
                               color: "blue",
                             }}
                           >
                             전부삭제
-                          </Link>
+                          </Text>
                         </Flex>
                       </Flex>
                     </PopoverHeader>
 
-                    {alarmList.map((list) => (
-                      <PopoverBody borderBottomWidth={2}>
-                        <Flex alignItems={"center"}>
-                          <Text
-                            _hover={{ cursor: "pointer" }}
-                            onClick={() => {
-                              handleRead(list.id, list.board_id);
-                            }}
-                            style={{
-                              color: list._alarm === false ? "blue" : "gray",
-                            }}
-                          >
-                            {list.board_title}에 {list.sender_member_id}님이
-                            댓글을 남겼습니다.
-                            <Text color={"black"}>{list.ago}</Text>
-                          </Text>
+                    {IsConnected === true ? (
+                      alarmList.map((list) => (
+                        <PopoverBody borderBottomWidth={2} key={list.id}>
+                          <Flex alignItems={"center"}>
+                            <Text
+                              _hover={{ cursor: "pointer" }}
+                              onClick={() => {
+                                handleRead(list.id, list.board_id);
+                              }}
+                              style={{
+                                color: list._alarm === false ? "blue" : "gray",
+                              }}
+                            >
+                              {list.board_title}에 {list.sender_member_id}님이
+                              댓글을 남겼습니다.
+                              <Text color={"black"}>{list.ago}</Text>
+                            </Text>
 
-                          <Box>
-                            <FontAwesomeIcon icon={faXmark} />
-                          </Box>
-                        </Flex>
-                      </PopoverBody>
-                    ))}
+                            <Box _hover={{ cursor: "pointer" }}>
+                              <FontAwesomeIcon
+                                icon={faXmark}
+                                onClick={() => handleDeleteAlarm(list.id)}
+                              />
+                            </Box>
+                          </Flex>
+                        </PopoverBody>
+                      ))
+                    ) : (
+                      <Text>알람을 불러오는 중입니다...</Text>
+                    )}
                   </PopoverContent>
                 </Popover>
 
