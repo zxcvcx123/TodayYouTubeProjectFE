@@ -19,7 +19,7 @@ import {DoughnutChart} from "./DoughnutChart";
 import {LineChart} from "./LineChart";
 
 // 도넛 차트 출력 형식
-const DoughnutChartBox = ({ title, chartData }) => (
+const DoughnutChartBox = ({title, chartData}) => (
   <Box width={"150px"} alignItems={"center"}>
     <Text textAlign={"center"}>{title}</Text>
     <DoughnutChart chartData={chartData}/>
@@ -27,6 +27,8 @@ const DoughnutChartBox = ({ title, chartData }) => (
 );
 
 function AdminMain() {
+  /* 로딩 상태 */
+  const [isLoading, setIsLoading] = useState(true);
   /* 카테고리 별 게시글 수 */
   const [countCategoryBoard, setCountCategoryBoard] = useState(null);
   /* 카테고리 별 게시글 성비 수 (바) */
@@ -40,13 +42,17 @@ function AdminMain() {
   const [countCategoryGenderCooking, setCountCategoryGenderCooking] = useState(null);
   const [countCategoryGenderMovie, setCountCategoryGenderMovie] = useState(null);
   const [countCategoryGenderGame, setCountCategoryGenderGame] = useState(null);
+  /* 유저 순위 (게시글, 좋아요, 댓글) */
+  const [userWriteRankDataList, setUserWriteRankDataList] = useState(null);
+  const [userLikeRankDataList, setUserLikeRankDataList] = useState(null);
+  const [userCommentRankDataList, setUserCommentRankDataList] = useState(null);
 
   useEffect(() => {
     axios.get("/api/admin/user")
       .then(response => {
-        const userWriteRankDataList = response.data.userWriteRankDataList;
-        const userLikeRankDataList = response.data.userLikeRankDataList;
-        const userCommentRankDataList = response.data.userCommentRankDataList;
+        setUserWriteRankDataList(response.data.userWriteRankDataList);
+        setUserLikeRankDataList(response.data.userLikeRankDataList);
+        setUserCommentRankDataList(response.data.userCommentRankDataList);
       })
   }, []);
 
@@ -129,7 +135,7 @@ function AdminMain() {
               label: categoryData.map(data => data.name_eng),
               data: [categoryData.map(data => data.count_category_members_man),
                 categoryData.map(data => data.count_category_members_woman)],
-              backgroundColor: ["rgba(54, 162, 235, 0.8)", "rgba(255, 99, 132, 0.8)" ],
+              backgroundColor: ["rgba(54, 162, 235, 0.8)", "rgba(255, 99, 132, 0.8)"],
               hoverOffset: 4
             }]
           };
@@ -166,24 +172,26 @@ function AdminMain() {
           </Box>
           <Box bg={"whitesmoke"} h={"100%"} borderRadius={"30px"} p={"10px"}>
             <Flex mb={"10px"}>
-              <DoughnutChartBox title="스포츠" chartData={countCategoryGenderSports} />
-              <DoughnutChartBox title="먹방" chartData={countCategoryGenderMukbang} />
-              <DoughnutChartBox title="일상" chartData={countCategoryGenderDaily} />
+              <DoughnutChartBox title="스포츠" chartData={countCategoryGenderSports}/>
+              <DoughnutChartBox title="먹방" chartData={countCategoryGenderMukbang}/>
+              <DoughnutChartBox title="일상" chartData={countCategoryGenderDaily}/>
             </Flex>
             <Flex>
-              <DoughnutChartBox title="요리" chartData={countCategoryGenderCooking} />
-              <DoughnutChartBox title="영화/드라마" chartData={countCategoryGenderMovie} />
-              <DoughnutChartBox title="게임" chartData={countCategoryGenderGame} />
+              <DoughnutChartBox title="요리" chartData={countCategoryGenderCooking}/>
+              <DoughnutChartBox title="영화/드라마" chartData={countCategoryGenderMovie}/>
+              <DoughnutChartBox title="게임" chartData={countCategoryGenderGame}/>
             </Flex>
           </Box>
         </Flex>
+
+        {/* ---------- 게시글 작성 순위 ---------- */}
         <Card w={"300px"}>
           <CardHeader>
             <Heading size='md'>게시글 작성 순위</Heading>
           </CardHeader>
 
           <CardBody>
-            <Stack divider={<StackDivider />} spacing='4'>
+            <Stack divider={<StackDivider/>} spacing='4'>
               <Flex>
                 <Badge fontSize='xs' border={"1px solid black"}>
                   순위(숫자)
