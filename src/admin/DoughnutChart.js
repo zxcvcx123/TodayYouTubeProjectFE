@@ -4,5 +4,12 @@ import { Chart as ChartJS } from "chart.js/auto"
 
 
 export function DoughnutChart({chartData}) {
-  return <Doughnut data={chartData} />;
+  const options = {
+    interaction: {
+      mode: "index",
+    },
+    spacing: 0.5
+  }
+
+  return <Doughnut data={chartData} options={options} />;
 }
