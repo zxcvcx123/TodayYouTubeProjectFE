@@ -62,7 +62,7 @@ function AdminMain() {
             data: dataFromBoardList.map(data => data.count_category_view),
             fill: true,
             backgroundColor: "rgba(75,192,192,0.2)",
-            borderColor: "rgba(75,192,192,1)"
+            borderColor: "rgba(75,192,192,1)",
           }]
         });
 
@@ -71,10 +71,16 @@ function AdminMain() {
           labels: dataFromBoardList.map(data => data.name_eng),
           datasets: [{
             label: "남성",
-            data: dataFromBoardList.map(data => data.count_category_members_man)
+            data: dataFromBoardList.map(data => data.count_category_members_man),
+            backgroundColor: "rgba(54, 162, 235, 0.5)",
+            borderColor: "rgba(54, 162, 235)",
+            borderWidth: 3
           }, {
             label: "여성",
-            data: dataFromBoardList.map(data => data.count_category_members_woman)
+            data: dataFromBoardList.map(data => data.count_category_members_woman),
+            backgroundColor: "rgba(255, 99, 132, 0.5)",
+            borderColor: "rgba(255, 99, 132)",
+            borderWidth: 3
           }]
         });
 
