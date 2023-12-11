@@ -100,6 +100,8 @@ function AdminMain() {
               label: categoryData.map(data => data.name_eng),
               data: [categoryData.map(data => data.count_category_members_man),
                 categoryData.map(data => data.count_category_members_woman)],
+              backgroundColor: ["rgba(54, 162, 235, 0.8)", "rgba(255, 99, 132, 0.8)" ],
+              borderColor: ["rgba(54, 162, 235)", "rgba(255, 99, 132)" ],
               hoverOffset: 4
             }]
           };
