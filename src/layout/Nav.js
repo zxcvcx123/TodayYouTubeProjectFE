@@ -129,6 +129,10 @@ export function Nav({ setSocket }) {
               <MenuItem onClick={() => navigate("/inquiry/list")}>
                 문의게시판
               </MenuItem>
+              <Divider />
+              <MenuItem onClick={() => navigate("/admin")}>
+                관리자(임시)
+              </MenuItem>
             </MenuList>
           </Menu>
         </Flex>
