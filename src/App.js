@@ -30,6 +30,7 @@ import AdminMain from "./admin/AdminMain";
 import InquiryAnswer from "./inquiry/InquiryAnswer";
 import ScrollToTop from "./util/ScrollToTop";
 import AdminReport from "./admin/AdminReport";
+import SearchResult from "./allsearch/SearchResult";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -53,6 +54,7 @@ const routes = createBrowserRouter(
       <Route path={"editor"} element={<Editor />} />
       <Route path="chat" element={<Chat />} />
       <Route path="admin" element={<AdminMain />} />
+      <Route path="search" element={<SearchResult />} />
     </Route>,
   ),
 );
