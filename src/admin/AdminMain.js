@@ -9,8 +9,11 @@ import {DoughnutChart} from "./DoughnutChart";
 DoughnutChart.propTypes = {chartData: PropTypes.any};
 
 function AdminMain() {
+  /* 카테고리 별 게시글 수 */
   const [countCategoryBoard, setCountCategoryBoard] = useState(null);
+  /* 카테고리 별 게시글 성비 수 (바) */
   const [countCategoryGender, setCountCategoryGender] = useState(null);
+  /* 카테고리 별 게시글 성비 수 (도넛) */
   const [countCategoryGenderSports, setCountCategoryGenderSports] = useState(null);
   const [countCategoryGenderMukbang, setCountCategoryGenderMukbang] = useState(null);
   const [countCategoryGenderDaily, setCountCategoryGenderDaily] = useState(null);
