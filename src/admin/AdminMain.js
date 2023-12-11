@@ -40,7 +40,10 @@ function AdminMain() {
           labels: dataFromBoardList.map(data => data.name_eng),
           datasets: [{
             label: "카테고리 별 게시글 수",
-            data: dataFromBoardList.map(data => data.count_category_view)
+            data: dataFromBoardList.map(data => data.count_category_view),
+            fill: true,
+            backgroundColor: "rgba(75,192,192,0.2)",
+            borderColor: "rgba(75,192,192,1)"
           }]
         });
 
