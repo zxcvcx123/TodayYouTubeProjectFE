@@ -50,7 +50,7 @@ function CommentForm({
   setCommentLike,
   boardData,
 }) {
-  const { connectUser } = useContext(DetectLoginContext);
+  const connectUser = localStorage.getItem("memberInfo");
   const { stompClient, setToId } = useContext(SocketContext);
 
   const [comment, setComment] = useState("");
