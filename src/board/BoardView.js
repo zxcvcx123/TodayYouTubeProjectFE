@@ -189,6 +189,7 @@ function BoardView() {
 
   // 유튜브 섹션 렌더링 여부 결정 함수
   function renderYoutubeSection() {
+    console.log("링크: " + board.link);
     if (!board.link) {
       return <Text>링크가 없네용</Text>;
     }

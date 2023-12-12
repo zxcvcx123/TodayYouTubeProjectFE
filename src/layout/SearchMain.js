@@ -17,17 +17,17 @@ export function SearchMain() {
 
   return (
     <Flex width={600}>
-      <Box>
-        <Select fontSize={13}>
-          <option value="all">통합검색</option>
-          <option value="category">스포츠</option>
-          <option value="category">먹방</option>
-          <option value="category">일상</option>
-          <option value="category">요리</option>
-          <option value="category">영화/드라마</option>
-          <option value="category">게임</option>
-        </Select>
-      </Box>
+      {/*<Box>*/}
+      {/*  <Select fontSize={13}>*/}
+      {/*    <option value="all">통합검색</option>*/}
+      {/*    <option value="category">스포츠</option>*/}
+      {/*    <option value="category">먹방</option>*/}
+      {/*    <option value="category">일상</option>*/}
+      {/*    <option value="category">요리</option>*/}
+      {/*    <option value="category">영화/드라마</option>*/}
+      {/*    <option value="category">게임</option>*/}
+      {/*  </Select>*/}
+      {/*</Box>*/}
       <Box width={400}>
         <Input
           fontSize={13}
@@ -35,7 +35,6 @@ export function SearchMain() {
           value={allSearch}
           onChange={(e) => setAllSearch(e.target.value)}
         />
-
       </Box>
       <Button width={100}>
         <FontAwesomeIcon icon={faSearch} onClick={handleAllSearch} />
