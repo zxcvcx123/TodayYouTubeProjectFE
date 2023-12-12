@@ -32,8 +32,6 @@ function YoutubeInfo({
       thumbnail = thumbnailUrl;
       videoId = videoIdMatch[4];
     }
-  } else {
-    return null;
   }
 
   return (
