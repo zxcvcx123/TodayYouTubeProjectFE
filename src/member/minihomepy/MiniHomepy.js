@@ -13,7 +13,16 @@ import { error } from "react-dom/test-utils";
 
 export let HomepyMemberContext = createContext(null);
 
+function YoutubeChannelInfo() {
+  return (
+    <>
+      <Box></Box>
+    </>
+  );
+}
+
 export function MiniHomepy(props) {
+  const API_KEY =config.apikey;
   // 로그인 정보
   const { loginInfo } = useContext(DetectLoginContext);
   // 미니홈피 정보
@@ -40,6 +49,22 @@ export function MiniHomepy(props) {
   const accessToken = localStorage.getItem("accessToken");
   const loginMember = localStorage.getItem("memberInfo");
   let originBgmValue = "";
+
+  useEffect(() => {
+    axios
+      .get("https://youtube.googleapis.com/youtube/v3/channels", {
+        params: {
+          part: "snippet",
+          id: "UCBkyj16n2snkRg1BAzpovXQ",
+          key: ,
+        },
+      })
+      .then((response) => {
+        console.log(response.data.items[0].snippet.localized.description);
+        console.log(response.data.items[0].snippet.title);
+        console.log(response.data.items[0].snippet.thumbnails.default.url);
+      });
+  }, []);
 
   /*미니홈피 정보*/
   useEffect(() => {
@@ -224,6 +249,7 @@ export function MiniHomepy(props) {
               borderRadius={"20px"}
               backgroundColor={"transparent"}
             >
+              <YoutubeChannelInfo />
               <MiniHomepyLeftContainer
                 member={member}
                 miniHomepyInfo={miniHomepyInfo}
