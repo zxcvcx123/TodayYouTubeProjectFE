@@ -281,8 +281,18 @@ export function Nav({ setSocket }) {
                                 color: list._alarm === false ? "blue" : "gray",
                               }}
                             >
-                              {list.board_title}에 {list.sender_member_id}님이
-                              댓글을 남겼습니다.
+                              {list.alarm_category === "ac002" ? (
+                                <>
+                                  {list.board_title}에 {list.nickname}
+                                  님이 댓글을 남겼습니다.
+                                </>
+                              ) : list.alarm_category === "ac003" ? (
+                                <>
+                                  {list.inquiry_title}에 운영자가 답변을
+                                  남겼습니다.
+                                </>
+                              ) : null}
+
                               <Text color={"black"}>{list.ago}</Text>
                             </Text>
 
