@@ -112,7 +112,9 @@ export function MainView() {
 
   // 메인페이지 접속시 방문자 증가
   useEffect(() => {
-    axios.get("/api/visitor");
+    const memberInfo = localStorage.getItem("memberInfo");
+
+    axios.get("/api/visitor", { params: { member_id: memberInfo } });
   }, []);
 
   function handleCategoryChange(e) {
