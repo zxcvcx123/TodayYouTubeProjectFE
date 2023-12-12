@@ -199,12 +199,12 @@ function BoardList() {
             <Table size={"sm"}>
               <Thead>
                 <Tr>
-                  <Th textAlign={"center"}>번호</Th>
-                  <Th textAlign={"center"}>제목</Th>
-                  <Th textAlign={"center"}>좋아요</Th>
-                  <Th textAlign={"center"}>작성자</Th>
-                  <Th textAlign={"center"}>작성일시</Th>
-                  <Th textAlign={"center"}>조회수</Th>
+                  <Th borderBottom={"1px solid white"} textAlign={"center"}>번호</Th>
+                  <Th borderBottom={"1px solid white"} textAlign={"center"}>제목</Th>
+                  <Th borderBottom={"1px solid white"} textAlign={"center"}>좋아요</Th>
+                  <Th borderBottom={"1px solid white"} textAlign={"center"}>작성자</Th>
+                  <Th borderBottom={"1px solid white"} textAlign={"center"}>작성일시</Th>
+                  <Th borderBottom={"1px solid white"} textAlign={"center"}>조회수</Th>
                 </Tr>
               </Thead>
 
@@ -223,11 +223,11 @@ function BoardList() {
                         }}
                       >
                         {/* 게시판 번호 출력 */}
-                        <Td textAlign={"center"} verticalAlign="middle">
+                        <Td textAlign={"center"} verticalAlign="middle" borderBottom={"1px solid white"}>
                           {board.rownum}
                         </Td>
                         {/* 썸네일, 제목 출력 */}
-                        <Td verticalAlign="middle">
+                        <Td verticalAlign="middle" width={"500px"} borderBottom={"1px solid white"}>
                           <Flex align={"center"} gap={"10px"}>
                             {/* 썸네일 출력 */}
                             <YoutubeInfo
@@ -242,16 +242,16 @@ function BoardList() {
                             {renderListTitle(board)}
                           </Flex>
                         </Td>
-                        <Td textAlign={"center"} verticalAlign="middle">
+                        <Td textAlign={"center"} verticalAlign="middle" borderBottom={"1px solid white"}>
                           {board.countlike}
                         </Td>
-                        <Td textAlign={"center"} verticalAlign="middle">
+                        <Td textAlign={"center"} verticalAlign="middle" borderBottom={"1px solid white"}>
                           {board.board_member_id}
                         </Td>
-                        <Td textAlign={"center"} verticalAlign="middle">
+                        <Td textAlign={"center"} verticalAlign="middle" borderBottom={"1px solid white"}>
                           {board.ago}
                         </Td>
-                        <Td textAlign={"center"} verticalAlign="middle">
+                        <Td textAlign={"center"} verticalAlign="middle" borderBottom={"1px solid white"}>
                           {board.views}
                         </Td>
                       </Tr>
