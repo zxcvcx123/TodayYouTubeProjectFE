@@ -65,6 +65,7 @@ function BoardView() {
 
   // 초기 렌더링
   useEffect(() => {
+    console.log("랜더링 테스트");
     axios.get("/api/board/id/" + id).then((response) => {
       setBoard(response.data);
 
@@ -78,7 +79,7 @@ function BoardView() {
         setIsAuthor(true);
       }
     });
-  }, [isSubmitting]);
+  }, [isSubmitting, location]);
 
   // 초기 렌더링 파일 목록 가져오기
   useEffect(() => {
@@ -318,11 +319,8 @@ function BoardView() {
       </Flex>
       {/* -------------------- 댓글 영역 -------------------- */}
 
-        <BoardComment board_id={id} boardData={board} />
+      <BoardComment board_id={id} boardData={board} />
       <ScrollToTop />
-
-    
-
     </Box>
   );
 }

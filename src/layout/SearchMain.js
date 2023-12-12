@@ -1,8 +1,20 @@
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Box, Button, Flex, Input, Select } from "@chakra-ui/react";
+import { useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 export function SearchMain() {
+  const [allSearch, setAllSearch] = useState("");
+  const params = new URLSearchParams();
+
+  const navigate = useNavigate();
+
+  function handleAllSearch() {
+    params.set("allSearch", allSearch);
+    navigate("/search/?" + params);
+  }
+
   return (
     <Flex width={600}>
       <Box>
@@ -17,10 +29,16 @@ export function SearchMain() {
         </Select>
       </Box>
       <Box width={400}>
-        <Input fontSize={13} placeholder="검색어를 입력하세요" />
+        <Input
+          fontSize={13}
+          placeholder="검색어를 입력하세요"
+          value={allSearch}
+          onChange={(e) => setAllSearch(e.target.value)}
+        />
+
       </Box>
       <Button width={100}>
-        <FontAwesomeIcon icon={faSearch} />
+        <FontAwesomeIcon icon={faSearch} onClick={handleAllSearch} />
       </Button>
     </Flex>
   );

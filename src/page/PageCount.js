@@ -8,24 +8,31 @@ import {
   Stack,
   useRadioGroup,
 } from "@chakra-ui/react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { hover } from "@testing-library/user-event/dist/hover";
+import axios from "axios";
 
-function PageCount(props) {
-  const [pageCount, setPageCount] = useState("10");
+function PageCount({ params }) {
+  const [pageCount, setPageCount] = useState(10);
   const navigate = useNavigate();
-
-  const [params] = useSearchParams();
+  const [params1] = useSearchParams(params);
 
   useEffect(() => {
-    params.set("s", pageCount);
-    params.set("p", 1);
-    navigate("?" + params);
+    axios.get("/api/board/list?" + params);
   }, [pageCount]);
+
+  function handlePageCount(e) {
+    const newPageCount = e.target.value;
+    setPageCount(newPageCount);
+
+    params1.set("s", newPageCount);
+    params1.set("p", 1);
+    navigate("?" + params1);
+  }
 
   return (
     <Box>
-      <Select defaultValue={10} onChange={(e) => setPageCount(e.target.value)}>
+      <Select defaultValue={10} onChange={(e) => handlePageCount(e)}>
         <option value={5}>5개씩 보기</option>
         <option value={10}>10개씩 보기</option>
         <option value={20}>20개씩 보기</option>

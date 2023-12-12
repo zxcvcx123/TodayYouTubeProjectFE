@@ -50,7 +50,7 @@ function CommentForm({
   setCommentLike,
   boardData,
 }) {
-  const { connectUser } = useContext(DetectLoginContext);
+  const connectUser = localStorage.getItem("memberInfo");
   const { stompClient, setToId } = useContext(SocketContext);
 
   const [comment, setComment] = useState("");
@@ -61,8 +61,20 @@ function CommentForm({
 
   // 댓글작성시 알람기능
   function send(comment) {
+    // 알림목록
     stompClient.current.publish({
       destination: "/app/comment/sendalarm/" + connectUser,
+      body: JSON.stringify({
+        sender_member_id: connectUser,
+        receiver_member_id: boardData.board_member_id,
+        board_id: board_id,
+        board_title: boardData.board_title,
+      }),
+    });
+
+    // 개수
+    stompClient.current.publish({
+      destination: "/app/comment/sendalarm/count/" + connectUser,
       body: JSON.stringify({
         sender_member_id: connectUser,
         receiver_member_id: boardData.board_member_id,
@@ -79,7 +91,7 @@ function CommentForm({
         isDisabled={isSubmitting}
         h="80px"
         onClick={() => {
-          //handleSubmit();
+          handleSubmit();
           send();
         }}
       >
@@ -127,7 +139,7 @@ function CommentItem({
   function handleCommentLike() {
     axios
       .post("/api/comment/like", {
-        member_id: loginInfo.member_id,
+        member_id: localStorage.getItem("memberInfo"),
         board_id: comment.board_id,
         comment_id: comment.id,
       })
@@ -150,7 +162,7 @@ function CommentItem({
           <Text size="xs" as="sub">
             {comment.created_at}
           </Text>
-          {loginInfo.member_id === comment.member_id && (
+          {localStorage.getItem("memberInfo") === comment.member_id && (
             <Flex gap={0.5}>
               {isEditing || (
                 <Button
@@ -219,7 +231,7 @@ function CommentItem({
                   <FontAwesomeIcon
                     icon={comment.likeHeart ? faHeartSolid : faHeartRegular}
                   />
-                </Button>{" "}
+                </Button>
                 <Text fontSize="x-small">{comment.count_comment_like}</Text>
               </Flex>
             </Flex>
@@ -320,7 +332,7 @@ export function BoardComment({ board_id, boardData }) {
         });
       }
     }
-  }, [isSubmitting, loginInfo]);
+  }, [isSubmitting]);
 
   function handleCommentLike(data) {
     setCommentList(
@@ -346,7 +358,7 @@ export function BoardComment({ board_id, boardData }) {
       .post("/api/comment/add", {
         comment: comment.comment,
         board_id: comment.board_id,
-        member_id: loginInfo.member_id,
+        member_id: localStorage.getItem("memberInfo"),
       })
       .then(() => {
         toast({

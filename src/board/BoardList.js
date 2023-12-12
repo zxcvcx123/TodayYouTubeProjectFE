@@ -42,6 +42,7 @@ import { SearchComponent } from "../page/SearchComponent";
 import PageCount from "../page/PageCount";
 import { DetectLoginContext } from "../component/LoginProvider";
 import ScrollToTop from "../util/ScrollToTop";
+import pageCount from "../page/PageCount";
 
 function BoardList() {
   /* 로그인 정보 컨텍스트 */
@@ -76,7 +77,9 @@ function BoardList() {
       setPageInfo(response.data.pageInfo);
       setBoardInfo(response.data.boardInfo);
     });
-  }, [location]);
+  }, [location, pageCount]);
+
+  console.log(params);
 
   // 리스트 뷰 세팅 동작
   const switchToListView = () => {
@@ -94,8 +97,12 @@ function BoardList() {
     // 글쓰기 버튼 클릭시 로그인 되어 있지 않다면 로그인 창으로 이동
     if (!token.detectLogin) {
       onOpen();
+    } else if (currentParams === "vote") {
+      navigate("/board/vote/write?category=" + currentParams, {
+        state: boardInfo,
+      });
     } else {
-      navigate("/write?category=" + currentParams, { state: boardInfo });
+      navigate("/board/write?category=" + currentParams, { state: boardInfo });
     }
   }
 

@@ -66,22 +66,25 @@ export function MainView() {
     params.set("c", category);
     params.set("sort", dateSort);
 
-    axios.get("/api?" + params).then((response) => {
-      setFirstList(response.data.firstBoardList);
-      setOtherList(response.data.otherBoardList);
-      setMainShowLink(response.data.firstBoardList.link);
-      setLinkCategory(response.data.firstBoardList.categoryName);
-      setMainBoardList2(response.data.mainBoardList2);
-      setMainBoardList3(response.data.mainBoardList3);
-      setMainBoardList4(response.data.mainBoardList4);
-      setMainBoardList5(response.data.mainBoardList5);
-      setMainBoardList6(response.data.mainBoardList6);
-      setMainBoardList7(response.data.mainBoardList7);
-      setMainRecommendBoardList(response.data.mainRecommendBoardList);
-      setMainHitsBoardList(response.data.mainHitsBoardList);
-      // navigate("?" + params);
-      return () => clearTimeout(timer);
-    });
+    axios
+      .get("/api?" + params)
+      .then((response) => {
+        setFirstList(response.data.firstBoardList);
+        setOtherList(response.data.otherBoardList);
+        setMainShowLink(response.data.firstBoardList.link);
+        setLinkCategory(response.data.firstBoardList.categoryName);
+        setMainBoardList2(response.data.mainBoardList2);
+        setMainBoardList3(response.data.mainBoardList3);
+        setMainBoardList4(response.data.mainBoardList4);
+        setMainBoardList5(response.data.mainBoardList5);
+        setMainBoardList6(response.data.mainBoardList6);
+        setMainBoardList7(response.data.mainBoardList7);
+        setMainRecommendBoardList(response.data.mainRecommendBoardList);
+        setMainHitsBoardList(response.data.mainHitsBoardList);
+        // navigate("?" + params);
+        return () => clearTimeout(timer);
+      })
+      .catch(() => console.log("글이 없습니다"));
   }, [category, dateSort]);
 
   // 나머지 영상 바뀔때 메인화면에 출력
@@ -312,7 +315,7 @@ export function MainView() {
                 </Box>
               </Box>
               <Flex w={"80%"} ml={5}>
-                {otherList !== null &&
+                {otherList &&
                   otherList.map((other) => (
                     <Box
                       w={"25%"}
