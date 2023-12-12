@@ -35,6 +35,9 @@ function YoutubeInfo({
     }
   }, [location]);
 
+  console.log("비디오 아이디" + videoId);
+  console.log("비디오 링크" + link);
+
   return (
     <div>
       {/* 프롭에 따라 썸네일, 유튜브영상 등을 선택해서 추출 가능 */}
