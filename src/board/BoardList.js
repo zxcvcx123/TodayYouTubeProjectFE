@@ -162,12 +162,12 @@ function BoardList() {
     <Flex justifyContent={"center"}>
       <Box>
         {/* ------------------------- 게시글 목록 상단 바 ------------------------- */}
-        <Box mb={5}>
+        <Box my={5}>
           <Heading>{boardInfo} 게시판</Heading>
         </Box>
-        <Flex justifyContent={"space-between"} mb={5}>
+        <Flex justifyContent={"space-between"} mb={5} >
           <Box>
-            <Button onClick={handleWriteClick} colorScheme="blue">
+            <Button onClick={handleWriteClick} colorScheme={"facebook"}>
               글쓰기
             </Button>
           </Box>
@@ -178,12 +178,12 @@ function BoardList() {
             {/* ------------------------- 게시글 뷰 형태 선택 ------------------------- */}
             <Box ml={3}>
               <Tooltip label={"리스트 형태 보기"}>
-                <Button onClick={switchToListView}>
-                  <FontAwesomeIcon icon={faList} />
+                <Button onClick={switchToListView} colorScheme="facebook" mr={1}>
+                  <FontAwesomeIcon icon={faList}/>
                 </Button>
               </Tooltip>
               <Tooltip label={"격자 형태 보기 "}>
-                <Button onClick={switchToGridView}>
+                <Button onClick={switchToGridView} colorScheme="facebook">
                   <FontAwesomeIcon icon={faBorderAll} />
                 </Button>
               </Tooltip>
