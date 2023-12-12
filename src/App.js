@@ -30,6 +30,8 @@ import AdminMain from "./admin/AdminMain";
 import InquiryAnswer from "./inquiry/InquiryAnswer";
 import ScrollToTop from "./util/ScrollToTop";
 import AdminReport from "./admin/AdminReport";
+import VoteWrite from "./vote/VoteWrite";
+import VoteView from "./vote/VoteView";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -37,20 +39,22 @@ const routes = createBrowserRouter(
       <Route index element={<MainView />} />
       <Route index element={<MainBoardList />} />
       {/*<Route path="경로명" element={컴포넌트} />*/}
-      <Route path="write" element={<BoardWrite />} />
+      <Route path="board/write" element={<BoardWrite />} />
       <Route path="board/:id" element={<BoardView />} />
       <Route path="board/list" element={<BoardList />} />
       <Route path="board/edit/:id" element={<BoardEdit />} />
+      <Route path="board/vote/write" element={<VoteWrite />} />
+      <Route path="board/vote/:id" element={<VoteView />} />
       <Route path="inquiry/list" element={<InquiryList />} />
       <Route path="inquiry/write" element={<InquiryWrite />} />
       <Route path="inquiry/:id" element={<InquiryView />} />
       <Route path="inquiry/edit/:id" element={<InquiryEdit />} />
       <Route path="inquiry/answer/:id" element={<InquiryAnswer />} />
       <Route path="/file/" element={<Filednd />} />
-      <Route path={"member/signup"} element={<MemberSignup />} />
-      <Route path={"member/login"} element={<MemberLogin />} />
-      <Route path={"member/info"} element={<MemberInfo />} />
-      <Route path={"editor"} element={<Editor />} />
+      <Route path="member/signup" element={<MemberSignup />} />
+      <Route path="member/login" element={<MemberLogin />} />
+      <Route path="member/info" element={<MemberInfo />} />
+      <Route path="editor" element={<Editor />} />
       <Route path="chat" element={<Chat />} />
       <Route path="admin" element={<AdminMain />} />
     </Route>,
