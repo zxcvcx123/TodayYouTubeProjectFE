@@ -223,9 +223,11 @@ function BoardList() {
                         }}
                       >
                         {/* 게시판 번호 출력 */}
-                        <Td textAlign={"center"}>{board.rownum}</Td>
+                        <Td textAlign={"center"} verticalAlign="middle">
+                          {board.rownum}
+                        </Td>
                         {/* 썸네일, 제목 출력 */}
-                        <Td>
+                        <Td verticalAlign="middle">
                           <Flex align={"center"} gap={"10px"}>
                             {/* 썸네일 출력 */}
                             <YoutubeInfo
@@ -240,10 +242,18 @@ function BoardList() {
                             {renderListTitle(board)}
                           </Flex>
                         </Td>
-                        <Td textAlign={"center"}>{board.countlike}</Td>
-                        <Td textAlign={"center"}>{board.board_member_id}</Td>
-                        <Td textAlign={"center"}>{board.ago}</Td>
-                        <Td textAlign={"center"}>{board.views}</Td>
+                        <Td textAlign={"center"} verticalAlign="middle">
+                          {board.countlike}
+                        </Td>
+                        <Td textAlign={"center"} verticalAlign="middle">
+                          {board.board_member_id}
+                        </Td>
+                        <Td textAlign={"center"} verticalAlign="middle">
+                          {board.ago}
+                        </Td>
+                        <Td textAlign={"center"} verticalAlign="middle">
+                          {board.views}
+                        </Td>
                       </Tr>
                     ))}
               </Tbody>
