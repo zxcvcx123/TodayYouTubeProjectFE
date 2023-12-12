@@ -9,6 +9,7 @@ import { MiniHomepyLeftContainer } from "./MiniHomepyLeftContainer";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { MiniHomepyRightContainer } from "./MiniHomepyRightContainer";
+import { error } from "react-dom/test-utils";
 
 export let HomepyMemberContext = createContext(null);
 
@@ -32,6 +33,8 @@ export function MiniHomepy(props) {
   const [boardListAll, setBoardListAll] = useState(null);
   const [categoryOrdedBy, setCategoryOrdedBy] = useState("latest"); // 정렬 기준
   const [params] = useSearchParams();
+  const [searchingKeyword, setSearchingKeyword] = useState("");
+
   // 로그인 정보
   const grantType = localStorage.getItem("grantType");
   const accessToken = localStorage.getItem("accessToken");
@@ -117,15 +120,32 @@ export function MiniHomepy(props) {
       });
   }, []);
 
+  // MinihomepyList 정렬 및 검색
   useEffect(() => {
-    params.set("ob", categoryOrdedBy); // 정렬 기준
-    params.set("member_id", member_id);
-    axios
-      .get("/api/member/minihomepy/boardlist/all?" + params)
-      .then((response) => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "/api/member/minihomepy/boardlist/all?",
+          {
+            params: {
+              member_id: member_id,
+              ob: categoryOrdedBy,
+              sk: searchingKeyword,
+            },
+          },
+        );
         setBoardListAll(response.data.boardListAll);
-      });
-  }, [categoryOrdedBy]);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    if (searchingKeyword) {
+      fetchData();
+    }
+    if (categoryOrdedBy) {
+      fetchData();
+    }
+  }, [searchingKeyword, categoryOrdedBy]);
 
   /* 방문자 수 정보 */
   useEffect(() => {
@@ -234,6 +254,9 @@ export function MiniHomepy(props) {
                 categoryOrdedBy={categoryOrdedBy}
                 setCategoryOrdedBy={setCategoryOrdedBy}
                 boardListAll={boardListAll}
+                member={member}
+                setSearchingKeyword={setSearchingKeyword}
+                searchingKeyword={searchingKeyword}
               />
             </Box>
             <Box

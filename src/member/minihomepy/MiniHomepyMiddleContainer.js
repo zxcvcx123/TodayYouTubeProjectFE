@@ -19,6 +19,9 @@ function MiniHomepyMiddleContent({
   categoryOrdedBy,
   setCategoryOrdedBy,
   boardListAll,
+  member,
+  setSearchingKeyword,
+  searchingKeyword,
 }) {
   return (
     <>
@@ -56,16 +59,12 @@ function MiniHomepyMiddleContent({
                   categoryOrdedBy={categoryOrdedBy}
                   setCategoryOrdedBy={setCategoryOrdedBy}
                   boardListAll={boardListAll}
+                  member={member}
+                  setSearchingKeyword={setSearchingKeyword}
+                  searchingKeyword={searchingKeyword}
                 />
               )}
-              {name === "MESSAGE" && (
-                <MiniHomepyList
-                  topRankBoardList={topRankBoardList}
-                  newBoardList={newBoardList}
-                  loginMember={loginMember}
-                  member_id={member_id}
-                />
-              )}
+              {name === "MESSAGE" && <MiniHomepyList />}
             </Box>
           </Center>
           {/* 여기에 각 팝업의 내용을 추가 */}
@@ -83,6 +82,9 @@ export function MiniHomepyMiddleContainer({
   categoryOrdedBy,
   setCategoryOrdedBy,
   boardListAll,
+  member,
+  setSearchingKeyword,
+  searchingKeyword,
 }) {
   let navigate = useNavigate();
   useEffect(() => {
@@ -123,6 +125,9 @@ export function MiniHomepyMiddleContainer({
           categoryOrdedBy={categoryOrdedBy}
           setCategoryOrdedBy={setCategoryOrdedBy}
           boardListAll={boardListAll}
+          member={member}
+          setSearchingKeyword={setSearchingKeyword}
+          searchingKeyword={searchingKeyword}
         />
       )}
 
