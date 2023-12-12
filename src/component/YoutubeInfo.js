@@ -2,6 +2,8 @@ import YouTube from "react-youtube";
 import { Box, Img, Tooltip } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faCommentDots, faComments} from "@fortawesome/free-solid-svg-icons";
 
 // 유튜브 정보 추출 컴포넌트 - 썸네일, 영상을 추출합니다.
 function YoutubeInfo({
@@ -63,14 +65,18 @@ function YoutubeInfo({
                   alt="유튜브 썸네일"
                   maxW={thumbnailWidth}
                   h={thumbnailHeight}
+                  borderRadius={10}
                 />
               ) : (
                 <Box
                   backgroundColor={"grey"}
                   maxW={thumbnailWidth}
                   h={thumbnailHeight}
+                  display={"flex"}
+                  alignItems={"center"}
+                  borderRadius={10}
                 >
-                  링크X 일 경우 임시 박스
+                  <FontAwesomeIcon width={thumbnailWidth} icon={faComments} size="3x" inverse={true}/>
                 </Box>
               )}
             </Tooltip>
@@ -84,14 +90,18 @@ function YoutubeInfo({
                   alt="유튜브 썸네일"
                   maxW={thumbnailWidth}
                   h={thumbnailHeight}
+                  borderRadius={10}
                 />
               ) : (
                 <Box
-                  backgroundColor={"grey"}
+                  backgroundColor={"darkgray"}
                   maxW={thumbnailWidth}
                   h={thumbnailHeight}
+                  display={"flex"}
+                  alignItems={"center"}
+                  borderRadius={10}
                 >
-                  링크X 일 경우 임시 박스
+                  <FontAwesomeIcon width={thumbnailWidth} icon={faComments} size="3x" inverse={true}/>
                 </Box>
               )}
             </>
