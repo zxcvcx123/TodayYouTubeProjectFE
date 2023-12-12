@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouseUser } from "@fortawesome/free-solid-svg-icons/faHouseUser";
-import { faBookOpen, faComments } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBookmark,
+  faBookOpen,
+  faComments,
+} from "@fortawesome/free-solid-svg-icons";
 import { faHeart } from "@fortawesome/free-regular-svg-icons/faHeart";
 import "./minihomepy-styles/content.css";
 import { ArrowForwardIcon, HamburgerIcon } from "@chakra-ui/icons";
@@ -9,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { MiniHomepyList } from "./MiniHomepyList";
 import { Box, Center, Text } from "@chakra-ui/react";
 import { MiniHomepyHome } from "./MiniHomepyHome";
+import { MiniHomepyFavoriteList } from "./MiniHomepyFavoriteList";
 
 function MiniHomepyMiddleContent({
   name,
@@ -22,6 +27,9 @@ function MiniHomepyMiddleContent({
   member,
   setSearchingKeyword,
   searchingKeyword,
+  youtuberInfo,
+  addYoutuber,
+  setAddYoutuber,
 }) {
   return (
     <>
@@ -64,7 +72,14 @@ function MiniHomepyMiddleContent({
                   searchingKeyword={searchingKeyword}
                 />
               )}
-              {name === "MESSAGE" && <MiniHomepyList />}
+              {name === "FAVORITE" && (
+                <MiniHomepyFavoriteList
+                  loginMember={loginMember}
+                  youtuberInfo={youtuberInfo}
+                  addYoutuber={addYoutuber}
+                  setAddYoutuber={setAddYoutuber}
+                />
+              )}
             </Box>
           </Center>
           {/* 여기에 각 팝업의 내용을 추가 */}
@@ -85,6 +100,9 @@ export function MiniHomepyMiddleContainer({
   member,
   setSearchingKeyword,
   searchingKeyword,
+  youtuberInfo,
+  addYoutuber,
+  setAddYoutuber,
 }) {
   let navigate = useNavigate();
   useEffect(() => {
@@ -128,6 +146,9 @@ export function MiniHomepyMiddleContainer({
           member={member}
           setSearchingKeyword={setSearchingKeyword}
           searchingKeyword={searchingKeyword}
+          youtuberInfo={youtuberInfo}
+          addYoutuber={addYoutuber}
+          setAddYoutuber={setAddYoutuber}
         />
       )}
 
@@ -171,14 +192,14 @@ export function MiniHomepyMiddleContainer({
             <li
               className="list"
               onClick={() => {
-                showPopup("MESSAGE");
+                showPopup("FAVORITE");
               }}
             >
               <a href="#">
                 <span className="icon">
-                  <FontAwesomeIcon icon={faComments} />
+                  <FontAwesomeIcon icon={faBookmark} />
                 </span>
-                <span className="text">MESSAGE</span>
+                <span className="text">FAVORITE</span>
                 <span className="circle"></span>
               </a>
             </li>{" "}

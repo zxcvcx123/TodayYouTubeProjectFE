@@ -73,7 +73,7 @@
     --left-ini: -1vw;
     --left-end: -9vw;
     left: 57vw;
-    animation: snowfall 6s linear infinite;
+    animation: snowfall 10s linear infinite;
     animation-delay: -9s;
 }
 .snowflake:nth-child(5) {
@@ -81,7 +81,7 @@
     --left-ini: 9vw;
     --left-end: -1vw;
     left: 39vw;
-    animation: snowfall 10s linear infinite;
+    animation: snowfall 14s linear infinite;
     animation-delay: -3s;
 }
 .snowflake:nth-child(6) {
@@ -97,7 +97,7 @@
     --left-ini: -1vw;
     --left-end: -4vw;
     left: 89vw;
-    animation: snowfall 6s linear infinite;
+    animation: snowfall 9s linear infinite;
     animation-delay: -8s;
 }
 .snowflake:nth-child(8) {
@@ -161,7 +161,7 @@
     --left-ini: 9vw;
     --left-end: 4vw;
     left: 48vw;
-    animation: snowfall 8s linear infinite;
+    animation: snowfall 10s linear infinite;
     animation-delay: -5s;
 }
 .snowflake:nth-child(16) {
@@ -185,7 +185,7 @@
     --left-ini: -5vw;
     --left-end: 2vw;
     left: 21vw;
-    animation: snowfall 6s linear infinite;
+    animation: snowfall 7s linear infinite;
     animation-delay: -5s;
 }
 .snowflake:nth-child(19) {
@@ -297,7 +297,7 @@
     --left-ini: -4vw;
     --left-end: -2vw;
     left: 82vw;
-    animation: snowfall 6s linear infinite;
+    animation: snowfall 9s linear infinite;
     animation-delay: -6s;
 }
 .snowflake:nth-child(33) {
@@ -305,7 +305,7 @@
     --left-ini: 8vw;
     --left-end: 4vw;
     left: 16vw;
-    animation: snowfall 7s linear infinite;
+    animation: snowfall 11s linear infinite;
     animation-delay: -2s;
 }
 .snowflake:nth-child(34) {
@@ -337,7 +337,7 @@
     --left-ini: -5vw;
     --left-end: -6vw;
     left: 90vw;
-    animation: snowfall 7s linear infinite;
+    animation: snowfall 15s linear infinite;
     animation-delay: -9s;
 }
 .snowflake:nth-child(38) {
@@ -345,7 +345,7 @@
     --left-ini: -8vw;
     --left-end: -8vw;
     left: 9vw;
-    animation: snowfall 7s linear infinite;
+    animation: snowfall 13s linear infinite;
     animation-delay: -6s;
 }
 .snowflake:nth-child(39) {
@@ -353,7 +353,7 @@
     --left-ini: 5vw;
     --left-end: 3vw;
     left: 83vw;
-    animation: snowfall 7s linear infinite;
+    animation: snowfall 17s linear infinite;
     animation-delay: -3s;
 }
 .snowflake:nth-child(40) {
