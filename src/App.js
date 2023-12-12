@@ -24,19 +24,23 @@ import InquiryWrite from "./inquiry/InquiryWrite";
 import LoginProvider from "./component/LoginProvider";
 import MemberInfo from "./member/memberInfo/MemberInfo";
 import InquiryEdit from "./inquiry/InquiryEdit";
-
 import AdminMain from "./admin/AdminMain";
-
 import InquiryAnswer from "./inquiry/InquiryAnswer";
 import ScrollToTop from "./util/ScrollToTop";
 import AdminReport from "./admin/AdminReport";
 import SearchResult from "./allsearch/SearchResult";
 import VoteWrite from "./vote/VoteWrite";
 import VoteView from "./vote/VoteView";
+import MiniHomepyContainer from "./member/minihomepy/MiniHomepyContainer";
+import MiniHomepy from "./member/minihomepy/MiniHomepy";
+
+
+
 
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
+        <>
     <Route path="/" element={<HomeLayout />}>
       <Route index element={<MainView />} />
       <Route index element={<MainBoardList />} />
@@ -60,7 +64,11 @@ const routes = createBrowserRouter(
       <Route path="chat" element={<Chat />} />
       <Route path="admin" element={<AdminMain />} />
       <Route path="search" element={<SearchResult />} />
-    </Route>,
+    </Route>
+      <Route path="/member/minihomepy" element={<MiniHomepyContainer />}>
+        <Route path="/member/minihomepy/:member_id" element={<MiniHomepy />} />
+      </Route>
+    </>,
   ),
 );
 

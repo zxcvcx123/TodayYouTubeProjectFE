@@ -16,6 +16,7 @@ import {
   Input,
   Radio,
   RadioGroup,
+  Spinner,
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
@@ -59,7 +60,7 @@ function MemberSignup(props) {
   const [passwordMessage, setPasswordMessage] = useState(defaultMessage);
   const [passwordCheckMessage, setPasswordCheckMessage] =
     useState("비밀번호가 일치하지 않습니다");
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [timer, setTimer] = useState(null);
 
   const submitAvailable =
@@ -76,6 +77,7 @@ function MemberSignup(props) {
 
   /* 회원 가입 요청 ----------------------------------------------------------------------------------*/
   function handleSignupForm() {
+    setIsSubmitting(true);
     axios
       .post("/api/signup", {
         member_id,
@@ -93,7 +95,6 @@ function MemberSignup(props) {
         });
         navigate("/");
       })
-
       .catch((error) => {
         if (error.response.status === 400) {
           toast({
@@ -108,11 +109,13 @@ function MemberSignup(props) {
             status: "error",
           });
         }
-      });
+      })
+      .finally(setIsSubmitting(false));
   }
 
   /* 중복 체크 메서드 ----------------------------------------------------------------------------------*/
   function handleDuplicated(itemName, item) {
+    setIsSubmitting(true);
     const params = new URLSearchParams();
     params.set(itemName, item);
     console.log(params);
@@ -155,7 +158,8 @@ function MemberSignup(props) {
           setCheckEmailResult(false);
           setEmailMessage(result);
         }
-      });
+      })
+      .finally(() => setIsSubmitting(false));
   }
 
   return (
@@ -201,18 +205,22 @@ function MemberSignup(props) {
                       }
                     }}
                   />
-                  <Button
-                    isDisabled={
-                      member_id.length < 6 ||
-                      englishAndNumberOnly(member_id) ||
-                      !idDisable
-                    }
-                    onClick={() => {
-                      handleDuplicated("member_id", member_id);
-                    }}
-                  >
-                    중복확인
-                  </Button>
+                  {!isSubmitting ? (
+                    <Button
+                      isDisabled={
+                        member_id.length < 6 ||
+                        englishAndNumberOnly(member_id) ||
+                        !idDisable
+                      }
+                      onClick={() => {
+                        handleDuplicated("member_id", member_id);
+                      }}
+                    >
+                      중복확인
+                    </Button>
+                  ) : (
+                    <Spinner />
+                  )}
                 </Flex>
                 <FormErrorMessage>{idMessage}</FormErrorMessage>
               </FormControl>
@@ -243,14 +251,18 @@ function MemberSignup(props) {
                     }
                   }}
                 />
-                <Button
-                  isDisabled={nickname.length <= 2 || !nickNameDisable}
-                  onClick={() => {
-                    handleDuplicated("nickname", nickname);
-                  }}
-                >
-                  중복확인
-                </Button>
+                {!isSubmitting ? (
+                  <Button
+                    isDisabled={nickname.length <= 2 || !nickNameDisable}
+                    onClick={() => {
+                      handleDuplicated("nickname", nickname);
+                    }}
+                  >
+                    중복확인
+                  </Button>
+                ) : (
+                  <Spinner />
+                )}
               </Flex>
               <FormErrorMessage>{nicknameMessage}</FormErrorMessage>
             </FormControl>
@@ -313,32 +325,36 @@ function MemberSignup(props) {
                     }
                   }}
                 />
-                <Button
-                  isDisabled={
-                    password.length < 7 || password !== password_check
-                  }
-                  onClick={() => {
-                    if (validatePassword(password)) {
-                      setPasswordTypeResult(true);
-                      toast({
-                        description: "안전한 비밀번호입니다",
-                        status: "success",
-                      });
-                    } else {
-                      toast({
-                        description: "안전하지 않은 비밀번호입니다.",
-                        status: "warning",
-                      });
-                      setPasswordTypeResult(false);
-                      setPasswordCheckMessage("");
-                      setPasswordMessage(
-                        "영문자와 숫자, 특수기호를 모두 포함해주세요",
-                      );
+                {!isSubmitting ? (
+                  <Button
+                    isDisabled={
+                      password.length < 7 || password !== password_check
                     }
-                  }}
-                >
-                  안전검사
-                </Button>
+                    onClick={() => {
+                      if (validatePassword(password)) {
+                        setPasswordTypeResult(true);
+                        toast({
+                          description: "안전한 비밀번호입니다",
+                          status: "success",
+                        });
+                      } else {
+                        toast({
+                          description: "안전하지 않은 비밀번호입니다.",
+                          status: "warning",
+                        });
+                        setPasswordTypeResult(false);
+                        setPasswordCheckMessage("");
+                        setPasswordMessage(
+                          "영문자와 숫자, 특수기호를 모두 포함해주세요",
+                        );
+                      }
+                    }}
+                  >
+                    안전검사
+                  </Button>
+                ) : (
+                  <Spinner />
+                )}
               </Flex>
               <FormErrorMessage>{passwordCheckMessage}</FormErrorMessage>
             </FormControl>
@@ -374,17 +390,20 @@ function MemberSignup(props) {
                     }
                   }}
                 />
-
-                <Button
-                  isDisabled={!emailDisable || !validateEmail(email)}
-                  onClick={(e) => {
-                    if (validateEmail(email)) {
-                      handleDuplicated("email", email);
-                    }
-                  }}
-                >
-                  중복확인
-                </Button>
+                {!isSubmitting ? (
+                  <Button
+                    isDisabled={!emailDisable || !validateEmail(email)}
+                    onClick={(e) => {
+                      if (validateEmail(email)) {
+                        handleDuplicated("email", email);
+                      }
+                    }}
+                  >
+                    중복확인
+                  </Button>
+                ) : (
+                  <Spinner />
+                )}
               </Flex>
               <FormErrorMessage>{emailMessage}</FormErrorMessage>
             </FormControl>
@@ -430,13 +449,17 @@ function MemberSignup(props) {
             </FormControl>
           </CardBody>
           <CardFooter gap={6}>
-            <Button
-              size={"lg"}
-              isDisabled={!submitAvailable}
-              onClick={handleSignupForm}
-            >
-              가입
-            </Button>
+            {!isSubmitting ? (
+              <Button
+                size={"lg"}
+                isDisabled={!submitAvailable}
+                onClick={handleSignupForm}
+              >
+                가입
+              </Button>
+            ) : (
+              <Spinner />
+            )}
             <Button
               colorScheme="red"
               size={"lg"}
