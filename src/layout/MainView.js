@@ -31,6 +31,7 @@ import YoutubeInfo from "../component/YoutubeInfo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRankingStar, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import { DetectLoginContext } from "../component/LoginProvider";
+import getVisitorCount from "../component/GetVisitorCount";
 
 export function MainView() {
   /* 로그인 정보 컨텍스트 */
@@ -58,6 +59,8 @@ export function MainView() {
   const [mainHitsBoardList, setMainHitsBoardList] = useState(null);
 
   const [showSpinner, setShowSpinner] = useState(true);
+
+  const [visitorCountAll, setVisitorCountAll] = useState(0);
 
   const params = new URLSearchParams();
   const navigate = useNavigate();
@@ -115,6 +118,9 @@ export function MainView() {
     const memberInfo = localStorage.getItem("memberInfo");
 
     axios.get("/api/visitor", { params: { member_id: memberInfo } });
+    getVisitorCount().then((response) => {
+      setVisitorCountAll(response.data);
+    });
   }, []);
 
   function handleCategoryChange(e) {
@@ -200,7 +206,7 @@ export function MainView() {
   // 임시메인
   return (
     <Box w="100%" h="2180px" p={4} border={"1px"} borderColor="pink">
-      <Text>(임시)방문자수 전체 :</Text>
+      <Text>(임시)방문자수 전체 : {visitorCountAll}</Text>
       <Flex w="100%" mb="200px" bg="black">
         <Box w="18%">
           <Box>
