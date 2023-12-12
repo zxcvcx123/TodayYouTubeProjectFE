@@ -22,7 +22,7 @@ import {
   CardBody,
   CardFooter,
 } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { MainBoardList } from "./MainBoardList";
 import axios from "axios";
 import { AddIcon, ChevronDownIcon, HamburgerIcon } from "@chakra-ui/icons";
@@ -30,8 +30,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 import YoutubeInfo from "../component/YoutubeInfo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRankingStar, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
+import { DetectLoginContext } from "../component/LoginProvider";
 
 export function MainView() {
+  /* 로그인 정보 컨텍스트 */
+  const { token, handleLogout, loginInfo, validateToken, connectUser } =
+    useContext(DetectLoginContext);
+
   const [category, setCategory] = useState("all");
   const [firstList, setFirstList] = useState(null);
   const [otherList, setOtherList] = useState(null);
@@ -105,6 +110,11 @@ export function MainView() {
       .catch(() => console.log("글이 없습니다."));
   }, [category, dateSort, mainShowLink]);
 
+  // 메인페이지 접속시 방문자 증가
+  useEffect(() => {
+    axios.get("/api/visitor");
+  }, []);
+
   function handleCategoryChange(e) {
     // setMainShowLink(null);
     setCategory(e.target.value);
@@ -135,38 +145,46 @@ export function MainView() {
       <>
         {showSpinner && <Spinner />}
         {showSpinner || (
-          <Card align="center" w={"60%"} m={"auto"} mt={100} variant={"filled"}>
-            <CardHeader>
-              <Heading size="md">
-                [ {dateSort == "daily" && "오늘은 "}
-                {dateSort == "weekly" && "이번주엔 "}
-                {dateSort == "monthly" && "이번달엔 "}
-                아직 작성된 게시물이 없어요! ]
-              </Heading>
-            </CardHeader>
-            <CardBody>
-              <Text>게시글을 올려서 추천을 받아보세요!</Text>
-            </CardBody>
-            <CardFooter>
-              <Button
-                mr={10}
-                color="black"
-                colorScheme="red"
-                variant={"outline"}
-                onClick={handleHomeClick}
-              >
-                홈으로 가기
-              </Button>
-              <Button
-                color="blueviolet"
-                colorScheme="red"
-                variant={"outline"}
-                onClick={() => navigate("/board/list")}
-              >
-                글 작성하러 가기!
-              </Button>
-            </CardFooter>
-          </Card>
+          <>
+            <Card
+              align="center"
+              w={"60%"}
+              m={"auto"}
+              mt={100}
+              variant={"filled"}
+            >
+              <CardHeader>
+                <Heading size="md">
+                  [ {dateSort == "daily" && "오늘은 "}
+                  {dateSort == "weekly" && "이번주엔 "}
+                  {dateSort == "monthly" && "이번달엔 "}
+                  아직 작성된 게시물이 없어요! ]
+                </Heading>
+              </CardHeader>
+              <CardBody>
+                <Text>게시글을 올려서 추천을 받아보세요!</Text>
+              </CardBody>
+              <CardFooter>
+                <Button
+                  mr={10}
+                  color="black"
+                  colorScheme="red"
+                  variant={"outline"}
+                  onClick={handleHomeClick}
+                >
+                  홈으로 가기
+                </Button>
+                <Button
+                  color="blueviolet"
+                  colorScheme="red"
+                  variant={"outline"}
+                  onClick={() => navigate("/board/list")}
+                >
+                  글 작성하러 가기!
+                </Button>
+              </CardFooter>
+            </Card>
+          </>
         )}
       </>
     );
@@ -180,6 +198,7 @@ export function MainView() {
   // 임시메인
   return (
     <Box w="100%" h="2180px" p={4} border={"1px"} borderColor="pink">
+      <Text>(임시)방문자수 전체 :</Text>
       <Flex w="100%" mb="200px" bg="black">
         <Box w="18%">
           <Box>
