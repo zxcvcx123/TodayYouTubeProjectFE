@@ -52,7 +52,7 @@ function InquiryAnswer(props) {
   function send() {
     // 문의 답변 목록
     stompClient.current.publish({
-      destination: "/app/inquiry/sendalarm",
+      destination: "/app/answer/sendalarm",
       body: JSON.stringify({
         sender_member_id: connectUser,
         receiver_member_id: inquiry.inquiry_member_id,
