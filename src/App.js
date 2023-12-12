@@ -33,38 +33,36 @@ import VoteWrite from "./vote/VoteWrite";
 import VoteView from "./vote/VoteView";
 import MiniHomepyContainer from "./member/minihomepy/MiniHomepyContainer";
 import MiniHomepy from "./member/minihomepy/MiniHomepy";
-
-
-
-
+import AdminMemberList from "./admin/AdminMemberList";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
-        <>
-    <Route path="/" element={<HomeLayout />}>
-      <Route index element={<MainView />} />
-      <Route index element={<MainBoardList />} />
-      {/*<Route path="경로명" element={컴포넌트} />*/}
-      <Route path="board/write" element={<BoardWrite />} />
-      <Route path="board/:id" element={<BoardView />} />
-      <Route path="board/list" element={<BoardList />} />
-      <Route path="board/edit/:id" element={<BoardEdit />} />
-      <Route path="board/vote/write" element={<VoteWrite />} />
-      <Route path="board/vote/:id" element={<VoteView />} />
-      <Route path="inquiry/list" element={<InquiryList />} />
-      <Route path="inquiry/write" element={<InquiryWrite />} />
-      <Route path="inquiry/:id" element={<InquiryView />} />
-      <Route path="inquiry/edit/:id" element={<InquiryEdit />} />
-      <Route path="inquiry/answer/:id" element={<InquiryAnswer />} />
-      <Route path="/file/" element={<Filednd />} />
-      <Route path="member/signup" element={<MemberSignup />} />
-      <Route path="member/login" element={<MemberLogin />} />
-      <Route path="member/info" element={<MemberInfo />} />
-      <Route path="editor" element={<Editor />} />
-      <Route path="chat" element={<Chat />} />
-      <Route path="admin" element={<AdminMain />} />
-      <Route path="search" element={<SearchResult />} />
-    </Route>
+    <>
+      <Route path="/" element={<HomeLayout />}>
+        <Route index element={<MainView />} />
+        <Route index element={<MainBoardList />} />
+        {/*<Route path="경로명" element={컴포넌트} />*/}
+        <Route path="board/write" element={<BoardWrite />} />
+        <Route path="board/:id" element={<BoardView />} />
+        <Route path="board/list" element={<BoardList />} />
+        <Route path="board/edit/:id" element={<BoardEdit />} />
+        <Route path="board/vote/write" element={<VoteWrite />} />
+        <Route path="board/vote/:id" element={<VoteView />} />
+        <Route path="inquiry/list" element={<InquiryList />} />
+        <Route path="inquiry/write" element={<InquiryWrite />} />
+        <Route path="inquiry/:id" element={<InquiryView />} />
+        <Route path="inquiry/edit/:id" element={<InquiryEdit />} />
+        <Route path="inquiry/answer/:id" element={<InquiryAnswer />} />
+        <Route path="/file/" element={<Filednd />} />
+        <Route path="member/signup" element={<MemberSignup />} />
+        <Route path="member/login" element={<MemberLogin />} />
+        <Route path="member/info" element={<MemberInfo />} />
+        <Route path="editor" element={<Editor />} />
+        <Route path="chat" element={<Chat />} />
+        <Route path="admin" element={<AdminMain />} />
+        <Route path="admin/member/list" element={<AdminMemberList />} />
+        <Route path="search" element={<SearchResult />} />
+      </Route>
       <Route path="/member/minihomepy" element={<MiniHomepyContainer />}>
         <Route path="/member/minihomepy/:member_id" element={<MiniHomepy />} />
       </Route>

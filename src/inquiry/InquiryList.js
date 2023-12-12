@@ -55,9 +55,9 @@ function InquiryList(props) {
     }
   }, [location, params, loginInfo]);
 
-  if (inquiryList == null || loginInfo == null) {
-    return <Spinner />;
-  }
+  // if (inquiryList == null || loginInfo == null) {
+  //   return <Spinner />;
+  // }
 
   // 로그인 안했을시 로그인화면으로 이동
   if (!token.detectLogin) {
