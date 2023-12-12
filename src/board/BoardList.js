@@ -42,6 +42,7 @@ import { SearchComponent } from "../page/SearchComponent";
 import PageCount from "../page/PageCount";
 import { DetectLoginContext } from "../component/LoginProvider";
 import ScrollToTop from "../util/ScrollToTop";
+import pageCount from "../page/PageCount";
 
 function BoardList() {
   /* 로그인 정보 컨텍스트 */
@@ -76,7 +77,9 @@ function BoardList() {
       setPageInfo(response.data.pageInfo);
       setBoardInfo(response.data.boardInfo);
     });
-  }, [location]);
+  }, [location, pageCount]);
+
+  console.log(params);
 
   // 리스트 뷰 세팅 동작
   const switchToListView = () => {
