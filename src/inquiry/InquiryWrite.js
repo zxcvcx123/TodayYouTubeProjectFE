@@ -23,8 +23,9 @@ import {
 import { useNavigate } from "react-router-dom";
 import Editor from "../component/Editor";
 import { DetectLoginContext } from "../component/LoginProvider";
+import { SocketContext } from "../socket/Socket";
 
-function InquiryWrite(props) {
+function InquiryWrite() {
   const { token, handleLogout, loginInfo, validateToken } =
     useContext(DetectLoginContext);
 
@@ -36,6 +37,8 @@ function InquiryWrite(props) {
 
   const navigate = useNavigate();
   const toast = useToast();
+
+  const { stompClient, setToId } = useContext(SocketContext);
 
   function handleWriteButton() {
     axios
@@ -109,7 +112,12 @@ function InquiryWrite(props) {
           onChange={(e) => setContent(e.target.value)}
         ></Textarea>
       </FormControl>
-      <Button onClick={handleWriteButton} colorScheme={"blue"}>
+      <Button
+        onClick={() => {
+          handleWriteButton();
+        }}
+        colorScheme={"blue"}
+      >
         작성완료
       </Button>
       <Button colorScheme="red" onClick={onOpen}>

@@ -33,6 +33,7 @@ function Socket({ children }) {
 
   // 알람
   const [alarmList, setAlarmList] = useState([]);
+  const [alarmCount, setAlarmCount] = useState(null);
 
   useEffect(() => {
     connect();
@@ -110,12 +111,43 @@ function Socket({ children }) {
   const boardCommentAlramSocket = () => {
     console.log("댓글 알람 소켓연결");
 
+    //  알람목록
     stompClient.current.subscribe(
       "/queue/comment/alarm/" + localStorage.getItem("memberInfo"),
       (res) => {
         const data = JSON.parse(res.body);
         console.log(data);
         setAlarmList(data);
+      },
+    );
+
+    // 알람 개수
+    stompClient.current.subscribe(
+      "/queue/comment/alarm/count/" + localStorage.getItem("memberInfo"),
+      (res) => {
+        const data = JSON.parse(res.body);
+        console.log(data);
+        setAlarmCount(data);
+      },
+    );
+
+    // 답변 알람
+    stompClient.current.subscribe(
+      "/queue/inquiry/alarm/" + localStorage.getItem("memberInfo"),
+      (res) => {
+        const data = JSON.parse(res.body);
+        console.log(data);
+        setAlarmList(data);
+      },
+    );
+
+    // 답변 개수
+    stompClient.current.subscribe(
+      "/queue/inquiry/alarm/count/" + localStorage.getItem("memberInfo"),
+      (res) => {
+        const data = JSON.parse(res.body);
+        console.log(data);
+        setAlarmCount(data);
       },
     );
   };
@@ -133,6 +165,8 @@ function Socket({ children }) {
         setLike,
         alarmList,
         setAlarmList,
+        alarmCount,
+        setAlarmCount,
       }}
     >
       {children}

@@ -1,6 +1,7 @@
 import YouTube from "react-youtube";
 import { Box, Img, Tooltip } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 // 유튜브 정보 추출 컴포넌트 - 썸네일, 영상을 추출합니다.
 function YoutubeInfo({
@@ -15,6 +16,7 @@ function YoutubeInfo({
   // 상태 값
   const [thumbnail, setThumbnail] = useState(null);
   const [videoId, setVideoId] = useState(null);
+  const location = useLocation();
 
   useEffect(() => {
     // 링크가 유효한지 첫번째 검사 (null or isBlack)
@@ -31,7 +33,7 @@ function YoutubeInfo({
         setVideoId(videoIdMatch[4]);
       }
     }
-  }, []);
+  }, [location]);
 
   return (
     <div>

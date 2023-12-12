@@ -97,8 +97,12 @@ function BoardList() {
     // 글쓰기 버튼 클릭시 로그인 되어 있지 않다면 로그인 창으로 이동
     if (!token.detectLogin) {
       onOpen();
+    } else if (currentParams === "vote") {
+      navigate("/board/vote/write?category=" + currentParams, {
+        state: boardInfo,
+      });
     } else {
-      navigate("/write?category=" + currentParams, { state: boardInfo });
+      navigate("/board/write?category=" + currentParams, { state: boardInfo });
     }
   }
 

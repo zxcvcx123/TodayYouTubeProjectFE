@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -21,8 +21,12 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { faArrowTurnUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import * as stompClient from "immer";
+import { SocketContext } from "../socket/Socket";
 
 function InquiryAnswer(props) {
+  const connectUser = localStorage.getItem("memberInfo");
+  const { stompClient } = useContext(SocketContext);
   const [inquiry, setInquiry] = useState(null);
   const [answerContent, setAnswerContent] = useState("");
 
@@ -34,13 +38,28 @@ function InquiryAnswer(props) {
   const { id } = useParams();
 
   useEffect(() => {
-    axios
-      .get("/api/inquiry/" + id)
-      .then((response) => setInquiry(response.data));
+    axios.get("/api/inquiry/" + id).then((response) => {
+      setInquiry(response.data);
+      console.log(response.data);
+    });
   }, []);
 
   if (inquiry == null) {
     return <Spinner />;
+  }
+
+  // 문의 답변시 알람기능
+  function send() {
+    // 문의 답변 목록
+    stompClient.current.publish({
+      destination: "/app/inquiry/sendalarm",
+      body: JSON.stringify({
+        sender_member_id: connectUser,
+        receiver_member_id: inquiry.inquiry_member_id,
+        inquiry_id: inquiry.id,
+        inquiry_title: inquiry.title,
+      }),
+    });
   }
 
   function handleAnswerComplete() {
@@ -128,7 +147,13 @@ function InquiryAnswer(props) {
             borderRadius={(2, 20)}
           ></Textarea>
         </FormControl>
-        <Button colorScheme={"blue"} onClick={handleAnswerComplete}>
+        <Button
+          colorScheme={"blue"}
+          onClick={() => {
+            handleAnswerComplete();
+            send();
+          }}
+        >
           작성완료
         </Button>
         <Button colorScheme="red" onClick={onOpen}>

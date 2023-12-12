@@ -35,6 +35,7 @@ export function SearchMain() {
           value={allSearch}
           onChange={(e) => setAllSearch(e.target.value)}
         />
+
       </Box>
       <Button width={100}>
         <FontAwesomeIcon icon={faSearch} onClick={handleAllSearch} />
