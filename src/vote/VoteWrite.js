@@ -163,7 +163,7 @@ function VoteWrite() {
           description: "게시글 저장에 성공했습니다.",
           status: "success",
         });
-        navigate("/board/list?category=" + currentParams);
+        navigate("/board/vote/list");
       })
       .catch((error) => {
         if (error.response.status === 400) {

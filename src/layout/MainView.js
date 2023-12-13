@@ -295,11 +295,13 @@ export function MainView() {
             borderColor={"red"}
           >
             <Box width={"80%"} height="100%" key={mainShowLink}>
-              <YoutubeInfo
-                link={mainShowLink}
-                extraVideo={true}
-                opts={{ height: 550, width: 1100 }}
-              />
+              {mainShowLink && (
+                <YoutubeInfo
+                  link={mainShowLink}
+                  extraVideo={true}
+                  opts={{ height: 550, width: 1100 }}
+                />
+              )}
             </Box>
 
             <Button w={"1%"} color="white" mt={300} ml={100} variant={"link"}>

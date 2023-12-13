@@ -24,6 +24,7 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { DetectLoginContext } from "../component/LoginProvider";
 import MemberProfile from "../member/MemberProfile";
 import ScrollToTop from "../util/ScrollToTop";
+import ProgressBar from "./ProgressBar";
 
 function VoteView() {
   /* 로그인 정보 컨텍스트 */
@@ -31,6 +32,14 @@ function VoteView() {
     useContext(DetectLoginContext);
 
   // state
+  // 가정: optionOneVotes와 optionTwoVotes는 서버에서 가져온 투표 수입니다.
+  const [optionOneVotes, setOptionOneVotes] = useState(120);
+  const [optionTwoVotes, setOptionTwoVotes] = useState(80);
+
+  const totalVotes = optionOneVotes + optionTwoVotes;
+  const optionOnePercentage = (optionOneVotes / totalVotes) * 100;
+  const optionTwoPercentage = (optionTwoVotes / totalVotes) * 100;
+
   const [board, setBoard] = useState(null);
   const [thumbnail, setThumbnail] = useState(null);
 
@@ -156,6 +165,10 @@ function VoteView() {
       <Box mb={2} textAlign={"center"}>
         {board.content}
       </Box>
+      <ProgressBar
+        optionOnePercentage={optionOnePercentage}
+        optionTwoPercentage={optionTwoPercentage}
+      />
       <Divider my={5} borderColor="grey" />
 
       {/* -------------------- 버튼 섹션 -------------------- */}

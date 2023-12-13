@@ -1,5 +1,5 @@
 import YouTube from "react-youtube";
-import { Box, Img, Tooltip } from "@chakra-ui/react";
+import { Box, Img, Spinner, Tooltip } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -12,7 +12,7 @@ function YoutubeInfo({
   extraVideo,
   thumbnailWidth = 320,
   thumbnailHeight = 180,
-  opts = { height: 360, width: 640 },
+  opts = { height: "360", width: "640" },
   toolTip,
 }) {
   // 상태 값
@@ -109,7 +109,9 @@ function YoutubeInfo({
         </>
       )}
       {/* 유튜브 영상 출력 => extraVideo를 true로 설정 */}
-      {extraVideo && <YouTube videoId={videoId} opts={opts} />}
+      {extraVideo && videoId !== null && (
+        <YouTube videoId={videoId} opts={opts} />
+      )}
     </div>
   );
 }
