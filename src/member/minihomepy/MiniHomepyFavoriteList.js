@@ -231,6 +231,7 @@ export function MiniHomepyFavoriteList({
                           minHeight={"120px"}
                         />
                       </Box>
+
                       <Box>
                         <Box color={"#dcdcdc"} fontSize={"20px"}>
                           채널명 :{" "}
