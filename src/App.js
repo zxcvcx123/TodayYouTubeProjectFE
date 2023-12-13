@@ -31,7 +31,7 @@ import MiniHomepyContainer from "./member/minihomepy/MiniHomepyContainer";
 import MiniHomepy from "./member/minihomepy/MiniHomepy";
 import AdminMemberList from "./admin/AdminMemberList";
 import VoteList from "./vote/VoteList";
-
+import AdminMemberInfo from "./admin/AdminMemberInfo";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -60,6 +60,7 @@ const routes = createBrowserRouter(
         <Route path="chat" element={<Chat />} />
         <Route path="admin" element={<AdminMain />} />
         <Route path="admin/member/list" element={<AdminMemberList />} />
+        <Route path="admin/member/:member_id" element={<AdminMemberInfo />} />
         <Route path="search" element={<SearchResult />} />
       </Route>
       <Route path="/member/minihomepy" element={<MiniHomepyContainer />}>

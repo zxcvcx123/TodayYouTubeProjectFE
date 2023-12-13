@@ -11,12 +11,13 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import Pagination from "../page/Pagination";
-import { useLocation, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
 function AdminMemberList(props) {
   const [memberList, setMemberList] = useState(null);
   const [pageInfo, setPageInfo] = useState(null);
 
+  const navigate = useNavigate();
   let [params] = useSearchParams();
   let location = useLocation();
 
@@ -68,6 +69,7 @@ function AdminMemberList(props) {
               <Tr
                 key={member.member_id}
                 _hover={{ backgroundColor: "red.100" }}
+                onClick={() => navigate("/admin/member/" + member.member_id)}
               >
                 <Td textAlign={"center"}>
                   {memberList.indexOf(member) + 1 + (params.get("p") - 1) * 20}
