@@ -97,8 +97,16 @@ export function Nav({ setSocket }) {
   }
 
   // 알람 개별 읽기
-  function handleRead(id, boardid) {
-    navigate("/board/" + boardid);
+  function handleRead(id, boardid, category, inquiryid) {
+    if (category === "ac002") {
+      navigate("/board/" + boardid);
+    }
+    if (category === "ac003") {
+      navigate("/inquiry/" + inquiryid);
+    }
+    if (category === "ac004") {
+      navigate("/inquiry/list/");
+    }
 
     axios
       .post("http://localhost:3000/api/alarmread", { id: id })
@@ -197,7 +205,7 @@ export function Nav({ setSocket }) {
               <MenuItem onClick={() => navigate("board/list?category=game")}>
                 게임
               </MenuItem>
-              <MenuItem onClick={() => navigate("board/list?category=vote")}>
+              <MenuItem onClick={() => navigate("board/vote/list")}>
                 투표
               </MenuItem>
               <MenuItem onClick={() => navigate("/chat")}>채팅</MenuItem>
@@ -275,7 +283,12 @@ export function Nav({ setSocket }) {
                             <Text
                               _hover={{ cursor: "pointer" }}
                               onClick={() => {
-                                handleRead(list.id, list.board_id);
+                                handleRead(
+                                  list.id,
+                                  list.board_id,
+                                  list.alarm_category,
+                                  list.inquiry_id,
+                                );
                               }}
                               style={{
                                 color: list._alarm === false ? "blue" : "gray",
@@ -291,6 +304,8 @@ export function Nav({ setSocket }) {
                                   {list.inquiry_title}에 운영자가 답변을
                                   남겼습니다.
                                 </>
+                              ) : list.alarm_category === "ac004" ? (
+                                <>문의 게시판에 문의가 작성되었습니다.</>
                               ) : null}
 
                               <Text color={"black"}>{list.ago}</Text>

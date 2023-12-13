@@ -24,15 +24,33 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { DetectLoginContext } from "../component/LoginProvider";
 import MemberProfile from "../member/MemberProfile";
 import ScrollToTop from "../util/ScrollToTop";
+import ProgressBar from "./ProgressBar";
+import { CheckIcon } from "@chakra-ui/icons";
+
 
 function VoteView() {
-  /* 로그인 정보 컨텍스트 */
-  const { token, handleLogout, loginInfo, validateToken, connectUser } =
-    useContext(DetectLoginContext);
+  const connectUser = localStorage.getItem("memberInfo");
 
   // state
+  // 가정: optionOneVotes와 optionTwoVotes는 서버에서 가져온 투표 수입니다.
+  const [optionOneVotes, setOptionOneVotes] = useState(120);
+  const [optionTwoVotes, setOptionTwoVotes] = useState(80);
+
+  const totalVotes = optionOneVotes + optionTwoVotes;
+  const optionOnePercentage = (optionOneVotes / totalVotes) * 100;
+  const optionTwoPercentage = (optionTwoVotes / totalVotes) * 100;
+
   const [board, setBoard] = useState(null);
   const [thumbnail, setThumbnail] = useState(null);
+  const [vote, setVote] = useState(null);
+
+  // progressBar
+  const [optionOneVotes, setOptionOneVotes] = useState(0);
+  const [optionTwoVotes, setOptionTwoVotes] = useState(0);
+
+  const totalVotes = optionOneVotes + optionTwoVotes;
+  const optionOnePercentage = (optionOneVotes / totalVotes) * 100;
+  const optionTwoPercentage = (optionTwoVotes / totalVotes) * 100;
 
   //URL 매개변수 추출
   const { id } = useParams();
@@ -61,6 +79,7 @@ function VoteView() {
   if (board === null) {
     return <Spinner />;
   }
+
   // 링크 복사 버튼 클릭
   function handleCopyClick() {
     navigator.clipboard
@@ -99,6 +118,20 @@ function VoteView() {
   //     </FormControl>
   //   );
   // }
+
+  function handleVoteA() {
+    axios.put("/api/votea", {
+      vote_board_id: id,
+      vote_member_id: connectUser,
+    });
+  }
+
+  function handleVoteB() {
+    axios.put("/api/voteb", {
+      vote_id: id,
+      vote_member_id: connectUser,
+    });
+  }
 
   return (
     <Box m={"50px 20% 20px 50px"}>
@@ -147,15 +180,43 @@ function VoteView() {
       </Box>
       <Box>
         <Flex mb={2} alignItems={"center"}>
-          <YoutubeInfo link={board.link_a} extraVideo={true} />
+          <Box>
+            <YoutubeInfo link={board.link_a} extraVideo={true} />
+            <Button
+              colorScheme="blue"
+              w="100%"
+              h={20}
+              onClick={() => {
+                handleVoteA();
+              }}
+            >
+              <CheckIcon />
+            </Button>
+          </Box>
           <Heading>VS</Heading>
-          <YoutubeInfo link={board.link_b} extraVideo={true} />
+          <Box>
+            <YoutubeInfo link={board.link_b} extraVideo={true} />
+            <Button
+              colorScheme="red"
+              w="100%"
+              h={20}
+              onClick={() => {
+                handleVoteB();
+              }}
+            >
+              <CheckIcon />
+            </Button>
+          </Box>
         </Flex>
       </Box>
       {/* -------------------- 본문 -------------------- */}
       <Box mb={2} textAlign={"center"}>
         {board.content}
       </Box>
+      <ProgressBar
+        optionOnePercentage={optionOnePercentage}
+        optionTwoPercentage={optionTwoPercentage}
+      />
       <Divider my={5} borderColor="grey" />
 
       {/* -------------------- 버튼 섹션 -------------------- */}

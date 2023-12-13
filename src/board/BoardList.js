@@ -162,12 +162,12 @@ function BoardList() {
     <Flex justifyContent={"center"}>
       <Box>
         {/* ------------------------- 게시글 목록 상단 바 ------------------------- */}
-        <Box mb={5}>
+        <Box my={5}>
           <Heading>{boardInfo} 게시판</Heading>
         </Box>
-        <Flex justifyContent={"space-between"} mb={5}>
+        <Flex justifyContent={"space-between"} mb={5} >
           <Box>
-            <Button onClick={handleWriteClick} colorScheme="blue">
+            <Button onClick={handleWriteClick} colorScheme={"facebook"}>
               글쓰기
             </Button>
           </Box>
@@ -178,12 +178,12 @@ function BoardList() {
             {/* ------------------------- 게시글 뷰 형태 선택 ------------------------- */}
             <Box ml={3}>
               <Tooltip label={"리스트 형태 보기"}>
-                <Button onClick={switchToListView}>
-                  <FontAwesomeIcon icon={faList} />
+                <Button onClick={switchToListView} colorScheme="facebook" mr={1}>
+                  <FontAwesomeIcon icon={faList}/>
                 </Button>
               </Tooltip>
               <Tooltip label={"격자 형태 보기 "}>
-                <Button onClick={switchToGridView}>
+                <Button onClick={switchToGridView} colorScheme="facebook">
                   <FontAwesomeIcon icon={faBorderAll} />
                 </Button>
               </Tooltip>
@@ -199,12 +199,12 @@ function BoardList() {
             <Table size={"sm"}>
               <Thead>
                 <Tr>
-                  <Th textAlign={"center"}>번호</Th>
-                  <Th textAlign={"center"}>제목</Th>
-                  <Th textAlign={"center"}>좋아요</Th>
-                  <Th textAlign={"center"}>작성자</Th>
-                  <Th textAlign={"center"}>작성일시</Th>
-                  <Th textAlign={"center"}>조회수</Th>
+                  <Th borderBottom={"1px solid white"} textAlign={"center"}>번호</Th>
+                  <Th borderBottom={"1px solid white"} textAlign={"center"}>제목</Th>
+                  <Th borderBottom={"1px solid white"} textAlign={"center"}>좋아요</Th>
+                  <Th borderBottom={"1px solid white"} textAlign={"center"}>작성자</Th>
+                  <Th borderBottom={"1px solid white"} textAlign={"center"}>작성일시</Th>
+                  <Th borderBottom={"1px solid white"} textAlign={"center"}>조회수</Th>
                 </Tr>
               </Thead>
 
@@ -223,9 +223,11 @@ function BoardList() {
                         }}
                       >
                         {/* 게시판 번호 출력 */}
-                        <Td textAlign={"center"}>{board.rownum}</Td>
+                        <Td textAlign={"center"} verticalAlign="middle" borderBottom={"1px solid white"}>
+                          {board.rownum}
+                        </Td>
                         {/* 썸네일, 제목 출력 */}
-                        <Td>
+                        <Td verticalAlign="middle" width={"500px"} borderBottom={"1px solid white"}>
                           <Flex align={"center"} gap={"10px"}>
                             {/* 썸네일 출력 */}
                             <YoutubeInfo
@@ -240,10 +242,18 @@ function BoardList() {
                             {renderListTitle(board)}
                           </Flex>
                         </Td>
-                        <Td textAlign={"center"}>{board.countlike}</Td>
-                        <Td textAlign={"center"}>{board.board_member_id}</Td>
-                        <Td textAlign={"center"}>{board.ago}</Td>
-                        <Td textAlign={"center"}>{board.views}</Td>
+                        <Td textAlign={"center"} verticalAlign="middle" borderBottom={"1px solid white"}>
+                          {board.countlike}
+                        </Td>
+                        <Td textAlign={"center"} verticalAlign="middle" borderBottom={"1px solid white"}>
+                          {board.board_member_id}
+                        </Td>
+                        <Td textAlign={"center"} verticalAlign="middle" borderBottom={"1px solid white"}>
+                          {board.ago}
+                        </Td>
+                        <Td textAlign={"center"} verticalAlign="middle" borderBottom={"1px solid white"}>
+                          {board.views}
+                        </Td>
                       </Tr>
                     ))}
               </Tbody>

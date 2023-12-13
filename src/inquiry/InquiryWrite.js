@@ -24,8 +24,10 @@ import { useNavigate } from "react-router-dom";
 import Editor from "../component/Editor";
 import { DetectLoginContext } from "../component/LoginProvider";
 import { SocketContext } from "../socket/Socket";
+import memberInfo from "../member/memberInfo/MemberInfo";
 
 function InquiryWrite() {
+  const connectUser = localStorage.getItem("memberInfo");
   const { token, handleLogout, loginInfo, validateToken } =
     useContext(DetectLoginContext);
 
@@ -65,6 +67,17 @@ function InquiryWrite() {
   }
   if (loginInfo == null) {
     return <Spinner />;
+  }
+
+  // 문의글 등록시 운영자에게 알림
+  function send() {
+    // 문의 목록
+    stompClient.current.publish({
+      destination: "/app/inquiry/sendalarm",
+      body: JSON.stringify({
+        sender_member_id: connectUser,
+      }),
+    });
   }
 
   return (
@@ -115,6 +128,7 @@ function InquiryWrite() {
       <Button
         onClick={() => {
           handleWriteButton();
+          send();
         }}
         colorScheme={"blue"}
       >

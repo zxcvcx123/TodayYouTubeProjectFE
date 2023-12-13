@@ -2,11 +2,10 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
   Route,
-  Router,
   RouterProvider,
 } from "react-router-dom";
+import React from "react";
 import { HomeLayout } from "./layout/Homelayout";
-
 import BoardWrite from "./board/BoardWrite";
 import BoardView from "./board/BoardView";
 import BoardList from "./board/BoardList";
@@ -21,19 +20,18 @@ import Chat from "./socket/Chat";
 import InquiryList from "./inquiry/InquiryList";
 import InquiryView from "./inquiry/InquiryView";
 import InquiryWrite from "./inquiry/InquiryWrite";
-import LoginProvider from "./component/LoginProvider";
 import MemberInfo from "./member/memberInfo/MemberInfo";
 import InquiryEdit from "./inquiry/InquiryEdit";
 import AdminMain from "./admin/AdminMain";
 import InquiryAnswer from "./inquiry/InquiryAnswer";
-import ScrollToTop from "./util/ScrollToTop";
-import AdminReport from "./admin/AdminReport";
 import SearchResult from "./allsearch/SearchResult";
 import VoteWrite from "./vote/VoteWrite";
 import VoteView from "./vote/VoteView";
 import MiniHomepyContainer from "./member/minihomepy/MiniHomepyContainer";
 import MiniHomepy from "./member/minihomepy/MiniHomepy";
 import AdminMemberList from "./admin/AdminMemberList";
+import VoteList from "./vote/VoteList";
+
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -48,6 +46,7 @@ const routes = createBrowserRouter(
         <Route path="board/edit/:id" element={<BoardEdit />} />
         <Route path="board/vote/write" element={<VoteWrite />} />
         <Route path="board/vote/:id" element={<VoteView />} />
+        <Route path="board/vote/list" element={<VoteList />} />
         <Route path="inquiry/list" element={<InquiryList />} />
         <Route path="inquiry/write" element={<InquiryWrite />} />
         <Route path="inquiry/:id" element={<InquiryView />} />
