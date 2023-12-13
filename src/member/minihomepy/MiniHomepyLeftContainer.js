@@ -73,9 +73,10 @@ export function MiniHomepyLeftContainer({ member, introduce, setIntroduce }) {
         flexDirection={"column"}
         alignItems={"center"}
         justifyContent={"space-around"}
+        pt={10}
       >
         <Box>
-          <Avatar borderRadius="20px" boxSize="280px" src={imageUrl} />
+          <Avatar borderRadius="140px" boxSize="280px" src={imageUrl} />
         </Box>
         <Box
           display={"flex"}

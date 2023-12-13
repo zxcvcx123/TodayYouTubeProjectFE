@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -6,6 +6,7 @@ import {
   FormControl,
   Input,
   Select,
+  Spinner,
   Text,
 } from "@chakra-ui/react";
 import YoutubeInfo from "../../component/YoutubeInfo";
@@ -18,8 +19,12 @@ export function MiniHomepyList({
   member_id,
   setCategoryOrdedBy,
   boardListAll,
+  member,
+  setSearchingKeyword,
+  searchingKeyword,
 }) {
   let navigate = useNavigate();
+  const nickname = member ? member.nickname : <Spinner />;
 
   return (
     <>
@@ -54,7 +59,7 @@ export function MiniHomepyList({
             color={"#dcdcdc"}
             borderBottom={"1px solid #dcdcdc"}
           >
-            {}님의 게시글
+            {nickname}님의 게시글
           </Text>
           <Flex justifyContent={"space-between"}>
             <Select
@@ -79,27 +84,20 @@ export function MiniHomepyList({
             </Select>
             <Box mr={"5px"} mb={"10px"}>
               <FormControl>
-                <Flex>
+                <Flex alignItems="center" position="relative">
                   <Input
                     color={"#dcdcdc"}
                     placeholder="검색어를 입력해 주세요."
-                    borderLeftRadius={"20px"}
-                    w={"180px"}
+                    borderRadius={"20px"}
+                    w={"200px"}
+                    value={searchingKeyword}
+                    onChange={(e) => {
+                      setSearchingKeyword(e.target.value);
+                    }}
                   />
-                  <Button
-                    pr={"5px"}
-                    borderRightRadius={"20px"}
-                    border={"1px solid #dcdcdc"}
-                    bg={"transparent"}
-                    color={"#dcdcdc"}
-                    variant="link"
-                    display={"flex"}
-                    flexDirection={"column"}
-                    justifyContent={"center"}
-                    alignItems={"center"}
-                  >
-                    <FontAwesomeIcon icon={faMagnifyingGlass} />
-                  </Button>
+                  <Box position="absolute" right="15px">
+                    <FontAwesomeIcon icon={faMagnifyingGlass} color="#dcdcdc" />
+                  </Box>
                 </Flex>
               </FormControl>
             </Box>

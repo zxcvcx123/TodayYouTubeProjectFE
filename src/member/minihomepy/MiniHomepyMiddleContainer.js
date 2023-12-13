@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouseUser } from "@fortawesome/free-solid-svg-icons/faHouseUser";
-import { faBookOpen, faComments } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBookmark,
+  faBookOpen,
+  faComments,
+} from "@fortawesome/free-solid-svg-icons";
 import { faHeart } from "@fortawesome/free-regular-svg-icons/faHeart";
 import "./minihomepy-styles/content.css";
 import { ArrowForwardIcon, HamburgerIcon } from "@chakra-ui/icons";
@@ -9,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { MiniHomepyList } from "./MiniHomepyList";
 import { Box, Center, Text } from "@chakra-ui/react";
 import { MiniHomepyHome } from "./MiniHomepyHome";
+import { MiniHomepyFavoriteList } from "./MiniHomepyFavoriteList";
 
 function MiniHomepyMiddleContent({
   name,
@@ -19,6 +24,12 @@ function MiniHomepyMiddleContent({
   categoryOrdedBy,
   setCategoryOrdedBy,
   boardListAll,
+  member,
+  setSearchingKeyword,
+  searchingKeyword,
+  youtuberInfo,
+  addYoutuber,
+  setAddYoutuber,
 }) {
   return (
     <>
@@ -56,14 +67,17 @@ function MiniHomepyMiddleContent({
                   categoryOrdedBy={categoryOrdedBy}
                   setCategoryOrdedBy={setCategoryOrdedBy}
                   boardListAll={boardListAll}
+                  member={member}
+                  setSearchingKeyword={setSearchingKeyword}
+                  searchingKeyword={searchingKeyword}
                 />
               )}
-              {name === "MESSAGE" && (
-                <MiniHomepyList
-                  topRankBoardList={topRankBoardList}
-                  newBoardList={newBoardList}
+              {name === "FAVORITE" && (
+                <MiniHomepyFavoriteList
                   loginMember={loginMember}
-                  member_id={member_id}
+                  youtuberInfo={youtuberInfo}
+                  addYoutuber={addYoutuber}
+                  setAddYoutuber={setAddYoutuber}
                 />
               )}
             </Box>
@@ -83,6 +97,12 @@ export function MiniHomepyMiddleContainer({
   categoryOrdedBy,
   setCategoryOrdedBy,
   boardListAll,
+  member,
+  setSearchingKeyword,
+  searchingKeyword,
+  youtuberInfo,
+  addYoutuber,
+  setAddYoutuber,
 }) {
   let navigate = useNavigate();
   useEffect(() => {
@@ -123,6 +143,12 @@ export function MiniHomepyMiddleContainer({
           categoryOrdedBy={categoryOrdedBy}
           setCategoryOrdedBy={setCategoryOrdedBy}
           boardListAll={boardListAll}
+          member={member}
+          setSearchingKeyword={setSearchingKeyword}
+          searchingKeyword={searchingKeyword}
+          youtuberInfo={youtuberInfo}
+          addYoutuber={addYoutuber}
+          setAddYoutuber={setAddYoutuber}
         />
       )}
 
@@ -166,14 +192,14 @@ export function MiniHomepyMiddleContainer({
             <li
               className="list"
               onClick={() => {
-                showPopup("MESSAGE");
+                showPopup("FAVORITE");
               }}
             >
               <a href="#">
                 <span className="icon">
-                  <FontAwesomeIcon icon={faComments} />
+                  <FontAwesomeIcon icon={faBookmark} />
                 </span>
-                <span className="text">MESSAGE</span>
+                <span className="text">FAVORITE</span>
                 <span className="circle"></span>
               </a>
             </li>{" "}

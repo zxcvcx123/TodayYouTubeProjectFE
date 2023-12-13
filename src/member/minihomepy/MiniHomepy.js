@@ -9,10 +9,11 @@ import { MiniHomepyLeftContainer } from "./MiniHomepyLeftContainer";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { MiniHomepyRightContainer } from "./MiniHomepyRightContainer";
-
+import { config } from "../config/apikey";
 export let HomepyMemberContext = createContext(null);
 
 export function MiniHomepy(props) {
+  const API_KEY = config.apikey;
   // 로그인 정보
   const { loginInfo } = useContext(DetectLoginContext);
   // 미니홈피 정보
@@ -22,16 +23,21 @@ export function MiniHomepy(props) {
   const [todayViews, setTodayViews] = useState(null);
   const [totalViews, setTotalViews] = useState(null);
   const [bgm, setBgm] = useState(null);
+  const [addYoutuber, setAddYoutuber] = useState("");
   const { member_id } = useParams();
+  // 게시글 정보 가져오기
   const [topRankBoardList, setTopRankBoardList] = useState(null);
   const [newBoardList, setNewBoardList] = useState(null);
-  let navigate = useNavigate();
-  let toast = useToast();
-
-  // board list
   const [boardListAll, setBoardListAll] = useState(null);
   const [categoryOrdedBy, setCategoryOrdedBy] = useState("latest"); // 정렬 기준
   const [params] = useSearchParams();
+  const [searchingKeyword, setSearchingKeyword] = useState("");
+  // 구독 정보 가져오기
+  const [youtuberInfo, setYoutuberInfo] = useState(null);
+
+  let navigate = useNavigate();
+  let toast = useToast();
+
   // 로그인 정보
   const grantType = localStorage.getItem("grantType");
   const accessToken = localStorage.getItem("accessToken");
@@ -117,15 +123,32 @@ export function MiniHomepy(props) {
       });
   }, []);
 
+  // MinihomepyList 정렬 및 검색
   useEffect(() => {
-    params.set("ob", categoryOrdedBy); // 정렬 기준
-    params.set("member_id", member_id);
-    axios
-      .get("/api/member/minihomepy/boardlist/all?" + params)
-      .then((response) => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "/api/member/minihomepy/boardlist/all?",
+          {
+            params: {
+              member_id: member_id,
+              ob: categoryOrdedBy,
+              sk: searchingKeyword,
+            },
+          },
+        );
         setBoardListAll(response.data.boardListAll);
-      });
-  }, [categoryOrdedBy]);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    if (searchingKeyword) {
+      fetchData();
+    }
+    if (categoryOrdedBy) {
+      fetchData();
+    }
+  }, [searchingKeyword, categoryOrdedBy]);
 
   /* 방문자 수 정보 */
   useEffect(() => {
@@ -144,6 +167,14 @@ export function MiniHomepy(props) {
         });
     }
   }, []);
+
+  useEffect(() => {
+    axios
+      .get("/api/member/minihomepy/youtuberinfo/" + member_id)
+      .then((response) => {
+        setYoutuberInfo(response.data.youtuberInfo);
+      });
+  }, [addYoutuber]);
 
   const [videoId, setVideoId] = useState(null);
   useEffect(() => {
@@ -234,6 +265,12 @@ export function MiniHomepy(props) {
                 categoryOrdedBy={categoryOrdedBy}
                 setCategoryOrdedBy={setCategoryOrdedBy}
                 boardListAll={boardListAll}
+                member={member}
+                setSearchingKeyword={setSearchingKeyword}
+                searchingKeyword={searchingKeyword}
+                youtuberInfo={youtuberInfo}
+                addYoutuber={addYoutuber}
+                setAddYoutuber={setAddYoutuber}
               />
             </Box>
             <Box
