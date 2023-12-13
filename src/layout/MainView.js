@@ -60,8 +60,6 @@ export function MainView() {
 
   const [showSpinner, setShowSpinner] = useState(true);
 
-  const [visitorCountAll, setVisitorCountAll] = useState(0);
-
   const params = new URLSearchParams();
   const navigate = useNavigate();
   const location = useLocation();
@@ -118,9 +116,6 @@ export function MainView() {
     const memberInfo = localStorage.getItem("memberInfo");
 
     axios.get("/api/visitor", { params: { member_id: memberInfo } });
-    getVisitorCount().then((response) => {
-      setVisitorCountAll(response.data);
-    });
   }, []);
 
   function handleCategoryChange(e) {
@@ -206,7 +201,7 @@ export function MainView() {
   // 임시메인
   return (
     <Box w="100%" h="2180px" p={4} border={"1px"} borderColor="pink">
-      <Text>(임시)방문자수 전체 : {visitorCountAll}</Text>
+      <Text>(임시)방문자수 전체 : </Text>
       <Flex w="100%" mb="200px" bg="black">
         <Box w="18%">
           <Box>
