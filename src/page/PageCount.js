@@ -17,9 +17,9 @@ function PageCount({ params }) {
   const navigate = useNavigate();
   const [params1] = useSearchParams(params);
 
-  useEffect(() => {
-    axios.get("/api/board/list?" + params);
-  }, [pageCount]);
+  // useEffect(() => {
+  //   axios.get("/api/board/list?" + params);
+  // }, [pageCount]);
 
   function handlePageCount(e) {
     const newPageCount = e.target.value;

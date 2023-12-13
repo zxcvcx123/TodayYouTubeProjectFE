@@ -7,12 +7,34 @@ import {
   CardFooter,
   Flex,
   Heading,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverCloseButton,
+  PopoverContent,
+  PopoverHeader,
+  PopoverTrigger,
   Stack,
   StackDivider,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react";
 
-function AdminMemberInfoDetails({ memberInfo }) {
+function AdminMemberInfoDetails({
+  memberInfo,
+  handleMyBoardList,
+  handleMemberInfoMyInfo,
+  handleMemberComment,
+}) {
+  const { onClose, isOpen, onOpen } = useDisclosure();
+
   return (
     <Box>
       <Card w={"80%"} p={"20px"} boxShadow={"none"} minWidth="1200px">
@@ -113,9 +135,17 @@ function AdminMemberInfoDetails({ memberInfo }) {
                             작성한 게시글 수
                           </Heading>
                         </Flex>
-                        <Text pl={2} mt={1} pt="2" fontSize="sm">
+                        <Button
+                          colorScheme="blue"
+                          pl={2}
+                          mt={1}
+                          pt="2"
+                          fontSize="sm"
+                          variant={"link"}
+                          onClick={handleMyBoardList}
+                        >
                           {memberInfo.countboard}
-                        </Text>
+                        </Button>
                       </Box>
                     </Flex>
                     <Flex w={"50%"} borderRight={"1px solid #E2E4E8"} mr={4}>
@@ -123,12 +153,20 @@ function AdminMemberInfoDetails({ memberInfo }) {
                         <Heading size="s" textTransform="uppercase">
                           댓글 수
                         </Heading>
-                        <Text pl={2} mt={1} pt="2" fontSize="sm">
+                        <Button
+                          colorScheme="blue"
+                          pl={2}
+                          mt={1}
+                          pt="2"
+                          fontSize="sm"
+                          variant={"link"}
+                          onClick={handleMemberComment}
+                        >
                           {memberInfo.countcomment +
                             memberInfo.countcommentreply}{" "}
                           (댓글 {memberInfo.countcomment}, 대댓글
                           {memberInfo.countcommentreply})
-                        </Text>
+                        </Button>
                       </Box>
                     </Flex>
                   </Flex>
@@ -138,9 +176,16 @@ function AdminMemberInfoDetails({ memberInfo }) {
                         <Heading size="s" textTransform="uppercase">
                           누른 좋아요
                         </Heading>
-                        <Text pl={2} mt={1} pt="2" fontSize="sm">
+                        <Button
+                          colorScheme="blue"
+                          pl={2}
+                          mt={1}
+                          pt="2"
+                          fontSize="sm"
+                          variant={"link"}
+                        >
                           {memberInfo.countlike}
-                        </Text>
+                        </Button>
                       </Box>
                     </Flex>
                   </Flex>
@@ -150,11 +195,27 @@ function AdminMemberInfoDetails({ memberInfo }) {
           </Stack>
         </CardBody>
         <CardFooter>
-          <Button ml="70%" colorScheme="red">
+          <Button ml="70%" colorScheme="red" onClick={onOpen}>
             회원정지
           </Button>
         </CardFooter>
       </Card>
+
+      {/* 회원정지 모달 */}
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Modal Title</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>회원을 정지시키시겠습니까?</ModalBody>
+          <ModalFooter>
+            <Button variant={"ghost"} onClick={onClose}>
+              닫기
+            </Button>
+            <Button colorScheme="blue">삭제</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 }
