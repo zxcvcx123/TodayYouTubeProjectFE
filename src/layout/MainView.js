@@ -31,7 +31,6 @@ import YoutubeInfo from "../component/YoutubeInfo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRankingStar, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import { DetectLoginContext } from "../component/LoginProvider";
-import getVisitorCount from "../component/GetVisitorCount";
 
 export function MainView() {
   /* 로그인 정보 컨텍스트 */
