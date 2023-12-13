@@ -18,6 +18,7 @@ import { BarChart } from "./BarChart";
 import axios from "axios";
 import { DoughnutChart } from "./DoughnutChart";
 import { LineChart } from "./LineChart";
+import getVisitorCount from "../component/GetVisitorCount";
 
 // 도넛 차트 출력 형식
 const DoughnutChartBox = ({ title, chartData }) => (
@@ -94,6 +95,8 @@ function AdminMain() {
   const [userWriteRankDataList, setUserWriteRankDataList] = useState(null);
   const [userLikeRankDataList, setUserLikeRankDataList] = useState(null);
   const [userCommentRankDataList, setUserCommentRankDataList] = useState(null);
+  /* 방문자수 전체 합계 */
+  const [visitorCountAll, setVisitorCountAll] = useState(0);
 
   useEffect(() => {
     axios.get("/api/admin/user").then((response) => {
@@ -213,6 +216,11 @@ function AdminMain() {
       setCountCategoryGenderMukbang(generateDoughnutChartData("mukbang"));
       setCountCategoryGenderDaily(generateDoughnutChartData("daily"));
       setCountCategoryGenderCooking(generateDoughnutChartData("cooking"));
+
+      // 방문자 수 가져오기
+      getVisitorCount().then((response) => {
+        setVisitorCountAll(response.data);
+      });
     });
   }, []);
 
@@ -291,6 +299,9 @@ function AdminMain() {
             countField={"comment"}
           />
         </Flex>
+        <Box border={"1px solid red"}>
+          <Text>(임시)방문자수 전체 : {visitorCountAll}</Text>
+        </Box>
       </Box>
     </Flex>
   );
