@@ -1,8 +1,8 @@
-import {Line} from "react-chartjs-2";
-import React, {useState} from "react";
-import {Chart as ChartJS} from "chart.js/auto"
+import { Line } from "react-chartjs-2";
+import React, { useState } from "react";
+import { Chart as ChartJS } from "chart.js/auto";
 
-export function LineChart({chartData}) {
+export function LineChart({ chartData }) {
   const options = {
     interaction: {
       intersect: false,
@@ -19,7 +19,7 @@ export function LineChart({chartData}) {
         },
       },
     },
-  }
+  };
 
-  return <Line data={chartData} options={options} style={{width: '500px'}}/>;
+  return <Line data={chartData} options={options} />;
 }

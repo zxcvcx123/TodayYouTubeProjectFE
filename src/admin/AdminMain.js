@@ -91,8 +91,11 @@ function AdminMain() {
   const [userWriteRankDataList, setUserWriteRankDataList] = useState(null);
   const [userLikeRankDataList, setUserLikeRankDataList] = useState(null);
   const [userCommentRankDataList, setUserCommentRankDataList] = useState(null);
-  /* 방문자 통계 데이터 가져오기 */
-  const [visitorData, setVisitorData] = useState(null);
+  /* 카테고리 별 조회수 합산 (라인) */
+  const [countVisitorMonthlyData, setCountVisitorMonthlyData] = useState(null);
+  /* 전체, 오늘 방문자 수 */
+  const [countVisitorAll, setCountVisitorAll] = useState(null);
+  const [countVisitorToday, setCountVisitorToday] = useState(null);
 
   useEffect(() => {
     axios.get("/api/admin/user").then((response) => {
@@ -212,11 +215,31 @@ function AdminMain() {
       setCountCategoryGenderMukbang(generateDoughnutChartData("mukbang"));
       setCountCategoryGenderDaily(generateDoughnutChartData("daily"));
       setCountCategoryGenderCooking(generateDoughnutChartData("cooking"));
+    });
+  }, []);
 
-      // 방문자 통계 데이터 가져오기
-      // visitorCountAll, visitorCountToday, visitorCountMonthlyLastYear
-      axios.get("/api/getVisitorCount").then((response) => {
-        setVisitorData(response.data);
+  // 방문자 데이터
+  useEffect(() => {
+    // 방문자 통계 데이터 가져오기
+    // visitorCountAll, visitorCountToday, visitorCountMonthlyLastYear
+    axios.get("/api/getVisitorCount").then((response) => {
+      const visitorData = response.data.visitorCountMonthlyLastYear;
+      setCountVisitorAll(response.data.visitorCountAll);
+      setCountVisitorToday(response.data.visitorCountToday);
+
+      // -------------------- 월별 방문자 수 (라인) -------------------
+      setCountVisitorMonthlyData({
+        labels: visitorData.map((data) => data.year_month),
+        datasets: [
+          {
+            label: "월별 방문자 수",
+            data: visitorData.map((data) => data.visitor_count),
+            fill: true,
+            backgroundColor: "rgba(147,152,72,0.2)",
+            borderColor: "rgb(147,152,72)",
+            tension: 0,
+          },
+        ],
       });
     });
   }, []);
@@ -235,13 +258,34 @@ function AdminMain() {
       <Sidenav />
       {/* ---------- 메인 ----------*/}
       <Box>
+        <Card p={1} w={"200px"}>
+          <Flex>
+            <Text mb={1} fontWeight={"bold"}>
+              전체 방문자 수
+              <Badge mx={1} fontSize="13px" colorScheme="green">
+                {countVisitorAll}
+              </Badge>
+              명
+            </Text>
+          </Flex>
+          <Flex>
+            <Text fontWeight={"bold"}>
+              오늘 방문자 수
+              <Badge mx={1} fontSize="13px" colorScheme="blue">
+                {countVisitorToday}
+              </Badge>
+              명
+            </Text>
+          </Flex>
+        </Card>
         <Flex>
           <Box>
             <BarChart chartData={countCategoryBoard} />
             <BarChart chartData={countCategoryGender} />
           </Box>
-          <Box>
+          <Box w={"500px"}>
             <LineChart chartData={countCategoryView} />
+            <LineChart chartData={countVisitorMonthlyData} />
           </Box>
           <Box bg={"whitesmoke"} h={"100%"} borderRadius={"30px"} p={"10px"}>
             <Flex mb={"10px"}>
@@ -296,15 +340,6 @@ function AdminMain() {
             countField={"comment"}
           />
         </Flex>
-        <Box border={"1px solid red"}>
-          <Text>(임시)방문자수 전체 : {visitorData.visitorCountAll}</Text>
-          <Text>(임시)방문자수 오늘 : {visitorData.visitorCountToday}</Text>
-          {visitorData.visitorCountMonthlyLastYear.map((data) => (
-            <Text>
-              {data.year_month} => {data.visitor_count}명
-            </Text>
-          ))}
-        </Box>
       </Box>
     </Flex>
   );
