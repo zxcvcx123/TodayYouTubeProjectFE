@@ -266,15 +266,17 @@ function BoardView() {
         {/*<FormLabel>본문</FormLabel>*/}
         <Box>
           {/* CKEditor 본문 영역 onReady => 높이 설정 */}
-          <CKEditor
-            disabled={"true"}
-            editor={ClassicEditor}
-            data={board.content}
-            config={editorConfig}
-            onReady={(editor) => {
-              editor.ui.view.editable.element.style.minHeight = "500px";
-            }}
-          />
+          {!board && (
+            <CKEditor
+              disabled={"true"}
+              editor={ClassicEditor}
+              data={board.content}
+              config={editorConfig}
+              onReady={(editor) => {
+                editor.ui.view.editable.element.style.minHeight = "500px";
+              }}
+            />
+          )}
         </Box>
       </FormControl>
 

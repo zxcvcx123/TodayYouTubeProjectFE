@@ -205,7 +205,7 @@ export function Nav({ setSocket }) {
               <MenuItem onClick={() => navigate("board/list?category=game")}>
                 게임
               </MenuItem>
-              <MenuItem onClick={() => navigate("board/list?category=vote")}>
+              <MenuItem onClick={() => navigate("board/vote/list")}>
                 투표
               </MenuItem>
               <MenuItem onClick={() => navigate("/chat")}>채팅</MenuItem>
