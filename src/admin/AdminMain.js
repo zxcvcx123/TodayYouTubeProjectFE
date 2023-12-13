@@ -214,6 +214,7 @@ function AdminMain() {
       setCountCategoryGenderCooking(generateDoughnutChartData("cooking"));
 
       // 방문자 통계 데이터 가져오기
+      // visitorCountAll, visitorCountToday, visitorCountMonthlyLastYear
       axios.get("/api/getVisitorCount").then((response) => {
         setVisitorData(response.data);
       });
@@ -296,8 +297,8 @@ function AdminMain() {
           />
         </Flex>
         <Box border={"1px solid red"}>
-          <Text>(임시)방문자수 전체 : </Text>
-          <Text>(임시)방문자수 오늘 : </Text>
+          <Text>(임시)방문자수 전체 : {visitorData.visitorCountAll}</Text>
+          <Text>(임시)방문자수 오늘 : {visitorData.visitorCountToday}</Text>
         </Box>
       </Box>
     </Flex>
