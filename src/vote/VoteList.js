@@ -152,7 +152,7 @@ function VoteList() {
 
                   <CardBody w={"100%"} p={"15px"} textAlign={"center"}>
                     {/* 제목 출력 */}
-                    {renderGreedTitle(board)}
+                    번호: {board.id} |{renderGreedTitle(board)}
                   </CardBody>
 
                   <CardFooter p={"10px"}></CardFooter>

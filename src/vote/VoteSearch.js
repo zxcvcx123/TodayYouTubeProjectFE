@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Button, Flex, Input } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
 import axios from "axios";
@@ -8,11 +8,14 @@ function VoteSearch({ params }) {
   const navigate = useNavigate();
   const [keyword, setKeyword] = useState("");
 
-  if (params.get("p") === null) {
-    params.set("p", "1");
-  }
+  useEffect(() => {
+    if (params.get("p") === null) {
+      params.set("p", "1");
+    }
+  }, []);
 
   function handleSearchClick() {
+    console.log("실행");
     navigate("/board/vote/list?p=" + params.get("p") + "&k=" + keyword);
   }
 
