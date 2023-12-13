@@ -35,6 +35,11 @@ function Socket({ children }) {
   const [alarmList, setAlarmList] = useState([]);
   const [alarmCount, setAlarmCount] = useState(null);
 
+  // 투표
+  const [voteResult, setVoteResult] = useState(null);
+  const [optionOneVotes, setOptionOneVotes] = useState(0);
+  const [optionTwoVotes, setOptionTwoVotes] = useState(0);
+
   useEffect(() => {
     connect();
   }, []);
@@ -68,6 +73,7 @@ function Socket({ children }) {
           chatSocket(); // 채팅
           boardLikeSocket(); // 좋아요
           boardCommentAlramSocket(); // 댓글알람
+          vote(); // 투표집계
           setIsConnected(true);
         });
       }
@@ -152,6 +158,23 @@ function Socket({ children }) {
     );
   };
 
+  // 투표 결과
+  const vote = () => {
+    console.log("투표 소켓 연결됨");
+    stompClient.current.subscribe("/topic/voteresult", (res) => {
+      const data = JSON.parse(res.body);
+      console.log(data);
+      setVoteResult(data);
+      setOptionOneVotes(data.voted_a);
+      setOptionTwoVotes(data.voted_b);
+    });
+
+    stompClient.current.subscribe("/queue/votecheck", (res) => {
+      const data = JSON.parse(res.body);
+      console.log(data);
+    });
+  };
+
   return (
     <SocketContext.Provider
       value={{
@@ -167,6 +190,12 @@ function Socket({ children }) {
         setAlarmList,
         alarmCount,
         setAlarmCount,
+        voteResult,
+        setVoteResult,
+        optionOneVotes,
+        setOptionOneVotes,
+        optionTwoVotes,
+        setOptionTwoVotes,
       }}
     >
       {children}

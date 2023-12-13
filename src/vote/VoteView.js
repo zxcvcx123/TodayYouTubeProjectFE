@@ -26,22 +26,53 @@ import MemberProfile from "../member/MemberProfile";
 import ScrollToTop from "../util/ScrollToTop";
 import ProgressBar from "./ProgressBar";
 import { CheckIcon } from "@chakra-ui/icons";
+import { SocketContext } from "../socket/Socket";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCheck,
+  faCheckDouble,
+  faCircleCheck,
+} from "@fortawesome/free-solid-svg-icons";
 
 function VoteView() {
   const connectUser = localStorage.getItem("memberInfo");
+
+  const {
+    stompClient,
+    voteResult,
+    setVoteResult,
+    optionOneVotes,
+    setOptionOneVotes,
+    optionTwoVotes,
+    setOptionTwoVotes,
+  } = useContext(SocketContext);
 
   // state
   const [board, setBoard] = useState(null);
   const [thumbnail, setThumbnail] = useState(null);
   const [vote, setVote] = useState(null);
 
-  // progressBar
-  const [optionOneVotes, setOptionOneVotes] = useState(0);
-  const [optionTwoVotes, setOptionTwoVotes] = useState(0);
+  const totalVotes = (optionOneVotes || 0) + (optionTwoVotes || 0);
 
-  const totalVotes = optionOneVotes + optionTwoVotes;
-  const optionOnePercentage = (optionOneVotes / totalVotes) * 100;
-  const optionTwoPercentage = (optionTwoVotes / totalVotes) * 100;
+  // 투표 버튼 관련 state
+  const [voteAButtonActive, setVoteAButtonActive] = useState(true);
+  const [voteBButtonActive, setVoteBButtonActive] = useState(true);
+  const [voteAButtonIcon, setVoteAButtonIcon] = useState(
+    <FontAwesomeIcon icon={faCheck} />,
+  );
+  const [voteBButtonIcon, setVoteBButtonIcon] = useState(
+    <FontAwesomeIcon icon={faCheck} />,
+  );
+
+  // progressBar
+  const optionOnePercentage =
+    totalVotes === 0
+      ? 0
+      : (((optionOneVotes || 0) / totalVotes || 1) * 100).toFixed(1);
+  const optionTwoPercentage =
+    totalVotes === 0
+      ? 0
+      : (((optionTwoVotes || 0) / totalVotes || 1) * 100).toFixed(1);
 
   //URL 매개변수 추출
   const { id } = useParams();
@@ -110,17 +141,41 @@ function VoteView() {
   //   );
   // }
 
+  // 투표 A
   function handleVoteA() {
-    axios.put("/api/votea", {
-      vote_board_id: id,
-      vote_member_id: connectUser,
+    // 버튼 클릭 후 비활성화
+    setVoteAButtonActive(false);
+    setVoteBButtonActive(true);
+
+    // 버튼 클릭 후 아이콘 변경
+    setVoteAButtonIcon(<FontAwesomeIcon icon={faCircleCheck} size="xl" />);
+    setVoteBButtonIcon(<FontAwesomeIcon icon={faCheck} />);
+
+    stompClient.current.publish({
+      destination: "/app/votea",
+      body: JSON.stringify({
+        vote_board_id: id,
+        vote_member_id: connectUser,
+      }),
     });
   }
 
+  // 투표 B
   function handleVoteB() {
-    axios.put("/api/voteb", {
-      vote_id: id,
-      vote_member_id: connectUser,
+    // 버튼 클릭 후 비활성화
+    setVoteBButtonActive(false);
+    setVoteAButtonActive(true);
+
+    // 버튼 클릭 후 아이콘 변경
+    setVoteBButtonIcon(<FontAwesomeIcon icon={faCircleCheck} size="xl" />);
+    setVoteAButtonIcon(<FontAwesomeIcon icon={faCheck} />);
+
+    stompClient.current.publish({
+      destination: "/app/voteb",
+      body: JSON.stringify({
+        vote_board_id: id,
+        vote_member_id: connectUser,
+      }),
     });
   }
 
@@ -180,8 +235,9 @@ function VoteView() {
               onClick={() => {
                 handleVoteA();
               }}
+              isDisabled={!voteAButtonActive}
             >
-              <CheckIcon />
+              {voteAButtonIcon}
             </Button>
           </Box>
           <Heading>VS</Heading>
@@ -194,8 +250,9 @@ function VoteView() {
               onClick={() => {
                 handleVoteB();
               }}
+              isDisabled={!voteBButtonActive}
             >
-              <CheckIcon />
+              {voteBButtonIcon}
             </Button>
           </Box>
         </Flex>
