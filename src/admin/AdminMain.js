@@ -213,7 +213,7 @@ function AdminMain() {
       setCountCategoryGenderDaily(generateDoughnutChartData("daily"));
       setCountCategoryGenderCooking(generateDoughnutChartData("cooking"));
 
-      // 방문자 통계 데이타들 가져오기
+      // 방문자 통계 데이터 가져오기
       axios.get("/api/getVisitorCount").then((response) => {
         setVisitorData(response.data);
       });
