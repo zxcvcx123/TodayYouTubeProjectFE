@@ -299,6 +299,11 @@ function AdminMain() {
         <Box border={"1px solid red"}>
           <Text>(임시)방문자수 전체 : {visitorData.visitorCountAll}</Text>
           <Text>(임시)방문자수 오늘 : {visitorData.visitorCountToday}</Text>
+          {visitorData.visitorCountMonthlyLastYear.map((data) => (
+            <Text>
+              {data.year_month} => {data.visitor_count}명
+            </Text>
+          ))}
         </Box>
       </Box>
     </Flex>
