@@ -27,19 +27,10 @@ import ScrollToTop from "../util/ScrollToTop";
 import ProgressBar from "./ProgressBar";
 import { CheckIcon } from "@chakra-ui/icons";
 
-
 function VoteView() {
   const connectUser = localStorage.getItem("memberInfo");
 
   // state
-  // 가정: optionOneVotes와 optionTwoVotes는 서버에서 가져온 투표 수입니다.
-  const [optionOneVotes, setOptionOneVotes] = useState(120);
-  const [optionTwoVotes, setOptionTwoVotes] = useState(80);
-
-  const totalVotes = optionOneVotes + optionTwoVotes;
-  const optionOnePercentage = (optionOneVotes / totalVotes) * 100;
-  const optionTwoPercentage = (optionTwoVotes / totalVotes) * 100;
-
   const [board, setBoard] = useState(null);
   const [thumbnail, setThumbnail] = useState(null);
   const [vote, setVote] = useState(null);

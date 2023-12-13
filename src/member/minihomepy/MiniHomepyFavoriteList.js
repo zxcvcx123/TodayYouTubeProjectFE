@@ -23,7 +23,7 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
-import { config } from "../config/apikey";
+import { apikey } from "../config/apikey";
 import { faCircleQuestion } from "@fortawesome/free-regular-svg-icons";
 import YoutubeInfo from "../../component/YoutubeInfo";
 import { useNavigate } from "react-router-dom";
@@ -34,7 +34,7 @@ export function MiniHomepyFavoriteList({
   addYoutuber,
   setAddYoutuber,
 }) {
-  const API_KEY = config.apikey;
+  const API_KEY = apikey.apikey;
 
   let toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
