@@ -4,13 +4,10 @@ import {
   Badge,
   Box,
   Card,
-  CardBody,
   CardHeader,
   Flex,
   Heading,
   Spinner,
-  Stack,
-  StackDivider,
   Text,
   VStack,
 } from "@chakra-ui/react";
@@ -18,7 +15,6 @@ import { BarChart } from "./BarChart";
 import axios from "axios";
 import { DoughnutChart } from "./DoughnutChart";
 import { LineChart } from "./LineChart";
-import getVisitorCount from "../component/GetVisitorCount";
 
 // 도넛 차트 출력 형식
 const DoughnutChartBox = ({ title, chartData }) => (
@@ -95,8 +91,8 @@ function AdminMain() {
   const [userWriteRankDataList, setUserWriteRankDataList] = useState(null);
   const [userLikeRankDataList, setUserLikeRankDataList] = useState(null);
   const [userCommentRankDataList, setUserCommentRankDataList] = useState(null);
-  /* 방문자수 전체 합계 */
-  const [visitorCountAll, setVisitorCountAll] = useState(0);
+  /* 방문자 통계 데이터 가져오기 */
+  const [visitorData, setVisitorData] = useState(null);
 
   useEffect(() => {
     axios.get("/api/admin/user").then((response) => {
@@ -217,9 +213,9 @@ function AdminMain() {
       setCountCategoryGenderDaily(generateDoughnutChartData("daily"));
       setCountCategoryGenderCooking(generateDoughnutChartData("cooking"));
 
-      // 방문자 수 가져오기
-      getVisitorCount().then((response) => {
-        setVisitorCountAll(response.data);
+      // 방문자 통계 데이타들 가져오기
+      axios.get("/api/getVisitorCount").then((response) => {
+        setVisitorData(response.data);
       });
     });
   }, []);
@@ -300,7 +296,8 @@ function AdminMain() {
           />
         </Flex>
         <Box border={"1px solid red"}>
-          <Text>(임시)방문자수 전체 : {visitorCountAll}</Text>
+          <Text>(임시)방문자수 전체 : </Text>
+          <Text>(임시)방문자수 오늘 : </Text>
         </Box>
       </Box>
     </Flex>
