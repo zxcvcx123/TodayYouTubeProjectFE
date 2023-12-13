@@ -30,7 +30,7 @@ import Pagination from "../page/Pagination";
 import { DetectLoginContext } from "../component/LoginProvider";
 
 function InquiryList(props) {
-  const { token, handleLogout, loginInfo, validateToken } =
+  const { token, handleLogout, loginInfo, validateToken, connectUser } =
     useContext(DetectLoginContext);
 
   const [inquiryList, setInquiryList] = useState(null);
@@ -50,13 +50,14 @@ function InquiryList(props) {
         .then((response) => {
           setInquiryList(response.data.inquiryList);
           setPageInfo(response.data.pageInfo);
-        });
+        })
+        .catch(() => console.log("bad"));
     }
   }, [location, params, loginInfo]);
 
-  if (inquiryList == null || loginInfo == null) {
-    return <Spinner />;
-  }
+  // if (inquiryList == null || loginInfo == null) {
+  //   return <Spinner />;
+  // }
 
   // 로그인 안했을시 로그인화면으로 이동
   if (!token.detectLogin) {

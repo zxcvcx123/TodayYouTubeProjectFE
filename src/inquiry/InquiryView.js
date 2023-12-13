@@ -34,7 +34,6 @@ import { DetectLoginContext } from "../component/LoginProvider";
 
 import ScrollToTop from "../util/ScrollToTop";
 
-
 function InquiryView(props) {
   const { token, handleLogout, loginInfo, validateToken } =
     useContext(DetectLoginContext);
@@ -119,6 +118,20 @@ function InquiryView(props) {
           readOnly
         ></Input>
       </Flex>
+      {loginInfo.role_name == "운영자" && (
+        <Flex mb={1} w={"100%"} mb={4}>
+          <Box fontWeight={"bold"} ml={3} w={"10%"}>
+            작성자 :
+          </Box>
+          <Input
+            value={inquiry.inquiry_member_id}
+            size={"sm"}
+            width={"70%"}
+            borderColor={"black.300"}
+            readOnly
+          ></Input>
+        </Flex>
+      )}
       <Flex mb={1} mb={4}>
         <Box fontWeight={"bold"} ml={3} w={"10%"}>
           제 목 :
@@ -203,7 +216,6 @@ function InquiryView(props) {
       </Box>
 
       <ScrollToTop />
-
     </Box>
   );
 }

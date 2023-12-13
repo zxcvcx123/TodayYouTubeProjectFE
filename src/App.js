@@ -29,7 +29,9 @@ import VoteWrite from "./vote/VoteWrite";
 import VoteView from "./vote/VoteView";
 import MiniHomepyContainer from "./member/minihomepy/MiniHomepyContainer";
 import MiniHomepy from "./member/minihomepy/MiniHomepy";
+import AdminMemberList from "./admin/AdminMemberList";
 import VoteList from "./vote/VoteList";
+
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -57,6 +59,7 @@ const routes = createBrowserRouter(
         <Route path="editor" element={<Editor />} />
         <Route path="chat" element={<Chat />} />
         <Route path="admin" element={<AdminMain />} />
+        <Route path="admin/member/list" element={<AdminMemberList />} />
         <Route path="search" element={<SearchResult />} />
       </Route>
       <Route path="/member/minihomepy" element={<MiniHomepyContainer />}>
