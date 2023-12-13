@@ -2,6 +2,8 @@ import YouTube from "react-youtube";
 import { Box, Img, Tooltip } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faCommentDots, faComments} from "@fortawesome/free-solid-svg-icons";
 
 // 유튜브 정보 추출 컴포넌트 - 썸네일, 영상을 추출합니다.
 function YoutubeInfo({
@@ -14,26 +16,25 @@ function YoutubeInfo({
   toolTip,
 }) {
   // 상태 값
-  const [thumbnail, setThumbnail] = useState(null);
-  const [videoId, setVideoId] = useState(null);
   const location = useLocation();
 
-  useEffect(() => {
-    // 링크가 유효한지 첫번째 검사 (null or isBlack)
-    if (link && link.trim() !== "") {
-      // 유튜브 링크에서 동영상 ID 추출 (정규표현식 match 메서드)
-      const videoIdMatch = link.match(
-        /^(https?:\/\/)?(www\.)?(youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/,
-      );
+  let thumbnail = null;
+  let videoId = null;
 
-      // 정규표현식 match 메서드 4번의 값으로 썸네일 추출
-      if (videoIdMatch && videoIdMatch[4]) {
-        const thumbnailUrl = `https://img.youtube.com/vi/${videoIdMatch[4]}/mqdefault.jpg`;
-        setThumbnail(thumbnailUrl);
-        setVideoId(videoIdMatch[4]);
-      }
+  // 링크가 유효한지 첫번째 검사 (null or isBlack)
+  if (link && link.trim() !== "") {
+    // 유튜브 링크에서 동영상 ID 추출 (정규표현식 match 메서드)
+    const videoIdMatch = link.match(
+      /^(https?:\/\/)?(www\.)?(youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/,
+    );
+
+    // 정규표현식 match 메서드 4번의 값으로 썸네일 추출
+    if (videoIdMatch && videoIdMatch[4]) {
+      const thumbnailUrl = `https://img.youtube.com/vi/${videoIdMatch[4]}/mqdefault.jpg`;
+      thumbnail = thumbnailUrl;
+      videoId = videoIdMatch[4];
     }
-  }, [location]);
+  }
 
   return (
     <div>
@@ -64,14 +65,18 @@ function YoutubeInfo({
                   alt="유튜브 썸네일"
                   maxW={thumbnailWidth}
                   h={thumbnailHeight}
+                  borderRadius={10}
                 />
               ) : (
                 <Box
                   backgroundColor={"grey"}
                   maxW={thumbnailWidth}
                   h={thumbnailHeight}
+                  display={"flex"}
+                  alignItems={"center"}
+                  borderRadius={10}
                 >
-                  링크X 일 경우 임시 박스
+                  <FontAwesomeIcon width={thumbnailWidth} icon={faComments} size="3x" inverse={true}/>
                 </Box>
               )}
             </Tooltip>
@@ -85,14 +90,18 @@ function YoutubeInfo({
                   alt="유튜브 썸네일"
                   maxW={thumbnailWidth}
                   h={thumbnailHeight}
+                  borderRadius={10}
                 />
               ) : (
                 <Box
-                  backgroundColor={"grey"}
+                  backgroundColor={"darkgray"}
                   maxW={thumbnailWidth}
                   h={thumbnailHeight}
+                  display={"flex"}
+                  alignItems={"center"}
+                  borderRadius={10}
                 >
-                  링크X 일 경우 임시 박스
+                  <FontAwesomeIcon width={thumbnailWidth} icon={faComments} size="3x" inverse={true}/>
                 </Box>
               )}
             </>
