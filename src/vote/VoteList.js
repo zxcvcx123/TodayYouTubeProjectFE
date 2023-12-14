@@ -45,6 +45,7 @@ import ScrollToTop from "../util/ScrollToTop";
 import pageCount from "../page/PageCount";
 import VotePage from "./VotePage";
 import VoteSearch from "./VoteSearch";
+import ProgressBar from "./ProgressBar";
 
 function VoteList() {
   /* 로그인 정보 컨텍스트 */
@@ -54,6 +55,7 @@ function VoteList() {
   // state
   const [boardList, setBoardList] = useState(null);
   const [page, setPage] = useState([]);
+  const [listProgressBar, setListProgressBar] = useState();
 
   // 현재 URL 파악하기
   const location = useLocation();
@@ -109,14 +111,28 @@ function VoteList() {
         <Box mb={5}>
           <Heading>투표 게시판</Heading>
         </Box>
-        <Flex justifyContent={"space-between"} mb={5}>
-          <Box>
-            <Button onClick={handleWriteBtn} colorScheme="blue">
-              글쓰기
-            </Button>
-          </Box>
-          <Flex></Flex>
-        </Flex>
+        {boardList !== null && boardList.length > 0 ? (
+          <Flex justifyContent={"space-between"} mb={5}>
+            <Box>
+              <Button onClick={handleWriteBtn} colorScheme="blue">
+                글쓰기
+              </Button>
+            </Box>
+          </Flex>
+        ) : (
+          <>
+            <Center>
+              <Heading>첫 글의 주인공이 되어보세요!</Heading>
+            </Center>
+            <Center mb={5} mt={5}>
+              <Box>
+                <Button onClick={handleWriteBtn} colorScheme="blue">
+                  첫 글 작성하러 가기
+                </Button>
+              </Box>
+            </Center>
+          </>
+        )}
         {/* ------------------------- 게시글 목록 본문 ------------------------- */}
         <>
           {/* ---------------------------------------- 그리드 형태 보기 ---------------------------------------------*/}
@@ -146,7 +162,15 @@ function VoteList() {
                         thumbnailWidth={250}
                         thumbnailHeight={150}
                       />
-                      <Heading p={"20px"}>VS</Heading>
+                      <Box>
+                        <Heading p={"20px"}>VS</Heading>
+                        <ProgressBar
+                          listTotalVotes={board.voted_all}
+                          listOptionOneVotes={board.voted_a}
+                          listOptionTwoVotes={board.voted_b}
+                          isList={1}
+                        />
+                      </Box>
                       <YoutubeInfo
                         link={board.link_b}
                         extraThumbnail={true}

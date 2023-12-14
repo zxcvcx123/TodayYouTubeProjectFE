@@ -163,7 +163,7 @@ function VoteWrite() {
           description: "게시글 저장에 성공했습니다.",
           status: "success",
         });
-        navigate("/board/vote/list");
+        navigate("/board/vote/list?p=1");
       })
       .catch((error) => {
         if (error.response.status === 400) {
@@ -198,12 +198,8 @@ function VoteWrite() {
 
   return (
     <Box border={"2px solid black"} m={5}>
-      <Box mb={5}>
-        <Heading>{boardInfo} 게시판</Heading>
-      </Box>
-
       <Heading textAlign={"center"} mb={5}>
-        불 지르기
+        투표 생성
       </Heading>
 
       {/* -------------------- 제목 -------------------- */}
@@ -214,7 +210,7 @@ function VoteWrite() {
         <Input
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          placeholder="주제를 입력해주세요. (필수)"
+          placeholder="투표 주제를 입력해주세요. (필수)"
           textAlign={"center"}
         />
         {/* isInvalid로 타이틀이 공백이거나 null일 경우 에러메시지 출력 */}
@@ -234,7 +230,7 @@ function VoteWrite() {
             textAlign={"center"}
             value={link_a}
             onChange={(e) => setlink_a(e.target.value)}
-            placeholder="이간질할 링크를 입력해주세요. (필수)"
+            placeholder="주제에 어울리는 유트브 영상 링크를 입력해주세요. (필수)"
             required
           />
           <FormErrorMessage justifyContent={"center"}>
@@ -260,7 +256,7 @@ function VoteWrite() {
             textAlign={"center"}
             value={link_b}
             onChange={(e) => setlink_b(e.target.value)}
-            placeholder="이간질할 링크를 입력해주세요. (필수)"
+            placeholder="주제에 어울리는 링크를 입력해주세요. (필수)"
             required
           />
           <FormErrorMessage justifyContent={"center"}>
@@ -276,9 +272,7 @@ function VoteWrite() {
 
       {/* -------------------- 본문 -------------------- */}
       <FormControl mb={2} isInvalid={contentError}>
-        <FormLabel id="content" textAlign={"center"}>
-          한 줄 설명
-        </FormLabel>
+        <FormLabel id="content" textAlign={"center"}></FormLabel>
         <Input
           textAlign={"center"}
           value={content}

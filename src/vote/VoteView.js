@@ -66,9 +66,6 @@ function VoteView() {
 
   const totalVotes = (optionOneVotes || 0) + (optionTwoVotes || 0);
 
-  console.log("VoteNot: " + voteNot);
-  console.log("체크드: " + voteChecked);
-
   // progressBar
   const optionOnePercentage =
     totalVotes === 0
