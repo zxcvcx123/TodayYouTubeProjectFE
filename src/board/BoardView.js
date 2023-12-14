@@ -65,7 +65,6 @@ function BoardView() {
 
   // 초기 렌더링
   useEffect(() => {
-    if (loginInfo !== null) {
       console.log("랜더링 테스트");
       axios.get("/api/board/id/" + id).then((response) => {
         setBoard(response.data);
@@ -76,11 +75,10 @@ function BoardView() {
         }
 
         // 게시글 데이터를 가져온 후 작성자 여부를 확인하여 isAuthor 설정
-        if (loginInfo.member_id === response.data.board_member_id) {
+        if (loginInfo && loginInfo.member_id === response.data.board_member_id) {
           setIsAuthor(true);
         }
       });
-    }
   }, [isSubmitting, location, loginInfo]);
 
   // 초기 렌더링 파일 목록 가져오기
