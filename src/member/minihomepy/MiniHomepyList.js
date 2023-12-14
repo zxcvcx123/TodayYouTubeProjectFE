@@ -31,6 +31,7 @@ export function MiniHomepyList({
       <Box
         w={"100%"}
         h={"100%"}
+        pt={5}
         bg="transparent"
         maxHeight={"100%"}
         fontFamily={"'Jua', sans-serif"}
@@ -132,8 +133,8 @@ export function MiniHomepyList({
                         <YoutubeInfo
                           link={boardList.link}
                           extraThumbnail={true}
-                          thumbnailWidth={200}
-                          thumbnailHeight={100}
+                          thumbnailWidth={250}
+                          thumbnailHeight={150}
                         />
                       </Box>
                       <Flex
@@ -142,17 +143,17 @@ export function MiniHomepyList({
                         justifyContent={"center"}
                         pl={"15px"}
                       >
-                        <Box color={"#dcdcdc"} fontSize={"20px"}>
-                          {boardList.title.length > 30
-                            ? `${boardList.title.slice(0, 30)}..`
+                        <Box color={"#dcdcdc"} fontSize={"25px"}>
+                          {boardList.title.length > 40
+                            ? `${boardList.title.slice(0, 40)}..`
                             : boardList.title}
                         </Box>
-                        <Box color={"#a0a0a0"} fontSize={"15px"}>
+                        <Box color={"#a0a0a0"} fontSize={"20px"}>
                           {boardList.nickname}
                         </Box>
                         <Flex
                           color={"#a0a0a0"}
-                          fontSize={"12px"}
+                          fontSize={"16px"}
                           alignItems={"center"}
                         >
                           <Box textAlign={"center"}>
@@ -170,17 +171,10 @@ export function MiniHomepyList({
                           <Box textAlign={"center"}>
                             조회수 {boardList.views}회
                           </Box>
-                          <Box
-                            mr={1.5}
-                            ml={1.5}
-                            h={"4px"}
-                            w={"4px"}
-                            borderRadius={"2px"}
-                            bg={"#dcdcdc"}
-                            border={"1px solid #dcdcdc"}
-                          ></Box>
-                          <Box>{boardList.ago}</Box>
                         </Flex>
+                        <Box color={"#a0a0a0"} fontSize={"16px"}>
+                          {boardList.ago}
+                        </Box>
                       </Flex>
                     </Box>
                   </Flex>

@@ -21,8 +21,7 @@ import axios from "axios";
 export function MiniHomepyRightContainer({
   videoId,
   bgmOpts,
-  totalViews,
-  todayViews,
+
   loginMember,
   member_id,
   setBgm,
@@ -61,38 +60,6 @@ export function MiniHomepyRightContainer({
   return (
     <>
       <Box w={"100%"} h={"100%"}>
-        <Box borderBottom={"1px solid #dcdcdc"} color={"#dcdcdc"}>
-          <Flex p={"10px"}>
-            <Flex
-              justifyContent={"center"}
-              alignItems={"center"}
-              fontFamily={"'Song Myung', serif;"}
-            >
-              <Text fontSize={"14px"} mr={2} textAlign={"center"}>
-                TODAY
-              </Text>
-              <Text color={"tomato"}>{todayViews}</Text>
-            </Flex>
-            <Flex
-              ml={"10px"}
-              mr={"10px"}
-              justifyContent={"center"}
-              alignItems={"center"}
-            >
-              <Box h={"10px"} border={"1px solid #dcdcdc"}></Box>
-            </Flex>
-            <Flex
-              justifyContent={"center"}
-              alignItems={"center"}
-              fontFamily={"'Song Myung', serif;"}
-            >
-              <Text fontSize={"14px"} mr={2}>
-                TOTAL
-              </Text>
-              <Text>{totalViews}</Text>
-            </Flex>
-          </Flex>
-        </Box>
         <Box w={"100%"} mt={"10px"}>
           <Flex alignItems={"center"}>
             <Text
@@ -116,7 +83,7 @@ export function MiniHomepyRightContainer({
             )}
           </Flex>
           <Center>
-            <Box w={"300px"} h={"220px"} mt={"10px"}>
+            <Box w={"250px"} h={"250px"} borderRadius={"125px"} mt={"10px"}>
               <YouTube
                 videoId={videoId}
                 opts={bgmOpts}
