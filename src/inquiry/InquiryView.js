@@ -53,7 +53,7 @@ function InquiryView(props) {
       .then((response) => setInquiry(response.data));
   }, []);
 
-  if (inquiry == null || loginInfo == null) {
+  if (inquiry == null) {
     return <Spinner />;
   }
   if (!token.detectLogin) {

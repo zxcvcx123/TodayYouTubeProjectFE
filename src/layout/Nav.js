@@ -45,11 +45,12 @@ Stack.propTypes = {
 };
 
 export function Nav({ setSocket, setBoardCategory }) {
-  let navigate = useNavigate();
-  let location = useLocation();
-
+  // 로그인 유저 정보
   const { token, handleLogout, loginInfo, validateToken } =
     useContext(DetectLoginContext);
+
+  let navigate = useNavigate();
+  let location = useLocation();
 
   console.log(loginInfo);
   console.log(token);
@@ -63,12 +64,10 @@ export function Nav({ setSocket, setBoardCategory }) {
     setAlarmCount,
   } = useContext(SocketContext);
 
-  const connectUser = localStorage.getItem("memberInfo");
-
   useEffect(() => {
     axios
       .post("http://localhost:3000/api/websocket/alarmlist", {
-        userId: connectUser,
+        userId: loginInfo.member_id,
       })
       .then((res) => {
         setAlarmList(res.data);
@@ -79,7 +78,7 @@ export function Nav({ setSocket, setBoardCategory }) {
 
     axios
       .post("http://localhost:3000/api/websocket/alarmcount", {
-        userId: connectUser,
+        userId: loginInfo.member_id,
       })
       .then((res) => {
         setAlarmCount(res.data);
@@ -121,7 +120,7 @@ export function Nav({ setSocket, setBoardCategory }) {
   // 알람 모두 읽기
   function handleAllRead() {
     stompClient.current.publish({
-      destination: "/app/comment/alarm/allread/" + connectUser,
+      destination: "/app/comment/alarm/allread/" + loginInfo.member_id,
     });
   }
 
@@ -132,7 +131,7 @@ export function Nav({ setSocket, setBoardCategory }) {
       destination: "/app/comment/alarm/delete",
       body: JSON.stringify({
         id: id,
-        userId: connectUser,
+        userId: loginInfo.member_id,
         mode: "ONE",
       }),
     });
@@ -144,7 +143,7 @@ export function Nav({ setSocket, setBoardCategory }) {
     stompClient.current.publish({
       destination: "/app/comment/alarm/delete",
       body: JSON.stringify({
-        userId: connectUser,
+        userId: loginInfo.member_id,
         mode: "ALL",
       }),
     });

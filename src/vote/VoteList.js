@@ -51,8 +51,6 @@ function VoteList() {
   const { token, handleLogout, loginInfo, validateToken } =
     useContext(DetectLoginContext);
 
-  const connectUser = localStorage.getItem("memberInfo");
-
   // state
   const [boardList, setBoardList] = useState(null);
   const [page, setPage] = useState([]);

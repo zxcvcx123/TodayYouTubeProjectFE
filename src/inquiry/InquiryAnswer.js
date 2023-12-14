@@ -23,9 +23,13 @@ import { faArrowTurnUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as stompClient from "immer";
 import { SocketContext } from "../socket/Socket";
+import { DetectLoginContext } from "../component/LoginProvider";
 
 function InquiryAnswer(props) {
-  const connectUser = localStorage.getItem("memberInfo");
+  // 로그인 유저 정보
+  const { token, handleLogout, loginInfo, validateToken } =
+    useContext(DetectLoginContext);
+
   const { stompClient } = useContext(SocketContext);
   const [inquiry, setInquiry] = useState(null);
   const [answerContent, setAnswerContent] = useState("");
@@ -54,7 +58,7 @@ function InquiryAnswer(props) {
     stompClient.current.publish({
       destination: "/app/answer/sendalarm",
       body: JSON.stringify({
-        sender_member_id: connectUser,
+        sender_member_id: loginInfo.member_id,
         receiver_member_id: inquiry.inquiry_member_id,
         inquiry_id: inquiry.id,
         inquiry_title: inquiry.title,

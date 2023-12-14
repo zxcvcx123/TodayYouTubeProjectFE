@@ -30,7 +30,7 @@ import Pagination from "../page/Pagination";
 import { DetectLoginContext } from "../component/LoginProvider";
 
 function InquiryList(props) {
-  const { token, handleLogout, loginInfo, validateToken, connectUser } =
+  const { token, handleLogout, loginInfo, validateToken } =
     useContext(DetectLoginContext);
 
   const [inquiryList, setInquiryList] = useState(null);
@@ -41,19 +41,17 @@ function InquiryList(props) {
   const location = useLocation();
 
   useEffect(() => {
-    if (loginInfo !== null) {
-      axios
-        .post("/api/inquiry/list?" + params, {
-          login_member_id: loginInfo.member_id,
-          role_name: loginInfo.role_name,
-        })
-        .then((response) => {
-          setInquiryList(response.data.inquiryList);
-          setPageInfo(response.data.pageInfo);
-        })
-        .catch(() => console.log("bad"));
-    }
-  }, [location, params, loginInfo]);
+    axios
+      .post("/api/inquiry/list?" + params, {
+        login_member_id: loginInfo.member_id,
+        role_name: loginInfo.role_name,
+      })
+      .then((response) => {
+        setInquiryList(response.data.inquiryList);
+        setPageInfo(response.data.pageInfo);
+      })
+      .catch(() => console.log("bad"));
+  }, [location, params]);
 
   // if (inquiryList == null || loginInfo == null) {
   //   return <Spinner />;

@@ -50,7 +50,10 @@ function CommentForm({
   setCommentLike,
   boardData,
 }) {
-  const connectUser = localStorage.getItem("memberInfo");
+  // 로그인 유저 정보
+  const { token, handleLogout, loginInfo, validateToken } =
+    useContext(DetectLoginContext);
+
   const { stompClient, setToId } = useContext(SocketContext);
 
   const [comment, setComment] = useState("");
@@ -63,9 +66,9 @@ function CommentForm({
   function send(comment) {
     // 알림목록
     stompClient.current.publish({
-      destination: "/app/comment/sendalarm/" + connectUser,
+      destination: "/app/comment/sendalarm/" + loginInfo.member_id,
       body: JSON.stringify({
-        sender_member_id: connectUser,
+        sender_member_id: loginInfo.member_id,
         receiver_member_id: boardData.board_member_id,
         board_id: board_id,
         board_title: boardData.board_title,
@@ -74,9 +77,9 @@ function CommentForm({
 
     // 개수
     stompClient.current.publish({
-      destination: "/app/comment/sendalarm/count/" + connectUser,
+      destination: "/app/comment/sendalarm/count/" + loginInfo.member_id,
       body: JSON.stringify({
-        sender_member_id: connectUser,
+        sender_member_id: loginInfo.member_id,
         receiver_member_id: boardData.board_member_id,
         board_id: board_id,
         board_title: boardData.board_title,

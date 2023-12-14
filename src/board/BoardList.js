@@ -80,7 +80,6 @@ function BoardList() {
 
   // navigate
   const navigate = useNavigate();
-  console.log(boardList);
 
   // 초기 이펙트
   useEffect(() => {

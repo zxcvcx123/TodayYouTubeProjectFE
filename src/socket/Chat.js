@@ -16,7 +16,9 @@ import { DetectLoginContext } from "../component/LoginProvider";
 import { SocketContext } from "./Socket";
 
 function Chat() {
-  const { connectUser } = useContext(DetectLoginContext);
+  // 로그인 유저 정보
+  const { token, handleLogout, loginInfo, validateToken } =
+    useContext(DetectLoginContext);
   const { stompClient, IsConnected, chatId, chat } = useContext(SocketContext);
   const { test } = useOutletContext();
   const [text, setText] = useState("");
@@ -42,7 +44,7 @@ function Chat() {
   function sendMsg() {
     stompClient.current.publish({
       destination: "/app/hello",
-      body: JSON.stringify({ id: connectUser, chat: text }),
+      body: JSON.stringify({ id: loginInfo.member_id, chat: text }),
     });
   }
 
@@ -71,7 +73,7 @@ function Chat() {
                 textAlign={"center"}
                 h={"50px"}
               >
-                {connectUser}님 반갑습니다.
+                {loginInfo.member_id}님 반갑습니다.
               </Box>
             </Center>
 

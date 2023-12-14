@@ -28,7 +28,8 @@ import ProgressBar from "./ProgressBar";
 import { CheckIcon } from "@chakra-ui/icons";
 
 function VoteView() {
-  const connectUser = localStorage.getItem("memberInfo");
+  const { token, handleLogout, loginInfo, validateToken } =
+    useContext(DetectLoginContext);
 
   // state
   const [board, setBoard] = useState(null);
@@ -113,14 +114,14 @@ function VoteView() {
   function handleVoteA() {
     axios.put("/api/votea", {
       vote_board_id: id,
-      vote_member_id: connectUser,
+      vote_member_id: loginInfo.member_id,
     });
   }
 
   function handleVoteB() {
     axios.put("/api/voteb", {
       vote_id: id,
-      vote_member_id: connectUser,
+      vote_member_id: loginInfo.member_id,
     });
   }
 
