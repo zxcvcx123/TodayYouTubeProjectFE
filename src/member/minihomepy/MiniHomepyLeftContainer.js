@@ -16,7 +16,13 @@ import "./minihomepy-styles/font.css";
 import { EditIcon } from "@chakra-ui/icons";
 import axios from "axios";
 
-export function MiniHomepyLeftContainer({ member, introduce, setIntroduce }) {
+export function MiniHomepyLeftContainer({
+  member,
+  introduce,
+  setIntroduce,
+  todayViews,
+  totalViews,
+}) {
   const { loginInfo } = useContext(DetectLoginContext);
 
   const memberId = member ? member.member_id : <Spinner />;
@@ -28,29 +34,32 @@ export function MiniHomepyLeftContainer({ member, introduce, setIntroduce }) {
   const [introduceColors, setIntroduceColors] = useState([]);
   useEffect(() => {
     let nonSpaceCharCount = 0;
-
-    setIntroduceColors(
-      Array.from(introduce).map((char, index) => {
-        if (char !== " ") {
-          const color = nonSpaceCharCount % 2 === 0 ? "#41A541" : "tomato";
-          nonSpaceCharCount++;
-          return color;
-        }
-        return null;
-      }),
-    );
+    if (introduce !== null) {
+      setIntroduceColors(
+        Array.from(introduce).map((char, index) => {
+          if (char !== " ") {
+            const color = nonSpaceCharCount % 2 === 0 ? "#41A541" : "tomato";
+            nonSpaceCharCount++;
+            return color;
+          }
+          return null;
+        }),
+      );
+    }
   }, [introduce]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setIntroduceColors((currentColors) =>
-        currentColors.map(
-          (color) => color && (color === "#41A541" ? "tomato" : "#41A541"),
-        ),
-      );
-    }, 1000);
+    if (introduce !== null) {
+      const interval = setInterval(() => {
+        setIntroduceColors((currentColors) =>
+          currentColors.map(
+            (color) => color && (color === "#41A541" ? "tomato" : "#41A541"),
+          ),
+        );
+      }, 1000);
 
-    return () => clearInterval(interval);
+      return () => clearInterval(interval);
+    }
   }, []);
 
   function handleIntroduceEdit() {
@@ -72,26 +81,64 @@ export function MiniHomepyLeftContainer({ member, introduce, setIntroduce }) {
         display={"flex"}
         flexDirection={"column"}
         alignItems={"center"}
-        justifyContent={"space-around"}
-        pt={10}
+        justifyContent={"space-between"}
+        pt={5}
       >
         <Box>
-          <Avatar borderRadius="140px" boxSize="280px" src={imageUrl} />
-        </Box>
-        <Box
-          display={"flex"}
-          alignItems={"center"}
-          fontFamily={"'Jua', sans-serif"}
-          w={"100%"}
-          flexDirection={"column"}
-          justifyContent={"center"}
-          mt={5}
-          mb={5}
-        >
-          <MemberRoleBadge />
-          <Text pt={"3px"} fontSize={"40px"} color={"#dcdcdc"}>
-            {nickname}
-          </Text>
+          <Box borderBottom={"1px solid #dcdcdc"} color={"#dcdcdc"} mb={10}>
+            <Flex>
+              <Flex alignItems={"center"} fontFamily={"'Song Myung', serif;"}>
+                <Text fontSize={"16px"} mr={2} textAlign={"center"}>
+                  TODAY
+                </Text>
+                <Text fontSize={"16px"} color={"tomato"}>
+                  {todayViews}
+                </Text>
+              </Flex>
+              <Flex
+                ml={"10px"}
+                mr={"10px"}
+                justifyContent={"center"}
+                alignItems={"center"}
+              >
+                <Box h={"12px"} border={"1px solid #dcdcdc"}></Box>
+              </Flex>
+              <Flex
+                justifyContent={"center"}
+                alignItems={"center"}
+                fontFamily={"'Song Myung', serif;"}
+              >
+                <Text fontSize={"16px"} mr={2}>
+                  TOTAL
+                </Text>
+                <Text fontSize={"16px"}>{totalViews}</Text>
+              </Flex>
+            </Flex>
+          </Box>
+          <Box
+            bg=" rgba( 255, 255, 255, 0.1 )"
+            p={5}
+            borderRadius={"10px"}
+            mb={10}
+          >
+            <Box>
+              <Avatar borderRadius="50px" boxSize="200px" src={imageUrl} />
+            </Box>
+            <Box
+              display={"flex"}
+              alignItems={"center"}
+              fontFamily={"'Jua', sans-serif"}
+              w={"100%"}
+              justifyContent={"center"}
+              mt={5}
+              mb={3}
+            >
+              <Text fontSize={"30px"} color={"#dcdcdc"} mr={3}>
+                {nickname}
+              </Text>
+              <MemberRoleBadge />
+            </Box>
+          </Box>
         </Box>
         <Box
           backgroundColor={"transparent"}
@@ -167,14 +214,15 @@ export function MiniHomepyLeftContainer({ member, introduce, setIntroduce }) {
                 fontSize={"20px"}
                 color={"#dcdcdc"}
               >
-                {introduce.split("").map((char, index) => (
-                  <span
-                    style={{ color: introduceColors[index] || "inherit" }}
-                    key={index}
-                  >
-                    {char}
-                  </span>
-                ))}
+                {introduce !== null &&
+                  introduce.split("").map((char, index) => (
+                    <span
+                      style={{ color: introduceColors[index] || "inherit" }}
+                      key={index}
+                    >
+                      {char}
+                    </span>
+                  ))}
               </Box>
             )}
           </Box>

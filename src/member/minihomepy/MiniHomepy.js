@@ -21,6 +21,7 @@ export function MiniHomepy(props) {
   const [member, setMember] = useState();
   const [miniHomepyInfo, setMiniHomepyInfo] = useState(null);
   const [introduce, setIntroduce] = useState("");
+  const [homepyId, setHomepyId] = useState(null);
   const [todayViews, setTodayViews] = useState(null);
   const [totalViews, setTotalViews] = useState(null);
   const [bgm, setBgm] = useState(null);
@@ -29,6 +30,7 @@ export function MiniHomepy(props) {
   // 게시글 정보 가져오기
   const [topRankBoardList, setTopRankBoardList] = useState(null);
   const [newBoardList, setNewBoardList] = useState(null);
+  const [favoriteBoardList, setFavoriteBoardList] = useState(null);
   const [boardListAll, setBoardListAll] = useState(null);
   const [categoryOrdedBy, setCategoryOrdedBy] = useState("latest"); // 정렬 기준
   const [params] = useSearchParams();
@@ -107,6 +109,7 @@ export function MiniHomepy(props) {
         setTodayViews(response.data.today_visitors);
         setTotalViews(response.data.total_visitors);
         setBgm(response.data.bgm_link);
+        setHomepyId(response.data.homepy_id);
         originBgmValue = response.data.bgm_link;
       })
       .catch((error) => {
@@ -120,6 +123,7 @@ export function MiniHomepy(props) {
       .then((response) => {
         setTopRankBoardList(response.data.topBoardList);
         setNewBoardList(response.data.newBoardList);
+        setFavoriteBoardList(response.data.favoriteBoardList);
         console.log(topRankBoardList);
       });
   }, []);
@@ -219,24 +223,26 @@ export function MiniHomepy(props) {
           <Snowflake />
           <Box
             w={"100%"}
-            h={"100%"}
+            h={"90%"}
             minWidth={"1200px"}
-            minHeight={"700px"}
+            minHeight={"600px"}
             zIndex={"10"}
             borderRadius={"20px"}
             backgroundColor={"transparent"}
             backdropFilter={"blur(2px)"}
             display={"flex"}
-            justifyContent={"center"}
             alignItems={"center"}
           >
             <Box
               w={"25%"}
-              h={"95%"}
+              h={"100%"}
               borderRadius={"20px"}
+              border="1px solid white"
               backgroundColor={"transparent"}
             >
               <MiniHomepyLeftContainer
+                todayViews={todayViews}
+                totalViews={totalViews}
                 member={member}
                 miniHomepyInfo={miniHomepyInfo}
                 introduce={introduce}
@@ -244,25 +250,24 @@ export function MiniHomepy(props) {
               />
             </Box>
             <Box
-              w={"540px"}
-              h={"95%"}
-              minWidth={"540px"}
+              w={"70%"}
+              h={"100%"}
+              minWidth={"800px"}
               zIndex={"10"}
               borderRadius={"20px"}
               backgroundColor={"transparent"}
               backdropFilter={"blur(10px)"}
               display={"flex"}
-              flexDirection={"column"}
               justifyContent={"flex-end"}
-              alignItems={"center"}
               fontFamily={"'Song Myung', serif;"}
-              mr={"10px"}
+              mr={"50px"}
             >
               <MiniHomepyMiddleContainer
                 loginMember={loginMember}
                 member_id={member_id}
                 topRankBoardList={topRankBoardList}
                 newBoardList={newBoardList}
+                favoriteBoardList={favoriteBoardList}
                 categoryOrdedBy={categoryOrdedBy}
                 setCategoryOrdedBy={setCategoryOrdedBy}
                 boardListAll={boardListAll}
@@ -272,26 +277,26 @@ export function MiniHomepy(props) {
                 youtuberInfo={youtuberInfo}
                 addYoutuber={addYoutuber}
                 setAddYoutuber={setAddYoutuber}
+                homepyId={homepyId}
               />
             </Box>
-            <Box
-              w={"25%"}
-              h={"95%"}
-              borderRadius={"20px"}
-              backgroundColor={"transparent"}
-            >
-              <MiniHomepyRightContainer
-                todayViews={todayViews}
-                totalViews={totalViews}
-                videoId={videoId}
-                bgmOpts={bgmOpts}
-                loginMember={loginMember}
-                member_id={member_id}
-                setBgm={setBgm}
-                bgm={bgm}
-                originBgmValue={originBgmValue}
-              />
-            </Box>
+          </Box>
+          <Box
+            w={"20%"}
+            h={"100%"}
+            borderRadius={"20px"}
+            backgroundColor={"transparent"}
+            border="1px solid white"
+          >
+            <MiniHomepyRightContainer
+              videoId={videoId}
+              bgmOpts={bgmOpts}
+              loginMember={loginMember}
+              member_id={member_id}
+              setBgm={setBgm}
+              bgm={bgm}
+              originBgmValue={originBgmValue}
+            />
           </Box>
         </Box>
       </HomepyMemberContext.Provider>
