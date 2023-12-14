@@ -14,7 +14,7 @@ export function LoginProvider({ children }) {
   const [token, setToken] = useState({
     detectLogin: false,
   });
-  const [loginInfo, setLoginInfo] = useState({});
+  const [loginInfo, setLoginInfo] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -99,6 +99,7 @@ export function LoginProvider({ children }) {
     localStorage.clear();
   };
 
+  console.log(loginInfo === null);
   return (
     <>
       {/* token: 토큰 정보 token.detectLogin (로그인 유무 확인)

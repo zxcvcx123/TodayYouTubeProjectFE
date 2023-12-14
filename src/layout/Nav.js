@@ -52,9 +52,6 @@ export function Nav({ setSocket, setBoardCategory }) {
   let navigate = useNavigate();
   let location = useLocation();
 
-  console.log(loginInfo);
-  console.log(token);
-
   const {
     stompClient,
     IsConnected,
