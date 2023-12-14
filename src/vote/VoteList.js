@@ -165,10 +165,8 @@ function VoteList() {
                       <Box>
                         <Heading p={"20px"}>VS</Heading>
                         <ProgressBar
-                          listTotalVotes={board.voted_all}
-                          listOptionOneVotes={board.voted_a}
-                          listOptionTwoVotes={board.voted_b}
-                          isList={1}
+                          optionOneVotes={board.voted_a}
+                          optionTwoVotes={board.voted_b}
                         />
                       </Box>
                       <YoutubeInfo

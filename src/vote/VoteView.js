@@ -66,16 +66,6 @@ function VoteView() {
 
   const totalVotes = (optionOneVotes || 0) + (optionTwoVotes || 0);
 
-  // progressBar
-  const optionOnePercentage =
-    totalVotes === 0
-      ? 0
-      : (((optionOneVotes || 0) / totalVotes || 1) * 100).toFixed(1);
-  const optionTwoPercentage =
-    totalVotes === 0
-      ? 0
-      : (((optionTwoVotes || 0) / totalVotes || 1) * 100).toFixed(1);
-
   //URL 매개변수 추출
   const { id } = useParams();
 
@@ -291,8 +281,8 @@ function VoteView() {
         {board.content}
       </Box>
       <ProgressBar
-        optionOnePercentage={optionOnePercentage}
-        optionTwoPercentage={optionTwoPercentage}
+        optionOneVotes={optionOneVotes}
+        optionTwoVotes={optionTwoVotes}
       />
       <Divider my={5} borderColor="grey" />
 
