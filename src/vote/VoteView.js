@@ -48,6 +48,8 @@ function VoteView() {
     setOptionTwoVotes,
     voteChecked,
     setVoteChecked,
+    voteNot,
+    setVoteNot,
   } = useContext(SocketContext);
 
   // state
@@ -55,6 +57,9 @@ function VoteView() {
   const [thumbnail, setThumbnail] = useState(null);
 
   const totalVotes = (optionOneVotes || 0) + (optionTwoVotes || 0);
+
+  console.log("VoteNot: " + voteNot);
+  console.log("체크드: " + voteChecked);
 
   // progressBar
   const optionOnePercentage =
@@ -84,14 +89,34 @@ function VoteView() {
 
   // 초기 렌더링
   useEffect(() => {
-    axios.get("/api/vote/id/" + id).then((res) => {
-      console.log(res.data);
-      setBoard(res.data);
-      // count된 숫자 넣고 숫자에 따라서 set 해서 처음 % 반영
-    });
+    if (loginInfo !== null) {
+      axios.get("/api/vote/id/" + id).then((res) => {
+        console.log(res.data);
+        setBoard(res.data);
 
-    // axios.get 해서 버튼을 눌렀는지 안눌렀는지 게시판번호/아이디 기준으로 조회
-  }, []);
+        // count된 숫자 넣고 숫자에 따라서 set 해서 처음 % 반영
+        setOptionOneVotes(res.data.voted_a);
+        setOptionTwoVotes(res.data.voted_b);
+      });
+
+      // axios.get 해서 버튼을 눌렀는지 안눌렀는지 게시판번호/아이디 기준으로 조회
+      axios
+        .post("/api/vote/history", {
+          vote_board_id: id,
+          vote_member_id: loginInfo.member_id,
+        })
+        .then((res) => {
+          console.log(res.data);
+          if (res.data.checked_vote_not !== null) {
+            setVoteNot(1);
+            setVoteChecked(2);
+          } else {
+            setVoteNot(0);
+            setVoteChecked(res.data.checked_vote_a);
+          }
+        });
+    }
+  }, [loginInfo]);
 
   if (board === null) {
     return <Spinner />;
@@ -214,9 +239,9 @@ function VoteView() {
               onClick={() => {
                 handleVoteA();
               }}
-              isDisabled={voteChecked === 1 && true}
+              isDisabled={voteChecked === 1 && voteNot === 0 ? true : false}
             >
-              {voteChecked === 1 ? (
+              {voteChecked === 1 && voteNot === 0 ? (
                 <FontAwesomeIcon icon={faCircleCheck} size="xl" />
               ) : (
                 <FontAwesomeIcon icon={faCheck} />
@@ -233,9 +258,9 @@ function VoteView() {
               onClick={() => {
                 handleVoteB();
               }}
-              isDisabled={voteChecked !== 1 && true}
+              isDisabled={voteChecked !== 1 && voteNot === 0 ? true : false}
             >
-              {voteChecked !== 1 ? (
+              {voteChecked !== 1 && voteNot === 0 ? (
                 <FontAwesomeIcon icon={faCircleCheck} size="xl" />
               ) : (
                 <FontAwesomeIcon icon={faCheck} />
