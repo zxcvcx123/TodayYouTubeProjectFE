@@ -40,6 +40,7 @@ function VoteView() {
 
   const {
     stompClient,
+    IsConnected,
     voteResult,
     setVoteResult,
     optionOneVotes,
@@ -233,15 +234,22 @@ function VoteView() {
           <Box>
             <YoutubeInfo link={board.link_a} extraVideo={true} />
             <Button
+              id="BtnA"
               colorScheme="blue"
               w="100%"
               h={20}
               onClick={() => {
                 handleVoteA();
               }}
-              isDisabled={voteChecked === 1 && voteNot === 0 ? true : false}
+              isDisabled={
+                (voteChecked === 1 && voteNot === 0) || IsConnected === false
+                  ? true
+                  : false
+              }
             >
-              {voteChecked === 1 && voteNot === 0 ? (
+              {IsConnected === false ? (
+                <Text>연결 중...</Text>
+              ) : voteChecked === 1 && voteNot === 0 ? (
                 <FontAwesomeIcon icon={faCircleCheck} size="xl" />
               ) : (
                 <FontAwesomeIcon icon={faCheck} />
@@ -252,15 +260,22 @@ function VoteView() {
           <Box>
             <YoutubeInfo link={board.link_b} extraVideo={true} />
             <Button
+              id="BtnB"
               colorScheme="red"
               w="100%"
               h={20}
               onClick={() => {
                 handleVoteB();
               }}
-              isDisabled={voteChecked !== 1 && voteNot === 0 ? true : false}
+              isDisabled={
+                (voteChecked !== 1 && voteNot === 0) || IsConnected === false
+                  ? true
+                  : false
+              }
             >
-              {voteChecked !== 1 && voteNot === 0 ? (
+              {IsConnected === false ? (
+                <Text>연결 중...</Text>
+              ) : voteChecked !== 1 && voteNot === 0 ? (
                 <FontAwesomeIcon icon={faCircleCheck} size="xl" />
               ) : (
                 <FontAwesomeIcon icon={faCheck} />

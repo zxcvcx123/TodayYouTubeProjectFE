@@ -24,6 +24,7 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { DetectLoginContext } from "../component/LoginProvider";
 import MemberProfile from "../member/MemberProfile";
 import ScrollToTop from "../util/ScrollToTop";
+import LoadingPage from "../component/LoadingPage";
 
 function BoardView() {
   /* 로그인 정보 컨텍스트 */
@@ -92,7 +93,7 @@ function BoardView() {
 
   // board 불러오지 못할 시 로딩중 표시
   if (board === null) {
-    return <Spinner />;
+    return <LoadingPage />;
   }
 
   // 게시글 삭제 버튼 클릭
