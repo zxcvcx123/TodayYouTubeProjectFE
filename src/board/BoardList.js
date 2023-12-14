@@ -17,6 +17,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Select,
   SimpleGrid,
   Table,
   Tbody,
@@ -28,7 +29,12 @@ import {
   Tr,
   useDisclosure,
 } from "@chakra-ui/react";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import {
+  useLocation,
+  useNavigate,
+  useOutletContext,
+  useSearchParams,
+} from "react-router-dom";
 import Pagination from "../page/Pagination";
 import YoutubeInfo from "../component/YoutubeInfo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -48,15 +54,20 @@ function BoardList() {
   /* 로그인 정보 컨텍스트 */
   const { token, handleLogout, loginInfo, validateToken } =
     useContext(DetectLoginContext);
+  const { boardCategory } = useOutletContext();
 
   // state
-  const [boardList, setBoardList] = useState(null);
+  const [boardList, setBoardList] = useState([]);
   // 빈 배열로 받으면 null 값 오류 안나옴
   const [pageInfo, setPageInfo] = useState([]);
   const [currentView, setCurrentView] = useState("list");
   const [boardInfo, setBoardInfo] = useState("");
+  const [listCount, setListCount] = useState(null);
 
   const [params] = useSearchParams("");
+
+  // 몇 개 씩 보여줄건지
+  const [pageCount, setPageCount] = useState(10);
 
   // 현재 URL 파악하기
   const location = useLocation();
@@ -76,8 +87,24 @@ function BoardList() {
       setBoardList(response.data.boardList);
       setPageInfo(response.data.pageInfo);
       setBoardInfo(response.data.boardInfo);
+      setListCount(response.data.listCount);
     });
-  }, [location, pageCount]);
+
+
+    if (params.get("s") === null) {
+      setPageCount(10);
+    }
+  }, [location]);
+
+  // 몇 개씩 보여줄 건지
+  function handlePageCount(e) {
+    const newPageCount = e.target.value;
+    setPageCount(newPageCount);
+
+    params.set("s", newPageCount); // 직접 이벤트 객체에서 값을 가져옴
+    params.set("p", 1);
+    navigate("?" + params, { state: { refresh: true } });
+  }
 
   // 리스트 뷰 세팅 동작
   const switchToListView = () => {
@@ -95,10 +122,6 @@ function BoardList() {
     // 글쓰기 버튼 클릭시 로그인 되어 있지 않다면 로그인 창으로 이동
     if (!token.detectLogin) {
       onOpen();
-    } else if (currentParams === "vote") {
-      navigate("/board/vote/write?category=" + currentParams, {
-        state: boardInfo,
-      });
     } else {
       navigate("/board/write?category=" + currentParams, { state: boardInfo });
     }
@@ -110,20 +133,35 @@ function BoardList() {
     if (board.title.length > 20) {
       return (
         <Tooltip label={board.title}>
-          <Text>
-            {`${board.title.slice(0, 20)}...`}
-            <FontAwesomeIcon icon={faComment} /> {board.count_comment}
-          </Text>
+          <>
+            <Flex>
+              {`${board.title.slice(0, 20)}...`}
+              <FontAwesomeIcon icon={faComment} /> {board.count_comment}
+            </Flex>
+            {boardInfo === "all" && (
+              <Box ml={"auto"}>
+                <Text>{board.categoryName} </Text>
+              </Box>
+            )}
+          </>
         </Tooltip>
       );
     }
 
     // 일반적인 제목 표시 (툴팁 없음)
     return (
-      <Text>
-        {board.title}
-        <FontAwesomeIcon icon={faComment} /> {board.count_comment}
-      </Text>
+      <>
+        <Flex>
+          <Text>{board.title}</Text>
+          <FontAwesomeIcon icon={faComment} />
+          <Text>{board.count_comment}</Text>
+        </Flex>
+        {boardInfo === "all" && (
+          <Box ml={"auto"}>
+            <Text>{board.categoryName} </Text>
+          </Box>
+        )}
+      </>
     );
   }
 
@@ -133,7 +171,14 @@ function BoardList() {
     if (board.title.length > 15) {
       return (
         <Tooltip label={board.title}>
-          <Text fontWeight={"bold"}>{`${board.title.slice(0, 15)}...`}</Text>
+          <Flex>
+            <Text fontWeight={"bold"}>{`${board.title.slice(0, 15)}...`}</Text>
+            {boardInfo === "all" && (
+              <Box ml={"auto"}>
+                <Text>{board.categoryName} </Text>
+              </Box>
+            )}
+          </Flex>
         </Tooltip>
       );
     }
@@ -141,7 +186,12 @@ function BoardList() {
     // 일반적인 제목 표시 (툴팁 없음)
     return (
       <Flex>
-        <Text fontWeight={"bold"}>{board.title}</Text>{" "}
+        <Text fontWeight={"bold"}>{board.title}</Text>
+        {boardInfo === "all" && (
+          <Box ml={"auto"}>
+            <Text>{board.categoryName} </Text>
+          </Box>
+        )}
       </Flex>
     );
   }
@@ -161,7 +211,16 @@ function BoardList() {
       <Box>
         {/* ------------------------- 게시글 목록 상단 바 ------------------------- */}
         <Box my={5}>
-          <Heading>{boardInfo} 게시판</Heading>
+          {params.get("category") !== "all" ? (
+            <Heading>{boardCategory} 게시판</Heading>
+          ) : (
+            <>
+              <Heading>통합검색</Heading>
+              <Text>
+                {params.get("k")}의 검색결과 ({listCount})건
+              </Text>
+            </>
+          )}
         </Box>
         <Flex justifyContent={"space-between"} mb={5}>
           <Box>
@@ -171,7 +230,13 @@ function BoardList() {
           </Box>
           <Flex>
             {/* 한 페이지 출력 갯수 설정 (5, 10, 20) */}
-            <PageCount />
+            <Box>
+              <Select value={pageCount} onChange={(e) => handlePageCount(e)}>
+                <option value={5}>5개씩 보기</option>
+                <option value={10}>10개씩 보기</option>
+                <option value={20}>20개씩 보기</option>
+              </Select>
+            </Box>
 
             {/* ------------------------- 게시글 뷰 형태 선택 ------------------------- */}
             <Box ml={3}>

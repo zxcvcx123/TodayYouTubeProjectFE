@@ -10,7 +10,10 @@ import { SocketContext } from "../socket/Socket";
 
 // 게시물 조회시 좋아요 출력
 function BoardLike({ id }) {
-  const { connectUser } = useContext(DetectLoginContext);
+  // 로그인 유저 정보
+  const { token, handleLogout, loginInfo, validateToken } =
+    useContext(DetectLoginContext);
+
   const { stompClient, IsConnected, like, setLike, countLike, setCountLike } =
     useContext(SocketContext);
 
@@ -20,7 +23,7 @@ function BoardLike({ id }) {
     axios
       .post("/api/like/board", {
         board_id: id,
-        member_id: connectUser,
+        member_id: loginInfo.member_id,
       })
       .then((response) => {
         setCountLike(response.data.countlike);
@@ -36,10 +39,10 @@ function BoardLike({ id }) {
   // 실시간으로 좋아요 갯수 최신화 하기
   function send() {
     stompClient.current.publish({
-      destination: "/app/like/add/" + connectUser,
+      destination: "/app/like/add/" + loginInfo.member_id,
       body: JSON.stringify({
         board_id: id,
-        member_id: connectUser,
+        member_id: loginInfo.member_id,
       }),
     });
 
@@ -47,7 +50,7 @@ function BoardLike({ id }) {
       destination: "/app/like/",
       body: JSON.stringify({
         board_id: id,
-        member_id: connectUser,
+        member_id: loginInfo.member_id,
       }),
     });
   }

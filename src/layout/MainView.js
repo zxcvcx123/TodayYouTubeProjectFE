@@ -34,7 +34,7 @@ import { DetectLoginContext } from "../component/LoginProvider";
 
 export function MainView() {
   /* 로그인 정보 컨텍스트 */
-  const { token, handleLogout, loginInfo, validateToken, connectUser } =
+  const { token, handleLogout, loginInfo, validateToken } =
     useContext(DetectLoginContext);
 
   const [category, setCategory] = useState("all");

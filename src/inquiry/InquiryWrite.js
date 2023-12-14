@@ -27,7 +27,7 @@ import { SocketContext } from "../socket/Socket";
 import memberInfo from "../member/memberInfo/MemberInfo";
 
 function InquiryWrite() {
-  const connectUser = localStorage.getItem("memberInfo");
+  // 유저 정보
   const { token, handleLogout, loginInfo, validateToken } =
     useContext(DetectLoginContext);
 
@@ -65,9 +65,6 @@ function InquiryWrite() {
       )
       .finally(() => console.log("done"));
   }
-  if (loginInfo == null) {
-    return <Spinner />;
-  }
 
   // 문의글 등록시 운영자에게 알림
   function send() {
@@ -75,7 +72,7 @@ function InquiryWrite() {
     stompClient.current.publish({
       destination: "/app/inquiry/sendalarm",
       body: JSON.stringify({
-        sender_member_id: connectUser,
+        sender_member_id: loginInfo.member_id,
       }),
     });
   }

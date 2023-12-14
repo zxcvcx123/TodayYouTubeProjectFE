@@ -11,8 +11,11 @@ import { Spinner } from "@chakra-ui/react";
 import { DetectLoginContext } from "../component/LoginProvider";
 
 function Socket({ children }) {
-  // 유저 정보
-  const connectUser = localStorage.getItem("memberInfo");
+  // 로그인 유저 정보 받아오기
+  /* 로그인 정보 컨텍스트 */
+  const { token, handleLogout, loginInfo, validateToken } =
+    useContext(DetectLoginContext);
+
 
   // Stomp JS: https://stomp-js.github.io/stomp-websocket/codo/extra/docs-src/Usage.md.html#toc_5
   // Stomp JS: https://stomp-js.github.io/api-docs/latest/index.html
@@ -104,11 +107,15 @@ function Socket({ children }) {
     });
 
     // 개인이 좋아요 했는지 안했는지 검증
-    stompClient.current.subscribe("/queue/like/" + connectUser, (res) => {
-      const data = JSON.parse(res.body);
-      console.log(data);
-      setLike(data.like);
-    });
+
+    stompClient.current.subscribe(
+      "/queue/like/" + loginInfo.member_id,
+      (res) => {
+        const data = JSON.parse(res.body);
+        console.log(data);
+        setLike(data.like);
+      },
+    );
   };
 
   // 댓글 알람
@@ -117,7 +124,9 @@ function Socket({ children }) {
 
     //  알람목록
     stompClient.current.subscribe(
-      "/queue/comment/alarm/" + connectUser,
+
+      "/queue/comment/alarm/" + loginInfo.member_id,
+
       (res) => {
         const data = JSON.parse(res.body);
         console.log(data);
@@ -127,7 +136,7 @@ function Socket({ children }) {
 
     // 알람 개수
     stompClient.current.subscribe(
-      "/queue/comment/alarm/count/" + connectUser,
+      "/queue/comment/alarm/count/" + loginInfo.member_id,
       (res) => {
         const data = JSON.parse(res.body);
         console.log(data);
@@ -137,7 +146,8 @@ function Socket({ children }) {
 
     // 답변 알람
     stompClient.current.subscribe(
-      "/queue/inquiry/alarm/" + connectUser,
+      "/queue/inquiry/alarm/" + loginInfo.member_id,
+
       (res) => {
         const data = JSON.parse(res.body);
         console.log(data);
@@ -147,7 +157,7 @@ function Socket({ children }) {
 
     // 답변 개수
     stompClient.current.subscribe(
-      "/queue/inquiry/alarm/count/" + connectUser,
+      "/queue/inquiry/alarm/count/" + loginInfo.member_id,
       (res) => {
         const data = JSON.parse(res.body);
         console.log(data);

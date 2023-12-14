@@ -35,7 +35,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 function VoteView() {
-  const connectUser = localStorage.getItem("memberInfo");
+  const { token, handleLogout, loginInfo, validateToken } =
+    useContext(DetectLoginContext);
 
   const {
     stompClient,
@@ -141,7 +142,7 @@ function VoteView() {
       destination: "/app/votea",
       body: JSON.stringify({
         vote_board_id: id,
-        vote_member_id: connectUser,
+        vote_member_id: loginInfo.member_id,
       }),
     });
   }
@@ -152,7 +153,7 @@ function VoteView() {
       destination: "/app/voteb",
       body: JSON.stringify({
         vote_board_id: id,
-        vote_member_id: connectUser,
+        vote_member_id: loginInfo.member_id,
       }),
     });
   }

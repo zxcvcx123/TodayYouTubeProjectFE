@@ -27,7 +27,7 @@ import ScrollToTop from "../util/ScrollToTop";
 
 function BoardView() {
   /* 로그인 정보 컨텍스트 */
-  const { token, handleLogout, loginInfo, validateToken, connectUser } =
+  const { token, handleLogout, loginInfo, validateToken } =
     useContext(DetectLoginContext);
 
   // state
@@ -75,7 +75,7 @@ function BoardView() {
       }
 
       // 게시글 데이터를 가져온 후 작성자 여부를 확인하여 isAuthor 설정
-      if (connectUser === response.data.board_member_id) {
+      if (loginInfo.member_id === response.data.board_member_id) {
         setIsAuthor(true);
       }
     });
@@ -114,7 +114,7 @@ function BoardView() {
         is_show: board.is_show,
         countlike: board.countlike,
         views: board.views,
-        login_member_id: connectUser,
+        login_member_id: loginInfo.member_id,
       })
       .then(() => {
         toast({
@@ -162,7 +162,7 @@ function BoardView() {
     }
 
     // 작성자 본인 여부 검증
-    if (connectUser === board.board_member_id) {
+    if (loginInfo.member_id === board.board_member_id) {
       navigate("/board/edit/" + id);
     } else {
       window.alert("작성자 본인만 수정이 가능합니다.");

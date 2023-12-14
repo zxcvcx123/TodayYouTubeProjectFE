@@ -44,12 +44,16 @@ Stack.propTypes = {
   children: PropTypes.node,
 };
 
-export function Nav({ setSocket }) {
+export function Nav({ setSocket, setBoardCategory }) {
+  // 로그인 유저 정보
+  const { token, handleLogout, loginInfo, validateToken } =
+    useContext(DetectLoginContext);
+
   let navigate = useNavigate();
   let location = useLocation();
 
-  const { token, handleLogout, loginInfo, validateToken } =
-    useContext(DetectLoginContext);
+  console.log(loginInfo);
+  console.log(token);
 
   const {
     stompClient,
@@ -60,12 +64,10 @@ export function Nav({ setSocket }) {
     setAlarmCount,
   } = useContext(SocketContext);
 
-  const connectUser = localStorage.getItem("memberInfo");
-
   useEffect(() => {
     axios
       .post("http://localhost:3000/api/websocket/alarmlist", {
-        userId: connectUser,
+        userId: loginInfo.member_id,
       })
       .then((res) => {
         setAlarmList(res.data);
@@ -76,7 +78,7 @@ export function Nav({ setSocket }) {
 
     axios
       .post("http://localhost:3000/api/websocket/alarmcount", {
-        userId: connectUser,
+        userId: loginInfo.member_id,
       })
       .then((res) => {
         setAlarmCount(res.data);
@@ -118,7 +120,7 @@ export function Nav({ setSocket }) {
   // 알람 모두 읽기
   function handleAllRead() {
     stompClient.current.publish({
-      destination: "/app/comment/alarm/allread/" + connectUser,
+      destination: "/app/comment/alarm/allread/" + loginInfo.member_id,
     });
   }
 
@@ -129,7 +131,7 @@ export function Nav({ setSocket }) {
       destination: "/app/comment/alarm/delete",
       body: JSON.stringify({
         id: id,
-        userId: connectUser,
+        userId: loginInfo.member_id,
         mode: "ONE",
       }),
     });
@@ -141,7 +143,7 @@ export function Nav({ setSocket }) {
     stompClient.current.publish({
       destination: "/app/comment/alarm/delete",
       body: JSON.stringify({
-        userId: connectUser,
+        userId: loginInfo.member_id,
         mode: "ALL",
       }),
     });
@@ -169,6 +171,92 @@ export function Nav({ setSocket }) {
           로고
         </Button>
         <Flex>
+          <Menu>
+            <MenuButton as={Button} w={120} size="md" variant="ghost">
+              게시판
+              <ChevronDownIcon />
+            </MenuButton>
+            <MenuList>
+              <MenuItem
+                onClick={(e) => {
+                  navigate("board/list?category=notice");
+                  setBoardCategory("공지");
+                }}
+              >
+                공지
+              </MenuItem>
+              <MenuItem
+                onClick={(e) => {
+                  navigate("board/list?category=sports");
+                  setBoardCategory("스포츠");
+                }}
+              >
+                스포츠
+              </MenuItem>
+              <MenuItem
+                onClick={(e) => {
+                  navigate("board/list?category=mukbang");
+                  setBoardCategory("먹방");
+                }}
+              >
+                먹방
+              </MenuItem>
+              <MenuItem
+                onClick={(e) => {
+                  navigate("board/list?category=daily");
+                  setBoardCategory("일상");
+                }}
+              >
+                일상
+              </MenuItem>
+              <MenuItem
+                onClick={(e) => {
+                  navigate("board/list?category=cooking");
+                  setBoardCategory("요리");
+                }}
+              >
+                요리
+              </MenuItem>
+              <MenuItem
+                onClick={(e) => {
+                  navigate("board/list?category=movie");
+                  setBoardCategory("영화/드라마");
+                }}
+              >
+                영화/드라마
+              </MenuItem>
+              <MenuItem
+                onClick={(e) => {
+                  navigate("board/list?category=game");
+                  setBoardCategory("게임");
+                }}
+              >
+                게임
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  navigate("board/vote/list?p=1");
+                  setBoardCategory("투표");
+                }}
+              >
+                투표
+              </MenuItem>
+              <MenuItem onClick={() => navigate("/chat")}>채팅</MenuItem>
+              <Divider />
+              <MenuItem
+                onClick={(e) => {
+                  navigate("/inquiry/list");
+                  setBoardCategory("문의게시판");
+                }}
+              >
+                문의게시판
+              </MenuItem>
+              <Divider />
+              <MenuItem onClick={() => navigate("/admin")}>
+                관리자(임시)
+              </MenuItem>
+            </MenuList>
+          </Menu>
           <Button
             onClick={handleRandomView}
             w={120}
@@ -178,47 +266,6 @@ export function Nav({ setSocket }) {
           >
             오늘 뭐 볼까?
           </Button>
-          <Menu>
-            <MenuButton as={Button} w={120} size="md" variant="ghost">
-              게시판
-              <ChevronDownIcon />
-            </MenuButton>
-            <MenuList>
-              <MenuItem onClick={() => navigate("board/list?category=notice")}>
-                공지
-              </MenuItem>
-              <MenuItem onClick={() => navigate("board/list?category=sports")}>
-                스포츠
-              </MenuItem>
-              <MenuItem onClick={() => navigate("board/list?category=mukbang")}>
-                먹방
-              </MenuItem>
-              <MenuItem onClick={() => navigate("board/list?category=daily")}>
-                일상
-              </MenuItem>
-              <MenuItem onClick={() => navigate("board/list?category=cooking")}>
-                요리
-              </MenuItem>
-              <MenuItem onClick={() => navigate("board/list?category=movie")}>
-                영화/드라마
-              </MenuItem>
-              <MenuItem onClick={() => navigate("board/list?category=game")}>
-                게임
-              </MenuItem>
-              <MenuItem onClick={() => navigate("board/vote/list")}>
-                투표
-              </MenuItem>
-              <MenuItem onClick={() => navigate("/chat")}>채팅</MenuItem>
-              <Divider />
-              <MenuItem onClick={() => navigate("/inquiry/list")}>
-                문의게시판
-              </MenuItem>
-              <Divider />
-              <MenuItem onClick={() => navigate("/admin")}>
-                관리자(임시)
-              </MenuItem>
-            </MenuList>
-          </Menu>
         </Flex>
         <Box>
           <SearchMain />
