@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Button,
   Card,
   CardBody,
   CardFooter,
+  CardHeader,
   Flex,
   Heading,
+  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -21,6 +23,7 @@ import {
   PopoverContent,
   PopoverHeader,
   PopoverTrigger,
+  Select,
   Stack,
   StackDivider,
   Text,
@@ -34,7 +37,12 @@ function AdminMemberInfoDetails({
   handleMemberInfoMyInfo,
   handleMemberComment,
 }) {
+  const [suspensionReason, setSuspensionReason] = useState("");
+  const [suspensionPeriod, setSuspensionPeriod] = useState(7);
+
   const { onClose, isOpen, onOpen } = useDisclosure();
+
+  function handleSuspensionButton() {}
 
   return (
     <Box>
@@ -222,14 +230,47 @@ function AdminMemberInfoDetails({
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
+          <ModalHeader>회원 정지</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>회원을 정지시키시겠습니까?</ModalBody>
+          <ModalBody>
+            <Card>
+              <CardBody>
+                <Stack divider={<StackDivider />} spacing="4">
+                  <Box>
+                    <Heading size="xs" textTransform="uppercase">
+                      정지사유
+                    </Heading>
+                    <Input
+                      type="text"
+                      pt="2"
+                      fontSize="sm"
+                      onChange={(e) => setSuspensionReason(e.target.value)}
+                    ></Input>
+                  </Box>
+                  <Box>
+                    <Heading size="xs" textTransform="uppercase">
+                      정지기간
+                    </Heading>
+                    <Select
+                      defaultValue={7}
+                      onChange={(e) => setSuspensionPeriod(e.target.value)}
+                    >
+                      <option value={7}>7</option>
+                      <option value={30}>30</option>
+                      <option value={999}>999</option>
+                    </Select>
+                  </Box>
+                </Stack>
+              </CardBody>
+            </Card>
+          </ModalBody>
           <ModalFooter>
             <Button variant={"ghost"} onClick={onClose}>
               닫기
             </Button>
-            <Button colorScheme="blue">삭제</Button>
+            <Button colorScheme="red" onClick={handleSuspensionButton}>
+              정지
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

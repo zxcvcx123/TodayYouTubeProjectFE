@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
+  Checkbox,
   Flex,
   Heading,
   Input,
@@ -22,6 +23,7 @@ function AdminMemberList(props) {
   const [memberList, setMemberList] = useState(null);
   const [pageInfo, setPageInfo] = useState(null);
   const [searchById, setSearchById] = useState("");
+  const [isManaging, setIsManaging] = useState(false);
 
   const navigate = useNavigate();
   let [params] = useSearchParams();
@@ -70,6 +72,7 @@ function AdminMemberList(props) {
         <Table>
           <Thead>
             <Tr>
+              <Td>선택</Td>
               <Td
                 fontWeight={"bold"}
                 borderColor={"black"}
@@ -122,6 +125,12 @@ function AdminMemberList(props) {
                   _hover={{ backgroundColor: "red.100" }}
                   onClick={() => navigate("/admin/member/" + member.member_id)}
                 >
+                  <Td
+                    textAlign={"center"}
+                    onClick={(e) => e.stopPropagation(e)}
+                  >
+                    <Checkbox borderColor="black"></Checkbox>
+                  </Td>
                   <Td textAlign={"center"}>
                     {memberList.indexOf(member) +
                       1 +
