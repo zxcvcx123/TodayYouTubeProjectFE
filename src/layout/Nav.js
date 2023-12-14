@@ -51,6 +51,9 @@ export function Nav({ setSocket, setBoardCategory }) {
   const { token, handleLogout, loginInfo, validateToken } =
     useContext(DetectLoginContext);
 
+  console.log(loginInfo);
+  console.log(token);
+
   const {
     stompClient,
     IsConnected,

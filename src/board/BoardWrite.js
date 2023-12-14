@@ -44,14 +44,13 @@ function BoardWrite() {
 
   // 비로그인 상태로 글쓰기 경로 직접 접근시 경고 발생 후 로그인페이지로 이동
   useEffect(() => {
-    if (loginInfo == null) {
-      if (!token.detectLogin) {
-        window.alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-        navigate("/member/login");
-      }
+    if (!token.detectLogin) {
+      window.alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+      navigate("/member/login");
     }
+
     console.log(boardInfo);
-  }, [loginInfo]);
+  }, []);
 
   // useEffect를 사용하여 titleError가 변경(에러발생)될 때마다 스크롤이 제목 라벨으로 이동
   useEffect(() => {

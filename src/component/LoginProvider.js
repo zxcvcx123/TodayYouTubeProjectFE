@@ -16,9 +16,6 @@ export function LoginProvider({ children }) {
   });
   const [loginInfo, setLoginInfo] = useState({});
 
-  //정모가 필요해서 만듬
-  const [connectUser, setConnectUser] = useState("");
-
   useEffect(() => {
     const fetchData = async () => {
       validateToken();
@@ -32,9 +29,6 @@ export function LoginProvider({ children }) {
     const authority = localStorage.getItem("authority");
     const memberInfo = localStorage.getItem("memberInfo");
     console.log(memberInfo);
-
-    // 정모가 필요해서 만듬
-    setConnectUser(localStorage.getItem("memberInfo"));
 
     // 응답 인터셉터
     axios.interceptors.response.use(
@@ -111,11 +105,13 @@ export function LoginProvider({ children }) {
           handleLogout: 로그아웃 기능
           loginInfo: 로그인 사용자 정보(memberId, nickname, role_id, email)
       */}
-      <DetectLoginContext.Provider
-        value={{ token, handleLogout, loginInfo, validateToken, connectUser }}
-      >
-        {children}
-      </DetectLoginContext.Provider>
+      {token.detectLogin && (
+        <DetectLoginContext.Provider
+          value={{ token, handleLogout, loginInfo, validateToken }}
+        >
+          {children}
+        </DetectLoginContext.Provider>
+      )}
     </>
   );
 }
