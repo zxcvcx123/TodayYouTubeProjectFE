@@ -30,6 +30,8 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { Sidenav } from "./Sidenav";
+import axios from "axios";
+import { useParams, useSearchParams } from "react-router-dom";
 
 function AdminMemberInfoDetails({
   memberInfo,
@@ -42,7 +44,13 @@ function AdminMemberInfoDetails({
 
   const { onClose, isOpen, onOpen } = useDisclosure();
 
-  function handleSuspensionButton() {}
+  function handleSuspensionButton() {
+    axios.post("/api/admin/member/", {
+      member_id: memberInfo.member_id,
+      suspensionPeriod: suspensionPeriod,
+      suspensionReason: suspensionReason,
+    });
+  }
 
   return (
     <Box>
