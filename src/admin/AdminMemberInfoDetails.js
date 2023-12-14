@@ -26,6 +26,7 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
+import { Sidenav } from "./Sidenav";
 
 function AdminMemberInfoDetails({
   memberInfo,
