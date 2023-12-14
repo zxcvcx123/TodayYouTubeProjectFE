@@ -16,7 +16,6 @@ function Socket({ children }) {
   const { token, handleLogout, loginInfo, validateToken } =
     useContext(DetectLoginContext);
 
-
   // Stomp JS: https://stomp-js.github.io/stomp-websocket/codo/extra/docs-src/Usage.md.html#toc_5
   // Stomp JS: https://stomp-js.github.io/api-docs/latest/index.html
 
@@ -45,8 +44,10 @@ function Socket({ children }) {
   const [voteChecked, setVoteChecked] = useState(null);
 
   useEffect(() => {
-    connect();
-  }, []);
+    if (loginInfo !== null) {
+      connect();
+    }
+  }, [loginInfo]);
 
   // 유효성검사 보내는쪽에서 이거 넣으면 됨
   // IsConnected false = 미연결;
@@ -124,7 +125,6 @@ function Socket({ children }) {
 
     //  알람목록
     stompClient.current.subscribe(
-
       "/queue/comment/alarm/" + loginInfo.member_id,
 
       (res) => {
@@ -177,11 +177,14 @@ function Socket({ children }) {
       setOptionTwoVotes(data.voted_b);
     });
 
-    stompClient.current.subscribe("/queue/votecheck/" + connectUser, (res) => {
-      const data = JSON.parse(res.body);
-      console.log(data);
-      setVoteChecked(data.checked_vote_a);
-    });
+    stompClient.current.subscribe(
+      "/queue/votecheck/" + loginInfo.member_id,
+      (res) => {
+        const data = JSON.parse(res.body);
+        console.log(data);
+        setVoteChecked(data.checked_vote_a);
+      },
+    );
   };
 
   return (

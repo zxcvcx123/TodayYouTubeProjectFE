@@ -41,17 +41,19 @@ function InquiryList(props) {
   const location = useLocation();
 
   useEffect(() => {
-    axios
-      .post("/api/inquiry/list?" + params, {
-        login_member_id: loginInfo.member_id,
-        role_name: loginInfo.role_name,
-      })
-      .then((response) => {
-        setInquiryList(response.data.inquiryList);
-        setPageInfo(response.data.pageInfo);
-      })
-      .catch(() => console.log("bad"));
-  }, [location, params]);
+    if (loginInfo !== null) {
+      axios
+        .post("/api/inquiry/list?" + params, {
+          login_member_id: loginInfo.member_id,
+          role_name: loginInfo.role_name,
+        })
+        .then((response) => {
+          setInquiryList(response.data.inquiryList);
+          setPageInfo(response.data.pageInfo);
+        })
+        .catch(() => console.log("bad"));
+    }
+  }, [location, params, loginInfo]);
 
   // if (inquiryList == null || loginInfo == null) {
   //   return <Spinner />;

@@ -43,11 +43,10 @@ export function MemberLogin() {
           description: "로그인 되었습니다.",
           status: "info",
         });
-        const { grantType, accessToken, refreshToken } = response.data.token;
+        const { grantType, accessToken } = response.data.token;
         const authority = response.data.authentication[0].toString();
         localStorage.setItem("grantType", grantType);
         localStorage.setItem("accessToken", accessToken);
-        localStorage.setItem("refreshToken", refreshToken);
         localStorage.setItem("authority", authority);
         localStorage.setItem("memberInfo", member_id);
         navigate("/");

@@ -20,18 +20,20 @@ function BoardLike({ id }) {
   const { test } = useOutletContext();
 
   useEffect(() => {
-    axios
-      .post("/api/like/board", {
-        board_id: id,
-        member_id: loginInfo.member_id,
-      })
-      .then((response) => {
-        setCountLike(response.data.countlike);
-        setLike(response.data.like);
-      })
-      .catch(() => console.log("bad"))
-      .finally(() => console.log("완료"));
-  }, [like, countLike]);
+    if (loginInfo !== null) {
+      axios
+        .post("/api/like/board", {
+          board_id: id,
+          member_id: loginInfo.member_id,
+        })
+        .then((response) => {
+          setCountLike(response.data.countlike);
+          setLike(response.data.like);
+        })
+        .catch(() => console.log("bad"))
+        .finally(() => console.log("완료"));
+    }
+  }, [like, countLike, loginInfo]);
 
   console.log(stompClient.current);
 

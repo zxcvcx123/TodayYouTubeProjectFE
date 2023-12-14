@@ -2,13 +2,14 @@ import { Box } from "@chakra-ui/react";
 import { Outlet } from "react-router-dom";
 import { Footer } from "./Footer";
 import { Nav } from "./Nav";
-import LoginProvider from "../component/LoginProvider";
-import { createContext, useRef, useState } from "react";
+import LoginProvider, { DetectLoginContext } from "../component/LoginProvider";
+import { createContext, useContext, useRef, useState } from "react";
 import Socket from "../socket/Socket";
 import MiniHomepy from "../member/minihomepy/MiniHomepy";
 
 export function HomeLayout() {
   let test = "테스트1";
+
   const [boardCategory, setBoardCategory] = useState("");
   return (
     <Box bg="blackAlpha.200">

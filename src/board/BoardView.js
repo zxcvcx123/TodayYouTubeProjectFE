@@ -65,21 +65,23 @@ function BoardView() {
 
   // 초기 렌더링
   useEffect(() => {
-    console.log("랜더링 테스트");
-    axios.get("/api/board/id/" + id).then((response) => {
-      setBoard(response.data);
+    if (loginInfo !== null) {
+      console.log("랜더링 테스트");
+      axios.get("/api/board/id/" + id).then((response) => {
+        setBoard(response.data);
 
-      if (!response.data.is_show) {
-        navigate("board/list?category=notice");
-        window.alert("삭제된 게시물입니다.");
-      }
+        if (!response.data.is_show) {
+          navigate("board/list?category=notice");
+          window.alert("삭제된 게시물입니다.");
+        }
 
-      // 게시글 데이터를 가져온 후 작성자 여부를 확인하여 isAuthor 설정
-      if (loginInfo.member_id === response.data.board_member_id) {
-        setIsAuthor(true);
-      }
-    });
-  }, [isSubmitting, location]);
+        // 게시글 데이터를 가져온 후 작성자 여부를 확인하여 isAuthor 설정
+        if (loginInfo.member_id === response.data.board_member_id) {
+          setIsAuthor(true);
+        }
+      });
+    }
+  }, [isSubmitting, location, loginInfo]);
 
   // 초기 렌더링 파일 목록 가져오기
   useEffect(() => {

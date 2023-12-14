@@ -65,28 +65,30 @@ export function Nav({ setSocket, setBoardCategory }) {
   } = useContext(SocketContext);
 
   useEffect(() => {
-    axios
-      .post("http://localhost:3000/api/websocket/alarmlist", {
-        userId: loginInfo.member_id,
-      })
-      .then((res) => {
-        setAlarmList(res.data);
-        console.log(res.data);
-      })
-      .catch()
-      .finally();
+    if (loginInfo !== null) {
+      axios
+        .post("http://localhost:3000/api/websocket/alarmlist", {
+          userId: loginInfo.member_id,
+        })
+        .then((res) => {
+          setAlarmList(res.data);
+          console.log(res.data);
+        })
+        .catch()
+        .finally();
 
-    axios
-      .post("http://localhost:3000/api/websocket/alarmcount", {
-        userId: loginInfo.member_id,
-      })
-      .then((res) => {
-        setAlarmCount(res.data);
-        console.log(res.data);
-      })
-      .catch()
-      .finally();
-  }, [location]);
+      axios
+        .post("http://localhost:3000/api/websocket/alarmcount", {
+          userId: loginInfo.member_id,
+        })
+        .then((res) => {
+          setAlarmCount(res.data);
+          console.log(res.data);
+        })
+        .catch()
+        .finally();
+    }
+  }, [location, loginInfo]);
 
   function handleRandomView() {
     axios
