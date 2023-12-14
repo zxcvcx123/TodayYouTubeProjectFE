@@ -47,8 +47,8 @@ function AdminMemberInfoDetails({
   function handleSuspensionButton() {
     axios.post("/api/admin/member/", {
       member_id: memberInfo.member_id,
-      suspensionPeriod: suspensionPeriod,
-      suspensionReason: suspensionReason,
+      period: suspensionPeriod,
+      reason: suspensionReason,
     });
   }
 
