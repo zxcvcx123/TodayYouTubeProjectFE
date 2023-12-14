@@ -15,7 +15,13 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useOutletContext,
+  useParams,
+} from "react-router-dom";
 import { BoardComment } from "../comment/BoardComment";
 import BoardLike from "../like/BoardLike";
 import YoutubeInfo from "../component/YoutubeInfo";
@@ -33,6 +39,7 @@ import {
   faCheckDouble,
   faCircleCheck,
 } from "@fortawesome/free-solid-svg-icons";
+import LoadingPage from "../component/LoadingPage";
 
 function VoteView() {
   const { token, handleLogout, loginInfo, validateToken } =
@@ -120,7 +127,7 @@ function VoteView() {
   }, [loginInfo]);
 
   if (board === null) {
-    return <Spinner />;
+    return <LoadingPage />;
   }
 
   // 링크 복사 버튼 클릭
@@ -187,7 +194,7 @@ function VoteView() {
   return (
     <Box m={"50px 20% 20px 50px"}>
       <Box mb={5}>
-        <Heading>{boardInfo} 게시판</Heading>
+        <Heading>투표 게시판</Heading>
       </Box>
 
       {/* -------------------- 상단 영역 -------------------- */}
@@ -234,7 +241,6 @@ function VoteView() {
           <Box>
             <YoutubeInfo link={board.link_a} extraVideo={true} />
             <Button
-              id="BtnA"
               colorScheme="blue"
               w="100%"
               h={20}
@@ -260,7 +266,6 @@ function VoteView() {
           <Box>
             <YoutubeInfo link={board.link_b} extraVideo={true} />
             <Button
-              id="BtnB"
               colorScheme="red"
               w="100%"
               h={20}

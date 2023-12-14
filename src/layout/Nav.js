@@ -44,7 +44,7 @@ Stack.propTypes = {
   children: PropTypes.node,
 };
 
-export function Nav({ setSocket, setBoardCategory }) {
+export function Nav({ setSocket }) {
   // 로그인 유저 정보
   const { token, handleLogout, loginInfo, validateToken } =
     useContext(DetectLoginContext);
@@ -179,7 +179,6 @@ export function Nav({ setSocket, setBoardCategory }) {
               <MenuItem
                 onClick={(e) => {
                   navigate("board/list?category=notice");
-                  setBoardCategory("공지");
                 }}
               >
                 공지
@@ -187,7 +186,6 @@ export function Nav({ setSocket, setBoardCategory }) {
               <MenuItem
                 onClick={(e) => {
                   navigate("board/list?category=sports");
-                  setBoardCategory("스포츠");
                 }}
               >
                 스포츠
@@ -195,7 +193,6 @@ export function Nav({ setSocket, setBoardCategory }) {
               <MenuItem
                 onClick={(e) => {
                   navigate("board/list?category=mukbang");
-                  setBoardCategory("먹방");
                 }}
               >
                 먹방
@@ -203,7 +200,6 @@ export function Nav({ setSocket, setBoardCategory }) {
               <MenuItem
                 onClick={(e) => {
                   navigate("board/list?category=daily");
-                  setBoardCategory("일상");
                 }}
               >
                 일상
@@ -211,7 +207,6 @@ export function Nav({ setSocket, setBoardCategory }) {
               <MenuItem
                 onClick={(e) => {
                   navigate("board/list?category=cooking");
-                  setBoardCategory("요리");
                 }}
               >
                 요리
@@ -219,7 +214,6 @@ export function Nav({ setSocket, setBoardCategory }) {
               <MenuItem
                 onClick={(e) => {
                   navigate("board/list?category=movie");
-                  setBoardCategory("영화/드라마");
                 }}
               >
                 영화/드라마
@@ -227,7 +221,6 @@ export function Nav({ setSocket, setBoardCategory }) {
               <MenuItem
                 onClick={(e) => {
                   navigate("board/list?category=game");
-                  setBoardCategory("게임");
                 }}
               >
                 게임
@@ -235,7 +228,6 @@ export function Nav({ setSocket, setBoardCategory }) {
               <MenuItem
                 onClick={() => {
                   navigate("board/vote/list?p=1");
-                  setBoardCategory("투표");
                 }}
               >
                 투표
@@ -245,7 +237,6 @@ export function Nav({ setSocket, setBoardCategory }) {
               <MenuItem
                 onClick={(e) => {
                   navigate("/inquiry/list");
-                  setBoardCategory("문의게시판");
                 }}
               >
                 문의게시판
