@@ -12,14 +12,14 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { hover } from "@testing-library/user-event/dist/hover";
 import axios from "axios";
 
-function PageCount({ params }) {
+function PageCount(
+  {
+    /*params*/
+  },
+) {
   const [pageCount, setPageCount] = useState(10);
   const navigate = useNavigate();
-  const [params1] = useSearchParams(params);
-
-  // useEffect(() => {
-  //   axios.get("/api/board/list?" + params);
-  // }, [pageCount]);
+  const [params1] = useSearchParams(/*params*/);
 
   function handlePageCount(e) {
     const newPageCount = e.target.value;

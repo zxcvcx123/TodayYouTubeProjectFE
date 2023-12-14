@@ -4,16 +4,19 @@ import { faHouseUser } from "@fortawesome/free-solid-svg-icons/faHouseUser";
 import {
   faBookmark,
   faBookOpen,
-  faComments,
+  faChartPie,
+  faComment,
 } from "@fortawesome/free-solid-svg-icons";
-import { faHeart } from "@fortawesome/free-regular-svg-icons/faHeart";
 import "./minihomepy-styles/content.css";
-import { ArrowForwardIcon, HamburgerIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
 import { MiniHomepyList } from "./MiniHomepyList";
 import { Box, Center, Text } from "@chakra-ui/react";
 import { MiniHomepyHome } from "./MiniHomepyHome";
 import { MiniHomepyFavoriteList } from "./MiniHomepyFavoriteList";
+import { MiniHompeyAbout } from "./MiniHompeyAbout";
+import { MiniHomepyComment } from "./MiniHomepyComment";
+
+MiniHomepyComment.propTypes = {};
 
 function MiniHomepyMiddleContent({
   name,
@@ -21,6 +24,7 @@ function MiniHomepyMiddleContent({
   member_id,
   topRankBoardList,
   newBoardList,
+  favoriteBoardList,
   categoryOrdedBy,
   setCategoryOrdedBy,
   boardListAll,
@@ -30,12 +34,15 @@ function MiniHomepyMiddleContent({
   youtuberInfo,
   addYoutuber,
   setAddYoutuber,
+  homepyId,
 }) {
   return (
     <>
       <Box
         w={"100%"}
         h={"100%"}
+        border="1px solid white"
+        borderRadius={"10px"}
         bg={"transparent"}
         sx={{
           overflowY: "scroll",
@@ -57,6 +64,7 @@ function MiniHomepyMiddleContent({
                 <MiniHomepyHome
                   topRankBoardList={topRankBoardList}
                   newBoardList={newBoardList}
+                  favoriteBoardList={favoriteBoardList}
                 />
               )}
 
@@ -80,6 +88,14 @@ function MiniHomepyMiddleContent({
                   setAddYoutuber={setAddYoutuber}
                 />
               )}
+              {name === "COMMENT" && (
+                <MiniHomepyComment
+                  loginMember={loginMember}
+                  member_id={member_id}
+                  homepyId={homepyId}
+                />
+              )}
+              {name === "ABOUT" && <MiniHompeyAbout />}
             </Box>
           </Center>
           {/* 여기에 각 팝업의 내용을 추가 */}
@@ -94,6 +110,7 @@ export function MiniHomepyMiddleContainer({
   member_id,
   topRankBoardList,
   newBoardList,
+  favoriteBoardList,
   categoryOrdedBy,
   setCategoryOrdedBy,
   boardListAll,
@@ -103,6 +120,7 @@ export function MiniHomepyMiddleContainer({
   youtuberInfo,
   addYoutuber,
   setAddYoutuber,
+  homepyId,
 }) {
   let navigate = useNavigate();
   useEffect(() => {
@@ -139,6 +157,7 @@ export function MiniHomepyMiddleContainer({
           loginMember={loginMember}
           member_id={member_id}
           topRankBoardList={topRankBoardList}
+          favoriteBoardList={favoriteBoardList}
           newBoardList={newBoardList}
           categoryOrdedBy={categoryOrdedBy}
           setCategoryOrdedBy={setCategoryOrdedBy}
@@ -149,17 +168,12 @@ export function MiniHomepyMiddleContainer({
           youtuberInfo={youtuberInfo}
           addYoutuber={addYoutuber}
           setAddYoutuber={setAddYoutuber}
+          homepyId={homepyId}
         />
       )}
 
-      <div className="container">
+      <div className="barContainer">
         <div className="navigation">
-          <HamburgerIcon
-            color="white"
-            fontSize="1.5em"
-            position={"absolute"}
-            left={"10"}
-          />
           <ul>
             <li
               className="list active"
@@ -203,35 +217,36 @@ export function MiniHomepyMiddleContainer({
                 <span className="circle"></span>
               </a>
             </li>{" "}
-            <li className="list">
+            <li
+              className="list"
+              onClick={() => {
+                showPopup("COMMENT");
+              }}
+            >
               <a href="#">
                 <span className="icon">
-                  <FontAwesomeIcon icon={faHeart} />
+                  <FontAwesomeIcon icon={faComment} />
                 </span>
-                <span className="text">Photos</span>
+                <span className="text">COMMENT</span>
                 <span className="circle"></span>
               </a>
             </li>{" "}
-            <li className="list">
+            <li
+              className="list"
+              onClick={() => {
+                showPopup("ABOUT");
+              }}
+            >
               <a href="#">
                 <span className="icon">
-                  <FontAwesomeIcon icon={faComments} />
+                  <FontAwesomeIcon icon={faChartPie} />
                 </span>
-                <span className="text">Settings</span>
+                <span className="text">ABOUT</span>
                 <span className="circle"></span>
               </a>
             </li>
             <div className="indicator"></div>
           </ul>
-          <ArrowForwardIcon
-            color="white"
-            fontSize="1.8em"
-            position={"absolute"}
-            right={"10"}
-            onClick={() => {
-              navigate("/");
-            }}
-          />
         </div>
       </div>
     </>

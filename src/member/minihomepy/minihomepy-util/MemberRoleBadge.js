@@ -108,7 +108,7 @@ export function MemberRoleBadge() {
       )}
       {roleName === "운영자" && (
         <Badge
-          fontSize={"20px"}
+          fontSize={"15px"}
           backgroundColor={"black"}
           color="red"
           borderRadius={"8px"}

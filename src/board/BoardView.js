@@ -266,7 +266,7 @@ function BoardView() {
         {/*<FormLabel>본문</FormLabel>*/}
         <Box>
           {/* CKEditor 본문 영역 onReady => 높이 설정 */}
-          {!board && (
+          {board && (
             <CKEditor
               disabled={"true"}
               editor={ClassicEditor}
