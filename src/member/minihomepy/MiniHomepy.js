@@ -9,12 +9,12 @@ import { MiniHomepyLeftContainer } from "./MiniHomepyLeftContainer";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { MiniHomepyRightContainer } from "./MiniHomepyRightContainer";
-import { apikey } from "../config/apikey";
+import { config } from "../config/apikey";
 
 export let HomepyMemberContext = createContext(null);
 
 export function MiniHomepy(props) {
-  const API_KEY = apikey.apikey;
+  const API_KEY = config.apikey;
   // 로그인 정보
   const { loginInfo } = useContext(DetectLoginContext);
   // 미니홈피 정보
