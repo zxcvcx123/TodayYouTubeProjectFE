@@ -64,7 +64,7 @@ function BoardList() {
   const [boardInfo, setBoardInfo] = useState("");
   const [listCount, setListCount] = useState(null);
 
-  const [params] = useSearchParams();
+  const [params] = useSearchParams("");
 
   // 몇 개 씩 보여줄건지
   const [pageCount, setPageCount] = useState(10);
@@ -89,6 +89,7 @@ function BoardList() {
       setBoardInfo(response.data.boardInfo);
       setListCount(response.data.listCount);
     });
+
 
     if (params.get("s") === null) {
       setPageCount(10);

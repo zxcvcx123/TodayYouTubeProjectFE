@@ -23,7 +23,7 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
-import { apikey } from "../config/apikey";
+import { config } from "../config/apikey";
 import { faCircleQuestion } from "@fortawesome/free-regular-svg-icons";
 import YoutubeInfo from "../../component/YoutubeInfo";
 import { useNavigate } from "react-router-dom";
@@ -34,7 +34,7 @@ export function MiniHomepyFavoriteList({
   addYoutuber,
   setAddYoutuber,
 }) {
-  const API_KEY = apikey.apikey;
+  const API_KEY = config.apikey;
 
   let toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -90,6 +90,7 @@ export function MiniHomepyFavoriteList({
         w={"100%"}
         h={"100%"}
         bg="transparent"
+        pt={2}
         maxHeight={"100%"}
         fontFamily={"'Jua', sans-serif"}
         sx={{
@@ -117,7 +118,7 @@ export function MiniHomepyFavoriteList({
           mb={5}
           fontFamily={"'Jua', sans-serif"}
         >
-          <Box fontSize={"30px"} color={"#dcdcdc"}>
+          <Box fontSize={"35px"} color={"#dcdcdc"}>
             구독정보
           </Box>
           <Button
@@ -211,8 +212,8 @@ export function MiniHomepyFavoriteList({
                 bg=" rgba( 255, 255, 255, 0.1 )"
                 borderRadius={"20px"}
                 key={youtuberInfo.id}
-                mt={2}
-                mb={2}
+                mt={1.5}
+                mb={1.5}
                 onClick={() => {
                   window.location.href =
                     "https://www.youtube.com/" + youtuberInfo.customUrl;
@@ -224,16 +225,16 @@ export function MiniHomepyFavoriteList({
                       <Box borderRadius={"20px"} mr={5}>
                         <Image
                           src={youtuberInfo.thumbnails}
-                          borderRadius={"60px"}
-                          w={"120px"}
-                          minWidth={"120px"}
-                          h={"120px"}
-                          minHeight={"120px"}
+                          borderRadius={"80px"}
+                          w={"160px"}
+                          minWidth={"160px"}
+                          h={"160px"}
+                          minHeight={"160px"}
                         />
                       </Box>
 
                       <Box>
-                        <Box color={"#dcdcdc"} fontSize={"20px"}>
+                        <Box color={"#dcdcdc"} fontSize={"25px"}>
                           채널명 :{" "}
                           <Text display={"inline"} color={"tomato"}>
                             {youtuberInfo.title.length > 25
@@ -241,15 +242,17 @@ export function MiniHomepyFavoriteList({
                               : youtuberInfo.title}
                           </Text>
                         </Box>
-                        <Box color={"#dcdcdc"} fontSize={"15px"}>
+                        <Box color={"#dcdcdc"} fontSize={"20px"}>
                           정보 :
-                          {youtuberInfo.description.length > 28
-                            ? `${youtuberInfo.description.slice(0, 28)}..`
+                          {youtuberInfo.description.length > 40
+                            ? `${youtuberInfo.description.slice(0, 40)}..`
                             : youtuberInfo.description}
                         </Box>
-
+                        <Box color={"#a0a0a0"} fontSize={"18px"}>
+                          국적: {youtuberInfo.country}
+                        </Box>
                         <Flex alignItems={"center"}>
-                          <Box color={"#a0a0a0"} fontSize={"15px"}>
+                          <Box color={"#a0a0a0"} fontSize={"18px"}>
                             구독자: {youtuberInfo.subscriberCount}
                           </Box>
 
@@ -262,24 +265,12 @@ export function MiniHomepyFavoriteList({
                             bg={"#a0a0a0"}
                             border={"1px solid #dcdcdc"}
                           />
-                          <Box color={"#a0a0a0"} fontSize={"15px"}>
+                          <Box color={"#a0a0a0"} fontSize={"18px"}>
                             누적 조회수: {youtuberInfo.viewCount}
-                          </Box>
-                          <Box
-                            mr={2}
-                            ml={2}
-                            h={"4px"}
-                            w={"4px"}
-                            borderRadius={"2px"}
-                            bg={"#a0a0a0"}
-                            border={"1px solid #dcdcdc"}
-                          />
-                          <Box color={"#a0a0a0"} fontSize={"15px"}>
-                            동영상: {youtuberInfo.videoCount}
                           </Box>
                         </Flex>
                         <Flex alignItems={"center"}>
-                          <Box color={"#a0a0a0"} fontSize={"15px"}>
+                          <Box color={"#a0a0a0"} fontSize={"18px"}>
                             유튜브 시작일:{youtuberInfo.ago}
                           </Box>
                           <Box
@@ -291,8 +282,8 @@ export function MiniHomepyFavoriteList({
                             bg={"#a0a0a0"}
                             border={"1px solid #dcdcdc"}
                           />
-                          <Box color={"#a0a0a0"} fontSize={"15px"}>
-                            국적: {youtuberInfo.country}
+                          <Box color={"#a0a0a0"} fontSize={"18px"}>
+                            동영상: {youtuberInfo.videoCount}
                           </Box>
                         </Flex>
                       </Box>

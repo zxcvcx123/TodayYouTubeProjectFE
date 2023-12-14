@@ -26,23 +26,45 @@ import MemberProfile from "../member/MemberProfile";
 import ScrollToTop from "../util/ScrollToTop";
 import ProgressBar from "./ProgressBar";
 import { CheckIcon } from "@chakra-ui/icons";
+import { SocketContext } from "../socket/Socket";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCheck,
+  faCheckDouble,
+  faCircleCheck,
+} from "@fortawesome/free-solid-svg-icons";
 
 function VoteView() {
   const { token, handleLogout, loginInfo, validateToken } =
     useContext(DetectLoginContext);
 
+  const {
+    stompClient,
+    voteResult,
+    setVoteResult,
+    optionOneVotes,
+    setOptionOneVotes,
+    optionTwoVotes,
+    setOptionTwoVotes,
+    voteChecked,
+    setVoteChecked,
+  } = useContext(SocketContext);
+
   // state
   const [board, setBoard] = useState(null);
   const [thumbnail, setThumbnail] = useState(null);
-  const [vote, setVote] = useState(null);
+
+  const totalVotes = (optionOneVotes || 0) + (optionTwoVotes || 0);
 
   // progressBar
-  const [optionOneVotes, setOptionOneVotes] = useState(0);
-  const [optionTwoVotes, setOptionTwoVotes] = useState(0);
-
-  const totalVotes = optionOneVotes + optionTwoVotes;
-  const optionOnePercentage = (optionOneVotes / totalVotes) * 100;
-  const optionTwoPercentage = (optionTwoVotes / totalVotes) * 100;
+  const optionOnePercentage =
+    totalVotes === 0
+      ? 0
+      : (((optionOneVotes || 0) / totalVotes || 1) * 100).toFixed(1);
+  const optionTwoPercentage =
+    totalVotes === 0
+      ? 0
+      : (((optionTwoVotes || 0) / totalVotes || 1) * 100).toFixed(1);
 
   //URL 매개변수 추출
   const { id } = useParams();
@@ -65,7 +87,10 @@ function VoteView() {
     axios.get("/api/vote/id/" + id).then((res) => {
       console.log(res.data);
       setBoard(res.data);
+      // count된 숫자 넣고 숫자에 따라서 set 해서 처음 % 반영
     });
+
+    // axios.get 해서 버튼을 눌렀는지 안눌렀는지 게시판번호/아이디 기준으로 조회
   }, []);
 
   if (board === null) {
@@ -111,17 +136,25 @@ function VoteView() {
   //   );
   // }
 
+  // 투표 A
   function handleVoteA() {
-    axios.put("/api/votea", {
-      vote_board_id: id,
-      vote_member_id: loginInfo.member_id,
+    stompClient.current.publish({
+      destination: "/app/votea",
+      body: JSON.stringify({
+        vote_board_id: id,
+        vote_member_id: loginInfo.member_id,
+      }),
     });
   }
 
+  // 투표 B
   function handleVoteB() {
-    axios.put("/api/voteb", {
-      vote_id: id,
-      vote_member_id: loginInfo.member_id,
+    stompClient.current.publish({
+      destination: "/app/voteb",
+      body: JSON.stringify({
+        vote_board_id: id,
+        vote_member_id: loginInfo.member_id,
+      }),
     });
   }
 
@@ -181,8 +214,13 @@ function VoteView() {
               onClick={() => {
                 handleVoteA();
               }}
+              isDisabled={voteChecked === 1 && true}
             >
-              <CheckIcon />
+              {voteChecked === 1 ? (
+                <FontAwesomeIcon icon={faCircleCheck} size="xl" />
+              ) : (
+                <FontAwesomeIcon icon={faCheck} />
+              )}
             </Button>
           </Box>
           <Heading>VS</Heading>
@@ -195,8 +233,13 @@ function VoteView() {
               onClick={() => {
                 handleVoteB();
               }}
+              isDisabled={voteChecked !== 1 && true}
             >
-              <CheckIcon />
+              {voteChecked !== 1 ? (
+                <FontAwesomeIcon icon={faCircleCheck} size="xl" />
+              ) : (
+                <FontAwesomeIcon icon={faCheck} />
+              )}
             </Button>
           </Box>
         </Flex>
