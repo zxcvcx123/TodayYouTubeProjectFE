@@ -144,7 +144,8 @@ export function MemberLogin() {
               </button>
             </div>
           </form>
-          <KakaoLogin />
+
+          {/*<KakaoLogin /> 작업중 */}
 
           <p className="mt-10 text-center text-sm text-gray-500">
             회원이 아니신가요?{" "}
