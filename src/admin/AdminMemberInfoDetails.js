@@ -38,6 +38,7 @@ function AdminMemberInfoDetails({
   return (
     <Box>
       <Card w={"80%"} p={"20px"} boxShadow={"none"} minWidth="1200px">
+        b.is_show
         <CardBody>
           <Stack mt="6" spacing="3">
             <Card mt={"5"}>
@@ -171,21 +172,36 @@ function AdminMemberInfoDetails({
                     </Flex>
                   </Flex>
                   <Flex>
-                    <Flex w={"50%"} mr={4}>
+                    <Flex w={"50%"} mr={4} borderRight={"1px solid #E2E4E8"}>
                       <Box>
                         <Heading size="s" textTransform="uppercase">
                           누른 좋아요
                         </Heading>
-                        <Button
+                        <Text
                           colorScheme="blue"
                           pl={2}
                           mt={1}
                           pt="2"
                           fontSize="sm"
-                          variant={"link"}
                         >
                           {memberInfo.countlike}
-                        </Button>
+                        </Text>
+                      </Box>
+                    </Flex>
+                    <Flex w={"50%"} mr={4}>
+                      <Box>
+                        <Heading size="s" textTransform="uppercase">
+                          활동 게시판
+                        </Heading>
+                        <Text
+                          colorScheme="blue"
+                          pl={2}
+                          mt={1}
+                          pt="2"
+                          fontSize="sm"
+                        >
+                          {memberInfo.countlike}
+                        </Text>
                       </Box>
                     </Flex>
                   </Flex>

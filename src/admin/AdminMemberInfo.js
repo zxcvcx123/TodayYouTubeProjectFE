@@ -24,7 +24,7 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useLocation, useParams, useSearchParams } from "react-router-dom";
 import AdminMemberInfoDetails from "./AdminMemberInfoDetails";
 import YoutubeInfo from "../component/YoutubeInfo";
 import Pagination from "../page/Pagination";
@@ -35,23 +35,28 @@ function AdminMemberInfo(props) {
   const [activeBoard, setActiveBoard] = useState(null);
   const [memberInfoBoardList, setMemberInfoBoardList] = useState(null);
   const [memberInfoCommentList, setMemberInfoCommentList] = useState(null);
+  const [pageInfo, setPageInfo] = useState(null);
 
   const [myInfo, setMyInfo] = useState(true);
   const [popMyBoardList, setPopMyBoardList] = useState(false);
   const [myBoardListDependency, setMyBoardListDependency] = useState(0);
   const [MemberComment, setMemberComment] = useState(false);
+  const location = useLocation();
+
+  const [params] = useSearchParams();
 
   useEffect(() => {
     axios
-      .get("/api/admin/member/" + member_id)
+      .get("/api/admin/member/" + member_id + "?" + params)
       .then((response) => {
         setMemberInfo(response.data.memberList);
         setActiveBoard(response.data.activeBoard);
         setMemberInfoBoardList(response.data.memberInfoBoardList);
         setMemberInfoCommentList(response.data.memberInfoCommentList);
+        setPageInfo(response.data.pageInfo);
       })
       .catch(() => console.log("bad"));
-  }, []);
+  }, [location]);
 
   function handleMemberInfoMyInfo() {
     setMyInfo(true);
@@ -94,7 +99,7 @@ function AdminMemberInfo(props) {
     document.querySelector(".myFavoriteBoardBtn").style.color = "black";
   }
 
-  if (memberInfo == null || memberInfoBoardList == null) {
+  if (memberInfo == null || memberInfoBoardList == null || pageInfo == null) {
     return <Spinner />;
   }
 
@@ -197,6 +202,7 @@ function AdminMemberInfo(props) {
                               <Th>작성일</Th>
                               <Th>추천수</Th>
                               <Th>조회수</Th>
+                              <Th>비고</Th>
                             </Tr>
                           </Thead>
                           <Tbody>
@@ -232,6 +238,9 @@ function AdminMemberInfo(props) {
                                   <Td verticalAlign={"middle"}>
                                     {mList.views}
                                   </Td>
+                                  <Td verticalAlign={"middle"} color={"red"}>
+                                    {mList.is_show || "삭제됨"}
+                                  </Td>
                                 </Tr>
                               ))}
                           </Tbody>
@@ -243,7 +252,9 @@ function AdminMemberInfo(props) {
               </Stack>
             </CardBody>
             <Divider color={"gray"} />
-            <CardFooter></CardFooter>
+            <CardFooter>
+              <Pagination pageInfo={pageInfo} />
+            </CardFooter>
           </Card>
         )}
         {MemberComment && (
