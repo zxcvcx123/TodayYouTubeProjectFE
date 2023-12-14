@@ -3,6 +3,9 @@ import React, { useState } from "react";
 import { Chart as ChartJS } from "chart.js/auto";
 
 export function LineChart({ chartData }) {
+  if (!chartData || !chartData.labels || !chartData.datasets) {
+    return null;
+  }
   const options = {
     interaction: {
       intersect: false,
