@@ -45,7 +45,7 @@ function AdminMemberInfoDetails({
   const { onClose, isOpen, onOpen } = useDisclosure();
 
   function handleSuspensionButton() {
-    axios.post("/api/admin/member/", {
+    axios.put("/api/admin/member/", {
       member_id: memberInfo.member_id,
       period: suspensionPeriod,
       reason: suspensionReason,
