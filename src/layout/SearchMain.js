@@ -28,6 +28,8 @@ export function SearchMain() {
     }
 
     currentParams.set("k", keyword);
+    currentParams.delete("s");
+    currentParams.delete("p");
     // navigate("?p=" + page + "&" + type + "=" + keyword);
     navigate("/board/list?" + currentParams);
   }
@@ -53,8 +55,8 @@ export function SearchMain() {
           onChange={(e) => setKeyword(e.target.value)}
         />
       </Box>
-      <Button width={100}>
-        <FontAwesomeIcon icon={faSearch} onClick={handleSearchClick} />
+      <Button width={100} onClick={handleSearchClick}>
+        <FontAwesomeIcon icon={faSearch} />
       </Button>
     </Flex>
   );
