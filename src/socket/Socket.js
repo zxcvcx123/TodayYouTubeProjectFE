@@ -11,8 +11,8 @@ import { Spinner } from "@chakra-ui/react";
 import { DetectLoginContext } from "../component/LoginProvider";
 
 function Socket({ children }) {
-  // 로그인 유저 정보 받아오기
-  const { connectUser } = useContext(DetectLoginContext);
+  // 유저 정보
+  const connectUser = localStorage.getItem("memberInfo");
 
   // Stomp JS: https://stomp-js.github.io/stomp-websocket/codo/extra/docs-src/Usage.md.html#toc_5
   // Stomp JS: https://stomp-js.github.io/api-docs/latest/index.html
@@ -39,6 +39,7 @@ function Socket({ children }) {
   const [voteResult, setVoteResult] = useState(null);
   const [optionOneVotes, setOptionOneVotes] = useState(0);
   const [optionTwoVotes, setOptionTwoVotes] = useState(0);
+  const [voteChecked, setVoteChecked] = useState(null);
 
   useEffect(() => {
     connect();
@@ -103,14 +104,11 @@ function Socket({ children }) {
     });
 
     // 개인이 좋아요 했는지 안했는지 검증
-    stompClient.current.subscribe(
-      "/queue/like/" + localStorage.getItem("memberInfo"),
-      (res) => {
-        const data = JSON.parse(res.body);
-        console.log(data);
-        setLike(data.like);
-      },
-    );
+    stompClient.current.subscribe("/queue/like/" + connectUser, (res) => {
+      const data = JSON.parse(res.body);
+      console.log(data);
+      setLike(data.like);
+    });
   };
 
   // 댓글 알람
@@ -119,7 +117,7 @@ function Socket({ children }) {
 
     //  알람목록
     stompClient.current.subscribe(
-      "/queue/comment/alarm/" + localStorage.getItem("memberInfo"),
+      "/queue/comment/alarm/" + connectUser,
       (res) => {
         const data = JSON.parse(res.body);
         console.log(data);
@@ -129,7 +127,7 @@ function Socket({ children }) {
 
     // 알람 개수
     stompClient.current.subscribe(
-      "/queue/comment/alarm/count/" + localStorage.getItem("memberInfo"),
+      "/queue/comment/alarm/count/" + connectUser,
       (res) => {
         const data = JSON.parse(res.body);
         console.log(data);
@@ -139,7 +137,7 @@ function Socket({ children }) {
 
     // 답변 알람
     stompClient.current.subscribe(
-      "/queue/inquiry/alarm/" + localStorage.getItem("memberInfo"),
+      "/queue/inquiry/alarm/" + connectUser,
       (res) => {
         const data = JSON.parse(res.body);
         console.log(data);
@@ -149,7 +147,7 @@ function Socket({ children }) {
 
     // 답변 개수
     stompClient.current.subscribe(
-      "/queue/inquiry/alarm/count/" + localStorage.getItem("memberInfo"),
+      "/queue/inquiry/alarm/count/" + connectUser,
       (res) => {
         const data = JSON.parse(res.body);
         console.log(data);
@@ -169,9 +167,10 @@ function Socket({ children }) {
       setOptionTwoVotes(data.voted_b);
     });
 
-    stompClient.current.subscribe("/queue/votecheck", (res) => {
+    stompClient.current.subscribe("/queue/votecheck/" + connectUser, (res) => {
       const data = JSON.parse(res.body);
       console.log(data);
+      setVoteChecked(data.checked_vote_a);
     });
   };
 
@@ -196,6 +195,8 @@ function Socket({ children }) {
         setOptionOneVotes,
         optionTwoVotes,
         setOptionTwoVotes,
+        voteChecked,
+        setVoteChecked,
       }}
     >
       {children}

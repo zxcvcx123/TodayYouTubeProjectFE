@@ -45,24 +45,15 @@ function VoteView() {
     setOptionOneVotes,
     optionTwoVotes,
     setOptionTwoVotes,
+    voteChecked,
+    setVoteChecked,
   } = useContext(SocketContext);
 
   // state
   const [board, setBoard] = useState(null);
   const [thumbnail, setThumbnail] = useState(null);
-  const [vote, setVote] = useState(null);
 
   const totalVotes = (optionOneVotes || 0) + (optionTwoVotes || 0);
-
-  // 투표 버튼 관련 state
-  const [voteAButtonActive, setVoteAButtonActive] = useState(true);
-  const [voteBButtonActive, setVoteBButtonActive] = useState(true);
-  const [voteAButtonIcon, setVoteAButtonIcon] = useState(
-    <FontAwesomeIcon icon={faCheck} />,
-  );
-  const [voteBButtonIcon, setVoteBButtonIcon] = useState(
-    <FontAwesomeIcon icon={faCheck} />,
-  );
 
   // progressBar
   const optionOnePercentage =
@@ -95,7 +86,10 @@ function VoteView() {
     axios.get("/api/vote/id/" + id).then((res) => {
       console.log(res.data);
       setBoard(res.data);
+      // count된 숫자 넣고 숫자에 따라서 set 해서 처음 % 반영
     });
+
+    // axios.get 해서 버튼을 눌렀는지 안눌렀는지 게시판번호/아이디 기준으로 조회
   }, []);
 
   if (board === null) {
@@ -143,14 +137,6 @@ function VoteView() {
 
   // 투표 A
   function handleVoteA() {
-    // 버튼 클릭 후 비활성화
-    setVoteAButtonActive(false);
-    setVoteBButtonActive(true);
-
-    // 버튼 클릭 후 아이콘 변경
-    setVoteAButtonIcon(<FontAwesomeIcon icon={faCircleCheck} size="xl" />);
-    setVoteBButtonIcon(<FontAwesomeIcon icon={faCheck} />);
-
     stompClient.current.publish({
       destination: "/app/votea",
       body: JSON.stringify({
@@ -162,14 +148,6 @@ function VoteView() {
 
   // 투표 B
   function handleVoteB() {
-    // 버튼 클릭 후 비활성화
-    setVoteBButtonActive(false);
-    setVoteAButtonActive(true);
-
-    // 버튼 클릭 후 아이콘 변경
-    setVoteBButtonIcon(<FontAwesomeIcon icon={faCircleCheck} size="xl" />);
-    setVoteAButtonIcon(<FontAwesomeIcon icon={faCheck} />);
-
     stompClient.current.publish({
       destination: "/app/voteb",
       body: JSON.stringify({
@@ -235,9 +213,13 @@ function VoteView() {
               onClick={() => {
                 handleVoteA();
               }}
-              isDisabled={!voteAButtonActive}
+              isDisabled={voteChecked === 1 && true}
             >
-              {voteAButtonIcon}
+              {voteChecked === 1 ? (
+                <FontAwesomeIcon icon={faCircleCheck} size="xl" />
+              ) : (
+                <FontAwesomeIcon icon={faCheck} />
+              )}
             </Button>
           </Box>
           <Heading>VS</Heading>
@@ -250,9 +232,13 @@ function VoteView() {
               onClick={() => {
                 handleVoteB();
               }}
-              isDisabled={!voteBButtonActive}
+              isDisabled={voteChecked !== 1 && true}
             >
-              {voteBButtonIcon}
+              {voteChecked !== 1 ? (
+                <FontAwesomeIcon icon={faCircleCheck} size="xl" />
+              ) : (
+                <FontAwesomeIcon icon={faCheck} />
+              )}
             </Button>
           </Box>
         </Flex>
