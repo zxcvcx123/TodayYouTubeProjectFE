@@ -350,7 +350,7 @@ function BoardList() {
                         >
                           <Flex align={"center"} gap={"10px"}>
                             {/* 썸네일 출력 */}
-                            <Box w={"50%"}>
+                            <Box w={"120px"} h={"70px"}>
                               <YoutubeInfo
                                 link={board.link}
                                 extraThumbnail={true}
