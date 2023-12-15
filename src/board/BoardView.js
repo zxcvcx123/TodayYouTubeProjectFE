@@ -198,19 +198,15 @@ function BoardView() {
     }
 
     return (
-      <FormControl mb={2}>
-        <FormLabel fontSize="xl" fontWeight="bold" color="purple.500">
+      <FormControl mb={2} backgroundColor={"rgb(0,0,0)"} p={"10px"}>
+        <FormLabel fontSize="xl" fontWeight="bold" color={"rgb(255,255,255)"}>
           추천 유튜브 영상
         </FormLabel>
         <Center>
           <Flex m={2} ml={0} gap={5}>
             {/* 유튜브 영상 출력 */}
             <YoutubeInfo link={board.link} extraVideo={true} />
-            <Card
-              p={2}
-              backgroundColor={"rgb(211,217,216)"}
-              justifyContent={"center"}
-            >
+            <Box justifyContent={"center"}>
               <Button
                 onClick={() => window.open(board.link)}
                 colorScheme="red"
@@ -221,7 +217,7 @@ function BoardView() {
               <Button onClick={handleCopyClick} colorScheme="blue">
                 유튜브 링크 복사
               </Button>
-            </Card>
+            </Box>
           </Flex>
         </Center>
       </FormControl>
@@ -230,7 +226,7 @@ function BoardView() {
 
   return (
     <Center>
-      <Box mt={"20px"} w={"70%"}>
+      <Box mt={"20px"} w={"1000px"}>
         <Box mb={5}>
           <Heading>{boardInfo} 게시판</Heading>
         </Box>
