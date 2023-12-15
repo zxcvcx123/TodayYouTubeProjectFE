@@ -3,9 +3,11 @@ import {
   Badge,
   Box,
   Button,
+  Center,
   Divider,
   Flex,
   HStack,
+  Image,
   Menu,
   MenuButton,
   MenuItem,
@@ -37,6 +39,7 @@ import { Stomp } from "@stomp/stompjs";
 import { SocketContext } from "../socket/Socket";
 import axios from "axios";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { Logo1WithText } from "../assets/Image";
 
 Stack.propTypes = {
   p: PropTypes.number,
@@ -162,27 +165,27 @@ export function Nav({ setSocket }) {
 
   return (
     <>
-      <div className="navBackground">
+    <div className="navBackground">
+      <Center bg="white" borderBottom={"5px solid rgb(255,0,0,0.5)"}>
         <Flex
+          // ml="100px"
           mt={2}
           h="100px"
-          w="100%"
+          w="70%"
           alignItems="center"
           justifyContent={"space-around"}
-          bgGradient="transparent"
-          color={"#dcdcdc"}
+          // bg="blackAlpha.100"
+          bg="white"
         >
-          <Button
-            borderStyle={"solid"}
-            size="md"
-            variant="link"
-            color={"#dcdcdc"}
+          <button
             onClick={() => {
               navigate("/");
             }}
           >
-            로고
-        </Button>
+
+            <Image src={Logo1WithText} minW={"200px"} maxW={"200px"} />
+          </button>
+  
         <Flex>
           <Menu>
             <MenuButton as={Button} w={120} size="md" variant="ghost">
@@ -266,12 +269,12 @@ export function Nav({ setSocket }) {
               w={120}
               borderStyle={"solid"}
               size="md"
-              variant="link"
-              color={"#dcdcdc"}
+              variant="ghost"
             >
               오늘 뭐 볼까?
             </Button>
           </Flex>
+          {/* ---------- 통합검색 ---------- */}
           <Box>
             <SearchMain />
           </Box>
@@ -286,7 +289,6 @@ export function Nav({ setSocket }) {
                         {alarmCount > 0 ? (
                           <FontAwesomeIcon
                             fontSize={"20px"}
-                            color={"#dcdcdc"}
                             icon={faBell}
                             color="gold"
                           />
@@ -422,7 +424,10 @@ export function Nav({ setSocket }) {
                     }}
                     w={90}
                     size="md"
-                    variant="ghost"
+                    variant="solid"
+                    backgroundColor={"rgb(0,35,150,0.9)"}
+                    _hover={{ bg: "rgba(0,35,150,0.2)", color: "black" }}
+                    color={"white"}
                   >
                     로그인
                   </Button>
@@ -431,6 +436,7 @@ export function Nav({ setSocket }) {
             </Flex>
           </Flex>
         </Flex>
+      </Center>
       </div>
     </>
   );

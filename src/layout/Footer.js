@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Spacer } from "@chakra-ui/react";
+import { Box, Button, Flex, Image, Spacer } from "@chakra-ui/react";
 import {
   faFacebook,
   faInstagram,
@@ -6,6 +6,8 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBlog, faCommentDots } from "@fortawesome/free-solid-svg-icons";
+import React from "react";
+import { Logo1WithText2 } from "../assets/Image";
 
 export function Footer() {
   return (
@@ -27,7 +29,7 @@ export function Footer() {
         justifyContent={"space-between"}
       >
         <Button color="white" size="lg" variant="link">
-          로고
+          <Image src={Logo1WithText2} minW={"150px"} maxW={"150px"} />
         </Button>
         <Button color="white" size="md" variant="link">
           이용약관

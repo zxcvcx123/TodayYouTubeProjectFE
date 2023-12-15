@@ -50,29 +50,19 @@ export function SearchMain() {
       <Box width={400}>
         <Input
           fontSize={13}
-          placeholder="검색어를 입력하세요"
-          _placeholder={{
-            fontFamily: "'Song Myung', serif;",
-            color: "#dcdcdc",
-            fontSize: "15px",
-          }}
+          placeholder="[게시판 통합검색] 검색어를 입력하세요"
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
+          borderRightRadius={0}
         />
       </Box>
       <Button
-        width={100}
+        width={70}
         onClick={handleSearchClick}
-        bg={"transparent"}
-        border={"1px solid #dcdcdc"}
-        variant="outline"
+        colorScheme="red"
+        borderLeftRadius={0}
       >
-        <FontAwesomeIcon
-          icon={faSearch}
-          color="#dcdcdc"
-          variant={"link"}
-          bg={"transparent"}
-        />
+        <FontAwesomeIcon icon={faSearch} />
       </Button>
     </Flex>
   );

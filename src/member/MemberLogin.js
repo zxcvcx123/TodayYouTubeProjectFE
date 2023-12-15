@@ -147,7 +147,6 @@ export function MemberLogin() {
               </button>
             </div>
           </form>
-
           <p className="mt-10 text-center text-sm text-gray-500">
             회원이 아니신가요?{" "}
             <a

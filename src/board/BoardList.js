@@ -80,21 +80,28 @@ function BoardList() {
   // navigate
   const navigate = useNavigate();
 
-  // 초기 이펙트
+  // 게시물 목록 불러오기
   useEffect(() => {
-    axios.get("/api/board/list?" + params).then((response) => {
-      setBoardList(response.data.boardList);
-      setPageInfo(response.data.pageInfo);
-      setBoardInfo(response.data.boardInfo);
-      setListCount(response.data.listCount);
-    });
+
+    axios
+      .get("/api/board/list?" + params)
+      .then((response) => {
+        setBoardList(response.data.boardList);
+        setPageInfo(response.data.pageInfo);
+        setBoardInfo(response.data.boardInfo);
+        setListCount(response.data.listCount);
+      })
+      .catch((error) => {
+        console.error("Error fetching board list:", error);
+        window.alert("게시글 목록을 가져오는 중에 오류가 발생했습니다.");
+      });
 
     if (params.get("s") === null) {
       setPageCount(10);
     }
   }, [location]);
 
-  // 몇 개씩 보여줄 건지
+  // 게시물 목록 한 페이지에 보여줄 게시글의 갯수 설정 버튼
   function handlePageCount(e) {
     const newPageCount = e.target.value;
     setPageCount(newPageCount);
@@ -104,12 +111,12 @@ function BoardList() {
     navigate("?" + params, { state: { refresh: true } });
   }
 
-  // 리스트 뷰 세팅 동작
+  // 리스트 뷰 형태로 게시물 목록 보여주기
   const switchToListView = () => {
     setCurrentView("list");
   };
 
-  // 그리드 뷰 세팅 동작
+  // 그리드 뷰 형태로 게시물 목록 보여주기
   const switchToGridView = () => {
     setCurrentView("grid");
   };
@@ -125,31 +132,31 @@ function BoardList() {
     }
   }
 
-  // 리스트 형태 제목 렌더링
+  // 리스트 형태 게시물 제목 렌더링
   function renderListTitle(board) {
     // 제목의 길이가 20자 이상일 경우 ...으로 자르고 툴팁으로 전체 제목을 표시
     if (board.title.length > 20) {
       return (
-        <Tooltip label={board.title}>
-          <>
-            <Flex>
-              {`${board.title.slice(0, 20)}...`}
+        <>
+          <Tooltip label={board.title}>
+            <Flex gap={2}>
+              {`${board.title.slice(0, 35)}...`}
               <FontAwesomeIcon icon={faComment} /> {board.count_comment}
             </Flex>
-            {boardInfo === "all" && (
-              <Box ml={"auto"}>
-                <Text>{board.categoryName} </Text>
-              </Box>
-            )}
-          </>
-        </Tooltip>
+          </Tooltip>
+          {boardInfo === "all" && (
+            <Box ml={"auto"}>
+              <Text>{board.categoryName} </Text>
+            </Box>
+          )}
+        </>
       );
     }
 
-    // 일반적인 제목 표시 (툴팁 없음)
+    // 일반적인 게시물 제목 표시 (툴팁 없음)
     return (
       <>
-        <Flex>
+        <Flex gap={2}>
           <Text>{board.title}</Text>
           <FontAwesomeIcon icon={faComment} />
           <Text>{board.count_comment}</Text>
@@ -163,7 +170,7 @@ function BoardList() {
     );
   }
 
-  // 그리드 형태 제목 렌더링
+  // 그리드 형태 게시물 제목 렌더링
   function renderGreedTitle(board) {
     // 제목의 길이가 15자 이상일 경우 ...으로 자르고 툴팁으로 전체 제목을 표시
     if (board.title.length > 15) {
@@ -181,7 +188,7 @@ function BoardList() {
       );
     }
 
-    // 일반적인 제목 표시 (툴팁 없음)
+    // 일반적인 게시물 제목 표시 (툴팁 없음)
     return (
       <Flex>
         <Text fontWeight={"bold"}>{board.title}</Text>
@@ -194,13 +201,15 @@ function BoardList() {
     );
   }
 
-  // 게시물 클릭 (게시물 보기)
+  // 게시물 클릭 (게시물 보기 화면으로 이동)
   function handleBoardClick(boardId) {
     navigate("/board/" + boardId + "?category=" + currentParams, {
       state: boardInfo,
     });
     // 조회수 증가 요청
-    axios.post("/api/board/" + boardId + "/increaseView");
+    axios.post("/api/board/" + boardId + "/increaseView").catch((error) => {
+      console.error("조회수 증가 요청 중 에러:", error);
+    });
   }
 
   // -------------------------------------------------- 화면 렌더링 --------------------------------------------------
@@ -220,12 +229,7 @@ function BoardList() {
             </>
           )}
         </Box>
-        <Flex justifyContent={"space-between"} mb={5}>
-          <Box>
-            <Button onClick={handleWriteClick} colorScheme={"facebook"}>
-              글쓰기
-            </Button>
-          </Box>
+        <Flex justify={"flex-end"} mb={5}>
           <Flex>
             {/* 한 페이지 출력 갯수 설정 (5, 10, 20) */}
             <Box>
@@ -264,22 +268,52 @@ function BoardList() {
             <Table size={"sm"}>
               <Thead>
                 <Tr>
-                  <Th borderBottom={"1px solid white"} textAlign={"center"}>
+                  <Th
+                    borderTop={"1px solid rgb(0,35,150,0.5)"}
+                    borderBottom={"1px solid rgb(0,35,150,0.5)"}
+                    textAlign={"center"}
+                    fontSize={"small"}
+                  >
                     번호
                   </Th>
-                  <Th borderBottom={"1px solid white"} textAlign={"center"}>
+                  <Th
+                    borderTop={"1px solid rgb(0,35,150,0.5)"}
+                    borderBottom={"1px solid rgb(0,35,150,0.5)"}
+                    textAlign={"center"}
+                    fontSize={"small"}
+                  >
                     제목
                   </Th>
-                  <Th borderBottom={"1px solid white"} textAlign={"center"}>
+                  <Th
+                    borderTop={"1px solid rgb(0,35,150,0.5)"}
+                    borderBottom={"1px solid rgb(0,35,150,0.5)"}
+                    textAlign={"center"}
+                    fontSize={"small"}
+                  >
                     좋아요
                   </Th>
-                  <Th borderBottom={"1px solid white"} textAlign={"center"}>
+                  <Th
+                    borderTop={"1px solid rgb(0,35,150,0.5)"}
+                    borderBottom={"1px solid rgb(0,35,150,0.5)"}
+                    textAlign={"center"}
+                    fontSize={"small"}
+                  >
                     작성자
                   </Th>
-                  <Th borderBottom={"1px solid white"} textAlign={"center"}>
+                  <Th
+                    borderTop={"1px solid rgb(0,35,150,0.5)"}
+                    borderBottom={"1px solid rgb(0,35,150,0.5)"}
+                    textAlign={"center"}
+                    fontSize={"small"}
+                  >
                     작성일시
                   </Th>
-                  <Th borderBottom={"1px solid white"} textAlign={"center"}>
+                  <Th
+                    borderTop={"1px solid rgb(0,35,150,0.5)"}
+                    borderBottom={"1px solid rgb(0,35,150,0.5)"}
+                    textAlign={"center"}
+                    fontSize={"small"}
+                  >
                     조회수
                   </Th>
                 </Tr>
@@ -304,14 +338,16 @@ function BoardList() {
                           textAlign={"center"}
                           verticalAlign="middle"
                           borderBottom={"1px solid white"}
+                          w={"80px"}
                         >
                           {board.rownum}
                         </Td>
                         {/* 썸네일, 제목 출력 */}
                         <Td
                           verticalAlign="middle"
-                          width={"500px"}
                           borderBottom={"1px solid white"}
+                          w={"580px"}
+                          whiteSpace={"nowrap"}
                         >
                           <Flex align={"center"} gap={"10px"}>
                             {/* 썸네일 출력 */}
@@ -331,6 +367,7 @@ function BoardList() {
                           textAlign={"center"}
                           verticalAlign="middle"
                           borderBottom={"1px solid white"}
+                          w={"80px"}
                         >
                           {board.countlike}
                         </Td>
@@ -338,6 +375,11 @@ function BoardList() {
                           textAlign={"center"}
                           verticalAlign="middle"
                           borderBottom={"1px solid white"}
+                          minW={"100px"}
+                          maxW={"100px"}
+                          overflow={"hidden"}
+                          textOverflow={"ellipsis"}
+                          whiteSpace={"nowrap"}
                         >
                           {board.board_member_id}
                         </Td>
@@ -345,6 +387,7 @@ function BoardList() {
                           textAlign={"center"}
                           verticalAlign="middle"
                           borderBottom={"1px solid white"}
+                          w={"100px"}
                         >
                           {board.ago}
                         </Td>
@@ -352,6 +395,7 @@ function BoardList() {
                           textAlign={"center"}
                           verticalAlign="middle"
                           borderBottom={"1px solid white"}
+                          w={"80px"}
                         >
                           {board.views}
                         </Td>
@@ -360,6 +404,11 @@ function BoardList() {
               </Tbody>
             </Table>
             {/* -------------------- 검색, 페이징 --------------------*/}
+            <Flex justify={"flex-end"} mt={2}>
+              <Button onClick={handleWriteClick} colorScheme={"facebook"}>
+                글쓰기
+              </Button>
+            </Flex>
             <Center>
               <Box width={"70%"}>
                 <SearchComponent />
@@ -429,6 +478,7 @@ function BoardList() {
                   ))}
             </SimpleGrid>
             {/* ------------------------- 검색, 페이징 섹션 ------------------------- */}
+
             <Box>
               <SearchComponent />
               <Pagination pageInfo={pageInfo} />
