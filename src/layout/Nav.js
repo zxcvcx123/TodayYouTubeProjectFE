@@ -37,6 +37,7 @@ import { Stomp } from "@stomp/stompjs";
 import { SocketContext } from "../socket/Socket";
 import axios from "axios";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { Logo1WithText } from "../assets/Image";
 
 Stack.propTypes = {
   p: PropTypes.number,
@@ -167,7 +168,7 @@ export function Nav({ setSocket, setBoardCategory }) {
             navigate("/");
           }}
         >
-          <Image src="img/logo1_withText.png" w={"200px"} />
+          <Image src={Logo1WithText} w={"200px"} />
         </button>
         <Flex>
           <Menu>

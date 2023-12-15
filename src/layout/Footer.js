@@ -7,6 +7,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBlog, faCommentDots } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
+import { Logo1WithText2 } from "../assets/Image";
 
 export function Footer() {
   return (
@@ -28,7 +29,7 @@ export function Footer() {
         justifyContent={"space-between"}
       >
         <Button color="white" size="lg" variant="link">
-          <Image src="img/logo1_withText2.png" w={"150px"} />
+          <Image src={Logo1WithText2} w={"150px"} />
         </Button>
         <Button color="white" size="md" variant="link">
           이용약관
