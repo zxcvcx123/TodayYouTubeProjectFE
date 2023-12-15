@@ -67,7 +67,6 @@ function AdminMemberInfoDetails({
   return (
     <Box>
       <Card w={"80%"} p={"20px"} boxShadow={"none"} minWidth="1200px">
-        b.is_show
         <CardBody>
           <Stack mt="6" spacing="3">
             <Card mt={"5"}>

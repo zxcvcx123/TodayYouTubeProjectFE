@@ -1,4 +1,4 @@
-import { Button, Heading, VStack } from "@chakra-ui/react";
+import { Button, Heading, VStack, Text } from "@chakra-ui/react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -16,11 +16,14 @@ export function Sidenav() {
       <Heading as="h4" size="md">
         관리자 페이지
       </Heading>
-      <Button>메인</Button>
-      <Button onClick={() => navigate("/admin/member/list?p=1")}>
+      <Button w={"70%"}>메인</Button>
+      <Button w={"70%"} onClick={() => navigate("/admin/member/list?p=1")}>
         회원목록
       </Button>
-      <Button>페이지2</Button>
+      <Button w={"70%"} onClick={() => navigate("/admin/suspension")}>
+        회원정지관리
+      </Button>
+      <Button w={"70%"}>페이지2</Button>
     </VStack>
   );
 }

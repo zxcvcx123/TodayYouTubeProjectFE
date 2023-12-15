@@ -67,8 +67,14 @@ function AdminMemberList(props) {
             placeholder="회원 ID입력"
             onChange={(e) => handleMemberIdSearch(e)}
           />
-          <Button colorScheme="blue" mt={5} mb={5} ml={"25%"}>
-            회원관리
+          <Button
+            onClick={() => navigate("/admin/suspension")}
+            colorScheme="blue"
+            mt={5}
+            mb={5}
+            ml={"25%"}
+          >
+            정지회원 관리
           </Button>
         </Flex>
         <Table>
