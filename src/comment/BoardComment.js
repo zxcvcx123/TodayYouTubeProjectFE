@@ -316,11 +316,11 @@ export function BoardComment({ board_id, boardData }) {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [commentLike, setCommentLike] = useState(null);
+  const [commentList, setCommentList] = useState([]);
+  const [hasReplies, setHasReplies] = useState(true);
 
   const commentIdRef = useRef(0);
   const toast = useToast();
-
-  const [commentList, setCommentList] = useState([]);
 
   const { isOpen, onClose, onOpen } = useDisclosure();
 

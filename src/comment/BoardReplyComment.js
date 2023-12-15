@@ -39,7 +39,7 @@ function ReplyCommentForm({
   isReplyFormOpen,
 }) {
   const [reply_comment, setReply_comment] = useState("");
-
+  const { token, loginInfo } = useContext(DetectLoginContext);
   function handleReplySubmit() {
     onSubmit({ comment_id, reply_comment });
   }
@@ -54,13 +54,17 @@ function ReplyCommentForm({
           ml={5}
           value={reply_comment}
           onChange={(e) => setReply_comment(e.target.value)}
+          isDisabled={!loginInfo.member_id}
+          placeholder={
+            loginInfo.member_id ? "댓글을 입력하세요" : "로그인 해주세요"
+          }
         />
         <Button
           colorScheme="telegram"
           mt={2}
           size="sm"
           h="80px"
-          isDisabled={isSubmitting}
+          isDisabled={isSubmitting || !loginInfo.member_id}
           onClick={handleReplySubmit}
         >
           쓰기
@@ -76,6 +80,7 @@ function ReplyCommentItem({
   setIsSubmitting,
 }) {
   const { token, loginInfo } = useContext(DetectLoginContext);
+
   const [isEditing, setIsEditing] = useState(false);
 
   const toast = useToast();
@@ -201,11 +206,12 @@ export function BoardReplyComment({
   setIsReplyFormOpen,
 }) {
   const { token, loginInfo } = useContext(DetectLoginContext);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const replyIdRef = useRef(0);
   const replyMeberId = useRef("");
 
   const toast = useToast();
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [reply_commentList, setReply_commentList] = useState([]);
 
   const { isOpen, onClose, onOpen } = useDisclosure();
@@ -213,13 +219,24 @@ export function BoardReplyComment({
   const location = useLocation();
 
   useEffect(() => {
-    if (!isSubmitting) {
-      const params = new URLSearchParams();
-      params.set("reply_id", comment_id);
+    if (loginInfo !== null) {
+      if (!isSubmitting) {
+        const params = new URLSearchParams();
+        params.set("reply_id", comment_id);
 
-      axios.get("/api/comment/reply/list?" + params).then((response) => {
-        setReply_commentList(response.data);
-      });
+        axios.get("/api/comment/reply/list?" + params).then((response) => {
+          setReply_commentList(response.data);
+        });
+      }
+    } else {
+      if (!isSubmitting) {
+        const params = new URLSearchParams();
+        params.set("reply_id", comment_id);
+
+        axios.get("/api/comment/reply/list?" + params).then((response) => {
+          setReply_commentList(response.data);
+        });
+      }
     }
   }, [isSubmitting]);
 
@@ -337,3 +354,4 @@ export function BoardReplyComment({
     </Box>
   );
 }
+// 커밋
