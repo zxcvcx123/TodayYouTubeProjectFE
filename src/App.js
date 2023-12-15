@@ -32,6 +32,7 @@ import MiniHomepy from "./member/minihomepy/MiniHomepy";
 import AdminMemberList from "./admin/AdminMemberList";
 import VoteList from "./vote/VoteList";
 import AdminMemberInfo from "./admin/AdminMemberInfo";
+import VoteLoading from "./vote/VoteLoading";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -46,7 +47,14 @@ const routes = createBrowserRouter(
         <Route path="board/edit/:id" element={<BoardEdit />} />
         <Route path="board/vote/write" element={<VoteWrite />} />
         <Route path="board/vote/:id" element={<VoteView />} />
-        <Route path="board/vote/list" element={<VoteList />} />
+        <Route
+          path="board/vote/list"
+          element={
+            <VoteLoading>
+              <VoteList />
+            </VoteLoading>
+          }
+        />
         <Route path="inquiry/list" element={<InquiryList />} />
         <Route path="inquiry/write" element={<InquiryWrite />} />
         <Route path="inquiry/:id" element={<InquiryView />} />
@@ -62,9 +70,12 @@ const routes = createBrowserRouter(
         <Route path="admin/member/list" element={<AdminMemberList />} />
         <Route path="admin/member/:member_id" element={<AdminMemberInfo />} />
         <Route path="search" element={<SearchResult />} />
-      </Route>
-      <Route path="/member/minihomepy" element={<MiniHomepyContainer />}>
-        <Route path="/member/minihomepy/:member_id" element={<MiniHomepy />} />
+        <Route path="/member/minihomepy" element={<MiniHomepyContainer />}>
+          <Route
+            path="/member/minihomepy/:member_id"
+            element={<MiniHomepy />}
+          />
+        </Route>
       </Route>
     </>,
   ),

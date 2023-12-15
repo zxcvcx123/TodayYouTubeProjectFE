@@ -45,6 +45,7 @@ import ScrollToTop from "../util/ScrollToTop";
 import pageCount from "../page/PageCount";
 import VotePage from "./VotePage";
 import VoteSearch from "./VoteSearch";
+import ProgressBar from "./ProgressBar";
 
 function VoteList() {
   /* 로그인 정보 컨텍스트 */
@@ -54,6 +55,7 @@ function VoteList() {
   // state
   const [boardList, setBoardList] = useState(null);
   const [page, setPage] = useState([]);
+  const [listProgressBar, setListProgressBar] = useState();
 
   // 현재 URL 파악하기
   const location = useLocation();
@@ -75,11 +77,11 @@ function VoteList() {
   function handleWriteBtn() {
     console.log("token.detectLogin = " + token.detectLogin);
     // 글쓰기 버튼 클릭시 로그인 되어 있지 않다면 로그인 창으로 이동
-    // if () {
-    //   onOpen();
-    // } else {
-    navigate("/board/vote/write");
-    // }
+    if (!token.detectLogin) {
+      onOpen();
+    } else {
+      navigate("/board/vote/write");
+    }
   }
 
   // 그리드 형태 제목 렌더링
@@ -109,14 +111,6 @@ function VoteList() {
         <Box mb={5}>
           <Heading>투표 게시판</Heading>
         </Box>
-        <Flex justifyContent={"space-between"} mb={5}>
-          <Box>
-            <Button onClick={handleWriteBtn} colorScheme="blue">
-              글쓰기
-            </Button>
-          </Box>
-          <Flex></Flex>
-        </Flex>
         {/* ------------------------- 게시글 목록 본문 ------------------------- */}
         <>
           {/* ---------------------------------------- 그리드 형태 보기 ---------------------------------------------*/}
@@ -126,7 +120,6 @@ function VoteList() {
                 <Card
                   key={board.id}
                   w={"100%"}
-                  h={"300px"}
                   border={"1px solid lightgray"}
                   onClick={() => navigate("/board/vote/" + board.id)}
                   _hover={{
@@ -134,41 +127,76 @@ function VoteList() {
                     cursor: "pointer",
                   }}
                 >
-                  <CardHeader p={"10px"}>
-                    {/* 썸네일 출력 */}
-                    <Flex
-                      justifyContent={"space-between"}
-                      alignItems={"center"}
-                    >
-                      <YoutubeInfo
-                        link={board.link_a}
-                        extraThumbnail={true}
-                        thumbnailWidth={250}
-                        thumbnailHeight={150}
-                      />
-                      <Heading p={"20px"}>VS</Heading>
-                      <YoutubeInfo
-                        link={board.link_b}
-                        extraThumbnail={true}
-                        thumbnailWidth={250}
-                        thumbnailHeight={150}
-                      />
+                  <CardHeader p={"1%"}>
+                    {/* 제목 출력 */}
+                    <Flex justifyContent={"space-between"}>
+                      <Box>
+                        <Heading fontSize={"2rem"}>
+                          {renderGreedTitle(board)}
+                        </Heading>
+                      </Box>
+                      <Flex
+                        alignItems={"end"}
+                        w={"17%"}
+                        justifyContent={"space-evenly"}
+                      >
+                        <Box>
+                          <Heading fontSize={"1.25rem"}>투표 현황: </Heading>
+                        </Box>
+                        <Box>
+                          <Heading fontSize={"1.25rem"}>
+                            {board.voted_all}
+                          </Heading>
+                        </Box>
+                      </Flex>
                     </Flex>
                   </CardHeader>
 
                   <CardBody w={"100%"} p={"15px"} textAlign={"center"}>
-                    {/* 제목 출력 */}
-                    번호: {board.id} |{renderGreedTitle(board)}
-                  </CardBody>
+                    {/* 썸네일 출력 */}
+                    <Flex
+                      justifyContent={"space-between"}
+                      alignItems={"center"}
+                      gap={2}
+                    >
+                      <YoutubeInfo link={board.link_a} extraThumbnail={true} />
 
-                  <CardFooter p={"10px"}></CardFooter>
+                      <Box w={"15%"}>
+                        <Heading p={"5px"} textAlign={"center"}>
+                          VS
+                        </Heading>
+                      </Box>
+
+                      <YoutubeInfo link={board.link_b} extraThumbnail={true} />
+                    </Flex>
+                  </CardBody>
+                  <CardFooter w={"100%"}>
+                    <ProgressBar
+                      optionOneVotes={board.voted_a}
+                      optionTwoVotes={board.voted_b}
+                    />
+                  </CardFooter>
                 </Card>
               ))}
           </Box>
           {/* ------------------------- 검색, 페이징 섹션 ------------------------- */}
           <Box>
-            <VoteSearch params={params} />
-            <VotePage page={page} />
+            <Flex mt={5} justifyContent={"space-between"}>
+              <Box>
+                <Button onClick={handleWriteBtn} colorScheme="blue">
+                  주제 생성
+                </Button>
+              </Box>
+
+              <Box w={"30%"}>
+                <VoteSearch params={params} />
+              </Box>
+            </Flex>
+            <Flex justifyContent={"center"}>
+              <Box>
+                <VotePage page={page} />
+              </Box>
+            </Flex>
           </Box>
         </>
       </Box>

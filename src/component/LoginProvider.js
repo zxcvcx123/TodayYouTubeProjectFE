@@ -16,6 +16,7 @@ export function LoginProvider({ children }) {
   });
   const [loginInfo, setLoginInfo] = useState(null);
 
+  const memberInfo = localStorage.getItem("memberInfo");
   useEffect(() => {
     const fetchData = async () => {
       validateToken();
@@ -24,12 +25,6 @@ export function LoginProvider({ children }) {
   }, [location]);
 
   function validateToken() {
-    const grantType = localStorage.getItem("grantType");
-    const accessToken = localStorage.getItem("accessToken");
-    const authority = localStorage.getItem("authority");
-    const memberInfo = localStorage.getItem("memberInfo");
-    console.log(memberInfo);
-
     // 응답 인터셉터
     axios.interceptors.response.use(
       (response) => response,
@@ -45,9 +40,6 @@ export function LoginProvider({ children }) {
       method: "post",
       url: "/api/member/loginProvider",
       params: { member_id: memberInfo },
-      headers: {
-        Authorization: `${grantType} ${accessToken}`,
-      },
     })
       .then((response) => {
         setLoginInfo((prevState) => ({
@@ -70,17 +62,16 @@ export function LoginProvider({ children }) {
         setToken((prevState) => ({
           ...prevState, // 객체의 모든 속성을 새로운 객체에 복사
           detectLogin: true,
-          grantType: localStorage.getItem("grantType"),
-          accessToken: localStorage.getItem("accessToken"),
         }));
       })
       .catch((error) => {
-        localStorage.clear();
         setLoginInfo(null);
-        setToken((prevState) => ({
-          ...prevState,
+        setToken((prevSState) => ({
           detectLogin: false,
         }));
+      })
+      .finally(() => {
+        localStorage.clear();
       });
   }
 
@@ -91,15 +82,11 @@ export function LoginProvider({ children }) {
 
     setToken({
       detectLogin: false,
-      accessToken: null,
-      refreshToken: null,
-      authorithy: null,
-      memberInfo: null,
     });
     localStorage.clear();
+    axios.post("/api/member/logout");
   };
 
-  console.log(loginInfo === null);
   return (
     <>
       {/* token: 토큰 정보 token.detectLogin (로그인 유무 확인)

@@ -20,6 +20,7 @@ import {
   PopoverFooter,
   PopoverHeader,
   PopoverTrigger,
+  Portal,
   Spinner,
   Stack,
   Text,
@@ -47,13 +48,14 @@ Stack.propTypes = {
   children: PropTypes.node,
 };
 
-export function Nav({ setSocket, setBoardCategory }) {
+export function Nav({ setSocket }) {
   // 로그인 유저 정보
   const { token, handleLogout, loginInfo, validateToken } =
     useContext(DetectLoginContext);
 
   let navigate = useNavigate();
   let location = useLocation();
+  console.log(location);
 
   const {
     stompClient,
@@ -64,6 +66,16 @@ export function Nav({ setSocket, setBoardCategory }) {
     setAlarmCount,
   } = useContext(SocketContext);
 
+  const navBackground = document.querySelector(".navBackground");
+  if (navBackground) {
+    if (location.pathname === "/member/minihomepy/admin123123") {
+      document.querySelector(".navBackground").style.background =
+        "linear-gradient(112.1deg, rgb(32, 38, 57) 11.4%, rgb(63, 76, 119) 70.2%)";
+    } else {
+      document.querySelector(".navBackground").style.background =
+        "linear-gradient(#FF0000,#990000)";
+    }
+  }
   useEffect(() => {
     if (loginInfo !== null) {
       axios
@@ -153,6 +165,7 @@ export function Nav({ setSocket, setBoardCategory }) {
 
   return (
     <>
+    <div className="navBackground">
       <Center bg="white" borderBottom={"5px solid rgb(255,0,0,0.5)"}>
         <Flex
           // ml="100px"
@@ -169,95 +182,88 @@ export function Nav({ setSocket, setBoardCategory }) {
               navigate("/");
             }}
           >
+
             <Image src={Logo1WithText} minW={"200px"} maxW={"200px"} />
           </button>
-          <Flex>
-            <Menu>
-              <MenuButton as={Button} w={120} size="md" variant="ghost">
-                게시판
-                <ChevronDownIcon />
-              </MenuButton>
-              <MenuList>
-                <MenuItem
-                  onClick={(e) => {
-                    navigate("board/list?category=notice");
-                    setBoardCategory("공지");
-                  }}
-                >
-                  공지
-                </MenuItem>
-                <MenuItem
-                  onClick={(e) => {
-                    navigate("board/list?category=sports");
-                    setBoardCategory("스포츠");
-                  }}
-                >
-                  스포츠
-                </MenuItem>
-                <MenuItem
-                  onClick={(e) => {
-                    navigate("board/list?category=mukbang");
-                    setBoardCategory("먹방");
-                  }}
-                >
-                  먹방
-                </MenuItem>
-                <MenuItem
-                  onClick={(e) => {
-                    navigate("board/list?category=daily");
-                    setBoardCategory("일상");
-                  }}
-                >
-                  일상
-                </MenuItem>
-                <MenuItem
-                  onClick={(e) => {
-                    navigate("board/list?category=cooking");
-                    setBoardCategory("요리");
-                  }}
-                >
-                  요리
-                </MenuItem>
-                <MenuItem
-                  onClick={(e) => {
-                    navigate("board/list?category=movie");
-                    setBoardCategory("영화/드라마");
-                  }}
-                >
-                  영화/드라마
-                </MenuItem>
-                <MenuItem
-                  onClick={(e) => {
-                    navigate("board/list?category=game");
-                    setBoardCategory("게임");
-                  }}
-                >
-                  게임
-                </MenuItem>
-                <MenuItem
-                  onClick={() => {
-                    navigate("board/vote/list?p=1");
-                    setBoardCategory("투표");
-                  }}
-                >
-                  투표
-                </MenuItem>
-                <MenuItem onClick={() => navigate("/chat")}>채팅</MenuItem>
-                <Divider />
-                <MenuItem
-                  onClick={(e) => {
-                    navigate("/inquiry/list");
-                    setBoardCategory("문의게시판");
-                  }}
-                >
-                  문의게시판
-                </MenuItem>
-                <Divider />
-                <MenuItem onClick={() => navigate("/admin")}>
-                  관리자(임시)
-                </MenuItem>
-              </MenuList>
-            </Menu>
+  
+        <Flex>
+          <Menu>
+            <MenuButton as={Button} w={120} size="md" variant="ghost">
+              게시판
+              <ChevronDownIcon />
+            </MenuButton>
+            <MenuList>
+              <MenuItem
+                onClick={(e) => {
+                  navigate("board/list?category=notice");
+                }}
+              >
+                공지
+              </MenuItem>
+              <MenuItem
+                onClick={(e) => {
+                  navigate("board/list?category=sports");
+                }}
+              >
+                스포츠
+              </MenuItem>
+              <MenuItem
+                onClick={(e) => {
+                  navigate("board/list?category=mukbang");
+                }}
+              >
+                먹방
+              </MenuItem>
+              <MenuItem
+                onClick={(e) => {
+                  navigate("board/list?category=daily");
+                }}
+              >
+                일상
+              </MenuItem>
+              <MenuItem
+                onClick={(e) => {
+                  navigate("board/list?category=cooking");
+                }}
+              >
+                요리
+              </MenuItem>
+              <MenuItem
+                onClick={(e) => {
+                  navigate("board/list?category=movie");
+                }}
+              >
+                영화/드라마
+              </MenuItem>
+              <MenuItem
+                onClick={(e) => {
+                  navigate("board/list?category=game");
+                }}
+              >
+                게임
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  navigate("board/vote/list?p=1");
+                }}
+              >
+                투표
+              </MenuItem>
+              <MenuItem onClick={() => navigate("/chat")}>채팅</MenuItem>
+              <Divider />
+              <MenuItem
+                onClick={(e) => {
+                  navigate("/inquiry/list");
+                }}
+              >
+                문의게시판
+              </MenuItem>
+              <Divider />
+              <MenuItem onClick={() => navigate("/admin")}>
+                관리자(임시)
+              </MenuItem>
+            </MenuList>
+          </Menu>
             <Button
               onClick={handleRandomView}
               w={120}
@@ -287,7 +293,11 @@ export function Nav({ setSocket, setBoardCategory }) {
                             color="gold"
                           />
                         ) : (
-                          <FontAwesomeIcon fontSize={"20px"} icon={faBell} />
+                          <FontAwesomeIcon
+                            fontSize={"20px"}
+                            color={"#dcdcdc"}
+                            icon={faBell}
+                          />
                         )}
                         {alarmCount > 99 && <Text>"99..."</Text>}
                         {alarmCount === 0 || alarmCount === null ? (
@@ -367,6 +377,7 @@ export function Nav({ setSocket, setBoardCategory }) {
 
                               <Box _hover={{ cursor: "pointer" }}>
                                 <FontAwesomeIcon
+                                  color={"#dcdcdc"}
                                   icon={faXmark}
                                   onClick={() => handleDeleteAlarm(list.id)}
                                 />
@@ -426,6 +437,7 @@ export function Nav({ setSocket, setBoardCategory }) {
           </Flex>
         </Flex>
       </Center>
+      </div>
     </>
   );
 }

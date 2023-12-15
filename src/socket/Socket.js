@@ -42,11 +42,10 @@ function Socket({ children }) {
   const [optionOneVotes, setOptionOneVotes] = useState(0);
   const [optionTwoVotes, setOptionTwoVotes] = useState(0);
   const [voteChecked, setVoteChecked] = useState(null);
+  const [voteNot, setVoteNot] = useState(0);
 
   useEffect(() => {
-    console.log("바깥실행");
     if (loginInfo !== null) {
-      console.log("안쪽실행");
       connect();
     }
   }, [loginInfo]);
@@ -86,6 +85,7 @@ function Socket({ children }) {
       }
     }
   }
+
   // 채팅
   const chatSocket = () => {
     console.log("채팅연결 성공");
@@ -179,12 +179,17 @@ function Socket({ children }) {
       setOptionTwoVotes(data.voted_b);
     });
 
+    console.log("큐 비낕쪽 실행 ");
     stompClient.current.subscribe(
       "/queue/votecheck/" + loginInfo.member_id,
       (res) => {
+        console.log("큐 안쪽 실행");
         const data = JSON.parse(res.body);
         console.log(data);
         setVoteChecked(data.checked_vote_a);
+        if (data.checked_vote_not === null) {
+          setVoteNot(0);
+        }
       },
     );
   };
@@ -212,6 +217,8 @@ function Socket({ children }) {
         setOptionTwoVotes,
         voteChecked,
         setVoteChecked,
+        voteNot,
+        setVoteNot,
       }}
     >
       {children}
