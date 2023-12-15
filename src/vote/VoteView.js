@@ -95,6 +95,7 @@ function VoteView() {
       });
 
       // axios.get 해서 버튼을 눌렀는지 안눌렀는지 게시판번호/아이디 기준으로 조회
+
       axios
         .post("/api/vote/history", {
           vote_board_id: id,
