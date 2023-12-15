@@ -81,7 +81,7 @@ function BoardList() {
   // navigate
   const navigate = useNavigate();
 
-  // 초기 이펙트
+  // 게시물 목록 불러오기
   useEffect(() => {
     axios
       .get("/api/board/list?" + params)
@@ -101,7 +101,7 @@ function BoardList() {
     }
   }, [location]);
 
-  // 몇 개씩 보여줄 건지
+  // 게시물 목록 한 페이지에 보여줄 게시글의 갯수 설정 버튼
   function handlePageCount(e) {
     const newPageCount = e.target.value;
     setPageCount(newPageCount);
@@ -111,12 +111,12 @@ function BoardList() {
     navigate("?" + params, { state: { refresh: true } });
   }
 
-  // 리스트 뷰 세팅 동작
+  // 리스트 뷰 형태로 게시물 목록 보여주기
   const switchToListView = () => {
     setCurrentView("list");
   };
 
-  // 그리드 뷰 세팅 동작
+  // 그리드 뷰 형태로 게시물 목록 보여주기
   const switchToGridView = () => {
     setCurrentView("grid");
   };
@@ -132,7 +132,7 @@ function BoardList() {
     }
   }
 
-  // 리스트 형태 제목 렌더링
+  // 리스트 형태 게시물 제목 렌더링
   function renderListTitle(board) {
     // 제목의 길이가 20자 이상일 경우 ...으로 자르고 툴팁으로 전체 제목을 표시
     if (board.title.length > 20) {
@@ -153,7 +153,7 @@ function BoardList() {
       );
     }
 
-    // 일반적인 제목 표시 (툴팁 없음)
+    // 일반적인 게시물 제목 표시 (툴팁 없음)
     return (
       <>
         <Flex>
@@ -170,7 +170,7 @@ function BoardList() {
     );
   }
 
-  // 그리드 형태 제목 렌더링
+  // 그리드 형태 게시물 제목 렌더링
   function renderGreedTitle(board) {
     // 제목의 길이가 15자 이상일 경우 ...으로 자르고 툴팁으로 전체 제목을 표시
     if (board.title.length > 15) {
@@ -188,7 +188,7 @@ function BoardList() {
       );
     }
 
-    // 일반적인 제목 표시 (툴팁 없음)
+    // 일반적인 게시물 제목 표시 (툴팁 없음)
     return (
       <Flex>
         <Text fontWeight={"bold"}>{board.title}</Text>
@@ -201,13 +201,15 @@ function BoardList() {
     );
   }
 
-  // 게시물 클릭 (게시물 보기)
+  // 게시물 클릭 (게시물 보기 화면으로 이동)
   function handleBoardClick(boardId) {
     navigate("/board/" + boardId + "?category=" + currentParams, {
       state: boardInfo,
     });
     // 조회수 증가 요청
-    axios.post("/api/board/" + boardId + "/increaseView");
+    axios.post("/api/board/" + boardId + "/increaseView").catch((error) => {
+      console.error("조회수 증가 요청 중 에러:", error);
+    });
   }
 
   // -------------------------------------------------- 화면 렌더링 --------------------------------------------------
@@ -227,12 +229,7 @@ function BoardList() {
             </>
           )}
         </Box>
-        <Flex justifyContent={"space-between"} mb={5}>
-          <Box>
-            <Button onClick={handleWriteClick} colorScheme={"facebook"}>
-              글쓰기
-            </Button>
-          </Box>
+        <Flex justify={"flex-end"} mb={5}>
           <Flex>
             {/* 한 페이지 출력 갯수 설정 (5, 10, 20) */}
             <Box>
@@ -367,6 +364,11 @@ function BoardList() {
               </Tbody>
             </Table>
             {/* -------------------- 검색, 페이징 --------------------*/}
+            <Flex justify={"flex-end"} mt={2}>
+              <Button onClick={handleWriteClick} colorScheme={"facebook"}>
+                글쓰기
+              </Button>
+            </Flex>
             <Center>
               <Box width={"70%"}>
                 <SearchComponent />
@@ -436,6 +438,7 @@ function BoardList() {
                   ))}
             </SimpleGrid>
             {/* ------------------------- 검색, 페이징 섹션 ------------------------- */}
+
             <Box>
               <SearchComponent />
               <Pagination pageInfo={pageInfo} />
