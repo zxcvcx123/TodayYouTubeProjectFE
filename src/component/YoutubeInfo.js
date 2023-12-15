@@ -10,11 +10,7 @@ function YoutubeInfo({
   link,
   extraThumbnail,
   extraVideo,
-  thumbnailWidth = "100%",
-  thumbnailHeight = "100%",
-  boxWidth = "",
-  boxHeight = "",
-  opts = { height: "360", width: "640" },
+  opts = { height: "360px", width: "640px" },
   toolTip,
 }) {
   // 상태 값
@@ -79,7 +75,7 @@ function YoutubeInfo({
                   borderRadius={10}
                 >
                   <FontAwesomeIcon
-                    width={thumbnailWidth}
+                    width={"100%"}
                     icon={faComments}
                     size="3x"
                     inverse={true}

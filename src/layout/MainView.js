@@ -330,12 +330,7 @@ export function MainView() {
                     setMainShowLink(firstList.link);
                   }}
                 >
-                  <YoutubeInfo
-                    link={firstList.link}
-                    extraThumbnail={true}
-                    thumbnailWidth={400}
-                    thumbnailHeight={250}
-                  />
+                  <YoutubeInfo link={firstList.link} extraThumbnail={true} />
                 </Box>
               </Box>
               <Flex w={"80%"} ml={5}>
@@ -371,12 +366,7 @@ export function MainView() {
                         }}
                         _hover={{ cursor: "pointer" }}
                       >
-                        <YoutubeInfo
-                          link={other.link}
-                          extraThumbnail={true}
-                          thumbnailWidth={250}
-                          thumbnailHeight={180}
-                        />
+                        <YoutubeInfo link={other.link} extraThumbnail={true} />
                       </Box>
                     </Box>
                   ))}

@@ -82,7 +82,6 @@ function BoardList() {
 
   // 게시물 목록 불러오기
   useEffect(() => {
-
     axios
       .get("/api/board/list?" + params)
       .then((response) => {
@@ -351,14 +350,13 @@ function BoardList() {
                         >
                           <Flex align={"center"} gap={"10px"}>
                             {/* 썸네일 출력 */}
-                            <YoutubeInfo
-                              link={board.link}
-                              extraThumbnail={true}
-                              thumbnailWidth={120}
-                              thumbnailHeight={70}
-                              toolTip={true}
-                            />
-
+                            <Box w={"50%"}>
+                              <YoutubeInfo
+                                link={board.link}
+                                extraThumbnail={true}
+                                toolTip={true}
+                              />
+                            </Box>
                             {/* 제목 출력 */}
                             {renderListTitle(board)}
                           </Flex>
