@@ -345,9 +345,9 @@ function BoardList() {
                         {/* 썸네일, 제목 출력 */}
                         <Td
                           verticalAlign="middle"
-                          width={"500px"}
                           borderBottom={"1px solid white"}
-                          w={"600px"}
+                          w={"580px"}
+                          whiteSpace={"nowrap"}
                         >
                           <Flex align={"center"} gap={"10px"}>
                             {/* 썸네일 출력 */}
@@ -375,6 +375,7 @@ function BoardList() {
                           textAlign={"center"}
                           verticalAlign="middle"
                           borderBottom={"1px solid white"}
+                          minW={"100px"}
                           maxW={"100px"}
                           overflow={"hidden"}
                           textOverflow={"ellipsis"}
@@ -386,6 +387,7 @@ function BoardList() {
                           textAlign={"center"}
                           verticalAlign="middle"
                           borderBottom={"1px solid white"}
+                          w={"100px"}
                         >
                           {board.ago}
                         </Td>
