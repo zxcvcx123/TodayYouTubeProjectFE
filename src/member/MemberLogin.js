@@ -23,7 +23,6 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { DetectLoginContext } from "../component/LoginProvider";
-import KakaoLogin from "./KakaoLogin";
 
 export function MemberLogin() {
   /* 아이디 */
@@ -144,9 +143,6 @@ export function MemberLogin() {
               </button>
             </div>
           </form>
-
-          {/*<KakaoLogin /> 작업중 */}
-
           <p className="mt-10 text-center text-sm text-gray-500">
             회원이 아니신가요?{" "}
             <a
