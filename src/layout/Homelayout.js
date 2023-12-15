@@ -23,7 +23,7 @@ export function HomeLayout() {
           </Socket>
           {/* Footer를 바닥에 고정시키려고 빈 컨텐츠 넣었습니다 */}
           <Box height={"auto"} minHeight="100%" paddingBottom="1px"></Box>
-          <Footer height="400px" />
+          {/*<Footer height="400px" />*/}
         </Box>
       </LoginProvider>
     </Box>

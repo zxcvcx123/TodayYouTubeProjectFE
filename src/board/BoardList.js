@@ -430,7 +430,7 @@ function BoardList() {
         ) : (
           <>
             {/* ---------------------------------------- 그리드 형태 보기 ---------------------------------------------*/}
-            <SimpleGrid columns={[1, 2, 3, 4, 5]} spacing={[4]}>
+            <SimpleGrid columns={[1, 2, 3, 4]} spacing={[4]}>
               {boardList &&
                 boardList
                   /* board.is_show=true 만 필터 */
