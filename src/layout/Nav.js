@@ -160,6 +160,7 @@ export function Nav({ setSocket, setBoardCategory }) {
         justifyContent={"space-around"}
         // bg="blackAlpha.100"
         bg="white"
+        borderBottom={"5px solid rgb(255,0,0,0.5)"}
       >
         <button
           onClick={() => {
