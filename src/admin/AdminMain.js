@@ -11,10 +11,10 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { BarChart } from "./BarChart";
+import { BarChart } from "../component/BarChart";
 import axios from "axios";
-import { DoughnutChart } from "./DoughnutChart";
-import { LineChart } from "./LineChart";
+import { DoughnutChart } from "../component/DoughnutChart";
+import { LineChart } from "../component/LineChart";
 
 // 도넛 차트 출력 형식
 const DoughnutChartBox = ({ title, chartData }) => (
