@@ -31,7 +31,6 @@ function BoardWrite() {
 
   /* useLocation */
   const location = useLocation();
-  const boardInfo = location.state;
 
   /* 현재 쿼리스트링의 category 명 가져오기 */
   const currentParams = new URLSearchParams(location.search).get("category");
@@ -49,7 +48,7 @@ function BoardWrite() {
       navigate("/member/login");
     }
 
-    console.log(boardInfo);
+    console.log(currentParams);
   }, []);
 
   // useEffect를 사용하여 titleError가 변경(에러발생)될 때마다 스크롤이 제목 라벨으로 이동
@@ -115,7 +114,7 @@ function BoardWrite() {
         uploadFiles,
         uuSrc,
         board_member_id: loginInfo.member_id,
-        name_eng: boardInfo,
+        name_eng: currentParams,
       })
       .then(() => {
         toast({
@@ -177,7 +176,7 @@ function BoardWrite() {
   return (
     <Box border={"2px solid black"} m={5}>
       <Box mb={5}>
-        <Heading>{boardInfo} 게시판</Heading>
+        <Heading>{currentParams} 게시판</Heading>
       </Box>
 
       <Heading mb={5}>유튜브 추천 :: 새 글 작성하기</Heading>
