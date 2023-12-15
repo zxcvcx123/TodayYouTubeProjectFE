@@ -28,6 +28,7 @@ import { useLocation, useParams, useSearchParams } from "react-router-dom";
 import AdminMemberInfoDetails from "./AdminMemberInfoDetails";
 import YoutubeInfo from "../component/YoutubeInfo";
 import Pagination from "../page/Pagination";
+import { Sidenav } from "./Sidenav";
 
 function AdminMemberInfo(props) {
   const { member_id } = useParams();
@@ -36,6 +37,7 @@ function AdminMemberInfo(props) {
   const [memberInfoBoardList, setMemberInfoBoardList] = useState(null);
   const [memberInfoCommentList, setMemberInfoCommentList] = useState(null);
   const [pageInfo, setPageInfo] = useState(null);
+  const [pageInfo2, setPageInfo2] = useState(null);
 
   const [myInfo, setMyInfo] = useState(true);
   const [popMyBoardList, setPopMyBoardList] = useState(false);
@@ -54,6 +56,7 @@ function AdminMemberInfo(props) {
         setMemberInfoBoardList(response.data.memberInfoBoardList);
         setMemberInfoCommentList(response.data.memberInfoCommentList);
         setPageInfo(response.data.pageInfo);
+        setPageInfo2(response.data.pageInfo2);
       })
       .catch(() => console.log("bad"));
   }, [location]);
@@ -106,9 +109,10 @@ function AdminMemberInfo(props) {
   return (
     <>
       <Flex w={"100%"} h={"100%"} minHeight={"750px"}>
+        <Sidenav />
         <Card
-          w={"350px"}
-          minWidth={"350px"}
+          w={"300px"}
+          minWidth={"300px"}
           bg={"#323232"}
           boxShadow={"none"}
           position={"sticky"}
@@ -213,8 +217,8 @@ function AdminMemberInfo(props) {
                                     <YoutubeInfo
                                       link={mList.link}
                                       extraThumbnail={true}
-                                      thumbnailWidth={150}
-                                      thumbnailHeight={100}
+                                      thumbnailWidth={120}
+                                      thumbnailHeight={70}
                                     />
                                   </Td>
                                   <Td
@@ -252,7 +256,7 @@ function AdminMemberInfo(props) {
               </Stack>
             </CardBody>
             <Divider color={"gray"} />
-            <CardFooter>
+            <CardFooter m={"auto"}>
               <Pagination pageInfo={pageInfo} />
             </CardFooter>
           </Card>
@@ -338,7 +342,9 @@ function AdminMemberInfo(props) {
               </Stack>
             </CardBody>
             <Divider color={"gray"} />
-            <CardFooter></CardFooter>
+            <CardFooter m={"auto"}>
+              <Pagination pageInfo={pageInfo2} />
+            </CardFooter>
           </Card>
         )}
       </Flex>
