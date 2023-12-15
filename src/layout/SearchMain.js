@@ -35,7 +35,7 @@ export function SearchMain() {
   }
 
   return (
-    <Flex width={600}>
+    <Flex width={400}>
       {/*<Box>*/}
       {/*  <Select fontSize={13}>*/}
       {/*    <option value="all">통합검색</option>*/}

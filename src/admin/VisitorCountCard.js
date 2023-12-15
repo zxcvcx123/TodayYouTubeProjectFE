@@ -18,7 +18,12 @@ function VisitorCountCard() {
   }, []);
 
   return (
-    <Card p={1} w={"200px"}>
+    <Card
+      p={1}
+      w={"200px"}
+      backgroundColor={"rgb(255,255,255)"}
+      boxShadow="0px 4px 8px rgba(0, 0, 0, 0.2)"
+    >
       <Flex>
         <Text mb={1} fontWeight={"bold"}>
           전체 방문자 수
