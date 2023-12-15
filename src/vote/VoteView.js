@@ -84,18 +84,17 @@ function VoteView() {
 
   // 초기 렌더링
   useEffect(() => {
+    axios.get("/api/vote/id/" + id).then((res) => {
+      console.log(res.data);
+      setBoard(res.data);
+
+      // count된 숫자 넣고 숫자에 따라서 set 해서 처음 % 반영
+      setOptionOneVotes(res.data.voted_a);
+      setOptionTwoVotes(res.data.voted_b);
+    });
+
+    // axios.get 해서 버튼을 눌렀는지 안눌렀는지 게시판번호/아이디 기준으로 조회
     if (loginInfo !== null) {
-      axios.get("/api/vote/id/" + id).then((res) => {
-        console.log(res.data);
-        setBoard(res.data);
-
-        // count된 숫자 넣고 숫자에 따라서 set 해서 처음 % 반영
-        setOptionOneVotes(res.data.voted_a);
-        setOptionTwoVotes(res.data.voted_b);
-      });
-
-      // axios.get 해서 버튼을 눌렀는지 안눌렀는지 게시판번호/아이디 기준으로 조회
-
       axios
         .post("/api/vote/history", {
           vote_board_id: id,
