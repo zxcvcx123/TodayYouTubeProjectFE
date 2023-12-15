@@ -49,6 +49,7 @@ import PageCount from "../page/PageCount";
 import { DetectLoginContext } from "../component/LoginProvider";
 import ScrollToTop from "../util/ScrollToTop";
 import pageCount from "../page/PageCount";
+import LoadingPage from "../component/LoadingPage";
 
 function BoardList() {
   /* 로그인 정보 컨텍스트 */
@@ -62,6 +63,8 @@ function BoardList() {
   const [currentView, setCurrentView] = useState("list");
   const [boardInfo, setBoardInfo] = useState("");
   const [listCount, setListCount] = useState(null);
+  // Loading state
+  const [loading, setLoading] = useState(true);
 
   const [params] = useSearchParams("");
 
@@ -93,12 +96,20 @@ function BoardList() {
       .catch((error) => {
         console.error("Error fetching board list:", error);
         window.alert("게시글 목록을 가져오는 중에 오류가 발생했습니다.");
+      })
+      .finally(() => {
+        setLoading(false);
       });
 
     if (params.get("s") === null) {
       setPageCount(10);
     }
   }, [location]);
+
+  // 로딩중일 경우 페이지 표시
+  if (loading) {
+    return <LoadingPage />;
+  }
 
   // 게시물 목록 한 페이지에 보여줄 게시글의 갯수 설정 버튼
   function handlePageCount(e) {
