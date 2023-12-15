@@ -178,8 +178,53 @@ function VoteView() {
     });
   }
 
+  // 삭제 버튼
+  function handleDelete() {
+    axios
+      .delete("/api/vote/delete", {
+        data: {
+          id: id,
+          vote_member_id: board.vote_member_id,
+          login_memeber_id: loginInfo.member_id,
+        },
+      })
+      .then(() => {
+        toast({
+          description: "정상적으로 삭제 되었습니다.",
+          status: "success",
+        });
+        navigate("/board/vote/list");
+      })
+      .catch((error) => {
+        if (error.response.status === 403) {
+          toast({
+            description: "게시글 삭제는 작성자만 가능합니다.",
+            status: "error",
+          });
+          return;
+        }
+
+        if (error.response.status === 401) {
+          toast({
+            description: "권한 정보가 없습니다.",
+            status: "error",
+          });
+          return;
+        }
+
+        if (error.response) {
+          toast({
+            description: "게시글 삭제에 실패했습니다.",
+            status: "error",
+          });
+          return;
+        }
+      })
+      .finally();
+  }
+
   return (
-    <Box m={"50px 20% 20px 50px"}>
+    <Box>
       <Box mb={5}>
         <Heading>투표 게시판</Heading>
       </Box>
@@ -211,7 +256,7 @@ function VoteView() {
           </Flex>
           {/* 좋아요, 조회수, 투표수 */}
           <Flex alignItems={"center"} gap={"5"}>
-            <Text> | 투표 수 : </Text>
+            <Text> | 투표 수 : {board.voted_all}</Text>
           </Flex>
         </Flex>
       </FormControl>
@@ -220,11 +265,16 @@ function VoteView() {
 
       {/* -------------------- 유튜브 섹션 -------------------- */}
       {/*{renderYoutubeSection()}*/}
-      <Box>
+      <Box w={"100%"} mb={5}>
         <Heading textAlign={"center"}>{board.title}</Heading>
       </Box>
       <Box>
-        <Flex mb={2} alignItems={"center"}>
+        <Flex
+          mb={2}
+          alignItems={"center"}
+          w={"100%"}
+          justifyContent={"space-between"}
+        >
           <Box>
             <YoutubeInfo link={board.link_a} extraVideo={true} />
             <Button
@@ -249,7 +299,9 @@ function VoteView() {
               )}
             </Button>
           </Box>
-          <Heading>VS</Heading>
+          <Box w={"20%"}>
+            <Heading textAlign={"center"}>VS</Heading>
+          </Box>
           <Box>
             <YoutubeInfo link={board.link_b} extraVideo={true} />
             <Button
@@ -277,17 +329,23 @@ function VoteView() {
         </Flex>
       </Box>
       {/* -------------------- 본문 -------------------- */}
-      <Box mb={2} textAlign={"center"}>
-        {board.content}
-      </Box>
+
       <ProgressBar
         optionOneVotes={optionOneVotes}
         optionTwoVotes={optionTwoVotes}
       />
+      <Box mt={5} textAlign={"center"}>
+        <Text fontSize={"1.5rem"}>{board.content}</Text>
+      </Box>
       <Divider my={5} borderColor="grey" />
 
       {/* -------------------- 버튼 섹션 -------------------- */}
       <Flex justifyContent={"space-between"}>
+        {/* 삭제 버튼 */}
+        <Button colorScheme="red" onClick={handleDelete}>
+          삭제
+        </Button>
+
         {/* 목록 버튼 */}
         <Button
           colorScheme="blue"

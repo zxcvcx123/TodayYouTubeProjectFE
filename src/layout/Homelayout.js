@@ -16,7 +16,9 @@ export function HomeLayout() {
         <Box>
           <Socket>
             <Nav />
-            <Outlet context={{ test }} />
+            <Box w={"80%"} m={"0 auto"}>
+              <Outlet context={{ test }} />
+            </Box>
           </Socket>
           {/* Footer를 바닥에 고정시키려고 빈 컨텐츠 넣었습니다 */}
           <Box height={"auto"} minHeight="100%" paddingBottom="1px"></Box>
