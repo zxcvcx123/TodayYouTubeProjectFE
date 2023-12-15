@@ -114,9 +114,11 @@ export function MainView() {
 
   // 메인페이지 접속시 방문자 증가
   useEffect(() => {
-    const memberInfo = localStorage.getItem("memberInfo");
+    if (loginInfo !== null) {
+      const memberInfo = loginInfo.member_id;
 
-    axios.get("/api/visitor", { params: { member_id: memberInfo } });
+      axios.get("/api/visitor", { params: { member_id: memberInfo } });
+    }
   }, []);
 
   function handleCategoryChange(e) {

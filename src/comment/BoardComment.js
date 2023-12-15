@@ -142,7 +142,7 @@ function CommentItem({
   function handleCommentLike() {
     axios
       .post("/api/comment/like", {
-        member_id: localStorage.getItem("memberInfo"),
+        member_id: loginInfo.member_id,
         board_id: comment.board_id,
         comment_id: comment.id,
       })
@@ -165,7 +165,7 @@ function CommentItem({
           <Text size="xs" as="sub">
             {comment.created_at}
           </Text>
-          {localStorage.getItem("memberInfo") === comment.member_id && (
+          {loginInfo.member_id === comment.member_id && (
             <Flex gap={0.5}>
               {isEditing || (
                 <Button
@@ -317,11 +317,11 @@ export function BoardComment({ board_id, boardData }) {
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   const params = new URLSearchParams();
-  params.set("member_id", localStorage.getItem("memberInfo"));
+  params.set("member_id", loginInfo.member_id);
   params.set("board_id", board_id);
 
   useEffect(() => {
-    if (localStorage.getItem("memberInfo") !== "") {
+    if (loginInfo.member_id !== "") {
       if (!isSubmitting) {
         axios.get("/api/comment/list?" + params).then((response) => {
           setCommentList(response.data);
@@ -361,7 +361,7 @@ export function BoardComment({ board_id, boardData }) {
       .post("/api/comment/add", {
         comment: comment.comment,
         board_id: comment.board_id,
-        member_id: localStorage.getItem("memberInfo"),
+        member_id: loginInfo.member_id,
       })
       .then(() => {
         toast({
