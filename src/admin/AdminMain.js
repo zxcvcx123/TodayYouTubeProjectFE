@@ -97,6 +97,7 @@ function AdminMain() {
   const [countVisitorAll, setCountVisitorAll] = useState(null);
   const [countVisitorToday, setCountVisitorToday] = useState(null);
 
+  /* ---------- 게시글, 좋아요, 댓글 작성 불러와 state 셋팅 ---------- */
   useEffect(() => {
     axios.get("/api/admin/user").then((response) => {
       setUserWriteRankDataList(response.data.userWriteRankDataList);
@@ -218,7 +219,7 @@ function AdminMain() {
     });
   }, []);
 
-  // 방문자 데이터
+  // 방문자 데이터 불러와 state 세팅 및 라인차트 세팅
   useEffect(() => {
     // 방문자 통계 데이터 가져오기
     // visitorCountAll, visitorCountToday, visitorCountMonthlyLastYear
