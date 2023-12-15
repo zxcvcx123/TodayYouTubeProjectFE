@@ -11,7 +11,8 @@ export function HomeLayout() {
   let test = "테스트1";
 
   return (
-    <Box bg="blackAlpha.200">
+    // <Box bg="blackAlpha.200">
+    <Box bg="white">
       <LoginProvider>
         <Box>
           <Socket>
