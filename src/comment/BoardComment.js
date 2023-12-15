@@ -42,6 +42,7 @@ import { faHeart as faHeartRegular } from "@fortawesome/free-regular-svg-icons";
 import commentLike from "../like/CommentLike";
 import { DetectLoginContext } from "../component/LoginProvider";
 import { SocketContext } from "../socket/Socket";
+import { useLocation } from "react-router-dom";
 
 function CommentForm({
   board_id,
@@ -89,7 +90,11 @@ function CommentForm({
 
   return (
     <Flex>
-      <Textarea value={comment} onChange={(e) => setComment(e.target.value)} />
+      <Textarea
+        bg="white"
+        value={comment}
+        onChange={(e) => setComment(e.target.value)}
+      />
       <Button
         isDisabled={isSubmitting}
         h="80px"
@@ -142,12 +147,11 @@ function CommentItem({
   function handleCommentLike() {
     axios
       .post("/api/comment/like", {
-        member_id: localStorage.getItem("memberInfo"),
+        member_id: loginInfo.member_id,
         board_id: comment.board_id,
         comment_id: comment.id,
       })
       .then((response) => {
-        // setCommentLike(response.data);
         onCommentLikeClick({ ...response.data, comment_id: comment.id });
         console.log(response.data);
       })
@@ -165,7 +169,7 @@ function CommentItem({
           <Text size="xs" as="sub">
             {comment.created_at}
           </Text>
-          {localStorage.getItem("memberInfo") === comment.member_id && (
+          {loginInfo.member_id === comment.member_id && (
             <Flex gap={0.5}>
               {isEditing || (
                 <Button
@@ -282,11 +286,12 @@ function CommentList({
 }) {
   return (
     <Card border="1px solid black" borderRadius="5" mt={3}>
-      <CardHeader size="md">댓글 목록</CardHeader>
-      <Divider colorScheme="whiteAlpha" />
+      {/*<CardHeader size="md">댓글 목록</CardHeader>*/}
+      {/*<Divider colorScheme="black" />*/}
       <CardBody>
-        <Stack divider={<StackDivider />} spacing="5">
-          {commentList.map((comment) => (
+        {/*<Stack divider={<StackDivider borderColor="whitesmoke" />} spacing="5">*/}
+        {commentList.map((comment) => (
+          <Box borderBottom={"1px solid black"} mb={5} h={"80px"}>
             <CommentItem
               key={comment.id}
               isSubmitting={isSubmitting}
@@ -296,8 +301,9 @@ function CommentList({
               setCommentLike={setCommentLike}
               onCommentLikeClick={onCommentLikeClick}
             />
-          ))}
-        </Stack>
+          </Box>
+        ))}
+        {/*</Stack>*/}
       </CardBody>
     </Card>
   );
@@ -317,25 +323,49 @@ export function BoardComment({ board_id, boardData }) {
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   const params = new URLSearchParams();
-  params.set("member_id", localStorage.getItem("memberInfo"));
-  params.set("board_id", board_id);
+
+  const location = useLocation();
+  console.log("댓글 테스트: " + location.pathname);
 
   useEffect(() => {
-    if (localStorage.getItem("memberInfo") !== "") {
-      if (!isSubmitting) {
-        axios.get("/api/comment/list?" + params).then((response) => {
-          setCommentList(response.data);
-        });
-      }
-      // 로그인 하지 않은 사용자도 댓글이 보이게
-    } else {
-      if (!isSubmitting) {
-        axios.get("/api/comment/list?" + params).then((response) => {
-          setCommentList(response.data);
-        });
+    if (loginInfo !== null) {
+      params.set("member_id", loginInfo.member_id);
+      params.set("board_id", board_id);
+      if (location.pathname.includes("vote")) {
+        if (loginInfo !== null) {
+          if (!isSubmitting) {
+            axios.get("/api/comment/vote/list?" + params).then((response) => {
+              setCommentList(response.data);
+            });
+          }
+
+          // 로그인 하지 않은 사용자도 댓글이 보이게
+        } else {
+          params.set("board_id", board_id);
+          if (!isSubmitting) {
+            axios.get("/api/comment/vote/list?" + params).then((response) => {
+              setCommentList(response.data);
+            });
+          }
+        }
+      } else {
+        if (!isSubmitting) {
+          axios.get("/api/comment/list?" + params).then((response) => {
+            setCommentList(response.data);
+          });
+        }
+
+        // 로그인 하지 않은 사용자도 댓글이 보이게
+        else {
+          if (!isSubmitting) {
+            axios.get("/api/comment/list?" + params).then((response) => {
+              setCommentList(response.data);
+            });
+          }
+        }
       }
     }
-  }, [isSubmitting]);
+  }, [isSubmitting, loginInfo]);
 
   function handleCommentLike(data) {
     setCommentList(
@@ -357,20 +387,37 @@ export function BoardComment({ board_id, boardData }) {
   function handleSubmit(comment) {
     setIsSubmitting(true);
     console.log("실행 여부 확인");
-    axios
-      .post("/api/comment/add", {
-        comment: comment.comment,
-        board_id: comment.board_id,
-        member_id: localStorage.getItem("memberInfo"),
-      })
-      .then(() => {
-        toast({
-          description: "댓글이 등록되었습니다.",
-          status: "success",
-        });
-      })
-      .catch((error) => console.log(error))
-      .finally(() => setIsSubmitting(false));
+    if (location.pathname.includes("vote")) {
+      axios
+        .post("/api/comment/vote/add", {
+          comment: comment.comment,
+          board_id: comment.board_id,
+          member_id: loginInfo.member_id,
+        })
+        .then(() => {
+          toast({
+            description: "댓글이 등록되었습니다.",
+            status: "success",
+          });
+        })
+        .catch((error) => console.log(error))
+        .finally(() => setIsSubmitting(false));
+    } else {
+      axios
+        .post("/api/comment/add", {
+          comment: comment.comment,
+          board_id: comment.board_id,
+          member_id: loginInfo.member_id,
+        })
+        .then(() => {
+          toast({
+            description: "댓글이 등록되었습니다.",
+            status: "success",
+          });
+        })
+        .catch((error) => console.log(error))
+        .finally(() => setIsSubmitting(false));
+    }
   }
 
   // 댓글 알람가게 하기

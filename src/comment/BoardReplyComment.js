@@ -30,6 +30,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { DetectLoginContext } from "../component/LoginProvider";
+import { useLocation } from "react-router-dom";
 
 function ReplyCommentForm({
   comment_id,
@@ -125,7 +126,9 @@ function ReplyCommentItem({
                 )}
 
                 <Button
-                  onClick={() => onDeleteModalOpen(reply_comment.id)}
+                  onClick={() =>
+                    onDeleteModalOpen(reply_comment.id, reply_comment.member_id)
+                  }
                   size="xs"
                   colorScheme="red"
                 >
@@ -191,11 +194,14 @@ export function BoardReplyComment({
   const { token, loginInfo } = useContext(DetectLoginContext);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const replyIdRef = useRef(0);
+  const replyMeberId = useRef("");
 
   const toast = useToast();
   const [reply_commentList, setReply_commentList] = useState([]);
 
   const { isOpen, onClose, onOpen } = useDisclosure();
+
+  const location = useLocation();
 
   useEffect(() => {
     if (!isSubmitting) {
@@ -212,27 +218,47 @@ export function BoardReplyComment({
     setIsSubmitting(true);
     setIsReplyFormOpen(true);
 
-    axios
-      .post("/api/comment/reply/add", {
-        reply_comment: reply_comment.reply_comment,
-        comment_id: reply_comment.comment_id,
-        member_id: loginInfo.member_id,
-      })
-      .then(() => {
-        toast({
-          description: "댓글이 등록되었습니다.",
-          status: "success",
+    if (location.pathname.includes("vote")) {
+      axios
+        .post("/api/comment/reply/vote/add", {
+          reply_comment: reply_comment.reply_comment,
+          comment_id: reply_comment.comment_id,
+          member_id: loginInfo.member_id,
+        })
+        .then(() => {
+          toast({
+            description: "댓글이 등록되었습니다.",
+            status: "success",
+          });
+        })
+        .catch((error) => console.log("bad"))
+        .finally(() => {
+          setIsSubmitting(false);
+          setIsReplyFormOpen(false);
         });
-      })
-      .catch((error) => console.log("bad"))
-      .finally(() => {
-        setIsSubmitting(false);
-        setIsReplyFormOpen(false);
-      });
+    } else {
+      axios
+        .post("/api/comment/reply/add", {
+          reply_comment: reply_comment.reply_comment,
+          comment_id: reply_comment.comment_id,
+          member_id: loginInfo.member_id,
+        })
+        .then(() => {
+          toast({
+            description: "댓글이 등록되었습니다.",
+            status: "success",
+          });
+        })
+        .catch((error) => console.log("bad"))
+        .finally(() => {
+          setIsSubmitting(false);
+          setIsReplyFormOpen(false);
+        });
+    }
   }
 
-  function handleReplyDelete(reply_comment) {
-    if (loginInfo.member_id === reply_comment.member_id) {
+  function handleReplyDelete() {
+    if (loginInfo.member_id === replyMeberId.current) {
       setIsSubmitting(true);
 
       axios
@@ -251,8 +277,10 @@ export function BoardReplyComment({
     }
   }
 
-  function handleReplyDeleteModalOpen(reply_id) {
+  function handleReplyDeleteModalOpen(reply_id, memberid) {
     replyIdRef.current = reply_id;
+    replyMeberId.current = memberid;
+
     onOpen();
   }
 
