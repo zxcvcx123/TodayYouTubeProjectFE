@@ -3,6 +3,7 @@ import {
   Avatar,
   Box,
   Button,
+  Center,
   Divider,
   Flex,
   FormControl,
@@ -65,20 +66,20 @@ function BoardView() {
 
   // 초기 렌더링
   useEffect(() => {
-      console.log("랜더링 테스트");
-      axios.get("/api/board/id/" + id).then((response) => {
-        setBoard(response.data);
+    console.log("랜더링 테스트");
+    axios.get("/api/board/id/" + id).then((response) => {
+      setBoard(response.data);
 
-        if (!response.data.is_show) {
-          navigate("board/list?category=notice");
-          window.alert("삭제된 게시물입니다.");
-        }
+      if (!response.data.is_show) {
+        navigate("board/list?category=notice");
+        window.alert("삭제된 게시물입니다.");
+      }
 
-        // 게시글 데이터를 가져온 후 작성자 여부를 확인하여 isAuthor 설정
-        if (loginInfo && loginInfo.member_id === response.data.board_member_id) {
-          setIsAuthor(true);
-        }
-      });
+      // 게시글 데이터를 가져온 후 작성자 여부를 확인하여 isAuthor 설정
+      if (loginInfo && loginInfo.member_id === response.data.board_member_id) {
+        setIsAuthor(true);
+      }
+    });
   }, [isSubmitting, location, loginInfo]);
 
   // 초기 렌더링 파일 목록 가져오기
@@ -214,117 +215,123 @@ function BoardView() {
   }
 
   return (
-    <Box m={"50px 20% 20px 50px"}>
-      <Box mb={5}>
-        <Heading>{boardInfo} 게시판</Heading>
-      </Box>
-      <Heading>{board.id} 번 게시글 보기(임시 게시글 번호 확인용!!)</Heading>
-
-      {/* -------------------- 상단 영역 -------------------- */}
-      <FormControl mt={10} mb={2}>
-        {/* 제목 */}
-        <Text fontSize={"xx-large"} as={"strong"}>
-          {board.title}
-        </Text>
-        <Flex justifyContent={"space-between"} alignItems={"center"}>
-          <Flex alignItems={"center"}>
-            {/* 프로필 */}
-            <HStack>
-              <Flex width={"150px"}>
-                <Avatar src="https://i.imgur.com/lmSDJtn.jpeg" />
-                <Box ml="3">
-                  <Tooltip label={board.nickname} placement="top-start">
-                    <Text fontWeight="bold">
-                      {board.nickname.slice(0, 8)}...
-                    </Text>
-                  </Tooltip>
-                  <Text fontSize="sm">{board.role_name}</Text>
-                </Box>
-              </Flex>
-            </HStack>
-
-            {/* 일자 */}
-            <Text>| {board.updated_at}</Text>
-          </Flex>
-          {/* 좋아요, 조회수 */}
-          <Flex alignItems={"center"} gap={"5"}>
-            <BoardLike id={id} like={like} board={board} />
-            <Text> | 조회수 : {board.views}</Text>
-          </Flex>
-        </Flex>
-      </FormControl>
-
-      <Divider my={5} borderColor="grey" />
-
-      {/* -------------------- 유튜브 섹션 -------------------- */}
-      {renderYoutubeSection()}
-
-      <Divider my={5} borderColor="grey" />
-
-      {/* -------------------- 본문 -------------------- */}
-      <FormControl mb={2}>
-        {/*<FormLabel>본문</FormLabel>*/}
-        <Box>
-          {/* CKEditor 본문 영역 onReady => 높이 설정 */}
-          {board && (
-            <CKEditor
-              disabled={"true"}
-              editor={ClassicEditor}
-              data={board.content}
-              config={editorConfig}
-              onReady={(editor) => {
-                editor.ui.view.editable.element.style.minHeight = "500px";
-              }}
-            />
-          )}
+    <Center>
+      <Box mt={"20px"} w={"70%"}>
+        <Box mb={5}>
+          <Heading>{boardInfo} 게시판</Heading>
         </Box>
-      </FormControl>
+        <Heading>{board.id} 번 게시글 보기(임시 게시글 번호 확인용!!)</Heading>
 
-      {/* -------------------- 파일 리스트 -------------------- */}
-      {uploadFiles.length > 0 && (
-        <Box mb={2}>
-          <Text>파일 목록</Text>
-          <Box border={"1px solid #edf1f6"} h={"auto"} textIndent={"10px"}>
-            {uploadFiles.map((fileList) => (
-              <Link
-                key={fileList.id}
-                style={{ display: "block", color: "blue" }}
-                to={fileList.fileurl}
-              >
-                {fileList.filename}
-              </Link>
-            ))}
-          </Box>
-        </Box>
-      )}
-      {/* -------------------- 버튼 섹션 -------------------- */}
-      <Flex justifyContent={"space-between"}>
-        {/* 목록 버튼 */}
-        <Button
-          colorScheme="blue"
-          onClick={() => navigate("/board/list?category=" + currentParams)}
-        >
-          목록
-        </Button>
-        {isAuthor && (
+        {/* -------------------- 상단 영역 -------------------- */}
+        <FormControl mt={10} mb={2}>
+          {/* 제목 */}
+          <Text fontSize={"xx-large"} as={"strong"}>
+            {board.title}
+          </Text>
+          <Flex justifyContent={"space-between"} alignItems={"center"}>
+            <Flex alignItems={"center"}>
+              {/* 프로필 */}
+              <HStack>
+                <Flex width={"150px"}>
+                  <Avatar src="https://i.imgur.com/lmSDJtn.jpeg" />
+                  <Box ml="3">
+                    <Tooltip label={board.nickname} placement="top-start">
+                      <Text fontWeight="bold">
+                        {board.nickname.slice(0, 8)}...
+                      </Text>
+                    </Tooltip>
+                    <Text fontSize="sm">{board.role_name}</Text>
+                  </Box>
+                </Flex>
+              </HStack>
+
+              {/* 일자 */}
+              <Text>| {board.updated_at}</Text>
+            </Flex>
+            {/* 좋아요, 조회수 */}
+            <Flex alignItems={"center"} gap={"5"}>
+              <BoardLike id={id} like={like} board={board} />
+              <Text> | 조회수 : {board.views}</Text>
+            </Flex>
+          </Flex>
+        </FormControl>
+
+        <Divider my={5} borderColor="grey" />
+
+        {/* -------------------- 유튜브 섹션 -------------------- */}
+        {renderYoutubeSection()}
+
+        <Divider my={5} borderColor="grey" />
+
+        {/* -------------------- 본문 -------------------- */}
+        <FormControl mb={2}>
+          {/*<FormLabel>본문</FormLabel>*/}
           <Box>
-            {/* 수정 버튼 */}
-            <Button colorScheme="purple" onClick={handleEditClick} mr={"10px"}>
-              수정
-            </Button>
+            {/* CKEditor 본문 영역 onReady => 높이 설정 */}
+            {board && (
+              <CKEditor
+                disabled={"true"}
+                editor={ClassicEditor}
+                data={board.content}
+                config={editorConfig}
+                onReady={(editor) => {
+                  editor.ui.view.editable.element.style.minHeight = "500px";
+                }}
+              />
+            )}
+          </Box>
+        </FormControl>
 
-            {/* 삭제 버튼 */}
-            <Button colorScheme="red" onClick={handleDeleteClick}>
-              삭제
-            </Button>
+        {/* -------------------- 파일 리스트 -------------------- */}
+        {uploadFiles.length > 0 && (
+          <Box mb={2}>
+            <Text>파일 목록</Text>
+            <Box border={"1px solid #edf1f6"} h={"auto"} textIndent={"10px"}>
+              {uploadFiles.map((fileList) => (
+                <Link
+                  key={fileList.id}
+                  style={{ display: "block", color: "blue" }}
+                  to={fileList.fileurl}
+                >
+                  {fileList.filename}
+                </Link>
+              ))}
+            </Box>
           </Box>
         )}
-      </Flex>
-      {/* -------------------- 댓글 영역 -------------------- */}
+        {/* -------------------- 버튼 섹션 -------------------- */}
+        <Flex justifyContent={"space-between"}>
+          {/* 목록 버튼 */}
+          <Button
+            colorScheme="blue"
+            onClick={() => navigate("/board/list?category=" + currentParams)}
+          >
+            목록
+          </Button>
+          {isAuthor && (
+            <Box>
+              {/* 수정 버튼 */}
+              <Button
+                colorScheme="purple"
+                onClick={handleEditClick}
+                mr={"10px"}
+              >
+                수정
+              </Button>
 
-      <BoardComment board_id={id} boardData={board} />
-      <ScrollToTop />
-    </Box>
+              {/* 삭제 버튼 */}
+              <Button colorScheme="red" onClick={handleDeleteClick}>
+                삭제
+              </Button>
+            </Box>
+          )}
+        </Flex>
+        {/* -------------------- 댓글 영역 -------------------- */}
+
+        <BoardComment board_id={id} boardData={board} />
+        <ScrollToTop />
+      </Box>
+    </Center>
   );
 }
 
