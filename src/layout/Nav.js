@@ -39,7 +39,7 @@ import { Stomp } from "@stomp/stompjs";
 import { SocketContext } from "../socket/Socket";
 import axios from "axios";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import { Logo1WithText } from "../assets/Image";
+import { Logo1WithText, Logo1WithText3 } from "../assets/Image";
 import VisitorCountCard from "../admin/VisitorCountCard";
 
 Stack.propTypes = {
@@ -183,7 +183,7 @@ export function Nav({ setSocket }) {
                 navigate("/");
               }}
             >
-              <Image src={Logo1WithText} minW={"200px"} maxW={"200px"} />
+              <Image src={Logo1WithText3} minW={"200px"} maxW={"200px"} />
             </button>
 
             <Flex>
