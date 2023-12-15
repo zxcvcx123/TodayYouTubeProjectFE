@@ -61,21 +61,12 @@ function MemberInfoMyInfo({ loginInfo }) {
   function handleMemberInfoEditValidatePassword() {
     if (editMemberInfoPassword === editMemberInfoPasswordCheck) {
       setIsSubmitting(true);
-      const grantType = localStorage.getItem("grantType");
-      const accessToken = localStorage.getItem("accessToken");
+
       axios
-        .post(
-          "/api/member/info/passwordCheck",
-          {
-            member_id: loginInfo.member_id,
-            password: editMemberInfoPassword,
-          },
-          {
-            headers: {
-              Authorization: `${grantType} ${accessToken}`,
-            },
-          },
-        )
+        .post("/api/member/info/passwordCheck", {
+          member_id: loginInfo.member_id,
+          password: editMemberInfoPassword,
+        })
         .then((response) => {
           toast({
             description: "비밀번호 검증을 성공하였습니다.",
