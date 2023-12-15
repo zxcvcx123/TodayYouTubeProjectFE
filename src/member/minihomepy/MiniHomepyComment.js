@@ -19,9 +19,15 @@ export function MiniHomepyComment({ homepyId }) {
   const [comment, setComment] = useState("");
   const [commentList, setCommentList] = useState(null);
   useEffect(() => {
-    axios.get("/api/member/minihomepy/getCommentList", {
-      homepy_id: homepyId,
-    });
+    axios
+      .get("/api/member/minihomepy/getCommentList", {
+        params: {
+          homepy_id: homepyId,
+        },
+      })
+      .then((response) => {
+        setCommentList(response.data.commentList);
+      });
   }, []);
   function handleAddComment() {
     axios.post("/api/member/minihomepy/addComment", {
@@ -29,6 +35,8 @@ export function MiniHomepyComment({ homepyId }) {
       member_id: loginInfo.member_id,
       comment: comment,
       image_url: loginInfo.image_url,
+      role_name: loginInfo.role_name,
+      nickname: loginInfo.nickname,
     });
   }
 
@@ -104,6 +112,38 @@ export function MiniHomepyComment({ homepyId }) {
             </Flex>
           </FormControl>
         </Box>
+        {commentList !== null ? (
+          commentList.map((comments) => (
+            <Box
+              p={"15px"}
+              w="80%"
+              bg=" rgba( 255, 255, 255, 0.1 )"
+              borderRadius={"20px"}
+              key={comments.id}
+              mt={1.5}
+              mb={1.5}
+            >
+              <Flex w="80%" alignItems={"center"}>
+                <Box>
+                  <Flex alignItems={"center"}>
+                    <Box borderRadius={"20px"} mr={5}>
+                      <Image
+                        src={comments.image_url}
+                        borderRadius={"80px"}
+                        w={"160px"}
+                        minWidth={"160px"}
+                        h={"160px"}
+                        minHeight={"160px"}
+                      />
+                    </Box>
+                  </Flex>
+                </Box>
+              </Flex>
+            </Box>
+          ))
+        ) : (
+          <></>
+        )}
       </Box>
     </>
   );

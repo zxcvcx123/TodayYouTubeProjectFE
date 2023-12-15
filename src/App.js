@@ -62,9 +62,12 @@ const routes = createBrowserRouter(
         <Route path="admin/member/list" element={<AdminMemberList />} />
         <Route path="admin/member/:member_id" element={<AdminMemberInfo />} />
         <Route path="search" element={<SearchResult />} />
-      </Route>
-      <Route path="/member/minihomepy" element={<MiniHomepyContainer />}>
-        <Route path="/member/minihomepy/:member_id" element={<MiniHomepy />} />
+        <Route path="/member/minihomepy" element={<MiniHomepyContainer />}>
+          <Route
+            path="/member/minihomepy/:member_id"
+            element={<MiniHomepy />}
+          />
+        </Route>
       </Route>
     </>,
   ),

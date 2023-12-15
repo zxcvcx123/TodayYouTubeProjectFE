@@ -33,27 +33,23 @@ export function MemberLogin() {
   function handleLogin(event) {
     event.preventDefault();
 
+    console.log(member_id);
+    console.log(password);
+
     axios
       .post("/api/member/login", {
         member_id,
         password,
       })
-      .then(function (response) {
+      .then((response) => {
+        localStorage.setItem("memberInfo", member_id);
         toast({
           description: "로그인 되었습니다.",
           status: "info",
         });
-        const { grantType, accessToken } = response.data.token;
-        const authority = response.data.authentication[0].toString();
-        localStorage.setItem("grantType", grantType);
-        localStorage.setItem("accessToken", accessToken);
-        localStorage.setItem("authority", authority);
-        localStorage.setItem("memberInfo", member_id);
         navigate("/");
       })
       .catch((error) => {
-        console.log(error);
-
         if (error.response && error.response.status === 400) {
           toast({
             description: "잘못된 접근입니다.",
@@ -72,6 +68,7 @@ export function MemberLogin() {
         }
       });
   }
+
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 mt-10">
