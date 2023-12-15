@@ -28,10 +28,11 @@ import {
   StackDivider,
   Text,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import { Sidenav } from "./Sidenav";
 import axios from "axios";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 function AdminMemberInfoDetails({
   memberInfo,
@@ -42,14 +43,25 @@ function AdminMemberInfoDetails({
   const [suspensionReason, setSuspensionReason] = useState("");
   const [suspensionPeriod, setSuspensionPeriod] = useState(7);
 
+  const toast = useToast();
   const { onClose, isOpen, onOpen } = useDisclosure();
+  const navigate = useNavigate();
 
   function handleSuspensionButton() {
-    axios.put("/api/admin/member", {
-      member_id: memberInfo.member_id,
-      period: suspensionPeriod,
-      reason: suspensionReason,
-    });
+    axios
+      .put("/api/admin/member", {
+        member_id: memberInfo.member_id,
+        period: suspensionPeriod,
+        reason: suspensionReason,
+      })
+      .then(() => {
+        toast({
+          description: "정지처리가 완료되었습니다.",
+          status: "success",
+        });
+        navigate("/admin/member/list?p=1");
+      })
+      .catch((error) => console.log(error));
   }
 
   return (

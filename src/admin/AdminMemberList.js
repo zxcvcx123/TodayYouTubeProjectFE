@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  border,
   Box,
   Button,
   Checkbox,
@@ -10,6 +11,7 @@ import {
   Table,
   Tbody,
   Td,
+  Text,
   Thead,
   Tr,
 } from "@chakra-ui/react";
@@ -72,7 +74,7 @@ function AdminMemberList(props) {
         <Table>
           <Thead>
             <Tr>
-              <Td>선택</Td>
+              <Td></Td>
               <Td
                 fontWeight={"bold"}
                 borderColor={"black"}
@@ -126,10 +128,15 @@ function AdminMemberList(props) {
                   onClick={() => navigate("/admin/member/" + member.member_id)}
                 >
                   <Td
+                    w={"5%"}
                     textAlign={"center"}
                     onClick={(e) => e.stopPropagation(e)}
                   >
-                    <Checkbox borderColor="black"></Checkbox>
+                    {member.role_name == "정지회원" && (
+                      <Button size={"sm"} colorScheme="red">
+                        정지회원
+                      </Button>
+                    )}
                   </Td>
                   <Td textAlign={"center"}>
                     {memberList.indexOf(member) +
