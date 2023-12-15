@@ -137,26 +137,26 @@ function BoardList() {
     // 제목의 길이가 20자 이상일 경우 ...으로 자르고 툴팁으로 전체 제목을 표시
     if (board.title.length > 20) {
       return (
-        <Tooltip label={board.title}>
-          <>
-            <Flex>
-              {`${board.title.slice(0, 20)}...`}
+        <>
+          <Tooltip label={board.title}>
+            <Flex gap={2}>
+              {`${board.title.slice(0, 35)}...`}
               <FontAwesomeIcon icon={faComment} /> {board.count_comment}
             </Flex>
-            {boardInfo === "all" && (
-              <Box ml={"auto"}>
-                <Text>{board.categoryName} </Text>
-              </Box>
-            )}
-          </>
-        </Tooltip>
+          </Tooltip>
+          {boardInfo === "all" && (
+            <Box ml={"auto"}>
+              <Text>{board.categoryName} </Text>
+            </Box>
+          )}
+        </>
       );
     }
 
     // 일반적인 게시물 제목 표시 (툴팁 없음)
     return (
       <>
-        <Flex>
+        <Flex gap={2}>
           <Text>{board.title}</Text>
           <FontAwesomeIcon icon={faComment} />
           <Text>{board.count_comment}</Text>
@@ -338,6 +338,7 @@ function BoardList() {
                           textAlign={"center"}
                           verticalAlign="middle"
                           borderBottom={"1px solid white"}
+                          w={"80px"}
                         >
                           {board.rownum}
                         </Td>
@@ -346,6 +347,7 @@ function BoardList() {
                           verticalAlign="middle"
                           width={"500px"}
                           borderBottom={"1px solid white"}
+                          w={"600px"}
                         >
                           <Flex align={"center"} gap={"10px"}>
                             {/* 썸네일 출력 */}
