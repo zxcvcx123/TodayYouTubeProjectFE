@@ -227,7 +227,9 @@ function BoardView() {
     <Center>
       <Box mt={"20px"} w={"1000px"}>
         <Box mb={5}>
-          <Heading>{boardInfo} 게시판</Heading>
+          <Box w={"500px"} borderBottom={"5px solid rgb(0,35,150,0.5)"}>
+            <Heading>{boardInfo} 게시판</Heading>
+          </Box>
         </Box>
 
         {/* -------------------- 상단 영역 -------------------- */}
