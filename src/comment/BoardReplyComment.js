@@ -176,7 +176,10 @@ function ReplyCommentList({
   return (
     <Card ml={5} border="1px solid black" borderRadius="5" mt={2}>
       <CardBody>
-        <Stack divider={<StackDivider />} spacing={4}>
+        <Stack
+          divider={<StackDivider border={"1px solid lightgray"} />}
+          spacing={4}
+        >
           {reply_commentList.map((reply_comment) => (
             <ReplyCommentItem
               key={reply_comment.id}
