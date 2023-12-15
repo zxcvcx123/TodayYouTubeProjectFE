@@ -50,6 +50,13 @@ export function MemberLogin() {
         navigate("/");
       })
       .catch((error) => {
+        console.log(error);
+        if (error.response && error.response.status === 401) {
+          toast({
+            description: "정지된 회원입니다.",
+            status: "error",
+          });
+        }
         if (error.response && error.response.status === 400) {
           toast({
             description: "잘못된 접근입니다.",

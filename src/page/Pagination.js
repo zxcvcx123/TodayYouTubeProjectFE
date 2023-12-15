@@ -41,7 +41,7 @@ function Pagination({ pageInfo }) {
   return (
     <Center>
       <Box>
-        {pageInfo.initialPage && (
+        {pageInfo.startPageNumber > 5 && (
           <PageButton variant="ghost" pageNumber={pageInfo.initialPage}>
             <FontAwesomeIcon icon={faAnglesLeft} />
           </PageButton>
@@ -70,7 +70,7 @@ function Pagination({ pageInfo }) {
           </PageButton>
         )}
 
-        {pageInfo.lastPageNumber && (
+        {pageInfo.endPageNumber < pageInfo.lastPageNumber && (
           <PageButton variant="ghost" pageNumber={pageInfo.lastPageNumber}>
             <FontAwesomeIcon icon={faAnglesRight} />
           </PageButton>

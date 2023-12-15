@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Button,
   Card,
   CardBody,
   CardFooter,
+  CardHeader,
   Flex,
   Heading,
+  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -21,11 +23,16 @@ import {
   PopoverContent,
   PopoverHeader,
   PopoverTrigger,
+  Select,
   Stack,
   StackDivider,
   Text,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
+import { Sidenav } from "./Sidenav";
+import axios from "axios";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 function AdminMemberInfoDetails({
   memberInfo,
@@ -33,7 +40,29 @@ function AdminMemberInfoDetails({
   handleMemberInfoMyInfo,
   handleMemberComment,
 }) {
+  const [suspensionReason, setSuspensionReason] = useState("");
+  const [suspensionPeriod, setSuspensionPeriod] = useState(7);
+
+  const toast = useToast();
   const { onClose, isOpen, onOpen } = useDisclosure();
+  const navigate = useNavigate();
+
+  function handleSuspensionButton() {
+    axios
+      .put("/api/admin/member", {
+        member_id: memberInfo.member_id,
+        period: suspensionPeriod,
+        reason: suspensionReason,
+      })
+      .then(() => {
+        toast({
+          description: "정지처리가 완료되었습니다.",
+          status: "success",
+        });
+        navigate("/admin/member/list?p=1");
+      })
+      .catch((error) => console.log(error));
+  }
 
   return (
     <Box>
@@ -221,14 +250,47 @@ function AdminMemberInfoDetails({
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
+          <ModalHeader>회원 정지</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>회원을 정지시키시겠습니까?</ModalBody>
+          <ModalBody>
+            <Card>
+              <CardBody>
+                <Stack divider={<StackDivider />} spacing="4">
+                  <Box>
+                    <Heading size="xs" textTransform="uppercase">
+                      정지사유
+                    </Heading>
+                    <Input
+                      type="text"
+                      pt="2"
+                      fontSize="sm"
+                      onChange={(e) => setSuspensionReason(e.target.value)}
+                    ></Input>
+                  </Box>
+                  <Box>
+                    <Heading size="xs" textTransform="uppercase">
+                      정지기간
+                    </Heading>
+                    <Select
+                      defaultValue={7}
+                      onChange={(e) => setSuspensionPeriod(e.target.value)}
+                    >
+                      <option value={7}>7</option>
+                      <option value={30}>30</option>
+                      <option value={999}>999</option>
+                    </Select>
+                  </Box>
+                </Stack>
+              </CardBody>
+            </Card>
+          </ModalBody>
           <ModalFooter>
             <Button variant={"ghost"} onClick={onClose}>
               닫기
             </Button>
-            <Button colorScheme="blue">삭제</Button>
+            <Button colorScheme="red" onClick={handleSuspensionButton}>
+              정지
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

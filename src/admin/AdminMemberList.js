@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import {
+  border,
   Box,
+  Button,
+  Checkbox,
   Flex,
   Heading,
   Input,
@@ -8,6 +11,7 @@ import {
   Table,
   Tbody,
   Td,
+  Text,
   Thead,
   Tr,
 } from "@chakra-ui/react";
@@ -21,6 +25,7 @@ function AdminMemberList(props) {
   const [memberList, setMemberList] = useState(null);
   const [pageInfo, setPageInfo] = useState(null);
   const [searchById, setSearchById] = useState("");
+  const [isManaging, setIsManaging] = useState(false);
 
   const navigate = useNavigate();
   let [params] = useSearchParams();
@@ -62,10 +67,14 @@ function AdminMemberList(props) {
             placeholder="회원 ID입력"
             onChange={(e) => handleMemberIdSearch(e)}
           />
+          <Button colorScheme="blue" mt={5} mb={5} ml={"25%"}>
+            회원관리
+          </Button>
         </Flex>
         <Table>
           <Thead>
             <Tr>
+              <Td></Td>
               <Td
                 fontWeight={"bold"}
                 borderColor={"black"}
@@ -118,18 +127,29 @@ function AdminMemberList(props) {
                   _hover={{ backgroundColor: "red.100" }}
                   onClick={() => navigate("/admin/member/" + member.member_id)}
                 >
+                  <Td
+                    w={"5%"}
+                    textAlign={"center"}
+                    onClick={(e) => e.stopPropagation(e)}
+                  >
+                    {member.role_name === "정지회원" && (
+                      <Button size={"sm"} colorScheme="red">
+                        정지회원
+                      </Button>
+                    )}
+                  </Td>
                   <Td textAlign={"center"}>
                     {memberList.indexOf(member) +
                       1 +
                       (params.get("p") - 1) * 20}
                   </Td>
                   <Td textAlign={"center"}>{member.member_id}</Td>
-                  {member.role_name == "운영자" && (
+                  {member.role_name === "운영자" && (
                     <Td color={"blue"} textAlign={"center"}>
                       {member.role_name}
                     </Td>
                   )}
-                  {member.role_name == "운영자" || (
+                  {member.role_name === "운영자" || (
                     <Td textAlign={"center"}>일반[{member.role_name}]</Td>
                   )}
                   <Td textAlign={"center"}>{member.email}</Td>
