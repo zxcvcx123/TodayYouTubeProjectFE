@@ -192,13 +192,12 @@ function BoardView() {
 
   // 유튜브 섹션 렌더링 여부 결정 함수
   function renderYoutubeSection() {
-    console.log("링크: " + board.link);
     if (!board.link) {
-      return <Text>링크가 없네용</Text>;
+      return <></>;
     }
 
     return (
-      <FormControl mb={2} backgroundColor={"rgb(0,0,0)"} p={"10px"}>
+      <FormControl mb={2} backgroundColor={"rgba(0,0,0,0.9)"} p={"10px"}>
         <FormLabel fontSize="xl" fontWeight="bold" color={"rgb(255,255,255)"}>
           추천 유튜브 영상
         </FormLabel>
@@ -230,7 +229,6 @@ function BoardView() {
         <Box mb={5}>
           <Heading>{boardInfo} 게시판</Heading>
         </Box>
-        <Heading>{board.id} 번 게시글 보기(임시 게시글 번호 확인용!!)</Heading>
 
         {/* -------------------- 상단 영역 -------------------- */}
         <FormControl mt={10} mb={2}>
@@ -266,15 +264,11 @@ function BoardView() {
           </Flex>
         </FormControl>
 
-        <Divider my={5} borderColor="grey" />
-
         {/* -------------------- 유튜브 섹션 -------------------- */}
         {renderYoutubeSection()}
 
-        <Divider my={5} borderColor="grey" />
-
         {/* -------------------- 본문 -------------------- */}
-        <FormControl mb={2}>
+        <FormControl my={5}>
           {/*<FormLabel>본문</FormLabel>*/}
           <Box>
             {/* CKEditor 본문 영역 onReady => 높이 설정 */}
