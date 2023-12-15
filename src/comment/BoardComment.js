@@ -165,7 +165,7 @@ function CommentItem({
           <Text size="xs" as="sub">
             {comment.created_at}
           </Text>
-          {loginInfo.member_id === comment.member_id && (
+          {loginInfo && loginInfo.member_id === comment.member_id && (
             <Flex gap={0.5}>
               {isEditing || (
                 <Button
@@ -317,11 +317,11 @@ export function BoardComment({ board_id, boardData }) {
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   const params = new URLSearchParams();
-  params.set("member_id", loginInfo.member_id);
-  params.set("board_id", board_id);
 
   useEffect(() => {
-    if (loginInfo.member_id !== "") {
+    if (loginInfo !== null) {
+      params.set("member_id", loginInfo.member_id);
+      params.set("board_id", board_id);
       if (!isSubmitting) {
         axios.get("/api/comment/list?" + params).then((response) => {
           setCommentList(response.data);
@@ -330,12 +330,13 @@ export function BoardComment({ board_id, boardData }) {
       // 로그인 하지 않은 사용자도 댓글이 보이게
     } else {
       if (!isSubmitting) {
+        params.set("board_id", board_id);
         axios.get("/api/comment/list?" + params).then((response) => {
           setCommentList(response.data);
         });
       }
     }
-  }, [isSubmitting]);
+  }, [isSubmitting, loginInfo]);
 
   function handleCommentLike(data) {
     setCommentList(

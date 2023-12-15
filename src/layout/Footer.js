@@ -16,7 +16,6 @@ export function Footer() {
       position="relative"
       transform="translateY(0%)"
       height="300px"
-      mt={20}
       backgroundColor="gray.700"
       justifyContent={"space-between"}
     >

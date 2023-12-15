@@ -192,25 +192,20 @@ function BoardView() {
 
   // 유튜브 섹션 렌더링 여부 결정 함수
   function renderYoutubeSection() {
-    console.log("링크: " + board.link);
     if (!board.link) {
-      return <Text>링크가 없네용</Text>;
+      return <></>;
     }
 
     return (
-      <FormControl mb={2}>
-        <FormLabel fontSize="xl" fontWeight="bold" color="purple.500">
+      <FormControl mb={2} backgroundColor={"rgba(0,0,0,0.9)"} p={"10px"}>
+        <FormLabel fontSize="xl" fontWeight="bold" color={"rgb(255,255,255)"}>
           추천 유튜브 영상
         </FormLabel>
         <Center>
           <Flex m={2} ml={0} gap={5}>
             {/* 유튜브 영상 출력 */}
             <YoutubeInfo link={board.link} extraVideo={true} />
-            <Card
-              p={2}
-              backgroundColor={"rgb(211,217,216)"}
-              justifyContent={"center"}
-            >
+            <Box justifyContent={"center"}>
               <Button
                 onClick={() => window.open(board.link)}
                 colorScheme="red"
@@ -221,20 +216,49 @@ function BoardView() {
               <Button onClick={handleCopyClick} colorScheme="blue">
                 유튜브 링크 복사
               </Button>
-            </Card>
+            </Box>
           </Flex>
         </Center>
       </FormControl>
     );
   }
 
+  // 날짜 포맷 변경
+  function formatDateTime(dateTimeString) {
+    const options = {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false, // 24시간 형식
+    };
+
+    const formattedDate = new Date(dateTimeString);
+    const intlFormatter = new Intl.DateTimeFormat("ko-KR", options);
+    const [
+      { value: year },
+      ,
+      { value: month },
+      ,
+      { value: day },
+      ,
+      { value: hour },
+      ,
+      { value: minute },
+    ] = intlFormatter.formatToParts(formattedDate);
+
+    return `${year}-${month}-${day} ${hour}:${minute}`;
+  }
+
   return (
-    <Center>
-      <Box mt={"20px"} w={"70%"}>
+    <Center mb={"50px"}>
+      <Box mt={"20px"} w={"1000px"}>
         <Box mb={5}>
-          <Heading>{boardInfo} 게시판</Heading>
+          <Box w={"500px"} borderBottom={"5px solid rgb(0,35,150,0.5)"}>
+            <Heading>{boardInfo} 게시판</Heading>
+          </Box>
         </Box>
-        <Heading>{board.id} 번 게시글 보기(임시 게시글 번호 확인용!!)</Heading>
 
         {/* -------------------- 상단 영역 -------------------- */}
         <FormControl mt={10} mb={2}>
@@ -260,7 +284,7 @@ function BoardView() {
               </HStack>
 
               {/* 일자 */}
-              <Text>| {board.updated_at}</Text>
+              <Text>| {formatDateTime(board.updated_at)}</Text>
             </Flex>
             {/* 좋아요, 조회수 */}
             <Flex alignItems={"center"} gap={"5"}>
@@ -270,15 +294,11 @@ function BoardView() {
           </Flex>
         </FormControl>
 
-        <Divider my={5} borderColor="grey" />
-
         {/* -------------------- 유튜브 섹션 -------------------- */}
         {renderYoutubeSection()}
 
-        <Divider my={5} borderColor="grey" />
-
         {/* -------------------- 본문 -------------------- */}
-        <FormControl mb={2}>
+        <FormControl my={5}>
           {/*<FormLabel>본문</FormLabel>*/}
           <Box>
             {/* CKEditor 본문 영역 onReady => 높이 설정 */}
