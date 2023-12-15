@@ -228,16 +228,18 @@ function BoardList() {
       <Box>
         {/* ------------------------- 게시글 목록 상단 바 ------------------------- */}
         <Box my={5}>
-          {params.get("category") !== "all" ? (
-            <Heading>{boardInfo} 게시판</Heading>
-          ) : (
-            <>
-              <Heading>통합검색</Heading>
-              <Text>
-                {params.get("k")}의 검색결과 ({listCount})건
-              </Text>
-            </>
-          )}
+          <Box w={"500px"} borderBottom={"5px solid rgb(0,35,150,0.5)"}>
+            {params.get("category") !== "all" ? (
+              <Heading>{boardInfo} 게시판</Heading>
+            ) : (
+              <>
+                <Heading>통합검색</Heading>
+                <Text>
+                  {params.get("k")}의 검색결과 ({listCount})건
+                </Text>
+              </>
+            )}
+          </Box>
         </Box>
         <Flex justify={"flex-end"} mb={5}>
           <Flex>
