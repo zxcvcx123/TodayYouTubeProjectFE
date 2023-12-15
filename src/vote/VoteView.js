@@ -15,7 +15,13 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useOutletContext,
+  useParams,
+} from "react-router-dom";
 import { BoardComment } from "../comment/BoardComment";
 import BoardLike from "../like/BoardLike";
 import YoutubeInfo from "../component/YoutubeInfo";
@@ -33,6 +39,7 @@ import {
   faCheckDouble,
   faCircleCheck,
 } from "@fortawesome/free-solid-svg-icons";
+import LoadingPage from "../component/LoadingPage";
 
 function VoteView() {
   const { token, handleLogout, loginInfo, validateToken } =
@@ -40,6 +47,7 @@ function VoteView() {
 
   const {
     stompClient,
+    IsConnected,
     voteResult,
     setVoteResult,
     optionOneVotes,
@@ -48,6 +56,8 @@ function VoteView() {
     setOptionTwoVotes,
     voteChecked,
     setVoteChecked,
+    voteNot,
+    setVoteNot,
   } = useContext(SocketContext);
 
   // state
@@ -55,16 +65,6 @@ function VoteView() {
   const [thumbnail, setThumbnail] = useState(null);
 
   const totalVotes = (optionOneVotes || 0) + (optionTwoVotes || 0);
-
-  // progressBar
-  const optionOnePercentage =
-    totalVotes === 0
-      ? 0
-      : (((optionOneVotes || 0) / totalVotes || 1) * 100).toFixed(1);
-  const optionTwoPercentage =
-    totalVotes === 0
-      ? 0
-      : (((optionTwoVotes || 0) / totalVotes || 1) * 100).toFixed(1);
 
   //URL 매개변수 추출
   const { id } = useParams();
@@ -84,17 +84,37 @@ function VoteView() {
 
   // 초기 렌더링
   useEffect(() => {
-    axios.get("/api/vote/id/" + id).then((res) => {
-      console.log(res.data);
-      setBoard(res.data);
-      // count된 숫자 넣고 숫자에 따라서 set 해서 처음 % 반영
-    });
+    if (loginInfo !== null) {
+      axios.get("/api/vote/id/" + id).then((res) => {
+        console.log(res.data);
+        setBoard(res.data);
 
-    // axios.get 해서 버튼을 눌렀는지 안눌렀는지 게시판번호/아이디 기준으로 조회
-  }, []);
+        // count된 숫자 넣고 숫자에 따라서 set 해서 처음 % 반영
+        setOptionOneVotes(res.data.voted_a);
+        setOptionTwoVotes(res.data.voted_b);
+      });
+
+      // axios.get 해서 버튼을 눌렀는지 안눌렀는지 게시판번호/아이디 기준으로 조회
+      axios
+        .post("/api/vote/history", {
+          vote_board_id: id,
+          vote_member_id: loginInfo.member_id,
+        })
+        .then((res) => {
+          console.log(res.data);
+          if (res.data.checked_vote_not !== null) {
+            setVoteNot(1);
+            setVoteChecked(2);
+          } else {
+            setVoteNot(0);
+            setVoteChecked(res.data.checked_vote_a);
+          }
+        });
+    }
+  }, [loginInfo]);
 
   if (board === null) {
-    return <Spinner />;
+    return <LoadingPage />;
   }
 
   // 링크 복사 버튼 클릭
@@ -158,10 +178,55 @@ function VoteView() {
     });
   }
 
+  // 삭제 버튼
+  function handleDelete() {
+    axios
+      .delete("/api/vote/delete", {
+        data: {
+          id: id,
+          vote_member_id: board.vote_member_id,
+          login_memeber_id: loginInfo.member_id,
+        },
+      })
+      .then(() => {
+        toast({
+          description: "정상적으로 삭제 되었습니다.",
+          status: "success",
+        });
+        navigate("/board/vote/list");
+      })
+      .catch((error) => {
+        if (error.response.status === 403) {
+          toast({
+            description: "게시글 삭제는 작성자만 가능합니다.",
+            status: "error",
+          });
+          return;
+        }
+
+        if (error.response.status === 401) {
+          toast({
+            description: "권한 정보가 없습니다.",
+            status: "error",
+          });
+          return;
+        }
+
+        if (error.response) {
+          toast({
+            description: "게시글 삭제에 실패했습니다.",
+            status: "error",
+          });
+          return;
+        }
+      })
+      .finally();
+  }
+
   return (
-    <Box m={"50px 20% 20px 50px"}>
+    <Box>
       <Box mb={5}>
-        <Heading>{boardInfo} 게시판</Heading>
+        <Heading>투표 게시판</Heading>
       </Box>
 
       {/* -------------------- 상단 영역 -------------------- */}
@@ -191,7 +256,7 @@ function VoteView() {
           </Flex>
           {/* 좋아요, 조회수, 투표수 */}
           <Flex alignItems={"center"} gap={"5"}>
-            <Text> | 투표 수 : </Text>
+            <Text> | 투표 수 : {board.voted_all}</Text>
           </Flex>
         </Flex>
       </FormControl>
@@ -200,11 +265,16 @@ function VoteView() {
 
       {/* -------------------- 유튜브 섹션 -------------------- */}
       {/*{renderYoutubeSection()}*/}
-      <Box>
+      <Box w={"100%"} mb={5}>
         <Heading textAlign={"center"}>{board.title}</Heading>
       </Box>
       <Box>
-        <Flex mb={2} alignItems={"center"}>
+        <Flex
+          mb={2}
+          alignItems={"center"}
+          w={"100%"}
+          justifyContent={"space-between"}
+        >
           <Box>
             <YoutubeInfo link={board.link_a} extraVideo={true} />
             <Button
@@ -214,16 +284,24 @@ function VoteView() {
               onClick={() => {
                 handleVoteA();
               }}
-              isDisabled={voteChecked === 1 && true}
+              isDisabled={
+                (voteChecked === 1 && voteNot === 0) || IsConnected === false
+                  ? true
+                  : false
+              }
             >
-              {voteChecked === 1 ? (
+              {IsConnected === false ? (
+                <Text>연결 중...</Text>
+              ) : voteChecked === 1 && voteNot === 0 ? (
                 <FontAwesomeIcon icon={faCircleCheck} size="xl" />
               ) : (
                 <FontAwesomeIcon icon={faCheck} />
               )}
             </Button>
           </Box>
-          <Heading>VS</Heading>
+          <Box w={"20%"}>
+            <Heading textAlign={"center"}>VS</Heading>
+          </Box>
           <Box>
             <YoutubeInfo link={board.link_b} extraVideo={true} />
             <Button
@@ -233,9 +311,15 @@ function VoteView() {
               onClick={() => {
                 handleVoteB();
               }}
-              isDisabled={voteChecked !== 1 && true}
+              isDisabled={
+                (voteChecked !== 1 && voteNot === 0) || IsConnected === false
+                  ? true
+                  : false
+              }
             >
-              {voteChecked !== 1 ? (
+              {IsConnected === false ? (
+                <Text>연결 중...</Text>
+              ) : voteChecked !== 1 && voteNot === 0 ? (
                 <FontAwesomeIcon icon={faCircleCheck} size="xl" />
               ) : (
                 <FontAwesomeIcon icon={faCheck} />
@@ -245,17 +329,23 @@ function VoteView() {
         </Flex>
       </Box>
       {/* -------------------- 본문 -------------------- */}
-      <Box mb={2} textAlign={"center"}>
-        {board.content}
-      </Box>
+
       <ProgressBar
-        optionOnePercentage={optionOnePercentage}
-        optionTwoPercentage={optionTwoPercentage}
+        optionOneVotes={optionOneVotes}
+        optionTwoVotes={optionTwoVotes}
       />
+      <Box mt={5} textAlign={"center"}>
+        <Text fontSize={"1.5rem"}>{board.content}</Text>
+      </Box>
       <Divider my={5} borderColor="grey" />
 
       {/* -------------------- 버튼 섹션 -------------------- */}
       <Flex justifyContent={"space-between"}>
+        {/* 삭제 버튼 */}
+        <Button colorScheme="red" onClick={handleDelete}>
+          삭제
+        </Button>
+
         {/* 목록 버튼 */}
         <Button
           colorScheme="blue"

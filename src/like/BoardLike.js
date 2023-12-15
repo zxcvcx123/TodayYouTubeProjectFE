@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import { Button, Flex, Heading } from "@chakra-ui/react";
+import { Button, Flex, Heading, Spinner } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as fullHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as emptyHeart } from "@fortawesome/free-regular-svg-icons";
@@ -64,14 +64,17 @@ function BoardLike({ id }) {
           onClick={() => {
             send();
           }}
+          isDisabled={IsConnected === false}
         >
-          {like === 1 ? (
+          {IsConnected === false ? (
+            <Spinner />
+          ) : like === 1 ? (
             <FontAwesomeIcon icon={fullHeart} />
           ) : (
             <FontAwesomeIcon icon={emptyHeart} />
           )}
         </Button>
-        {IsConnected && <Heading>{countLike}</Heading>}
+        <Heading>{countLike}</Heading>
       </Flex>
     </>
   );

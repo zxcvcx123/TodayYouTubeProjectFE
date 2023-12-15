@@ -54,7 +54,6 @@ function BoardList() {
   /* 로그인 정보 컨텍스트 */
   const { token, handleLogout, loginInfo, validateToken } =
     useContext(DetectLoginContext);
-  const { boardCategory } = useOutletContext();
 
   // state
   const [boardList, setBoardList] = useState([]);
@@ -89,7 +88,6 @@ function BoardList() {
       setBoardInfo(response.data.boardInfo);
       setListCount(response.data.listCount);
     });
-
 
     if (params.get("s") === null) {
       setPageCount(10);
@@ -212,7 +210,7 @@ function BoardList() {
         {/* ------------------------- 게시글 목록 상단 바 ------------------------- */}
         <Box my={5}>
           {params.get("category") !== "all" ? (
-            <Heading>{boardCategory} 게시판</Heading>
+            <Heading>{boardInfo} 게시판</Heading>
           ) : (
             <>
               <Heading>통합검색</Heading>
