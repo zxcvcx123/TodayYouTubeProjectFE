@@ -313,16 +313,9 @@ function BoardView() {
           </Box>
         )}
         {/* -------------------- 버튼 섹션 -------------------- */}
-        <Flex justifyContent={"space-between"}>
-          {/* 목록 버튼 */}
-          <Button
-            colorScheme="blue"
-            onClick={() => navigate("/board/list?category=" + currentParams)}
-          >
-            목록
-          </Button>
+        <Flex justifyContent={"right"}>
           {isAuthor && (
-            <Box>
+            <Box mr={"10px"}>
               {/* 수정 버튼 */}
               <Button
                 colorScheme="purple"
@@ -338,6 +331,13 @@ function BoardView() {
               </Button>
             </Box>
           )}
+          {/* 목록 버튼 */}
+          <Button
+            colorScheme="blue"
+            onClick={() => navigate("/board/list?category=" + currentParams)}
+          >
+            목록
+          </Button>
         </Flex>
         {/* -------------------- 댓글 영역 -------------------- */}
 
