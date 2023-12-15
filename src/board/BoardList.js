@@ -268,22 +268,52 @@ function BoardList() {
             <Table size={"sm"}>
               <Thead>
                 <Tr>
-                  <Th borderBottom={"1px solid white"} textAlign={"center"}>
+                  <Th
+                    borderTop={"1px solid rgb(0,35,150,0.5)"}
+                    borderBottom={"1px solid rgb(0,35,150,0.5)"}
+                    textAlign={"center"}
+                    fontSize={"small"}
+                  >
                     번호
                   </Th>
-                  <Th borderBottom={"1px solid white"} textAlign={"center"}>
+                  <Th
+                    borderTop={"1px solid rgb(0,35,150,0.5)"}
+                    borderBottom={"1px solid rgb(0,35,150,0.5)"}
+                    textAlign={"center"}
+                    fontSize={"small"}
+                  >
                     제목
                   </Th>
-                  <Th borderBottom={"1px solid white"} textAlign={"center"}>
+                  <Th
+                    borderTop={"1px solid rgb(0,35,150,0.5)"}
+                    borderBottom={"1px solid rgb(0,35,150,0.5)"}
+                    textAlign={"center"}
+                    fontSize={"small"}
+                  >
                     좋아요
                   </Th>
-                  <Th borderBottom={"1px solid white"} textAlign={"center"}>
+                  <Th
+                    borderTop={"1px solid rgb(0,35,150,0.5)"}
+                    borderBottom={"1px solid rgb(0,35,150,0.5)"}
+                    textAlign={"center"}
+                    fontSize={"small"}
+                  >
                     작성자
                   </Th>
-                  <Th borderBottom={"1px solid white"} textAlign={"center"}>
+                  <Th
+                    borderTop={"1px solid rgb(0,35,150,0.5)"}
+                    borderBottom={"1px solid rgb(0,35,150,0.5)"}
+                    textAlign={"center"}
+                    fontSize={"small"}
+                  >
                     작성일시
                   </Th>
-                  <Th borderBottom={"1px solid white"} textAlign={"center"}>
+                  <Th
+                    borderTop={"1px solid rgb(0,35,150,0.5)"}
+                    borderBottom={"1px solid rgb(0,35,150,0.5)"}
+                    textAlign={"center"}
+                    fontSize={"small"}
+                  >
                     조회수
                   </Th>
                 </Tr>
