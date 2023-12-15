@@ -191,7 +191,13 @@ export function Nav({ setSocket }) {
 
             <Flex>
               <Menu>
-                <MenuButton as={Button} w={120} size="md" variant="ghost">
+                <MenuButton
+                  as={Button}
+                  w={120}
+                  size="md"
+                  variant="ghost"
+                  style={{ fontFamily: "Nanum Gothic" }}
+                >
                   게시판
                   <ChevronDownIcon />
                 </MenuButton>
