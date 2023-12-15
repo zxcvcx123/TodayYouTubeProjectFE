@@ -253,7 +253,7 @@ function AdminMain() {
   }
 
   return (
-    <Flex>
+    <Flex border={"1px solid blue"}>
       {/* ---------- 사이드 바 ----------*/}
       <Sidenav />
       {/* ---------- 메인 ----------*/}
