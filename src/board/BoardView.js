@@ -3,6 +3,7 @@ import {
   Avatar,
   Box,
   Button,
+  Card,
   Center,
   Divider,
   Flex,
@@ -200,16 +201,28 @@ function BoardView() {
         <FormLabel fontSize="xl" fontWeight="bold" color="purple.500">
           추천 유튜브 영상
         </FormLabel>
-        {/* 유튜브 영상 출력 */}
-        <YoutubeInfo link={board.link} extraVideo={true} />
-        <Flex m={2} ml={0} gap={5}>
-          <Button onClick={() => window.open(board.link)} colorScheme="red">
-            유튜브 영상 페이지로 이동
-          </Button>
-          <Button onClick={handleCopyClick} colorScheme="blue">
-            유튜브 링크 복사
-          </Button>
-        </Flex>
+        <Center>
+          <Flex m={2} ml={0} gap={5}>
+            {/* 유튜브 영상 출력 */}
+            <YoutubeInfo link={board.link} extraVideo={true} />
+            <Card
+              p={2}
+              backgroundColor={"rgb(211,217,216)"}
+              justifyContent={"center"}
+            >
+              <Button
+                onClick={() => window.open(board.link)}
+                colorScheme="red"
+                mb={5}
+              >
+                유튜브 영상 페이지로 이동
+              </Button>
+              <Button onClick={handleCopyClick} colorScheme="blue">
+                유튜브 링크 복사
+              </Button>
+            </Card>
+          </Flex>
+        </Center>
       </FormControl>
     );
   }
