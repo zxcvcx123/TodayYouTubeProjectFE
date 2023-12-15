@@ -42,19 +42,13 @@ export function MiniHomepy(props) {
   let toast = useToast();
 
   // 로그인 정보
-  const grantType = localStorage.getItem("grantType");
-  const accessToken = localStorage.getItem("accessToken");
-  const loginMember = localStorage.getItem("memberInfo");
+  const loginMember = loginInfo !== null ? loginInfo.member_id : "";
   let originBgmValue = "";
 
   /*미니홈피 정보*/
   useEffect(() => {
     axios
-      .get("/api/member/minihomepy/member_id/" + member_id, {
-        headers: {
-          Authorization: `${grantType} ${accessToken}`,
-        },
-      })
+      .get("/api/member/minihomepy/member_id/" + member_id)
       .then((response) => {
         setMember((prevState) => ({
           ...prevState,
@@ -99,11 +93,7 @@ export function MiniHomepy(props) {
   /* 미니 홈피 콘텐츠 정보 */
   useEffect(() => {
     axios
-      .get("/api/member/minihomepy/member_id/info/" + member_id, {
-        headers: {
-          Authorization: `${grantType} ${accessToken}`,
-        },
-      })
+      .get("/api/member/minihomepy/member_id/info/" + member_id)
       .then((response) => {
         setIntroduce(response.data.introduce);
         setTodayViews(response.data.today_visitors);
@@ -161,7 +151,7 @@ export function MiniHomepy(props) {
       axios
         .post("/api/member/minihomepy/view", {
           member_id: member_id,
-          login_member_id: loginMember,
+          login_member_id: loginInfo.member_id,
         })
         .catch(() => {
           toast({
@@ -171,7 +161,7 @@ export function MiniHomepy(props) {
           navigate("/");
         });
     }
-  }, []);
+  }, [loginInfo]);
 
   useEffect(() => {
     axios
@@ -238,7 +228,6 @@ export function MiniHomepy(props) {
               w={"25%"}
               h={"100%"}
               borderRadius={"20px"}
-              border="1px solid white"
               backgroundColor={"transparent"}
             >
               <MiniHomepyLeftContainer
@@ -286,7 +275,6 @@ export function MiniHomepy(props) {
             h={"100%"}
             borderRadius={"20px"}
             backgroundColor={"transparent"}
-            border="1px solid white"
             backdropFilter={"blur(2px)"}
           >
             <MiniHomepyRightContainer

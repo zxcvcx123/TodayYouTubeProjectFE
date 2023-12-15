@@ -31,7 +31,8 @@
     position: relative;
     height: 380px;
     width: 60px;
-    background: linear-gradient(112.1deg, rgb(32, 38, 57) 11.4%, rgb(63, 76, 119) 70.2%);
+    background: linear-gradient(
+    #F71735,#FF0000, #FF7878);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -116,7 +117,8 @@
     transform: translateX(0);
     width:70px;
     height:70px;
-    background: linear-gradient(112.1deg, rgb(32, 38, 57) 11.4%, rgb(63, 76, 119) 70.2%);
+    background: linear-gradient(
+            #F71735,#FF0000, #FF7878);
     border:6px solid #243a4f;
     border-radius: 50%;
     display: flex;

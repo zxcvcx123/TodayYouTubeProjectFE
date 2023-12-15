@@ -46,7 +46,6 @@ export function MiniHomepyHome({
         w={"100%"}
         h={"100%"}
         bg="transparent"
-        maxHeight={"100%"}
         sx={{
           overflowY: "scroll",
           "::-webkit-scrollbar": {
@@ -64,7 +63,6 @@ export function MiniHomepyHome({
           },
         }}
       >
-        <Box></Box>
         <div className="middleContentImage">
           <Text
             fontSize={"30px"}
@@ -118,13 +116,13 @@ export function MiniHomepyHome({
               topRankBoardList.map((boardList, index) => (
                 <Box
                   p={"15px"}
-                  w="fit-content"
                   bg=" rgba( 255, 255, 255, 0.2 )"
                   borderRadius={"20px"}
                   key={boardList.id}
                   mt={5}
                   mr={3}
                   mb={5}
+                  minWidth={"300px"}
                   _hover={{
                     cursor: "pointer",
                   }}
@@ -267,7 +265,7 @@ export function MiniHomepyHome({
                   w="fit-content"
                   bg=" rgba( 255, 255, 255, 0.2 )"
                   borderRadius={"20px"}
-                  w="fit-content"
+                  minWidth={"300px"}
                   key={boardList.id}
                   mt={5}
                   mb={5}
@@ -393,6 +391,7 @@ export function MiniHomepyHome({
                   key={boardList.id}
                   mt={5}
                   mb={5}
+                  minWidth={"300px"}
                   _hover={{
                     cursor: "pointer",
                   }}

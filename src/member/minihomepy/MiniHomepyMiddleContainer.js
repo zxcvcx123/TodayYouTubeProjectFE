@@ -47,7 +47,17 @@ function MiniHomepyMiddleContent({
         sx={{
           overflowY: "scroll",
           "::-webkit-scrollbar": {
-            display: "none",
+            width: "10px",
+          },
+          "::-webkit-scrollbar-track": {
+            background: "transparent",
+          },
+          "::-webkit-scrollbar-thumb": {
+            background: "transparent",
+            borderRadius: "10px",
+          },
+          ":hover::-webkit-scrollbar-thumb": {
+            background: "#dcdcdc",
           },
         }}
       >
