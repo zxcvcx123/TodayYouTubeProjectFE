@@ -12,7 +12,7 @@ export function HomeLayout() {
 
   return (
     // <Box bg="blackAlpha.200">
-    <Box bg="white">
+    <Box bg="rgb(242,242,242)">
       <LoginProvider>
         <Box>
           <Socket>

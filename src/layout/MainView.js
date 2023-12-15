@@ -204,7 +204,7 @@ export function MainView() {
   // 임시메인
   return (
     <Center>
-      <Box w="80%" h="2180px" p={4} border={"1px"} borderColor="pink">
+      <Box w="1400px" h="2180px" p={4} border={"1px"} borderColor="pink">
         <Flex w="100%" mb="200px" bg="black">
           <Box w="18%">
             <Box>

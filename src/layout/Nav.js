@@ -167,7 +167,7 @@ export function Nav({ setSocket }) {
   return (
     <>
       <div className="navBackground">
-        <Center bg="white" borderBottom={"5px solid rgb(255,0,0,0.5)"}>
+        <Center bg="white" boxShadow="0px 4px 8px rgba(0, 0, 0, 0.2)">
           <Flex
             // ml="100px"
             mt={2}
