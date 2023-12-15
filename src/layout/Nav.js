@@ -29,7 +29,11 @@ import * as PropTypes from "prop-types";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { ChevronDownIcon, CloseIcon } from "@chakra-ui/icons";
 import { SearchMain } from "./SearchMain";
-import { faBell, faCircleXmark } from "@fortawesome/free-regular-svg-icons";
+import {
+  faBell,
+  faCircleXmark,
+  faStar,
+} from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { DetectLoginContext } from "../component/LoginProvider";
@@ -38,7 +42,7 @@ import * as SockJS from "sockjs-client";
 import { Stomp } from "@stomp/stompjs";
 import { SocketContext } from "../socket/Socket";
 import axios from "axios";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faGhost, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { Logo1WithText, Logo1WithText3 } from "../assets/Image";
 import VisitorCountCard from "../admin/VisitorCountCard";
 
@@ -270,8 +274,11 @@ export function Nav({ setSocket }) {
                 borderStyle={"solid"}
                 size="md"
                 variant="ghost"
+                rightIcon={<FontAwesomeIcon icon={faGhost} />}
+                backgroundColor={"rgba(11,121,177,0.5)"}
+                mr={"10px"}
               >
-                오늘 뭐 볼까?
+                랜덤 추천
               </Button>
             </Flex>
             {/* ---------- 통합검색 ---------- */}
