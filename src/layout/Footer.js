@@ -29,7 +29,7 @@ export function Footer() {
         justifyContent={"space-between"}
       >
         <Button color="white" size="lg" variant="link">
-          <Image src={Logo1WithText2} w={"150px"} />
+          <Image src={Logo1WithText2} minW={"150px"} maxW={"150px"} />
         </Button>
         <Button color="white" size="md" variant="link">
           이용약관
