@@ -177,7 +177,8 @@ export function MiniHomepyMiddleContainer({
           <ul>
             <li
               className="list active"
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault();
                 showPopup("HOME");
               }}
             >
@@ -191,7 +192,8 @@ export function MiniHomepyMiddleContainer({
             </li>{" "}
             <li
               className="list"
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault();
                 showPopup("LIST");
               }}
             >
@@ -205,7 +207,8 @@ export function MiniHomepyMiddleContainer({
             </li>{" "}
             <li
               className="list"
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault();
                 showPopup("FAVORITE");
               }}
             >
@@ -219,7 +222,8 @@ export function MiniHomepyMiddleContainer({
             </li>{" "}
             <li
               className="list"
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault();
                 showPopup("COMMENT");
               }}
             >

@@ -77,11 +77,11 @@ function VoteList() {
   function handleWriteBtn() {
     console.log("token.detectLogin = " + token.detectLogin);
     // 글쓰기 버튼 클릭시 로그인 되어 있지 않다면 로그인 창으로 이동
-    // if () {
-    //   onOpen();
-    // } else {
-    navigate("/board/vote/write");
-    // }
+    if (!token.detectLogin) {
+      onOpen();
+    } else {
+      navigate("/board/vote/write");
+    }
   }
 
   // 그리드 형태 제목 렌더링

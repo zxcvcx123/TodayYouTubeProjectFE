@@ -211,14 +211,15 @@ export function MiniHomepy(props) {
         <Box
           w={"100vw"}
           h={"100vh"}
-          bgGradient="linear(    to top,
-    #283e51,
-    #0a2342)"
+          // bgGradient="linear( to top,#283e51,#0a2342)"
+
+          bgGradient="linear(	#000000,#0a2342,#283e51)"
           position={"relative"}
           overflow={"hidden"}
           display={"flex"}
           alignItems={"center"}
           justifyContent={"center"}
+          backdropFilter={"blur(2px)"}
         >
           <Snowflake />
           <Box
@@ -229,9 +230,9 @@ export function MiniHomepy(props) {
             zIndex={"10"}
             borderRadius={"20px"}
             backgroundColor={"transparent"}
-            backdropFilter={"blur(2px)"}
             display={"flex"}
             alignItems={"center"}
+            backdropFilter={"blur(2px)"}
           >
             <Box
               w={"25%"}
@@ -256,7 +257,6 @@ export function MiniHomepy(props) {
               zIndex={"10"}
               borderRadius={"20px"}
               backgroundColor={"transparent"}
-              backdropFilter={"blur(10px)"}
               display={"flex"}
               justifyContent={"flex-end"}
               fontFamily={"'Song Myung', serif;"}
@@ -287,6 +287,7 @@ export function MiniHomepy(props) {
             borderRadius={"20px"}
             backgroundColor={"transparent"}
             border="1px solid white"
+            backdropFilter={"blur(2px)"}
           >
             <MiniHomepyRightContainer
               videoId={videoId}
