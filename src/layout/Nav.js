@@ -77,8 +77,7 @@ export function Nav({ setSocket }) {
       document.querySelector(".navBackground").style.background =
         "linear-gradient(112.1deg, rgb(32, 38, 57) 11.4%, rgb(63, 76, 119) 70.2%)";
     } else {
-      document.querySelector(".navBackground").style.background =
-        "linear-gradient(#FF0000,#990000)";
+      document.querySelector(".navBackground").style.background = "white";
     }
   }
   useEffect(() => {
@@ -180,7 +179,7 @@ export function Nav({ setSocket }) {
             alignItems="center"
             justifyContent={"space-around"}
             // bg="blackAlpha.100"
-            bg="white"
+            bg="transparent"
           >
             <button
               onClick={() => {
