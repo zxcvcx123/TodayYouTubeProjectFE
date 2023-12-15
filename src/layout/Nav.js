@@ -152,13 +152,14 @@ export function Nav({ setSocket, setBoardCategory }) {
   return (
     <>
       <Flex
-        ml="100px"
+        // ml="100px"
         mt={2}
         h="100px"
-        w="80%"
+        w="100%"
         alignItems="center"
         justifyContent={"space-around"}
-        bg="blackAlpha.100"
+        // bg="blackAlpha.100"
+        bg="white"
       >
         <button
           onClick={() => {
@@ -264,6 +265,7 @@ export function Nav({ setSocket, setBoardCategory }) {
             오늘 뭐 볼까?
           </Button>
         </Flex>
+        {/* ---------- 통합검색 ---------- */}
         <Box>
           <SearchMain />
         </Box>
