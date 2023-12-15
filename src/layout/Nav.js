@@ -169,7 +169,7 @@ export function Nav({ setSocket, setBoardCategory }) {
               navigate("/");
             }}
           >
-            <Image src={Logo1WithText} w={"200px"} />
+            <Image src={Logo1WithText} minW={"200px"} maxW={"200px"} />
           </button>
           <Flex>
             <Menu>
