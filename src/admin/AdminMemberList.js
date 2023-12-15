@@ -132,7 +132,7 @@ function AdminMemberList(props) {
                     textAlign={"center"}
                     onClick={(e) => e.stopPropagation(e)}
                   >
-                    {member.role_name == "정지회원" && (
+                    {member.role_name === "정지회원" && (
                       <Button size={"sm"} colorScheme="red">
                         정지회원
                       </Button>
@@ -144,12 +144,12 @@ function AdminMemberList(props) {
                       (params.get("p") - 1) * 20}
                   </Td>
                   <Td textAlign={"center"}>{member.member_id}</Td>
-                  {member.role_name == "운영자" && (
+                  {member.role_name === "운영자" && (
                     <Td color={"blue"} textAlign={"center"}>
                       {member.role_name}
                     </Td>
                   )}
-                  {member.role_name == "운영자" || (
+                  {member.role_name === "운영자" || (
                     <Td textAlign={"center"}>일반[{member.role_name}]</Td>
                   )}
                   <Td textAlign={"center"}>{member.email}</Td>
