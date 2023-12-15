@@ -405,7 +405,10 @@ export function Nav({ setSocket, setBoardCategory }) {
                   }}
                   w={90}
                   size="md"
-                  variant="ghost"
+                  variant="solid"
+                  backgroundColor={"rgb(0,35,150,0.9)"}
+                  _hover={{ bg: "rgba(0,35,150,0.2)", color: "black" }}
+                  color={"white"}
                 >
                   로그인
                 </Button>
