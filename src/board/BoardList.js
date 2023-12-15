@@ -434,16 +434,15 @@ function BoardList() {
                         cursor: "pointer",
                       }}
                     >
-                      <CardHeader p={"10px"}>
-                        {/* 썸네일 출력 */}
-                        <YoutubeInfo
-                          link={board.link}
-                          extraThumbnail={true}
-                          thumbnailWidth={250}
-                          thumbnailHeight={150}
-                        />
-                      </CardHeader>
-
+                      <Center>
+                        <CardHeader p={"10px"} w={"250px"} h={"150px"}>
+                          {/* 썸네일 출력 */}
+                          <YoutubeInfo
+                            link={board.link}
+                            extraThumbnail={true}
+                          />
+                        </CardHeader>
+                      </Center>
                       <CardBody p={"10px"}>
                         {/* 제목 출력 */}
                         {renderGreedTitle(board)}
