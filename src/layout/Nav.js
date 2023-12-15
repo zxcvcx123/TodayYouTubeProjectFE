@@ -6,6 +6,7 @@ import {
   Divider,
   Flex,
   HStack,
+  Image,
   Menu,
   MenuButton,
   MenuItem,
@@ -159,16 +160,13 @@ export function Nav({ setSocket, setBoardCategory }) {
         justifyContent={"space-around"}
         bg="blackAlpha.100"
       >
-        <Button
-          borderStyle={"solid"}
-          size="md"
-          variant="ghost"
+        <button
           onClick={() => {
             navigate("/");
           }}
         >
-          로고
-        </Button>
+          <Image src="img/logo1_withText.png" w={"200px"} />
+        </button>
         <Flex>
           <Menu>
             <MenuButton as={Button} w={120} size="md" variant="ghost">
