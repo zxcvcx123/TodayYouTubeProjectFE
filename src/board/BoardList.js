@@ -83,13 +83,18 @@ function BoardList() {
 
   // 초기 이펙트
   useEffect(() => {
-    axios.get("/api/board/list?" + params).then((response) => {
-      setBoardList(response.data.boardList);
-      setPageInfo(response.data.pageInfo);
-      setBoardInfo(response.data.boardInfo);
-      setListCount(response.data.listCount);
-    });
-
+    axios
+      .get("/api/board/list?" + params)
+      .then((response) => {
+        setBoardList(response.data.boardList);
+        setPageInfo(response.data.pageInfo);
+        setBoardInfo(response.data.boardInfo);
+        setListCount(response.data.listCount);
+      })
+      .catch((error) => {
+        console.error("Error fetching board list:", error);
+        window.alert("게시글 목록을 가져오는 중에 오류가 발생했습니다.");
+      });
 
     if (params.get("s") === null) {
       setPageCount(10);
