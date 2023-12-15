@@ -367,6 +367,7 @@ function BoardList() {
                           textAlign={"center"}
                           verticalAlign="middle"
                           borderBottom={"1px solid white"}
+                          w={"80px"}
                         >
                           {board.countlike}
                         </Td>
@@ -374,6 +375,10 @@ function BoardList() {
                           textAlign={"center"}
                           verticalAlign="middle"
                           borderBottom={"1px solid white"}
+                          maxW={"100px"}
+                          overflow={"hidden"}
+                          textOverflow={"ellipsis"}
+                          whiteSpace={"nowrap"}
                         >
                           {board.board_member_id}
                         </Td>
@@ -388,6 +393,7 @@ function BoardList() {
                           textAlign={"center"}
                           verticalAlign="middle"
                           borderBottom={"1px solid white"}
+                          w={"80px"}
                         >
                           {board.views}
                         </Td>
