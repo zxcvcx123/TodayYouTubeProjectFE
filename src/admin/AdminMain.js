@@ -15,6 +15,7 @@ import { BarChart } from "../component/BarChart";
 import axios from "axios";
 import { DoughnutChart } from "../component/DoughnutChart";
 import { LineChart } from "../component/LineChart";
+import VisitorCountCard from "./VisitorCountCard";
 
 // 도넛 차트 출력 형식
 const DoughnutChartBox = ({ title, chartData }) => (
