@@ -45,13 +45,19 @@ function ReplyCommentForm({
   }
 
   return (
-    <Box>
-      <Flex>
+    <Box mb={2}>
+      <Flex gap={2}>
         <Textarea
+          border="1px solid black"
+          borderRadius="5"
+          mt={2}
+          ml={5}
           value={reply_comment}
           onChange={(e) => setReply_comment(e.target.value)}
         />
         <Button
+          colorScheme="telegram"
+          mt={2}
           size="sm"
           h="80px"
           isDisabled={isSubmitting}
@@ -168,7 +174,7 @@ function ReplyCommentList({
   setIsSubmitting,
 }) {
   return (
-    <Card ml={5}>
+    <Card ml={5} border="1px solid black" borderRadius="5" mt={2}>
       <CardBody>
         <Stack divider={<StackDivider />} spacing={4}>
           {reply_commentList.map((reply_comment) => (

@@ -89,13 +89,14 @@ function CommentForm({
   }
 
   return (
-    <Flex>
+    <Flex gap={2}>
       <Textarea
         bg="white"
         value={comment}
         onChange={(e) => setComment(e.target.value)}
       />
       <Button
+        colorScheme="telegram"
         isDisabled={isSubmitting}
         h="80px"
         onClick={() => {
@@ -285,13 +286,15 @@ function CommentList({
   onCommentLikeClick,
 }) {
   return (
-    <Card border="1px solid black" borderRadius="5" mt={3}>
+    <Card border="1px solid black" borderRadius="5" mt={2}>
       {/*<CardHeader size="md">댓글 목록</CardHeader>*/}
       {/*<Divider colorScheme="black" />*/}
       <CardBody>
-        {/*<Stack divider={<StackDivider borderColor="whitesmoke" />} spacing="5">*/}
-        {commentList.map((comment) => (
-          <Box borderBottom={"1px solid black"} mb={5} h={"80px"}>
+        <Stack
+          divider={<StackDivider border={"1px solid lightgray"} />}
+          spacing="5"
+        >
+          {commentList.map((comment) => (
             <CommentItem
               key={comment.id}
               isSubmitting={isSubmitting}
@@ -301,9 +304,8 @@ function CommentList({
               setCommentLike={setCommentLike}
               onCommentLikeClick={onCommentLikeClick}
             />
-          </Box>
-        ))}
-        {/*</Stack>*/}
+          ))}
+        </Stack>
       </CardBody>
     </Card>
   );
