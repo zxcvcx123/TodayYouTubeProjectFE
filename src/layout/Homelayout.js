@@ -17,7 +17,7 @@ export function HomeLayout() {
         <Box>
           <Socket>
             <Nav />
-            <Box w={"80%"} m={"0 auto"}>
+            <Box w={"100%"} m={"0 auto"}>
               <Outlet context={{ test }} />
             </Box>
           </Socket>
