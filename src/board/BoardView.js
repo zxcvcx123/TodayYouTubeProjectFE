@@ -223,6 +223,34 @@ function BoardView() {
     );
   }
 
+  // 날짜 포맷 변경
+  function formatDateTime(dateTimeString) {
+    const options = {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false, // 24시간 형식
+    };
+
+    const formattedDate = new Date(dateTimeString);
+    const intlFormatter = new Intl.DateTimeFormat("ko-KR", options);
+    const [
+      { value: year },
+      ,
+      { value: month },
+      ,
+      { value: day },
+      ,
+      { value: hour },
+      ,
+      { value: minute },
+    ] = intlFormatter.formatToParts(formattedDate);
+
+    return `${year}-${month}-${day} ${hour}:${minute}`;
+  }
+
   return (
     <Center mb={"50px"}>
       <Box mt={"20px"} w={"1000px"}>
@@ -256,7 +284,7 @@ function BoardView() {
               </HStack>
 
               {/* 일자 */}
-              <Text>| {board.updated_at}</Text>
+              <Text>| {formatDateTime(board.updated_at)}</Text>
             </Flex>
             {/* 좋아요, 조회수 */}
             <Flex alignItems={"center"} gap={"5"}>
