@@ -31,6 +31,7 @@ import YoutubeInfo from "../component/YoutubeInfo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRankingStar, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import { DetectLoginContext } from "../component/LoginProvider";
+import LoadingPage from "../component/LoadingPage";
 
 export function MainView() {
   /* 로그인 정보 컨텍스트 */
@@ -149,7 +150,7 @@ export function MainView() {
   if (firstList == null || otherList == null) {
     return (
       <>
-        {showSpinner && <Spinner />}
+        {showSpinner && <LoadingPage />}
         {showSpinner || (
           <>
             <Card
