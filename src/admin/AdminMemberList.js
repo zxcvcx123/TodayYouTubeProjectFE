@@ -7,7 +7,6 @@ import {
   Flex,
   Heading,
   Input,
-  Spinner,
   Table,
   Tbody,
   Td,
@@ -20,6 +19,7 @@ import Pagination from "../page/Pagination";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { SearchComponent } from "../page/SearchComponent";
 import { Sidenav } from "./Sidenav";
+import LoadingPage from "../component/LoadingPage";
 
 function AdminMemberList(props) {
   const [memberList, setMemberList] = useState(null);
@@ -42,7 +42,7 @@ function AdminMemberList(props) {
   }, [location, searchById]);
 
   if (pageInfo == null) {
-    return <Spinner />;
+    return <LoadingPage />;
   }
 
   function handleMemberIdSearch(e) {

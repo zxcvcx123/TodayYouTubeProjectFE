@@ -12,7 +12,6 @@ import {
   Radio,
   RadioGroup,
   Select,
-  Spinner,
   Stack,
   Table,
   TableContainer,
@@ -29,6 +28,7 @@ import AdminMemberInfoDetails from "./AdminMemberInfoDetails";
 import YoutubeInfo from "../component/YoutubeInfo";
 import Pagination from "../page/Pagination";
 import { Sidenav } from "./Sidenav";
+import LoadingPage from "../component/LoadingPage";
 
 function AdminMemberInfo(props) {
   const { member_id } = useParams();
@@ -103,7 +103,7 @@ function AdminMemberInfo(props) {
   }
 
   if (memberInfo == null || memberInfoBoardList == null || pageInfo == null) {
-    return <Spinner />;
+    return <LoadingPage />;
   }
 
   return (
