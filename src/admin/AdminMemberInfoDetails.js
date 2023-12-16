@@ -263,6 +263,7 @@ function AdminMemberInfoDetails({
                       type="text"
                       pt="2"
                       fontSize="sm"
+                      placeholder={"정지사유를 입력해주세요"}
                       onChange={(e) => setSuspensionReason(e.target.value)}
                     ></Input>
                   </Box>

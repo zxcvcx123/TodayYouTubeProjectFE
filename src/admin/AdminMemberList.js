@@ -48,6 +48,7 @@ function AdminMemberList(props) {
   function handleMemberIdSearch(e) {
     const newSearchBy = e.target.value;
     setSearchById(newSearchBy);
+    params.set("p", 1);
     params.set("mid", newSearchBy);
   }
 
