@@ -2,8 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Grandiflora+One&display=swap');
-
+/* 폰트 전역 스타일 설정 */
 body {
-    font-family: 'Grandiflora One', cursive;
+    font-family: 'Nanum Gothic', sans-serif;
 }
