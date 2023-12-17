@@ -296,30 +296,28 @@ export function MainView() {
 
 
           {/* --------------- 메인 유튜브 영상 출력 --------------- */}
-          <Box border={"1px solid blue"} bg={"black"}>
-            <Flex
-              border={"1px"}
-              borderColor={"red"}
-            >
-              <Box width={"80%"} height="100%" key={mainShowLink}>
-                {mainShowLink && (
+          <Box boxShadow={"0px 4px 10px rgba(0, 0, 0, 0.1)"} h={"600px"} w={"1000px"} bg={"black"}
+               p={"10px"}>
+            <Box key={mainShowLink}>
+              {mainShowLink && (
                   <YoutubeInfo
                     link={mainShowLink}
                     extraVideo={true}
-                    opts={{height: "500px", width: "900px"}}
+                    opts={{height: "400px", width: "700px"}}
                   />
-                )}
-              </Box>
-
-            </Flex>
-            <Button color="white" variant={"link"}>
-              {linkCategory}게시판으로 이동하기 >
-            </Button>
+              )}
+            </Box>
+            <Box>
+              <Button color={"rgb(11,121,168)"} variant={"link"} bg={"white"}>
+                {linkCategory}게시판으로 이동하기 >
+              </Button>
+            </Box>
           </Box>
-
-
         </Flex>
-        {/* --------------- 1 ~ 5위 썸네일 --------------- */}
+
+
+        {/* --------------- 1 ~ 5위 썸네일 --------------- */
+        }
         <Flex border={"3px solid blue"} backgroundColor={"gray"}>
           <Box>
             <Flex h={"15%"} color={"white"} fontSize={"1.5rem"}>
@@ -386,7 +384,8 @@ export function MainView() {
         </Flex>
 
 
-        {/* --------------- 최신 게시글 리스트 --------------- */}
+        {/* --------------- 최신 게시글 리스트 --------------- */
+        }
         <MainBoardList
           mainBoardList2={mainBoardList2}
           mainBoardList3={mainBoardList3}
@@ -399,5 +398,6 @@ export function MainView() {
         />
       </Box>
     </Center>
-  );
+  )
+    ;
 }
