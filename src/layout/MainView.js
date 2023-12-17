@@ -205,13 +205,13 @@ export function MainView() {
   // 임시메인
   return (
     <Center>
-      <Box w="1400px" h="2180px" pt={4} border={"1px"} borderColor="pink">
-        <Flex mb={2}>
+      <Box w="1400px" h="2180px" pt={4}>
+        <Flex mb={"30px"} >
 
           {/* --------------- 사이드 베스트 영상 선택 창 --------------- */}
           <Box w="300px" bg={"white"} boxShadow={"0px 4px 10px rgba(0, 0, 0, 0.1)"}>
             <Box>
-              <Flex ml={2} mb={2} mt={2} gap={2}>
+              <Flex my={"10px"} justifyContent={"space-around"}>
                 <Button
                   backgroundColor={isDay ? "rgb(94,72,147)" : "rgb(184,235,246)"}
                   color={isDay ? "rgb(255,255,255)" : "rgb(0,0,0)"}
@@ -295,7 +295,7 @@ export function MainView() {
 
 
           {/* --------------- 메인 유튜브 영상 출력 --------------- */}
-          <Center w={"1200px"}>
+          <Center w={"1100px"}>
             <Box boxShadow={"0px 4px 10px rgba(0, 0, 0, 0.1)"} h={"600px"} w={"1000px"} bg={"white"}
                  p={"50px"}>
               <Box key={mainShowLink}>
