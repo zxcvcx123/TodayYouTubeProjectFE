@@ -28,6 +28,8 @@ function BoardWrite() {
   const [uuid, setUuid] = useState("");
   const [titleError, setTitleError] = useState("");
   const [contentError, setContentError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isYouTubeLink, setIsYouTubeLink] = useState(false);
 
   /* useLocation */
   const location = useLocation();
@@ -89,6 +91,7 @@ function BoardWrite() {
 
   // 작성 완료 버튼 클릭 ---------------------------------------------------
   function handleSubmit() {
+    setIsSubmitting(true);
     let uuSrc = getSrc();
 
     console.log("저장 버튼 클릭됨");
@@ -127,7 +130,7 @@ function BoardWrite() {
         if (error.response.status === 400) {
           toast({
             description:
-              "게시글 유효성 검증에 실패했습니다. 양식에 맞게 작성해주세요.",
+              "게시글 유효성 및 파일(최대 5개) 검증에 실패했습니다. 양식에 맞게 작성해주세요.",
             status: "error",
           });
           return;
@@ -151,7 +154,7 @@ function BoardWrite() {
 
         console.log("error");
       })
-      .finally(() => console.log("게시글 저장 끝"));
+      .finally(() => setIsSubmitting(false));
   }
 
   // 본문 영역 이미지 소스 코드 얻어오기
@@ -216,7 +219,11 @@ function BoardWrite() {
 
       {/* -------------------- 버튼 섹션 -------------------- */}
       {/* 저장 버튼 */}
-      <Button onClick={handleSubmit} colorScheme="blue">
+      <Button
+        onClick={handleSubmit}
+        colorScheme="blue"
+        isDisabled={isSubmitting}
+      >
         작성 완료
       </Button>
 

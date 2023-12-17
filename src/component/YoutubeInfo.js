@@ -12,6 +12,10 @@ function YoutubeInfo({
   extraVideo,
   opts = { height: "360px", width: "640px" },
   toolTip,
+  mode,
+  setIsYouTubeLink,
+  setIsYouTubeLink1,
+  setIsYouTubeLink2,
 }) {
   // 상태 값
   const location = useLocation();
@@ -31,6 +35,48 @@ function YoutubeInfo({
       const thumbnailUrl = `https://img.youtube.com/vi/${videoIdMatch[4]}/mqdefault.jpg`;
       thumbnail = thumbnailUrl;
       videoId = videoIdMatch[4];
+    }
+  }
+
+  // 링크가 유효한지 첫번째 검사 (null or isBlack)
+  // 투표 게시판에서 링크1번 유효성검사
+  if (mode === "voteLink1") {
+    if (link && link.trim() !== "") {
+      // 유튜브 링크에서 동영상 ID 추출 (정규표현식 match 메서드)
+      const videoIdMatch = link.match(
+        /^(https?:\/\/)?(www\.)?(youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/,
+      );
+
+      // 정규표현식 match 메서드 4번의 값으로 썸네일 추출
+      if (videoIdMatch && videoIdMatch[4]) {
+        const thumbnailUrl = `https://img.youtube.com/vi/${videoIdMatch[4]}/mqdefault.jpg`;
+        thumbnail = thumbnailUrl;
+        videoId = videoIdMatch[4];
+        setIsYouTubeLink1(true);
+      } else {
+        setIsYouTubeLink1(false);
+      }
+    }
+  }
+
+  // 링크가 유효한지 첫번째 검사 (null or isBlack)
+  // 투표 게시판에서 링크2번 유효성검사
+  if (mode === "voteLink2") {
+    if (link && link.trim() !== "") {
+      // 유튜브 링크에서 동영상 ID 추출 (정규표현식 match 메서드)
+      const videoIdMatch = link.match(
+        /^(https?:\/\/)?(www\.)?(youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/,
+      );
+
+      // 정규표현식 match 메서드 4번의 값으로 썸네일 추출
+      if (videoIdMatch && videoIdMatch[4]) {
+        const thumbnailUrl = `https://img.youtube.com/vi/${videoIdMatch[4]}/mqdefault.jpg`;
+        thumbnail = thumbnailUrl;
+        videoId = videoIdMatch[4];
+        setIsYouTubeLink2(true);
+      } else {
+        setIsYouTubeLink2(false);
+      }
     }
   }
 

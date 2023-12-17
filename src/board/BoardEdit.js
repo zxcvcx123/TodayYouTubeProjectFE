@@ -32,6 +32,7 @@ function BoardEdit() {
   const [mode, setMode] = useState("");
   const [titleError, setTitleError] = useState("");
   const [contentError, setContentError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   /* use immer */
   const [board, updateBoard] = useImmer(null);
@@ -41,7 +42,6 @@ function BoardEdit() {
 
   /* use navigate */
   const navigate = useNavigate();
-  console.log("수정: " + editUploadFiles.length);
 
   /* use toast */
   const toast = useToast();
@@ -98,6 +98,7 @@ function BoardEdit() {
 
   // 게시글 수정 버튼 클릭 함수
   function handleSubmit() {
+    setIsSubmitting(true);
     let uuSrc = getSrc();
 
     // 로그인 여부 검증
@@ -145,11 +146,11 @@ function BoardEdit() {
         uploadFiles,
       })
       .then(() => {
-        navigate("/board/list");
         toast({
           description: "게시글 수정에 성공했습니다.",
           status: "success",
         });
+        navigate("/board/" + board.id);
       })
       .catch((error) => {
         if (error.response.status === 401) {
@@ -170,7 +171,7 @@ function BoardEdit() {
         }
         console.log("bad");
       })
-      .finally(() => console.log("done"));
+      .finally(() => setIsSubmitting(false));
   }
 
   // 본문 영역 이미지 소스 코드 얻어오기
@@ -259,7 +260,11 @@ function BoardEdit() {
 
       {/* -------------------- 버튼 섹션 --------------------*/}
       {/* 저장 버튼 */}
-      <Button onClick={handleSubmit} colorScheme="blue">
+      <Button
+        onClick={handleSubmit}
+        colorScheme="blue"
+        isDisabled={isSubmitting}
+      >
         수정 완료
       </Button>
 
