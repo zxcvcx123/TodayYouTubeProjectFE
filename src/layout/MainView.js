@@ -206,8 +206,11 @@ export function MainView() {
   return (
     <Center>
       <Box w="1400px" h="2180px" p={4} border={"1px"} borderColor="pink">
-        <Flex w="100%" mb="200px" bg="black">
-          <Box w="300px" border={"3px solid green"}>
+        <Flex w="100%" gap={2} mb={2}>
+
+
+          {/* --------------- 사이드 베스트 영상 선택 창 --------------- */}
+          <Box w="300px" border={"3px solid green"} bg={"white"}>
             <Box>
               <Flex ml={2} mb={2} mt={2} gap={2}>
                 <Button
@@ -257,9 +260,9 @@ export function MainView() {
                 </Button>
               </Flex>
             </Box>
-            <Box color="white" ml={2}>
+            <Box ml={2}>
               <FontAwesomeIcon icon={faRankingStar}/> {dateSort} 베스트 영상
-              <Text fontSize="0.8rem" color="gray.400">
+              <Text fontSize="0.8rem" color={"rgb(50,50,50)"}>
                 - {dateSort} 가장 추천을 많이 받은 영상들입니다.
               </Text>
             </Box>
@@ -291,106 +294,99 @@ export function MainView() {
             {/*</Box>*/}
           </Box>
 
-          <Box w={"85%"}>
-            <Box border={"1px solid blue"}>
-              <Flex
-                w="86%"
-                h="67%"
-                m="auto"
-                ml={10}
-                border={"1px"}
-                borderColor={"red"}
-              >
-                <Box width={"80%"} height="100%" key={mainShowLink}>
-                  {mainShowLink && (
-                    <YoutubeInfo
-                      link={mainShowLink}
-                      extraVideo={true}
-                      opts={{height: "550px", width: "1000px"}}
-                    />
-                  )}
-                </Box>
 
-              </Flex>
-              <Button w={"1%"} color="white" mt={300} ml={100} variant={"link"}>
-                {linkCategory}게시판으로 이동하기 >
-              </Button>
-            </Box>
-            <Box
-              ml={"-10%"}
-              w={"100%"}
-              mt={6}
-              h={"37%"}
+          {/* --------------- 메인 유튜브 영상 출력 --------------- */}
+          <Box border={"1px solid blue"} bg={"black"}>
+            <Flex
               border={"1px"}
-              borderColor={"blue"}
+              borderColor={"red"}
             >
-              <Flex w="100%" h="100%">
-                <Box>
-                  <Flex h={"15%"} color={"white"} fontSize={"1.5rem"}>
-                    <Text variant={"outline"} color={"wthie"} ml={10}>
-                      1위
-                    </Text>
-                  </Flex>
+              <Box width={"80%"} height="100%" key={mainShowLink}>
+                {mainShowLink && (
+                  <YoutubeInfo
+                    link={mainShowLink}
+                    extraVideo={true}
+                    opts={{height: "500px", width: "900px"}}
+                  />
+                )}
+              </Box>
+
+            </Flex>
+            <Button color="white" variant={"link"}>
+              {linkCategory}게시판으로 이동하기 >
+            </Button>
+          </Box>
+
+
+        </Flex>
+        {/* --------------- 1 ~ 5위 썸네일 --------------- */}
+        <Flex border={"3px solid blue"} backgroundColor={"gray"}>
+          <Box>
+            <Flex h={"15%"} color={"white"} fontSize={"1.5rem"}>
+              <Text variant={"outline"} color={"wthie"} ml={10}>
+                1위
+              </Text>
+            </Flex>
+            <Box
+              key={firstList.link}
+              _hover={{cursor: "pointer"}}
+              w={"100%"}
+              h={"82%"}
+              border={"1px"}
+              borderColor={"orange"}
+              onClick={() => {
+                setLinkCategory(firstList.categoryName);
+                setMainShowLink(firstList.link);
+              }}
+            >
+              <YoutubeInfo link={firstList.link} extraThumbnail={true}/>
+            </Box>
+          </Box>
+          <Flex w={"80%"} ml={5}>
+            {otherList &&
+              otherList.map((other) => (
+                <Box
+                  w={"25%"}
+                  border={"1px"}
+                  borderColor={"white"}
+                  key={other.id}
+                >
                   <Box
-                    key={firstList.link}
-                    _hover={{cursor: "pointer"}}
-                    w={"100%"}
-                    h={"82%"}
+                    h={"20%"}
+                    color={"white"}
+                    key={other.link}
+                    ml={12}
+                    fontSize={"1.2rem"}
+                    mt={"20px"}
+                    mb={"25px"}
+                  >
+                    <br/>
+                    {otherList.indexOf(other) + 2}위
+                  </Box>
+                  <Box
+                    w="100%"
+                    h="60%"
+                    key={other.id}
                     border={"1px"}
                     borderColor={"orange"}
                     onClick={() => {
-                      setLinkCategory(firstList.categoryName);
-                      setMainShowLink(firstList.link);
+                      setLinkCategory(other.categoryName);
+                      setMainShowLink(other.link);
                     }}
+                    _hover={{cursor: "pointer"}}
                   >
-                    <YoutubeInfo link={firstList.link} extraThumbnail={true}/>
+                    <YoutubeInfo
+                      link={other.link}
+                      extraThumbnail={true}
+                    />
                   </Box>
                 </Box>
-                <Flex w={"80%"} ml={5}>
-                  {otherList &&
-                    otherList.map((other) => (
-                      <Box
-                        w={"25%"}
-                        border={"1px"}
-                        borderColor={"white"}
-                        key={other.id}
-                      >
-                        <Box
-                          h={"20%"}
-                          color={"white"}
-                          key={other.link}
-                          ml={12}
-                          fontSize={"1.2rem"}
-                          mt={"20px"}
-                          mb={"25px"}
-                        >
-                          <br/>
-                          {otherList.indexOf(other) + 2}위
-                        </Box>
-                        <Box
-                          w="100%"
-                          h="60%"
-                          key={other.id}
-                          border={"1px"}
-                          borderColor={"orange"}
-                          onClick={() => {
-                            setLinkCategory(other.categoryName);
-                            setMainShowLink(other.link);
-                          }}
-                          _hover={{cursor: "pointer"}}
-                        >
-                          <YoutubeInfo
-                            link={other.link}
-                            extraThumbnail={true}
-                          />
-                        </Box>
-                      </Box>
-                    ))}
-                </Flex>
-              </Flex>
-            </Box>
-          </Box>
+              ))}
+          </Flex>
         </Flex>
+
+
+        {/* --------------- 최신 게시글 리스트 --------------- */}
         <MainBoardList
           mainBoardList2={mainBoardList2}
           mainBoardList3={mainBoardList3}
