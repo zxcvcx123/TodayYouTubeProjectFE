@@ -94,7 +94,9 @@ function MemberProfile(props) {
                 ADMIN
               </Badge>
             )}
-            <Text fontWeight="bold">{loginInfo.nickname}</Text>
+            <Text fontWeight="bold"
+                  style={{ fontFamily: "Nanum Gothic" }}
+            >{loginInfo.nickname}</Text>
           </Box>
         </Flex>
       </HStack>

@@ -54,6 +54,7 @@ export function SearchMain() {
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
           borderRightRadius={0}
+          style={{ fontFamily: "Nanum Gothic" }}
         />
       </Box>
       <Button
