@@ -205,12 +205,11 @@ export function MainView() {
   // 임시메인
   return (
     <Center>
-      <Box w="1400px" h="2180px" p={4} border={"1px"} borderColor="pink">
-        <Flex w="100%" gap={2} mb={2}>
-
+      <Box w="1400px" h="2180px" pt={4} border={"1px"} borderColor="pink">
+        <Flex mb={2}>
 
           {/* --------------- 사이드 베스트 영상 선택 창 --------------- */}
-          <Box w="300px" border={"3px solid green"} bg={"white"}>
+          <Box w="300px" bg={"white"} boxShadow={"0px 4px 10px rgba(0, 0, 0, 0.1)"}>
             <Box>
               <Flex ml={2} mb={2} mt={2} gap={2}>
                 <Button
@@ -296,23 +295,25 @@ export function MainView() {
 
 
           {/* --------------- 메인 유튜브 영상 출력 --------------- */}
-          <Box boxShadow={"0px 4px 10px rgba(0, 0, 0, 0.1)"} h={"600px"} w={"1000px"} bg={"black"}
-               p={"10px"}>
-            <Box key={mainShowLink}>
-              {mainShowLink && (
+          <Center w={"1200px"}>
+            <Box boxShadow={"0px 4px 10px rgba(0, 0, 0, 0.1)"} h={"600px"} w={"1000px"} bg={"white"}
+                 p={"50px"}>
+              <Box key={mainShowLink}>
+                {mainShowLink && (
                   <YoutubeInfo
                     link={mainShowLink}
                     extraVideo={true}
-                    opts={{height: "400px", width: "700px"}}
+                    opts={{height: "500px", width: "900px"}}
                   />
-              )}
+                )}
+              </Box>
+              <Box>
+                <Button color={"rgb(11,121,168)"} variant={"link"} bg={"white"}>
+                  {linkCategory}게시판으로 이동하기 >
+                </Button>
+              </Box>
             </Box>
-            <Box>
-              <Button color={"rgb(11,121,168)"} variant={"link"} bg={"white"}>
-                {linkCategory}게시판으로 이동하기 >
-              </Button>
-            </Box>
-          </Box>
+          </Center>
         </Flex>
 
 
