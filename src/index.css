@@ -3,6 +3,6 @@
 @tailwind utilities;
 
 /* 폰트 전역 스타일 설정 */
-body {
+* {
     font-family: 'Nanum Gothic', sans-serif;
 }

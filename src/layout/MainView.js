@@ -32,6 +32,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRankingStar, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import { DetectLoginContext } from "../component/LoginProvider";
 
+
 export function MainView() {
   /* 로그인 정보 컨텍스트 */
   const { token, handleLogout, loginInfo, validateToken } =
