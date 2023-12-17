@@ -1,5 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
+  Alert,
+  AlertIcon,
+  AlertTitle,
   Box,
   Button,
   Card,
@@ -23,14 +26,24 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useLocation, useParams, useSearchParams } from "react-router-dom";
+import {
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import AdminMemberInfoDetails from "./AdminMemberInfoDetails";
 import YoutubeInfo from "../component/YoutubeInfo";
 import Pagination from "../page/Pagination";
 import { Sidenav } from "./Sidenav";
 import LoadingPage from "../component/LoadingPage";
+import { DetectLoginContext } from "../component/LoginProvider";
 
 function AdminMemberInfo(props) {
+  // 로그인 유저 정보
+  const { token, handleLogout, loginInfo, validateToken } =
+    useContext(DetectLoginContext);
+
   const { member_id } = useParams();
   const [memberInfo, setMemberInfo] = useState(null);
   const [activeBoard, setActiveBoard] = useState(null);
@@ -44,6 +57,7 @@ function AdminMemberInfo(props) {
   const [myBoardListDependency, setMyBoardListDependency] = useState(0);
   const [MemberComment, setMemberComment] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const [params] = useSearchParams();
 
@@ -104,6 +118,31 @@ function AdminMemberInfo(props) {
 
   if (memberInfo == null || memberInfoBoardList == null || pageInfo == null) {
     return <LoadingPage />;
+  }
+
+  if (!token.detectLogin || loginInfo.role_name !== "운영자") {
+    return (
+      <Box w={"80%"} m={"auto"}>
+        <Alert
+          // colorScheme="red"
+          status="warning"
+          variant="subtle"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          textAlign="center"
+          height="200px"
+        >
+          <AlertIcon boxSize="40px" mr={0} />
+          <AlertTitle mt={4} mb={1} fontSize="lg">
+            관리자페이지 입니다!
+          </AlertTitle>
+          <Button mt={5} onClick={() => navigate("/")}>
+            메인페이지로 가기
+          </Button>
+        </Alert>
+      </Box>
+    );
   }
 
   return (
@@ -177,24 +216,10 @@ function AdminMemberInfo(props) {
               <Stack mt="6" spacing="3">
                 <Flex justifyContent={"space-between"}>
                   <Heading size="xl">사용자가 작성한 게시물</Heading>
-                  <Flex>
-                    <Select w={"100px"} defaultValue={"latest"}>
-                      <option value="latest">최신순</option>
-                      <option value="like">추천순</option>
-                      <option value="views">조회수순</option>
-                    </Select>
-                  </Flex>
                 </Flex>
                 <Card mt={"5"}>
                   <CardBody>
-                    <Flex m={2} justifyContent={"flex-end"}>
-                      <RadioGroup>
-                        <Stack direction="row">
-                          <Radio value="video">영상</Radio>
-                          <Radio value="origin">소통</Radio>
-                        </Stack>
-                      </RadioGroup>
-                    </Flex>
+                    <Flex m={2} justifyContent={"flex-end"}></Flex>
                     <Center>
                       <TableContainer w={"100%"}>
                         <Table size="sm">
@@ -267,24 +292,10 @@ function AdminMemberInfo(props) {
               <Stack mt="6" spacing="3">
                 <Flex justifyContent={"space-between"}>
                   <Heading size="xl">사용자가 작성한 게시물</Heading>
-                  <Flex>
-                    <Select w={"100px"} defaultValue={"latest"}>
-                      <option value="latest">최신순</option>
-                      <option value="like">추천순</option>
-                      <option value="views">조회수순</option>
-                    </Select>
-                  </Flex>
                 </Flex>
                 <Card mt={"5"}>
                   <CardBody>
-                    <Flex m={2} justifyContent={"flex-end"}>
-                      <RadioGroup>
-                        <Stack direction="row">
-                          <Radio value="video">영상</Radio>
-                          <Radio value="origin">소통</Radio>
-                        </Stack>
-                      </RadioGroup>
-                    </Flex>
+                    <Flex m={2} justifyContent={"flex-end"}></Flex>
                     <Center>
                       <TableContainer w={"100%"}>
                         <Table size="sm">

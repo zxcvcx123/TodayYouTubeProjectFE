@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
+  Alert,
+  AlertIcon,
+  AlertTitle,
   Box,
   Button,
   Card,
@@ -33,6 +36,7 @@ import {
 import { Sidenav } from "./Sidenav";
 import axios from "axios";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { DetectLoginContext } from "../component/LoginProvider";
 
 function AdminMemberInfoDetails({
   memberInfo,
@@ -40,6 +44,10 @@ function AdminMemberInfoDetails({
   handleMemberInfoMyInfo,
   handleMemberComment,
 }) {
+  // 로그인 유저 정보
+  const { token, handleLogout, loginInfo, validateToken } =
+    useContext(DetectLoginContext);
+
   const [suspensionReason, setSuspensionReason] = useState("");
   const [suspensionPeriod, setSuspensionPeriod] = useState(7);
 
@@ -62,6 +70,31 @@ function AdminMemberInfoDetails({
         navigate("/admin/member/list?p=1");
       })
       .catch((error) => console.log(error));
+  }
+
+  if (!token.detectLogin || loginInfo.role_name !== "운영자") {
+    return (
+      <Box w={"80%"} m={"auto"}>
+        <Alert
+          // colorScheme="red"
+          status="warning"
+          variant="subtle"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          textAlign="center"
+          height="200px"
+        >
+          <AlertIcon boxSize="40px" mr={0} />
+          <AlertTitle mt={4} mb={1} fontSize="lg">
+            관리자페이지 입니다!
+          </AlertTitle>
+          <Button mt={5} onClick={() => navigate("/")}>
+            메인페이지로 가기
+          </Button>
+        </Alert>
+      </Box>
+    );
   }
 
   return (
@@ -200,26 +233,10 @@ function AdminMemberInfoDetails({
                     </Flex>
                   </Flex>
                   <Flex>
-                    <Flex w={"50%"} mr={4} borderRight={"1px solid #E2E4E8"}>
-                      <Box>
-                        <Heading size="s" textTransform="uppercase">
-                          누른 좋아요
-                        </Heading>
-                        <Text
-                          colorScheme="blue"
-                          pl={2}
-                          mt={1}
-                          pt="2"
-                          fontSize="sm"
-                        >
-                          {memberInfo.countlike}
-                        </Text>
-                      </Box>
-                    </Flex>
                     <Flex w={"50%"} mr={4}>
                       <Box>
                         <Heading size="s" textTransform="uppercase">
-                          활동 게시판
+                          누른 좋아요
                         </Heading>
                         <Text
                           colorScheme="blue"

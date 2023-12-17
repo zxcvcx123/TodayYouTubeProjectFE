@@ -56,8 +56,8 @@ export function MemberLogin() {
             description: "정지된 회원입니다.",
             status: "error",
           });
-        }
-        if (error.response && error.response.status === 400) {
+          navigate("/" + member_id);
+        } else if (error.response && error.response.status === 400) {
           toast({
             description: "잘못된 접근입니다.",
             status: "warning",
