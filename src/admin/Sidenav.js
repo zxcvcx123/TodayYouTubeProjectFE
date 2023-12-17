@@ -16,7 +16,9 @@ export function Sidenav() {
       <Heading as="h4" size="md">
         관리자 페이지
       </Heading>
-      <Button w={"70%"}>메인</Button>
+      <Button w={"70%"} onClick={() => navigate("/admin")}>
+        메인
+      </Button>
       <Button w={"70%"} onClick={() => navigate("/admin/member/list?p=1")}>
         회원목록
       </Button>

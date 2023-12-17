@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Sidenav } from "./Sidenav";
 import {
   Badge,
@@ -15,6 +15,8 @@ import { BarChart } from "./BarChart";
 import axios from "axios";
 import { DoughnutChart } from "./DoughnutChart";
 import { LineChart } from "./LineChart";
+import LoadingPage from "../component/LoadingPage";
+import { DetectLoginContext } from "../component/LoginProvider";
 
 // 도넛 차트 출력 형식
 const DoughnutChartBox = ({ title, chartData }) => (
@@ -67,6 +69,10 @@ function CreateRankingCard({ title, data, countField }) {
 }
 
 function AdminMain() {
+  // 로그인 유저 정보
+  const { token, handleLogout, loginInfo, validateToken } =
+    useContext(DetectLoginContext);
+
   /* 로딩 상태 */
   const [isLoading, setIsLoading] = useState(true);
   /* 카테고리 별 게시글 수 */
@@ -249,7 +255,7 @@ function AdminMain() {
   }
 
   if (isLoading) {
-    return <Spinner />;
+    return <LoadingPage />;
   }
 
   return (
