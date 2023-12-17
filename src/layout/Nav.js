@@ -201,7 +201,9 @@ export function Nav({ setSocket }) {
                   게시판
                   <ChevronDownIcon />
                 </MenuButton>
-                <MenuList>
+                <MenuList
+                  style={{ fontFamily: "Nanum Gothic" }}
+                >
                   <MenuItem
                     onClick={(e) => {
                       navigate("board/list?category=notice");
@@ -282,6 +284,7 @@ export function Nav({ setSocket }) {
                 rightIcon={<FontAwesomeIcon icon={faGhost} />}
                 backgroundColor={"rgba(11,121,177,0.5)"}
                 mr={"10px"}
+                style={{ fontFamily: "Nanum Gothic" }}
               >
                 랜덤 추천
               </Button>
