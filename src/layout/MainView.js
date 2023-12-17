@@ -205,7 +205,7 @@ export function MainView() {
   // 임시메인
   return (
     <Center>
-      <Box w="1400px" h="2180px" pt={4}>
+      <Box w="1400px" h="2180px" pt={"50px"}>
         <Flex mb={"30px"} >
 
           {/* --------------- 사이드 베스트 영상 선택 창 --------------- */}
