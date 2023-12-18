@@ -1,8 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Sidenav } from "./Sidenav";
 import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
   Badge,
   Box,
+  Button,
   Card,
   CardHeader,
   Flex,
@@ -13,9 +18,14 @@ import {
 } from "@chakra-ui/react";
 import { BarChart } from "../component/BarChart";
 import axios from "axios";
+import { DoughnutChart } from "./DoughnutChart";
+import { LineChart } from "./LineChart";
+import LoadingPage from "../component/LoadingPage";
+import { DetectLoginContext } from "../component/LoginProvider";
+import { useNavigate } from "react-router-dom";
 import { DoughnutChart } from "../component/DoughnutChart";
 import { LineChart } from "../component/LineChart";
-import VisitorCountCard from "./VisitorCountCard";
+
 
 // 도넛 차트 출력 형식
 const DoughnutChartBox = ({ title, chartData }) => (
@@ -68,6 +78,12 @@ function CreateRankingCard({ title, data, countField }) {
 }
 
 function AdminMain() {
+  const navigate = useNavigate();
+
+  // 로그인 유저 정보
+  const { token, handleLogout, loginInfo, validateToken } =
+    useContext(DetectLoginContext);
+
   /* 로딩 상태 */
   const [isLoading, setIsLoading] = useState(true);
   /* 카테고리 별 게시글 수 */
@@ -251,7 +267,33 @@ function AdminMain() {
   }
 
   if (isLoading) {
-    return <Spinner />;
+    return <LoadingPage />;
+  }
+
+  // 운영자만 문의게시판으로(/admin으로 검색해서 들어올때)
+  if (!token.detectLogin || loginInfo.role_name !== "운영자") {
+    return (
+      <Box w={"80%"} m={"auto"}>
+        <Alert
+          // colorScheme="red"
+          status="warning"
+          variant="subtle"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          textAlign="center"
+          height="200px"
+        >
+          <AlertIcon boxSize="40px" mr={0} />
+          <AlertTitle mt={4} mb={1} fontSize="lg">
+            관리자페이지 입니다!
+          </AlertTitle>
+          <Button mt={5} onClick={() => navigate("/")}>
+            메인페이지로 가기
+          </Button>
+        </Alert>
+      </Box>
+    );
   }
 
   return (

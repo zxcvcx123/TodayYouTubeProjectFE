@@ -252,9 +252,11 @@ export function Nav({ setSocket }) {
                     문의게시판
                   </MenuItem>
                   <Divider />
-                  <MenuItem onClick={() => navigate("/admin")}>
+                  {token.detectLogin && loginInfo.role_name === "운영자" && (
+                    <MenuItem onClick={() => navigate("/admin")}>
                     관리자(임시)
                   </MenuItem>
+                  )}
                 </MenuList>
               </Menu>
               <Button
@@ -277,6 +279,7 @@ export function Nav({ setSocket }) {
             <Box>
               <VisitorCountCard />
             </Box>
+
             <Flex gap={10} ml={2}>
               <Flex gap={6} justifyContent={"center"} alignItems={"center"}>
                 {token.detectLogin ? (
@@ -397,10 +400,14 @@ export function Nav({ setSocket }) {
                         <MenuItem
                           onClick={() => {
                             handleLogout();
+                            navigate("/");
+
                           }}
                         >
                           로그아웃
                         </MenuItem>
+                        <Divider />
+
                         <MenuItem
                           onClick={() => {
                             navigate("/member/info");
@@ -408,7 +415,6 @@ export function Nav({ setSocket }) {
                         >
                           마이페이지
                         </MenuItem>
-
                         <MenuItem
                           onClick={() => {
                             navigate(

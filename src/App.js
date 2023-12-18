@@ -33,6 +33,8 @@ import AdminMemberList from "./admin/AdminMemberList";
 import VoteList from "./vote/VoteList";
 import AdminMemberInfo from "./admin/AdminMemberInfo";
 import VoteLoading from "./vote/VoteLoading";
+import AdminManageSuspension from "./admin/AdminManageSuspension";
+import SuspensionMemberLoginPage from "./admin/SuspensionMemberLoginPage";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -68,6 +70,8 @@ const routes = createBrowserRouter(
         <Route path="chat" element={<Chat />} />
         <Route path="admin" element={<AdminMain />} />
         <Route path="admin/member/list" element={<AdminMemberList />} />
+        <Route path="admin/suspension" element={<AdminManageSuspension />} />
+        <Route path="/:member_id" element={<SuspensionMemberLoginPage />} />
         <Route path="admin/member/:member_id" element={<AdminMemberInfo />} />
         <Route path="search" element={<SearchResult />} />
         <Route path="/member/minihomepy" element={<MiniHomepyContainer />}>

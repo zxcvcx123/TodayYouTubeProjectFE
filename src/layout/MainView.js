@@ -31,6 +31,7 @@ import YoutubeInfo from "../component/YoutubeInfo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRankingStar, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import { DetectLoginContext } from "../component/LoginProvider";
+import LoadingPage from "../component/LoadingPage";
 
 export function MainView() {
   /* 로그인 정보 컨텍스트 */
@@ -47,6 +48,7 @@ export function MainView() {
 
   const [mainShowLink, setMainShowLink] = useState(null);
   const [linkCategory, setLinkCategory] = useState(null);
+  const [linkNameEng, setLinkNameEng] = useState(null);
 
   const [mainBoardList2, setMainBoardList2] = useState(null);
   const [mainBoardList3, setMainBoardList3] = useState(null);
@@ -80,6 +82,7 @@ export function MainView() {
         setOtherList(response.data.otherBoardList);
         setMainShowLink(response.data.firstBoardList.link);
         setLinkCategory(response.data.firstBoardList.categoryName);
+        setLinkNameEng(response.data.firstBoardList.name_eng);
         setMainBoardList2(response.data.mainBoardList2);
         setMainBoardList3(response.data.mainBoardList3);
         setMainBoardList4(response.data.mainBoardList4);
@@ -149,7 +152,7 @@ export function MainView() {
   if (firstList == null || otherList == null) {
     return (
       <>
-        {showSpinner && <Spinner />}
+        {showSpinner && <LoadingPage />}
         {showSpinner || (
           <>
             <Card
@@ -301,8 +304,7 @@ export function MainView() {
                   />
                 )}
               </Box>
-
-              <Button w={"1%"} color="white" mt={300} ml={100} variant={"link"}>
+              <Button w={"1%"} color="white" mt={300} ml={100} variant={"link"} onClick={() => navigate("board/list?category=" + linkNameEng)}>
                 {linkCategory}게시판으로 이동하기 >
               </Button>
             </Flex>
@@ -331,6 +333,7 @@ export function MainView() {
                     onClick={() => {
                       setLinkCategory(firstList.categoryName);
                       setMainShowLink(firstList.link);
+                      setLinkNameEng(firstList.name_eng);
                     }}
                   >
                     <YoutubeInfo link={firstList.link} extraThumbnail={true} />
@@ -343,7 +346,14 @@ export function MainView() {
                         w={"25%"}
                         border={"1px"}
                         borderColor={"white"}
+                        onClick={() => {
+                          setLinkCategory(other.categoryName);
+                          setMainShowLink(other.link);
+                          setLinkNameEng(other.name_eng);
+                        }}
+                        _hover={{ cursor: "pointer" }}
                         key={other.id}
+
                       >
                         <Box
                           h={"20%"}
