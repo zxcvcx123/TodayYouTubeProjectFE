@@ -317,7 +317,9 @@ export function MainView() {
 
           {/* --------------- 메인 유튜브 영상 출력 --------------- */}
           <Center w={"1100px"}>
-            <Box
+            <Flex
+              flexDirection="column"
+              alignItems="flex-end"
               boxShadow={"0px 4px 10px rgba(0, 0, 0, 0.3)"}
               h={"600px"}
               w={"1000px"}
@@ -348,15 +350,14 @@ export function MainView() {
               </Box>
               <Box>
                 <Button
-                  color={"rgb(11,121,168)"}
+                  color={"rgb(14,154,218)"}
                   variant={"link"}
-                  bg={"white"}
                   onClick={() => navigate("board/list?category=" + linkNameEng)}
                 >
                   {linkCategory}게시판으로 이동하기 >
                 </Button>
               </Box>
-            </Box>
+            </Flex>
           </Center>
         </Flex>
 
