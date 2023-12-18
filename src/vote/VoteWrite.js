@@ -32,6 +32,9 @@ function VoteWrite() {
   const [link_aError, setlink_aError] = useState("");
   const [link_bError, setlink_bError] = useState("");
   const [contentError, setContentError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isYouTubeLink1, setIsYouTubeLink1] = useState(false);
+  const [isYouTubeLink2, setIsYouTubeLink2] = useState(false);
 
   /* useLocation */
   const location = useLocation();
@@ -117,34 +120,38 @@ function VoteWrite() {
 
   // 작성 완료 버튼 클릭 ---------------------------------------------------
   function handleSubmit() {
-    console.log("저장 버튼 클릭됨");
+    setIsSubmitting(true);
 
     // 제목이 null이거나 공백일 경우 에러메시지 세팅 후 반환
     if (!title || title.trim() === "") {
-      console.log("주제를 입력해주세요. title은 null이거나 공백이면 안 됨.");
       setTitleError("주제를 입력해주세요. 공백 x");
       return;
     }
 
-    if (!link_a || link_a.trim() === "") {
-      console.log(
-        "1번 링크를 입력해주세요. title은 null이거나 공백이면 안 됨.",
-      );
-      setlink_aError("1번 링크를 입력해주세요. 공백 x");
+    if (isYouTubeLink1) {
+      if (!link_a || link_a.trim() === "") {
+        setlink_aError("1번 링크를 입력해주세요. 공백 x");
+        return;
+      }
+    } else {
+      setlink_aError("올바른 유튜브 링크가 아닙니다.");
+      setIsSubmitting(false);
       return;
     }
 
-    if (!link_b || link_b.trim() === "") {
-      console.log(
-        "2번 링크를 입력해주세요. title은 null이거나 공백이면 안 됨.",
-      );
-      setlink_bError("2번 링크를 입력해주세요. 공백 x");
+    if (isYouTubeLink2) {
+      if (!link_b || link_b.trim() === "") {
+        setlink_bError("2번 링크를 입력해주세요. 공백 x");
+        return;
+      }
+    } else {
+      setlink_bError("올바른 유튜브 링크가 아닙니다.");
+      setIsSubmitting(false);
       return;
     }
 
     // 본문이 null이거나 공백일 경우 에러메시지 세팅 후 반환
     if (!content || content.trim() === "") {
-      console.log("설명을 입력해주세요. 설명은 null이거나 공백이면 안 됨.");
       setContentError("설명을 입력해주세요. 공백 x");
       return;
     }
@@ -193,7 +200,7 @@ function VoteWrite() {
 
         console.log("error");
       })
-      .finally(() => console.log("게시글 저장 끝"));
+      .finally(() => setIsSubmitting(false));
   }
 
   return (
@@ -240,6 +247,8 @@ function VoteWrite() {
             link={link_a}
             extraThumbnail={true}
             thumbnailWidth={"100%"}
+            mode={"voteLink1"}
+            setIsYouTubeLink1={setIsYouTubeLink1}
           />
         </FormControl>
 
@@ -265,7 +274,8 @@ function VoteWrite() {
           <YoutubeInfo
             link={link_b}
             extraThumbnail={true}
-            thumbnailWidth={"100%"}
+            mode={"voteLink2"}
+            setIsYouTubeLink2={setIsYouTubeLink2}
           />
         </FormControl>
       </Flex>
@@ -287,15 +297,16 @@ function VoteWrite() {
       {/* -------------------- 버튼 섹션 -------------------- */}
       {/* 저장 버튼 */}
       <Flex>
-        <Button onClick={handleSubmit} colorScheme="blue">
+        <Button
+          onClick={handleSubmit}
+          colorScheme="blue"
+          isDisabled={isSubmitting}
+        >
           작성 완료
         </Button>
 
         {/* 취소 버튼 */}
-        <Button
-          // onClick={() => navigate("/board/list?category=" + currentParams)}
-          colorScheme="red"
-        >
+        <Button onClick={() => navigate("/board/vote/list")} colorScheme="red">
           취소
         </Button>
       </Flex>

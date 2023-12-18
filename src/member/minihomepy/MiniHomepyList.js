@@ -31,7 +31,7 @@ export function MiniHomepyList({
       <Box
         w={"100%"}
         h={"100%"}
-        pt={5}
+        pt={10}
         bg="transparent"
         maxHeight={"100%"}
         fontFamily={"'Jua', sans-serif"}
@@ -118,7 +118,7 @@ export function MiniHomepyList({
                 <Box
                   p={"15px"}
                   w="100%"
-                  bg=" rgba( 255, 255, 255, 0.1 )"
+                  bgGradient="linear(to right, black,transparent)"
                   borderRadius={"20px"}
                   key={boardList.id}
                   mt={2}

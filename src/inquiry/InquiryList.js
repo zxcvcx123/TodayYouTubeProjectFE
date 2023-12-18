@@ -108,13 +108,15 @@ function InquiryList(props) {
             >
               문의하실 사항이 있으면 말씀해주세요
             </Box>
-            <Button
-              colorScheme="red"
-              variant={"outline"}
-              onClick={() => navigate("/inquiry/write")}
-            >
-              문의하기
-            </Button>
+            {loginInfo && (
+              <Button
+                colorScheme="red"
+                variant={"outline"}
+                onClick={() => navigate("/inquiry/write")}
+              >
+                문의하기
+              </Button>
+            )}
           </Flex>
           <Divider />
         </Box>

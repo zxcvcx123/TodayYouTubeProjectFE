@@ -1,6 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
   Box,
   Button,
   Divider,
@@ -41,6 +45,13 @@ function InquiryWrite() {
   const toast = useToast();
 
   const { stompClient, setToId } = useContext(SocketContext);
+
+  // write 도메인에 쳐서 들어올경우
+  useEffect(() => {
+    if (!token.detectLogin) {
+      navigate("/inquiry/list");
+    }
+  }, []);
 
   function handleWriteButton() {
     axios

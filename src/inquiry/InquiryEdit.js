@@ -12,13 +12,13 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Spinner,
   Text,
   Textarea,
   useDisclosure,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import LoadingPage from "../component/LoadingPage";
 
 function InquiryEdit(props) {
   const [inquiry, setInquiry] = useState();
@@ -39,7 +39,7 @@ function InquiryEdit(props) {
   }, []);
 
   if (inquiry == null) {
-    return <Spinner />;
+    return <LoadingPage />;
   }
 
   function handleUpdateButton() {

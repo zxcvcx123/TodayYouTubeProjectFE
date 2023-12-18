@@ -60,7 +60,6 @@ export function Nav({ setSocket }) {
 
   let navigate = useNavigate();
   let location = useLocation();
-  console.log(location);
 
   const {
     stompClient,
@@ -71,15 +70,6 @@ export function Nav({ setSocket }) {
     setAlarmCount,
   } = useContext(SocketContext);
 
-  const navBackground = document.querySelector(".navBackground");
-  if (navBackground) {
-    if (location.pathname === "/member/minihomepy/admin123123") {
-      document.querySelector(".navBackground").style.background =
-        "linear-gradient(112.1deg, rgb(32, 38, 57) 11.4%, rgb(63, 76, 119) 70.2%)";
-    } else {
-      document.querySelector(".navBackground").style.background = "white";
-    }
-  }
   useEffect(() => {
     if (loginInfo !== null) {
       axios
@@ -170,7 +160,7 @@ export function Nav({ setSocket }) {
   return (
     <>
       <div className="navBackground">
-        <Center bg="white" boxShadow="0px 4px 8px rgba(0, 0, 0, 0.2)">
+        <Center bg="transparent" boxShadow="0px 4px 8px rgba(0, 0, 0, 0.2)">
           <Flex
             // ml="100px"
             mt={2}
@@ -270,9 +260,11 @@ export function Nav({ setSocket }) {
                     문의게시판
                   </MenuItem>
                   <Divider />
-                  <MenuItem onClick={() => navigate("/admin")}>
+                  {token.detectLogin && loginInfo.role_name === "운영자" && (
+                    <MenuItem onClick={() => navigate("/admin")}>
                     관리자(임시)
                   </MenuItem>
+                  )}
                 </MenuList>
               </Menu>
               <Button
@@ -296,6 +288,7 @@ export function Nav({ setSocket }) {
             <Box>
               <VisitorCountCard />
             </Box>
+
             <Flex gap={10} ml={2}>
               <Flex gap={6} justifyContent={"center"} alignItems={"center"}>
                 {token.detectLogin ? (
@@ -417,11 +410,13 @@ export function Nav({ setSocket }) {
                           onClick={() => {
                             handleLogout();
                             navigate("/");
+
                           }}
                         >
                           로그아웃
                         </MenuItem>
                         <Divider />
+
                         <MenuItem
                           onClick={() => {
                             navigate("/member/info");
@@ -429,7 +424,15 @@ export function Nav({ setSocket }) {
                         >
                           마이페이지
                         </MenuItem>
-                        <MenuItem>준비중</MenuItem>
+                        <MenuItem
+                          onClick={() => {
+                            navigate(
+                              "/member/minihomepy/" + loginInfo.member_id,
+                            );
+                          }}
+                        >
+                          내 미니홈피
+                        </MenuItem>
                       </MenuList>
                     </Menu>
                   </>

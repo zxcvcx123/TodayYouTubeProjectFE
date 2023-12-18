@@ -5,7 +5,7 @@ import { Avatar, Badge, Box, Flex, HStack, Text } from "@chakra-ui/react";
 function MemberProfile(props) {
   const { loginInfo } = useContext(DetectLoginContext);
   const memberImage = loginInfo.image_url;
-  console.log(memberImage);
+
   return (
     <>
       <HStack>
