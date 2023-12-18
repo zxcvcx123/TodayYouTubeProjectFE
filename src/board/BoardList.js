@@ -155,7 +155,7 @@ function BoardList() {
           </Tooltip>
           {boardInfo === "통합" && (
             <Box ml={"auto"}>
-              <Text>{board.categoryName}</Text>
+              <Text>[{board.categoryName}]</Text>
             </Box>
           )}
         </>
@@ -170,9 +170,9 @@ function BoardList() {
           <FontAwesomeIcon icon={faComment} />
           <Text>{board.count_comment}</Text>
         </Flex>
-        {boardInfo === "all" && (
+        {boardInfo === "통합" && (
           <Box ml={"auto"}>
-            <Text>{board.categoryName} </Text>
+            <Text>[{board.categoryName}] </Text>
           </Box>
         )}
       </>
