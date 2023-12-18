@@ -37,9 +37,12 @@ function ReplyCommentForm({
   isSubmitting,
   onSubmit,
   isReplyFormOpen,
+  setReply_commentList,
+  reply_commentList,
 }) {
   const [reply_comment, setReply_comment] = useState("");
   const { token, loginInfo } = useContext(DetectLoginContext);
+
   function handleReplySubmit() {
     onSubmit({ comment_id, reply_comment });
   }
@@ -78,6 +81,8 @@ function ReplyCommentItem({
   reply_comment,
   onDeleteModalOpen,
   setIsSubmitting,
+  reply_commentList,
+  setReply_commentList,
 }) {
   const { token, loginInfo } = useContext(DetectLoginContext);
 
@@ -113,41 +118,41 @@ function ReplyCommentItem({
           {reply_comment.nickname}({reply_comment.member_id})
         </Heading>
         <Flex gap={2} alignItems="center">
-          <Text fontSize="xs">{reply_comment.created_at}</Text>
-          {loginInfo.member_id === reply_comment.member_id && (
-            <Box>
-              <Flex gap={0.5}>
-                {isEditing || (
-                  <Button
-                    size="xs"
-                    colorScheme="purple"
-                    onClick={() => setIsEditing(true)}
-                  >
-                    <FontAwesomeIcon icon={faPenToSquare} />
-                  </Button>
-                )}
-                {isEditing && (
-                  <Button
-                    size="xs"
-                    colorScheme="gray"
-                    onClick={() => setIsEditing(false)}
-                  >
-                    <FontAwesomeIcon icon={faXmark} />
-                  </Button>
-                )}
-
+          <Text fontSize="xs">{reply_comment.ago}</Text>
+          {/*{loginInfo.member_id === reply_comment.member_id && (*/}
+          <Box>
+            <Flex gap={0.5}>
+              {isEditing || (
                 <Button
-                  onClick={() =>
-                    onDeleteModalOpen(reply_comment.id, reply_comment.member_id)
-                  }
                   size="xs"
-                  colorScheme="red"
+                  colorScheme="purple"
+                  onClick={() => setIsEditing(true)}
                 >
-                  <FontAwesomeIcon icon={faTrash} />
+                  <FontAwesomeIcon icon={faPenToSquare} />
                 </Button>
-              </Flex>
-            </Box>
-          )}
+              )}
+              {isEditing && (
+                <Button
+                  size="xs"
+                  colorScheme="gray"
+                  onClick={() => setIsEditing(false)}
+                >
+                  <FontAwesomeIcon icon={faXmark} />
+                </Button>
+              )}
+
+              <Button
+                onClick={() =>
+                  onDeleteModalOpen(reply_comment.id, reply_comment.member_id)
+                }
+                size="xs"
+                colorScheme="red"
+              >
+                <FontAwesomeIcon icon={faTrash} />
+              </Button>
+            </Flex>
+          </Box>
+          {/*)}*/}
         </Flex>
       </Flex>
 
@@ -177,23 +182,30 @@ function ReplyCommentList({
   reply_commentList,
   onDeleteModalOpen,
   setIsSubmitting,
+  setReply_commentList,
 }) {
   return (
     <Card ml={5} border="1px solid black" borderRadius="5" mt={2}>
       <CardBody>
-        <Stack
-          divider={<StackDivider border={"1px solid lightgray"} />}
-          spacing={4}
-        >
-          {reply_commentList.map((reply_comment) => (
-            <ReplyCommentItem
-              key={reply_comment.id}
-              reply_comment={reply_comment}
-              setIsSubmitting={setIsSubmitting}
-              onDeleteModalOpen={onDeleteModalOpen}
-            />
-          ))}
-        </Stack>
+        {reply_commentList.length > 0 ? (
+          <Stack
+            divider={<StackDivider border={"1px solid lightgray"} />}
+            spacing={4}
+          >
+            {reply_commentList.map((reply_comment) => (
+              <ReplyCommentItem
+                key={reply_comment.id}
+                reply_comment={reply_comment}
+                setIsSubmitting={setIsSubmitting}
+                onDeleteModalOpen={onDeleteModalOpen}
+                reply_commentList={reply_commentList}
+                setReply_commentList={setReply_commentList}
+              />
+            ))}
+          </Stack>
+        ) : (
+          <Text>답글이 없습니다.</Text>
+        )}
       </CardBody>
     </Card>
   );
@@ -202,15 +214,17 @@ function ReplyCommentList({
 export function BoardReplyComment({
   comment_id,
   isReplyFormOpen,
-  isReplyListOpen,
   setIsReplyFormOpen,
+  isReplyListOpen,
+  setIsReplyListOpen,
 }) {
   const { token, loginInfo } = useContext(DetectLoginContext);
   const replyIdRef = useRef(0);
-  const replyMeberId = useRef("");
+  const replyMemberId = useRef("");
 
   const toast = useToast();
 
+  // const [isReplyListOpen, setIsReplyListOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [reply_commentList, setReply_commentList] = useState([]);
 
@@ -238,7 +252,7 @@ export function BoardReplyComment({
         });
       }
     }
-  }, [isSubmitting]);
+  }, [isSubmitting, loginInfo]);
 
   function handleReplySubmit(reply_comment) {
     setIsSubmitting(true);
@@ -284,7 +298,7 @@ export function BoardReplyComment({
   }
 
   function handleReplyDelete() {
-    if (loginInfo.member_id === replyMeberId.current) {
+    if (loginInfo.member_id === replyMemberId.current) {
       setIsSubmitting(true);
 
       axios
@@ -305,7 +319,7 @@ export function BoardReplyComment({
 
   function handleReplyDeleteModalOpen(reply_id, memberid) {
     replyIdRef.current = reply_id;
-    replyMeberId.current = memberid;
+    replyMemberId.current = memberid;
 
     onOpen();
   }
@@ -318,8 +332,11 @@ export function BoardReplyComment({
           isSubmitting={isSubmitting}
           onSubmit={handleReplySubmit}
           isReplyFormOpen={isReplyFormOpen}
+          reply_commentList={reply_commentList}
+          setReply_commentList={setReply_commentList}
         />
       )}
+
       {isReplyListOpen && (
         <ReplyCommentList
           comment_id={comment_id}
@@ -327,7 +344,10 @@ export function BoardReplyComment({
           setIsSubmitting={setIsSubmitting}
           reply_commentList={reply_commentList}
           isReplyListOpen={isReplyListOpen}
+          setIsReplyListOpen={setIsReplyListOpen}
           onDeleteModalOpen={handleReplyDeleteModalOpen}
+          reply_commentList={reply_commentList}
+          setReply_commentList={setReply_commentList}
         />
       )}
 
@@ -354,4 +374,3 @@ export function BoardReplyComment({
     </Box>
   );
 }
-// 커밋
