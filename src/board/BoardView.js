@@ -288,19 +288,7 @@ function BoardView() {
             {/*    },*/}
             {/*  }}*/}
             {/*/>*/}
-            <Box justifyContent={"center"}>
-              {renderChannelInfo()}
-              <Button
-                onClick={() => window.open(board.link)}
-                colorScheme="red"
-                my={5}
-              >
-                유튜브 영상 페이지로 이동
-              </Button>
-              <Button onClick={handleCopyClick} colorScheme="blue">
-                유튜브 링크 복사
-              </Button>
-            </Box>
+            <Box justifyContent={"center"}>{renderChannelInfo()}</Box>
           </Flex>
         </Center>
       </FormControl>
@@ -315,12 +303,32 @@ function BoardView() {
 
     return (
       <Box>
-        <Avatar
-          size="2xl"
-          src={channelInfo.thumbnails.high.url}
-          alt={channelInfo.title}
-        />
-        <Text color={"white"}>채널명: {channelInfo.title}</Text>
+        <Flex>
+          <Avatar
+            boxShadow="0 0 0 5px rgba(255, 255, 255, 1)"
+            size="2xl"
+            src={channelInfo.thumbnails.high.url}
+            alt={channelInfo.title}
+            m={"20px"}
+          />
+          <Box>
+            <Button
+              size={"sm"}
+              onClick={() => window.open(board.link)}
+              colorScheme="red"
+              my={5}
+            >
+              채널로 이동
+            </Button>
+            <Button size={"sm"} onClick={handleCopyClick} colorScheme="blue">
+              유튜브 링크 복사
+            </Button>
+          </Box>
+        </Flex>
+        <Text color={"white"} fontWeight={"bold"}>
+          채널명 : {channelInfo.title}
+        </Text>
+        <Text color={"white"}>{channelInfo.description}</Text>
       </Box>
     );
   }
