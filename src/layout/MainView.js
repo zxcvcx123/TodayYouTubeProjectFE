@@ -22,6 +22,7 @@ import {
   CardBody,
   CardFooter,
   Badge,
+  ButtonGroup,
 } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
 import { MainBoardList } from "./MainBoardList";
@@ -126,10 +127,10 @@ export function MainView() {
     }
   }, []);
 
-  function handleCategoryChange(e) {
-    // setMainShowLink(null);
-    setCategory(e.target.value);
-  }
+  // 사이드바 카테고리 변경
+  const handleCategoryChange = (newCategory) => {
+    setCategory(newCategory);
+  };
 
   //
   // if (firstList == null) {
@@ -287,7 +288,76 @@ export function MainView() {
                 - {dateSort} 가장 추천을 많이 받은 영상들입니다.
               </Text>
             </Box>
-            <Select
+
+            <Box>
+              <Flex mt={10} flexDirection="column">
+                <Button
+                  onClick={() => handleCategoryChange("all")}
+                  backgroundColor={category === "all" ? "black" : "white"}
+                  color={category === "all" ? "white" : "black"}
+                  _hover={{ backgroundColor: "black", color: "white" }}
+                  borderRadius={"0px"}
+                >
+                  전체게시판
+                </Button>
+                <Button
+                  onClick={() => handleCategoryChange("C002")}
+                  backgroundColor={category === "C002" ? "black" : "white"}
+                  color={category === "C002" ? "white" : "black"}
+                  _hover={{ backgroundColor: "black", color: "white" }}
+                  borderRadius={"0px"}
+                >
+                  스포츠
+                </Button>
+                <Button
+                  onClick={() => handleCategoryChange("C003")}
+                  backgroundColor={category === "C003" ? "black" : "white"}
+                  color={category === "C003" ? "white" : "black"}
+                  _hover={{ backgroundColor: "black", color: "white" }}
+                  borderRadius={"0px"}
+                >
+                  먹방
+                </Button>
+                <Button
+                  onClick={() => handleCategoryChange("C004")}
+                  backgroundColor={category === "C004" ? "black" : "white"}
+                  color={category === "C004" ? "white" : "black"}
+                  _hover={{ backgroundColor: "black", color: "white" }}
+                  borderRadius={"0px"}
+                >
+                  일상
+                </Button>
+                <Button
+                  onClick={() => handleCategoryChange("C005")}
+                  backgroundColor={category === "C005" ? "black" : "white"}
+                  color={category === "C005" ? "white" : "black"}
+                  _hover={{ backgroundColor: "black", color: "white" }}
+                  borderRadius={"0px"}
+                >
+                  요리
+                </Button>
+                <Button
+                  onClick={() => handleCategoryChange("C006")}
+                  backgroundColor={category === "C006" ? "black" : "white"}
+                  color={category === "C006" ? "white" : "black"}
+                  _hover={{ backgroundColor: "black", color: "white" }}
+                  borderRadius={"0px"}
+                >
+                  영화/드라마
+                </Button>
+                <Button
+                  onClick={() => handleCategoryChange("C007")}
+                  backgroundColor={category === "C007" ? "black" : "white"}
+                  color={category === "C007" ? "white" : "black"}
+                  _hover={{ backgroundColor: "black", color: "white" }}
+                  borderRadius={"0px"}
+                >
+                  게임
+                </Button>
+              </Flex>
+            </Box>
+
+            {/*<Select
               onChange={handleCategoryChange}
               width="60%"
               backgroundColor="white"
@@ -303,7 +373,8 @@ export function MainView() {
               <option value="C005">요리게시판</option>
               <option value="C006">영화/드라마 게시판</option>
               <option value="C007">게임게시판</option>
-            </Select>
+            </Select>*/}
+
             {/*<Box mt={50} ml={10}>*/}
             {/*  <Text color={"red.300"}>**둘 중에 하나만 사용할 예정**</Text>*/}
             {/*  <Button mb={1} onClick={() => setBaseOnCurrent(true)}>*/}
