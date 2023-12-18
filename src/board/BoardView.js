@@ -38,6 +38,7 @@ import LoadingPage from "../component/LoadingPage";
 import BoardProfile from "./BoardProfile";
 import ReactPlayer from "react-player";
 import dompurify from "dompurify";
+import { config } from "../member/config/apikey";
 
 function BoardView() {
   /* 로그인 정보 컨텍스트 */
@@ -78,6 +79,52 @@ function BoardView() {
     toolbar: [],
   };
 
+  // 게시글 정보에서 비디오 링크를 가져온 후 채널 정보를 가져오는 함수
+  const fetchChannelInfo = (videoLink) => {
+    // 정규 표현식을 사용하여 동영상 ID 추출
+    const videoIdMatch = videoLink.match(
+      /(?:youtu\.be\/|youtube\.com\/(?:.*v\/|.*[?&]v=))([^"&?\/\s]{11})/,
+    );
+
+    // videoIdMatch 배열에서 동영상 ID 추출
+    const videoId = videoIdMatch && videoIdMatch[1];
+
+    if (!videoId) {
+      console.error("YouTube 동영상 ID를 추출할 수 없습니다.");
+      return;
+    }
+
+    // YouTube Data API 엔드포인트
+    const apiKey = config.apikey;
+    const apiUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${apiKey}`;
+
+    // 비디오 정보 가져오기
+    fetch(apiUrl)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.items && data.items.length > 0) {
+          // 채널 ID 가져오기
+          const channelId = data.items[0].snippet.channelId;
+
+          // 채널 정보 가져오기
+          return fetch(
+            `https://www.googleapis.com/youtube/v3/channels?part=snippet&id=${channelId}&key=${apiKey}`,
+          );
+        } else {
+          console.error("YouTube API 응답에서 항목을 찾을 수 없습니다.");
+        }
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        // 채널 썸네일 URL 가져오기
+        const channelTitle = data.items[0].snippet.title;
+        console.log("채널명:", channelTitle);
+
+        // 가져온 채널 정보를 state에 저장하거나 필요한 작업 수행
+      })
+      .catch((error) => console.error("에러 발생:", error));
+  };
+
   // 초기 렌더링
   useEffect(() => {
     console.log("랜더링 테스트");
@@ -92,6 +139,11 @@ function BoardView() {
       // 게시글 데이터를 가져온 후 작성자 여부를 확인하여 isAuthor 설정
       if (loginInfo && loginInfo.member_id === response.data.board_member_id) {
         setIsAuthor(true);
+      }
+
+      // 게시글 정보를 가져온 후 채널 정보를 가져오는 함수 호출
+      if (response.data.link) {
+        fetchChannelInfo(response.data.link);
       }
     });
   }, [isSubmitting, location, loginInfo]);
@@ -278,7 +330,7 @@ function BoardView() {
     return `${year}-${month}-${day} ${hour}:${minute}`;
   }
 
-  function Ex() {
+  function contents() {
     if (board.content !== undefined) {
       const contents = dompurify.sanitize(board.content);
       return <Box dangerouslySetInnerHTML={{ __html: contents }}></Box>;
@@ -324,7 +376,7 @@ function BoardView() {
         <FormControl my={"50px"}>
           {/*<FormLabel>본문</FormLabel>*/}
           <Box>
-            {board.content !== undefined && Ex()}
+            {board.content !== undefined && contents()}
 
             {/* CKEditor 본문 영역 onReady => 높이 설정 */}
             {/*{board && (*/}
