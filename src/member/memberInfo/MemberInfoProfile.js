@@ -22,18 +22,13 @@ export function MemberInfoProfile() {
       };
       render.readAsDataURL(file);
     }
-    const grantType = localStorage.getItem("grantType");
-    const accessToken = localStorage.getItem("accessToken");
+
     const formData = new FormData();
     formData.append("updateProfileFiles", file);
     formData.append("member_id", loginInfo.member_id);
 
     axios
-      .postForm("/api/member/info/updateProfileImage", formData, {
-        headers: {
-          Authorization: `${grantType} ${accessToken}`,
-        },
-      })
+      .postForm("/api/member/info/updateProfileImage", formData)
       .then(() => {
         toast({
           description: "프로필이 저장되었습니다.",
@@ -56,7 +51,7 @@ export function MemberInfoProfile() {
           src={profileImageSrc}
           alt=""
         />
-      ) : loginInfo.image_url !== null ? (
+      ) : loginInfo !== null ? (
         <Avatar borderRadius="full" boxSize="250px" src={loginInfo.image_url} />
       ) : (
         <Avatar

@@ -116,7 +116,7 @@ function MemberInfoMyInfo({ loginInfo }) {
                             아이디
                           </Heading>
                           <Text pl={2} mt={1} pt="2" fontSize="sm">
-                            {loginInfo.member_id}
+                            {loginInfo !== null ? loginInfo.member_id : <></>}
                           </Text>
                         </Box>
                       </Flex>
@@ -126,7 +126,7 @@ function MemberInfoMyInfo({ loginInfo }) {
                             닉네임
                           </Heading>
                           <Text pl={2} mt={1} pt="2" fontSize="sm">
-                            {loginInfo.nickname}
+                            {loginInfo !== null ? loginInfo.nickname : <></>}
                           </Text>
                         </Box>
                       </Flex>
@@ -138,7 +138,7 @@ function MemberInfoMyInfo({ loginInfo }) {
                             이메일
                           </Heading>
                           <Text pl={2} mt={1} pt="2" fontSize="sm">
-                            {loginInfo.email}
+                            {loginInfo !== null ? loginInfo.email : <></>}
                           </Text>
                         </Box>
                       </Flex>
@@ -148,7 +148,11 @@ function MemberInfoMyInfo({ loginInfo }) {
                             전화번호
                           </Heading>
                           <Text pl={2} mt={1} pt="2" fontSize="sm">
-                            {loginInfo.phone_number}
+                            {loginInfo !== null ? (
+                              loginInfo.phone_number
+                            ) : (
+                              <></>
+                            )}
                           </Text>
                         </Box>
                       </Flex>
@@ -160,7 +164,7 @@ function MemberInfoMyInfo({ loginInfo }) {
                             생년월일
                           </Heading>
                           <Text pl={2} mt={1} pt="2" fontSize="sm">
-                            {loginInfo.birth_date}
+                            {loginInfo !== null ? loginInfo.birth_date : <></>}
                           </Text>
                         </Box>
                       </Flex>
@@ -170,7 +174,7 @@ function MemberInfoMyInfo({ loginInfo }) {
                             성별
                           </Heading>
                           <Text pl={2} mt={1} pt="2" fontSize="sm">
-                            {loginInfo.gender === "m" ? "남자" : "여자"}
+                            {loginInfo !== null ? loginInfo.gender : <></>}
                           </Text>
                         </Box>
                       </Flex>
@@ -186,7 +190,7 @@ function MemberInfoMyInfo({ loginInfo }) {
                             <MemberInfoMyInfoPopover />
                           </Flex>
                           <Text pl={2} mt={1} pt="2" fontSize="sm">
-                            {loginInfo.role_name}
+                            {loginInfo !== null ? loginInfo.role_name : <></>}
                           </Text>
                         </Box>
                       </Flex>
@@ -196,7 +200,7 @@ function MemberInfoMyInfo({ loginInfo }) {
                             내가 받은 좋아요
                           </Heading>
                           <Text pl={2} mt={1} pt="2" fontSize="sm">
-                            {loginInfo.total_like}
+                            {loginInfo !== null ? loginInfo.total_like : <></>}
                           </Text>
                         </Box>
                       </Flex>
@@ -211,7 +215,7 @@ function MemberInfoMyInfo({ loginInfo }) {
                             </Heading>
                           </Flex>
                           <Text pl={2} mt={1} pt="2" fontSize="sm">
-                            {loginInfo.total_board}
+                            {loginInfo !== null ? loginInfo.total_board : <></>}
                           </Text>
                         </Box>
                       </Flex>
@@ -221,7 +225,11 @@ function MemberInfoMyInfo({ loginInfo }) {
                             댓글 수
                           </Heading>
                           <Text pl={2} mt={1} pt="2" fontSize="sm">
-                            {loginInfo.total_comment}
+                            {loginInfo !== null ? (
+                              loginInfo.total_comment
+                            ) : (
+                              <></>
+                            )}
                           </Text>
                         </Box>
                       </Flex>
@@ -235,7 +243,7 @@ function MemberInfoMyInfo({ loginInfo }) {
                             </Heading>
                           </Flex>
                           <Text pl={2} mt={1} pt="2" fontSize="sm">
-                            {loginInfo.total_views}
+                            {loginInfo !== null ? loginInfo.total_views : <></>}
                           </Text>
                         </Box>
                       </Flex>

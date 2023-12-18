@@ -35,7 +35,7 @@ export function SearchMain() {
   }
 
   return (
-    <Flex width={600}>
+    <Flex width={400}>
       {/*<Box>*/}
       {/*  <Select fontSize={13}>*/}
       {/*    <option value="all">통합검색</option>*/}
@@ -47,7 +47,7 @@ export function SearchMain() {
       {/*    <option value="category">게임</option>*/}
       {/*  </Select>*/}
       {/*</Box>*/}
-      <Box width={400}>
+      <Box width={300}>
         <Input
           fontSize={13}
           placeholder="[게시판 통합검색] 검색어를 입력하세요"
