@@ -360,19 +360,32 @@ export function MainView() {
           </Center>
         </Flex>
 
-        {/* --------------- 1 ~ 5위 썸네일 --------------- */}
-        <Flex border={"3px solid blue"} backgroundColor={"gray"}>
-          <Box>
-            <Flex h={"15%"} color={"white"} fontSize={"1.5rem"}>
-              <Badge fontSize="20px" colorScheme="blue">
+        {/* ------------------------------ 1 ~ 5위 썸네일 ------------------------------ */}
+        <Flex w={"1500px"}>
+          <Box
+            w={"280px"}
+            // border={"1px solid black"}
+            p={"10px"}
+            bg={"rgb(255,255,255)"}
+            borderRadius={"20px"}
+            mx={"10px"}
+            display={"flex"}
+            flexDirection={"column"}
+            alignItems={"center"}
+            boxShadow={"0 4px 8px rgba(0, 0, 0, 0.3)"}
+            transition={"transform 0.1s ease-in-out"}
+            _hover={{ transform: "scale(1.1)" }}
+          >
+            <Box h={"20%"} fontSize={"1.2rem"}>
+              <Badge mx={1} fontSize="20px" colorScheme="green">
                 1위
               </Badge>
-            </Flex>
+            </Box>
             <Box
               key={firstList.link}
               _hover={{ cursor: "pointer" }}
-              w={"100%"}
-              h={"82%"}
+              w={"250px"}
+              h={"150px"}
               onClick={() => {
                 setLinkCategory(firstList.categoryName);
                 setMainShowLink(firstList.link);
@@ -382,45 +395,51 @@ export function MainView() {
               <YoutubeInfo link={firstList.link} extraThumbnail={true} />
             </Box>
           </Box>
-          <Flex w={"80%"} ml={5}>
-            {otherList &&
-              otherList.map((other) => (
+          {/*<Flex w={"80%"} ml={5}>*/}
+          {otherList &&
+            otherList.map((other) => (
+              <Box
+                w={"280px"}
+                // border={"1px solid black"}
+                p={"10px"}
+                bg={"rgb(255,255,255)"}
+                borderRadius={"20px"}
+                mx={"10px"}
+                display={"flex"}
+                flexDirection={"column"}
+                alignItems={"center"}
+                boxShadow={"0 4px 8px rgba(0, 0, 0, 0.3)"}
+                transition={"transform 0.1s ease-in-out"}
+                _hover={{ transform: "scale(1.1)" }}
+                key={other.id}
+              >
                 <Box
-                  w={"25%"}
-                  border={"1px"}
-                  borderColor={"white"}
-                  key={other.id}
+                  h={"20%"}
+                  color={"white"}
+                  key={other.link}
+                  fontSize={"1.2rem"}
+                  // border={"1px solid green"}
                 >
-                  <Box
-                    h={"20%"}
-                    color={"white"}
-                    key={other.link}
-                    ml={12}
-                    fontSize={"1.2rem"}
-                    mt={"20px"}
-                    mb={"25px"}
-                  >
-                    <br />
-                    <Badge mx={1} fontSize="20px" colorScheme="green">
-                      {otherList.indexOf(other) + 2}위
-                    </Badge>
-                  </Box>
-                  <Box
-                    w="100%"
-                    h="60%"
-                    key={other.id}
-                    onClick={() => {
-                      setLinkCategory(other.categoryName);
-                      setMainShowLink(other.link);
-                      setLinkNameEng(other.name_eng);
-                    }}
-                    _hover={{ cursor: "pointer" }}
-                  >
-                    <YoutubeInfo link={other.link} extraThumbnail={true} />
-                  </Box>
+                  <Badge mx={1} fontSize="20px" colorScheme="green">
+                    {otherList.indexOf(other) + 2}위
+                  </Badge>
                 </Box>
-              ))}
-          </Flex>
+                <Box
+                  w={"250px"}
+                  h={"150px"}
+                  key={other.id}
+                  onClick={() => {
+                    setLinkCategory(other.categoryName);
+                    setMainShowLink(other.link);
+                    setLinkNameEng(other.name_eng);
+                  }}
+                  _hover={{ cursor: "pointer" }}
+                >
+                  <YoutubeInfo link={other.link} extraThumbnail={true} />
+                </Box>
+              </Box>
+            ))}
+          {/*</Flex>*/}
         </Flex>
 
         {/* --------------- 최신 게시글 리스트 --------------- */}
