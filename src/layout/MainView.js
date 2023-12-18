@@ -52,6 +52,7 @@ export function MainView() {
   const [mainShowLink, setMainShowLink] = useState(null);
   const [linkCategory, setLinkCategory] = useState(null);
   const [linkNameEng, setLinkNameEng] = useState(null);
+  const [mainShowTitle, setMainShowTitle] = useState(null);
 
   const [mainBoardList2, setMainBoardList2] = useState(null);
   const [mainBoardList3, setMainBoardList3] = useState(null);
@@ -84,6 +85,7 @@ export function MainView() {
         setFirstList(response.data.firstBoardList);
         setOtherList(response.data.otherBoardList);
         setMainShowLink(response.data.firstBoardList.link);
+        setMainShowTitle(response.data.firstBoardList.title);
         setLinkCategory(response.data.firstBoardList.categoryName);
         setLinkNameEng(response.data.firstBoardList.name_eng);
         setMainBoardList2(response.data.mainBoardList2);
@@ -394,8 +396,8 @@ export function MainView() {
               boxShadow={"0px 4px 10px rgba(0, 0, 0, 0.3)"}
               h={"600px"}
               w={"1000px"}
-              bg={"rgb(210,210,210)"}
-              p={"50px"}
+              bg={"rgb(0,0,0)"}
+              p={"20px 50px"}
             >
               <Box key={mainShowLink}>
                 {mainShowLink && (
@@ -405,6 +407,17 @@ export function MainView() {
                     opts={{ height: "500px", width: "900px" }}
                   />*/
                   <>
+                    <Text
+                      fontSize={"xx-large"}
+                      fontFamily={"Nanum Gothic"}
+                      fontWeight={"bold"}
+                      whiteSpace={"nowrap"}
+                      overflow={"hidden"}
+                      textOverflow={"ellipsis"}
+                      color={"rgb(102,206,252)"}
+                    >
+                      추천글 : {mainShowTitle} >>
+                    </Text>
                     <ReactPlayer
                       className="video-container"
                       url={mainShowLink}
@@ -423,7 +436,7 @@ export function MainView() {
               </Box>
               <Box>
                 <Button
-                  color={"rgb(14,154,218)"}
+                  color={"rgb(102,206,252)"}
                   variant={"link"}
                   onClick={() => navigate("board/list?category=" + linkNameEng)}
                 >
@@ -461,6 +474,7 @@ export function MainView() {
               setLinkCategory(firstList.categoryName);
               setMainShowLink(firstList.link);
               setLinkNameEng(firstList.name_eng);
+              setMainShowTitle(firstList.title);
             }}
           >
             <Flex h={"20%"}>
@@ -507,6 +521,7 @@ export function MainView() {
                 onClick={() => {
                   setLinkCategory(other.categoryName);
                   setMainShowLink(other.link);
+                  setMainShowTitle(other.title);
                   setLinkNameEng(other.name_eng);
                 }}
                 _hover={{ transform: "scale(1.1)", cursor: "pointer" }}
