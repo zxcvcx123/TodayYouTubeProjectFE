@@ -20,6 +20,7 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import Editor from "../component/Editor";
 import { DetectLoginContext } from "../component/LoginProvider";
+import LoadingPage from "../component/LoadingPage";
 
 function BoardEdit() {
   /* 로그인 정보 컨텍스트 */
@@ -93,7 +94,7 @@ function BoardEdit() {
 
   // 게시글을 로딩중이라면 스피너 돌리기
   if (board === null) {
-    return <Spinner />;
+    return <LoadingPage />;
   }
 
   // 게시글 수정 버튼 클릭 함수

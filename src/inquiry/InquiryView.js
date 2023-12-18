@@ -33,6 +33,7 @@ import { faArrowTurnUp } from "@fortawesome/free-solid-svg-icons";
 import { DetectLoginContext } from "../component/LoginProvider";
 
 import ScrollToTop from "../util/ScrollToTop";
+import LoadingPage from "../component/LoadingPage";
 
 function InquiryView(props) {
   const { token, handleLogout, loginInfo, validateToken } =
@@ -54,7 +55,7 @@ function InquiryView(props) {
   }, []);
 
   if (inquiry == null) {
-    return <Spinner />;
+    return <LoadingPage />;
   }
   if (!token.detectLogin) {
     return (

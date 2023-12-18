@@ -45,9 +45,7 @@ function Socket({ children }) {
   const [voteNot, setVoteNot] = useState(0);
 
   useEffect(() => {
-    console.log("바깥실행");
     if (loginInfo !== null) {
-      console.log("안쪽실행");
       connect();
     }
   }, [loginInfo]);

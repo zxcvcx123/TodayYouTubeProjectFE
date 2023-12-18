@@ -3,9 +3,11 @@ import {
   Badge,
   Box,
   Button,
+  Center,
   Divider,
   Flex,
   HStack,
+  Image,
   Menu,
   MenuButton,
   MenuItem,
@@ -18,6 +20,7 @@ import {
   PopoverFooter,
   PopoverHeader,
   PopoverTrigger,
+  Portal,
   Spinner,
   Stack,
   Text,
@@ -26,7 +29,11 @@ import * as PropTypes from "prop-types";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { ChevronDownIcon, CloseIcon } from "@chakra-ui/icons";
 import { SearchMain } from "./SearchMain";
-import { faBell, faCircleXmark } from "@fortawesome/free-regular-svg-icons";
+import {
+  faBell,
+  faCircleXmark,
+  faStar,
+} from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { DetectLoginContext } from "../component/LoginProvider";
@@ -35,7 +42,9 @@ import * as SockJS from "sockjs-client";
 import { Stomp } from "@stomp/stompjs";
 import { SocketContext } from "../socket/Socket";
 import axios from "axios";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faGhost, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { Logo1WithText, Logo1WithText3 } from "../assets/Image";
+import VisitorCountCard from "../admin/VisitorCountCard";
 
 Stack.propTypes = {
   p: PropTypes.number,
@@ -150,261 +159,296 @@ export function Nav({ setSocket }) {
 
   return (
     <>
-      <Flex
-        ml="100px"
-        mt={2}
-        h="100px"
-        w="80%"
-        alignItems="center"
-        justifyContent={"space-around"}
-        bg="blackAlpha.100"
-      >
-        <Button
-          borderStyle={"solid"}
-          size="md"
-          variant="ghost"
-          onClick={() => {
-            navigate("/");
-          }}
-        >
-          로고
-        </Button>
-        <Flex>
-          <Menu>
-            <MenuButton as={Button} w={120} size="md" variant="ghost">
-              게시판
-              <ChevronDownIcon />
-            </MenuButton>
-            <MenuList>
-              <MenuItem
-                onClick={(e) => {
-                  navigate("board/list?category=notice");
-                }}
-              >
-                공지
-              </MenuItem>
-              <MenuItem
-                onClick={(e) => {
-                  navigate("board/list?category=sports");
-                }}
-              >
-                스포츠
-              </MenuItem>
-              <MenuItem
-                onClick={(e) => {
-                  navigate("board/list?category=mukbang");
-                }}
-              >
-                먹방
-              </MenuItem>
-              <MenuItem
-                onClick={(e) => {
-                  navigate("board/list?category=daily");
-                }}
-              >
-                일상
-              </MenuItem>
-              <MenuItem
-                onClick={(e) => {
-                  navigate("board/list?category=cooking");
-                }}
-              >
-                요리
-              </MenuItem>
-              <MenuItem
-                onClick={(e) => {
-                  navigate("board/list?category=movie");
-                }}
-              >
-                영화/드라마
-              </MenuItem>
-              <MenuItem
-                onClick={(e) => {
-                  navigate("board/list?category=game");
-                }}
-              >
-                게임
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  navigate("board/vote/list?p=1");
-                }}
-              >
-                투표
-              </MenuItem>
-              <MenuItem onClick={() => navigate("/chat")}>채팅</MenuItem>
-              <Divider />
-              <MenuItem
-                onClick={(e) => {
-                  navigate("/inquiry/list");
-                }}
-              >
-                문의게시판
-              </MenuItem>
-              <Divider />
-              <MenuItem onClick={() => navigate("/admin")}>
-                관리자(임시)
-              </MenuItem>
-            </MenuList>
-          </Menu>
-          <Button
-            onClick={handleRandomView}
-            w={120}
-            borderStyle={"solid"}
-            size="md"
-            variant="ghost"
+      <div className="navBackground">
+        <Center bg="transparent" boxShadow="0px 4px 8px rgba(0, 0, 0, 0.2)">
+          <Flex
+            // ml="100px"
+            mt={2}
+            h="100px"
+            w="70%"
+            alignItems="center"
+            justifyContent={"space-around"}
+            // bg="blackAlpha.100"
+            bg="transparent"
           >
-            오늘 뭐 볼까?
-          </Button>
-        </Flex>
-        <Box>
-          <SearchMain />
-        </Box>
+            <button
+              onClick={() => {
+                navigate("/");
+              }}
+            >
+              <Image src={Logo1WithText3} minW={"200px"} maxW={"200px"} />
+            </button>
 
-        <Flex gap={10} ml={2}>
-          <Flex gap={6} justifyContent={"center"} alignItems={"center"}>
-            {token.detectLogin ? (
-              <>
-                <Popover gutter={10}>
-                  <PopoverTrigger>
-                    <Button variant={"ghost"}>
-                      {alarmCount > 0 ? (
-                        <FontAwesomeIcon
-                          fontSize={"20px"}
-                          icon={faBell}
-                          color="gold"
-                        />
-                      ) : (
-                        <FontAwesomeIcon fontSize={"20px"} icon={faBell} />
-                      )}
-                      {alarmCount > 99 && <Text>"99..."</Text>}
-                      {alarmCount === 0 || alarmCount === null ? (
-                        <Text></Text>
-                      ) : (
-                        <Text>{alarmCount}</Text>
-                      )}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent w={"350px"} h={"300px"} overflowY={"scroll"}>
-                    <PopoverArrow />
-                    <PopoverCloseButton size={5} />
-                    <PopoverHeader>
-                      <Flex justifyContent={"space-between"} w={"88%"}>
-                        <Text>최근 알람</Text>
-                        <Flex alignItems={"flex-end"} gap={3}>
-                          <Text
-                            _hover={{ cursor: "pointer" }}
-                            onClick={handleAllRead}
-                            style={{ fontSize: "small", color: "blue" }}
-                          >
-                            전부읽음
-                          </Text>
-                          <Text
-                            _hover={{ cursor: "pointer" }}
-                            onClick={handleDeletAllAlarm}
-                            style={{
-                              fontSize: "small",
-                              color: "blue",
-                            }}
-                          >
-                            전부삭제
-                          </Text>
-                        </Flex>
-                      </Flex>
-                    </PopoverHeader>
+            <Flex>
+              <Menu>
+                <MenuButton as={Button} w={120} size="md" variant="ghost">
+                  게시판
+                  <ChevronDownIcon />
+                </MenuButton>
+                <MenuList>
+                  <MenuItem
+                    onClick={(e) => {
+                      navigate("board/list?category=notice");
+                    }}
+                  >
+                    공지
+                  </MenuItem>
+                  <MenuItem
+                    onClick={(e) => {
+                      navigate("board/list?category=sports");
+                    }}
+                  >
+                    스포츠
+                  </MenuItem>
+                  <MenuItem
+                    onClick={(e) => {
+                      navigate("board/list?category=mukbang");
+                    }}
+                  >
+                    먹방
+                  </MenuItem>
+                  <MenuItem
+                    onClick={(e) => {
+                      navigate("board/list?category=daily");
+                    }}
+                  >
+                    일상
+                  </MenuItem>
+                  <MenuItem
+                    onClick={(e) => {
+                      navigate("board/list?category=cooking");
+                    }}
+                  >
+                    요리
+                  </MenuItem>
+                  <MenuItem
+                    onClick={(e) => {
+                      navigate("board/list?category=movie");
+                    }}
+                  >
+                    영화/드라마
+                  </MenuItem>
+                  <MenuItem
+                    onClick={(e) => {
+                      navigate("board/list?category=game");
+                    }}
+                  >
+                    게임
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      navigate("board/vote/list?p=1");
+                    }}
+                  >
+                    투표
+                  </MenuItem>
+                  <MenuItem onClick={() => navigate("/chat")}>채팅</MenuItem>
+                  <Divider />
+                  <MenuItem
+                    onClick={(e) => {
+                      navigate("/inquiry/list");
+                    }}
+                  >
+                    문의게시판
+                  </MenuItem>
+                  <Divider />
+                  {token.detectLogin && loginInfo.role_name === "운영자" && (
+                    <MenuItem onClick={() => navigate("/admin")}>
+                    관리자(임시)
+                  </MenuItem>
+                  )}
+                </MenuList>
+              </Menu>
+              <Button
+                onClick={handleRandomView}
+                w={120}
+                borderStyle={"solid"}
+                size="md"
+                variant="ghost"
+                rightIcon={<FontAwesomeIcon icon={faGhost} />}
+                backgroundColor={"rgba(11,121,177,0.5)"}
+                mr={"10px"}
+              >
+                랜덤 추천
+              </Button>
+            </Flex>
+            {/* ---------- 통합검색 ---------- */}
+            <Box>
+              <SearchMain />
+            </Box>
+            <Box>
+              <VisitorCountCard />
+            </Box>
 
-                    {IsConnected === true ? (
-                      alarmList.map((list) => (
-                        <PopoverBody borderBottomWidth={2} key={list.id}>
-                          <Flex alignItems={"center"}>
-                            <Text
-                              _hover={{ cursor: "pointer" }}
-                              onClick={() => {
-                                handleRead(
-                                  list.id,
-                                  list.board_id,
-                                  list.alarm_category,
-                                  list.inquiry_id,
-                                );
-                              }}
-                              style={{
-                                color: list._alarm === false ? "blue" : "gray",
-                              }}
-                            >
-                              {list.alarm_category === "ac002" ? (
-                                <>
-                                  {list.board_title}에 {list.nickname}
-                                  님이 댓글을 남겼습니다.
-                                </>
-                              ) : list.alarm_category === "ac003" ? (
-                                <>
-                                  {list.inquiry_title}에 운영자가 답변을
-                                  남겼습니다.
-                                </>
-                              ) : list.alarm_category === "ac004" ? (
-                                <>문의 게시판에 문의가 작성되었습니다.</>
-                              ) : null}
-
-                              <Text color={"black"}>{list.ago}</Text>
-                            </Text>
-
-                            <Box _hover={{ cursor: "pointer" }}>
-                              <FontAwesomeIcon
-                                icon={faXmark}
-                                onClick={() => handleDeleteAlarm(list.id)}
-                              />
-                            </Box>
+            <Flex gap={10} ml={2}>
+              <Flex gap={6} justifyContent={"center"} alignItems={"center"}>
+                {token.detectLogin ? (
+                  <>
+                    <Popover gutter={10}>
+                      <PopoverTrigger>
+                        <Button variant={"ghost"}>
+                          {alarmCount > 0 ? (
+                            <FontAwesomeIcon
+                              fontSize={"20px"}
+                              icon={faBell}
+                              color="gold"
+                            />
+                          ) : (
+                            <FontAwesomeIcon
+                              fontSize={"20px"}
+                              color={"#dcdcdc"}
+                              icon={faBell}
+                            />
+                          )}
+                          {alarmCount > 99 && <Text>"99..."</Text>}
+                          {alarmCount === 0 || alarmCount === null ? (
+                            <Text></Text>
+                          ) : (
+                            <Text>{alarmCount}</Text>
+                          )}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent
+                        w={"350px"}
+                        h={"300px"}
+                        overflowY={"scroll"}
+                      >
+                        <PopoverArrow />
+                        <PopoverCloseButton size={5} />
+                        <PopoverHeader>
+                          <Flex justifyContent={"space-between"} w={"88%"}>
+                            <Text>최근 알람</Text>
+                            <Flex alignItems={"flex-end"} gap={3}>
+                              <Text
+                                _hover={{ cursor: "pointer" }}
+                                onClick={handleAllRead}
+                                style={{ fontSize: "small", color: "blue" }}
+                              >
+                                전부읽음
+                              </Text>
+                              <Text
+                                _hover={{ cursor: "pointer" }}
+                                onClick={handleDeletAllAlarm}
+                                style={{
+                                  fontSize: "small",
+                                  color: "blue",
+                                }}
+                              >
+                                전부삭제
+                              </Text>
+                            </Flex>
                           </Flex>
-                        </PopoverBody>
-                      ))
-                    ) : (
-                      <Text>알람을 불러오는 중입니다...</Text>
-                    )}
-                  </PopoverContent>
-                </Popover>
+                        </PopoverHeader>
 
-                <Menu w={200} size="md" variant="ghost">
-                  <MenuButton>
-                    <MemberProfile />
-                  </MenuButton>
-                  <MenuList>
-                    <MenuItem
+                        {IsConnected === true ? (
+                          alarmList.map((list) => (
+                            <PopoverBody borderBottomWidth={2} key={list.id}>
+                              <Flex alignItems={"center"}>
+                                <Text
+                                  _hover={{ cursor: "pointer" }}
+                                  onClick={() => {
+                                    handleRead(
+                                      list.id,
+                                      list.board_id,
+                                      list.alarm_category,
+                                      list.inquiry_id,
+                                    );
+                                  }}
+                                  style={{
+                                    color:
+                                      list._alarm === false ? "blue" : "gray",
+                                  }}
+                                >
+                                  {list.alarm_category === "ac002" ? (
+                                    <>
+                                      {list.board_title}에 {list.nickname}
+                                      님이 댓글을 남겼습니다.
+                                    </>
+                                  ) : list.alarm_category === "ac003" ? (
+                                    <>
+                                      {list.inquiry_title}에 운영자가 답변을
+                                      남겼습니다.
+                                    </>
+                                  ) : list.alarm_category === "ac004" ? (
+                                    <>문의 게시판에 문의가 작성되었습니다.</>
+                                  ) : null}
+
+                                  <Text color={"black"}>{list.ago}</Text>
+                                </Text>
+
+                                <Box _hover={{ cursor: "pointer" }}>
+                                  <FontAwesomeIcon
+                                    color={"#dcdcdc"}
+                                    icon={faXmark}
+                                    onClick={() => handleDeleteAlarm(list.id)}
+                                  />
+                                </Box>
+                              </Flex>
+                            </PopoverBody>
+                          ))
+                        ) : (
+                          <Text>알람을 불러오는 중입니다...</Text>
+                        )}
+                      </PopoverContent>
+                    </Popover>
+
+                    <Menu w={200} size="md" variant="ghost">
+                      <MenuButton>
+                        <MemberProfile />
+                      </MenuButton>
+                      <MenuList>
+                        <MenuItem
+                          onClick={() => {
+                            handleLogout();
+                            navigate("/");
+
+                          }}
+                        >
+                          로그아웃
+                        </MenuItem>
+                        <Divider />
+
+                        <MenuItem
+                          onClick={() => {
+                            navigate("/member/info");
+                          }}
+                        >
+                          마이페이지
+                        </MenuItem>
+                        <MenuItem
+                          onClick={() => {
+                            navigate(
+                              "/member/minihomepy/" + loginInfo.member_id,
+                            );
+                          }}
+                        >
+                          내 미니홈피
+                        </MenuItem>
+                      </MenuList>
+                    </Menu>
+                  </>
+                ) : (
+                  <>
+                    <Button
                       onClick={() => {
-                        handleLogout();
-                        navigate("/");
+                        navigate("member/login");
                       }}
+                      w={90}
+                      size="md"
+                      variant="solid"
+                      backgroundColor={"rgb(0,35,150,0.9)"}
+                      _hover={{ bg: "rgba(0,35,150,0.2)", color: "black" }}
+                      color={"white"}
                     >
-                      로그아웃
-                    </MenuItem>
-                    <Divider />
-                    <MenuItem
-                      onClick={() => {
-                        navigate("/member/info");
-                      }}
-                    >
-                      마이페이지
-                    </MenuItem>
-                    <MenuItem>준비중</MenuItem>
-                  </MenuList>
-                </Menu>
-              </>
-            ) : (
-              <>
-                <Button
-                  onClick={() => {
-                    navigate("member/login");
-                  }}
-                  w={90}
-                  size="md"
-                  variant="ghost"
-                >
-                  로그인
-                </Button>
-              </>
-            )}
+                      로그인
+                    </Button>
+                  </>
+                )}
+              </Flex>
+            </Flex>
           </Flex>
-        </Flex>
-      </Flex>
+        </Center>
+      </div>
     </>
   );
 }

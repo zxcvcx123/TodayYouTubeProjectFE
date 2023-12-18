@@ -2,17 +2,15 @@ import YouTube from "react-youtube";
 import { Box, Img, Spinner, Tooltip } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCommentDots, faComments} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCommentDots, faComments } from "@fortawesome/free-solid-svg-icons";
 
 // 유튜브 정보 추출 컴포넌트 - 썸네일, 영상을 추출합니다.
 function YoutubeInfo({
   link,
   extraThumbnail,
   extraVideo,
-  thumbnailWidth = 320,
-  thumbnailHeight = 180,
-  opts = { height: "360", width: "640" },
+  opts = { height: "360px", width: "640px" },
   toolTip,
 }) {
   // 상태 값
@@ -37,7 +35,7 @@ function YoutubeInfo({
   }
 
   return (
-    <div>
+    <Box w={"100%"} h={"100%"}>
       {/* 프롭에 따라 썸네일, 유튜브영상 등을 선택해서 추출 가능 */}
       {/* 유튜브 썸네일 출력 => extraThumnail을 true로 설정 */}
       {/* thumbnailWidth, thumbnailHeight prop을 통해 길이 설정 가능, (기본값 320*180) */}
@@ -51,8 +49,8 @@ function YoutubeInfo({
                 <Img
                   src={thumbnail}
                   alt="유튜브 썸네일"
-                  w={thumbnailWidth * 2}
-                  h={thumbnailHeight * 2}
+                  w={"100%"}
+                  h={"100%"}
                 />
               }
               placement="top-end"
@@ -63,20 +61,25 @@ function YoutubeInfo({
                 <Img
                   src={thumbnail}
                   alt="유튜브 썸네일"
-                  maxW={thumbnailWidth}
-                  h={thumbnailHeight}
+                  w={"100%"}
+                  h={"100%"}
                   borderRadius={10}
                 />
               ) : (
                 <Box
                   backgroundColor={"grey"}
-                  maxW={thumbnailWidth}
-                  h={thumbnailHeight}
+                  w={"100%"}
+                  h={"100%"}
                   display={"flex"}
                   alignItems={"center"}
                   borderRadius={10}
                 >
-                  <FontAwesomeIcon width={thumbnailWidth} icon={faComments} size="3x" inverse={true}/>
+                  <FontAwesomeIcon
+                    width={"100%"}
+                    icon={faComments}
+                    size="3x"
+                    inverse={true}
+                  />
                 </Box>
               )}
             </Tooltip>
@@ -88,20 +91,25 @@ function YoutubeInfo({
                 <Img
                   src={thumbnail}
                   alt="유튜브 썸네일"
-                  maxW={thumbnailWidth}
-                  h={thumbnailHeight}
+                  w={"100%"}
+                  h={"100%"}
                   borderRadius={10}
                 />
               ) : (
                 <Box
                   backgroundColor={"darkgray"}
-                  maxW={thumbnailWidth}
-                  h={thumbnailHeight}
+                  w={"100%"}
+                  h={"100%"}
                   display={"flex"}
                   alignItems={"center"}
                   borderRadius={10}
                 >
-                  <FontAwesomeIcon width={thumbnailWidth} icon={faComments} size="3x" inverse={true}/>
+                  <FontAwesomeIcon
+                    width={"100%"}
+                    icon={faComments}
+                    size="3x"
+                    inverse={true}
+                  />
                 </Box>
               )}
             </>
@@ -112,7 +120,7 @@ function YoutubeInfo({
       {extraVideo && videoId !== null && (
         <YouTube videoId={videoId} opts={opts} />
       )}
-    </div>
+    </Box>
   );
 }
 

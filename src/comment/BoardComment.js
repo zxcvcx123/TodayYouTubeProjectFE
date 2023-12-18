@@ -170,7 +170,7 @@ function CommentItem({
           <Text size="xs" as="sub">
             {comment.created_at}
           </Text>
-          {loginInfo.member_id === comment.member_id && (
+          {loginInfo && loginInfo.member_id === comment.member_id && (
             <Flex gap={0.5}>
               {isEditing || (
                 <Button
@@ -325,9 +325,9 @@ export function BoardComment({ board_id, boardData }) {
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   const params = new URLSearchParams();
-
   const location = useLocation();
-  console.log("댓글 테스트: " + location.pathname);
+
+
 
   useEffect(() => {
     if (loginInfo !== null) {

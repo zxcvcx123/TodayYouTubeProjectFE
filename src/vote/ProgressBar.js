@@ -11,6 +11,8 @@ const ProgressBar = ({ optionOneVotes, optionTwoVotes }) => {
     optionTwoPercentage = ((optionTwoVotes / totalVotes) * 100).toFixed(1);
   }
 
+  console.log("option: " + optionOnePercentage);
+
   const styleOne = {
     width: `${optionOnePercentage}%`,
     backgroundColor: "#4299E1",
@@ -28,18 +30,41 @@ const ProgressBar = ({ optionOneVotes, optionTwoVotes }) => {
   };
 
   return (
-    <Flex style={{ width: "80%", backgroundColor: "#ddd", height: "40px" }}>
-      <Box style={styleOne}>
-        <Text fontWeight="bold" fontSize="2xl">
-          {optionOnePercentage}%
-        </Text>
-      </Box>
-      <Box style={styleTwo}>
-        <Text fontWeight="bold" fontSize="2xl">
-          {optionTwoPercentage}%
-        </Text>
-      </Box>
-    </Flex>
+    <>
+      {optionOnePercentage === "0.0" && optionTwoPercentage === "0.0" ? (
+        <Flex
+          style={{
+            width: "100%",
+            backgroundColor: "#ddd",
+            height: "40px",
+            justifyContent: "center",
+          }}
+        >
+          <Text fontWeight="bold" fontSize="2xl">
+            0.0%
+          </Text>
+        </Flex>
+      ) : (
+        <Flex
+          style={{ width: "100%", backgroundColor: "#ddd", height: "40px" }}
+        >
+          {optionTwoPercentage === "100.0" || (
+            <Box style={styleOne}>
+              <Text fontWeight="bold" fontSize="2xl">
+                {optionOnePercentage}%
+              </Text>
+            </Box>
+          )}
+          {optionOnePercentage === "100.0" || (
+            <Box style={styleTwo}>
+              <Text fontWeight="bold" fontSize="2xl">
+                {optionTwoPercentage}%
+              </Text>
+            </Box>
+          )}
+        </Flex>
+      )}
+    </>
   );
 };
 

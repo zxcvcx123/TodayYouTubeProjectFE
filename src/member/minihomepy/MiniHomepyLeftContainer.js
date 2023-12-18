@@ -25,9 +25,9 @@ export function MiniHomepyLeftContainer({
 }) {
   const { loginInfo } = useContext(DetectLoginContext);
 
-  const memberId = member ? member.member_id : <Spinner />;
-  const nickname = member ? member.nickname : <Spinner />;
-  const imageUrl = member ? member.image_url : <Spinner />;
+  let memberId = member ? member.member_id : "";
+  let nickname = member ? member.nickname : "";
+  let imageUrl = member ? member.image_url : "";
 
   /*-----------------------------------------------------------*/
   const [editIntroduce, setEditIntroduce] = useState(false);

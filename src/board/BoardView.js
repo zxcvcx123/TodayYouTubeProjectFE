@@ -3,6 +3,8 @@ import {
   Avatar,
   Box,
   Button,
+  Card,
+  Center,
   Divider,
   Flex,
   FormControl,
@@ -25,6 +27,7 @@ import { DetectLoginContext } from "../component/LoginProvider";
 import MemberProfile from "../member/MemberProfile";
 import ScrollToTop from "../util/ScrollToTop";
 import LoadingPage from "../component/LoadingPage";
+import BoardProfile from "./BoardProfile";
 
 function BoardView() {
   /* 로그인 정보 컨텍스트 */
@@ -66,22 +69,20 @@ function BoardView() {
 
   // 초기 렌더링
   useEffect(() => {
-    if (loginInfo !== null) {
-      console.log("랜더링 테스트");
-      axios.get("/api/board/id/" + id).then((response) => {
-        setBoard(response.data);
+    console.log("랜더링 테스트");
+    axios.get("/api/board/id/" + id).then((response) => {
+      setBoard(response.data);
 
-        if (!response.data.is_show) {
-          navigate("board/list?category=notice");
-          window.alert("삭제된 게시물입니다.");
-        }
+      if (!response.data.is_show) {
+        navigate("board/list?category=notice");
+        window.alert("삭제된 게시물입니다.");
+      }
 
-        // 게시글 데이터를 가져온 후 작성자 여부를 확인하여 isAuthor 설정
-        if (loginInfo.member_id === response.data.board_member_id) {
-          setIsAuthor(true);
-        }
-      });
-    }
+      // 게시글 데이터를 가져온 후 작성자 여부를 확인하여 isAuthor 설정
+      if (loginInfo && loginInfo.member_id === response.data.board_member_id) {
+        setIsAuthor(true);
+      }
+    });
   }, [isSubmitting, location, loginInfo]);
 
   // 초기 렌더링 파일 목록 가져오기
@@ -192,142 +193,167 @@ function BoardView() {
 
   // 유튜브 섹션 렌더링 여부 결정 함수
   function renderYoutubeSection() {
-    console.log("링크: " + board.link);
     if (!board.link) {
-      return <Text>링크가 없네용</Text>;
+      return <></>;
     }
 
     return (
-      <FormControl mb={2}>
-        <FormLabel fontSize="xl" fontWeight="bold" color="purple.500">
+      <FormControl mb={2} backgroundColor={"rgba(0,0,0,0.9)"} p={"10px"}>
+        <FormLabel fontSize="xl" fontWeight="bold" color={"rgb(255,255,255)"}>
           추천 유튜브 영상
         </FormLabel>
-        {/* 유튜브 영상 출력 */}
-        <YoutubeInfo link={board.link} extraVideo={true} />
-        <Flex m={2} ml={0} gap={5}>
-          <Button onClick={() => window.open(board.link)} colorScheme="red">
-            유튜브 영상 페이지로 이동
-          </Button>
-          <Button onClick={handleCopyClick} colorScheme="blue">
-            유튜브 링크 복사
-          </Button>
-        </Flex>
+        <Center>
+          <Flex m={2} ml={0} gap={5}>
+            {/* 유튜브 영상 출력 */}
+            <YoutubeInfo link={board.link} extraVideo={true} />
+            <Box justifyContent={"center"}>
+              <Button
+                onClick={() => window.open(board.link)}
+                colorScheme="red"
+                mb={5}
+              >
+                유튜브 영상 페이지로 이동
+              </Button>
+              <Button onClick={handleCopyClick} colorScheme="blue">
+                유튜브 링크 복사
+              </Button>
+            </Box>
+          </Flex>
+        </Center>
       </FormControl>
     );
   }
 
+  // 날짜 포맷 변경
+  function formatDateTime(dateTimeString) {
+    const options = {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false, // 24시간 형식
+    };
+
+    const formattedDate = new Date(dateTimeString);
+    const intlFormatter = new Intl.DateTimeFormat("ko-KR", options);
+    const [
+      { value: year },
+      ,
+      { value: month },
+      ,
+      { value: day },
+      ,
+      { value: hour },
+      ,
+      { value: minute },
+    ] = intlFormatter.formatToParts(formattedDate);
+
+    return `${year}-${month}-${day} ${hour}:${minute}`;
+  }
+
   return (
-    <Box m={"50px 20% 20px 50px"}>
-      <Box mb={5}>
-        <Heading>{boardInfo} 게시판</Heading>
-      </Box>
-      <Heading>{board.id} 번 게시글 보기(임시 게시글 번호 확인용!!)</Heading>
-
-      {/* -------------------- 상단 영역 -------------------- */}
-      <FormControl mt={10} mb={2}>
-        {/* 제목 */}
-        <Text fontSize={"xx-large"} as={"strong"}>
-          {board.title}
-        </Text>
-        <Flex justifyContent={"space-between"} alignItems={"center"}>
-          <Flex alignItems={"center"}>
-            {/* 프로필 */}
-            <HStack>
-              <Flex width={"150px"}>
-                <Avatar src="https://i.imgur.com/lmSDJtn.jpeg" />
-                <Box ml="3">
-                  <Tooltip label={board.nickname} placement="top-start">
-                    <Text fontWeight="bold">
-                      {board.nickname.slice(0, 8)}...
-                    </Text>
-                  </Tooltip>
-                  <Text fontSize="sm">{board.role_name}</Text>
-                </Box>
-              </Flex>
-            </HStack>
-
-            {/* 일자 */}
-            <Text>| {board.updated_at}</Text>
-          </Flex>
-          {/* 좋아요, 조회수 */}
-          <Flex alignItems={"center"} gap={"5"}>
-            <BoardLike id={id} like={like} board={board} />
-            <Text> | 조회수 : {board.views}</Text>
-          </Flex>
-        </Flex>
-      </FormControl>
-
-      <Divider my={5} borderColor="grey" />
-
-      {/* -------------------- 유튜브 섹션 -------------------- */}
-      {renderYoutubeSection()}
-
-      <Divider my={5} borderColor="grey" />
-
-      {/* -------------------- 본문 -------------------- */}
-      <FormControl mb={2}>
-        {/*<FormLabel>본문</FormLabel>*/}
-        <Box>
-          {/* CKEditor 본문 영역 onReady => 높이 설정 */}
-          {board && (
-            <CKEditor
-              disabled={"true"}
-              editor={ClassicEditor}
-              data={board.content}
-              config={editorConfig}
-              onReady={(editor) => {
-                editor.ui.view.editable.element.style.minHeight = "500px";
-              }}
-            />
-          )}
-        </Box>
-      </FormControl>
-
-      {/* -------------------- 파일 리스트 -------------------- */}
-      {uploadFiles.length > 0 && (
-        <Box mb={2}>
-          <Text>파일 목록</Text>
-          <Box border={"1px solid #edf1f6"} h={"auto"} textIndent={"10px"}>
-            {uploadFiles.map((fileList) => (
-              <Link
-                key={fileList.id}
-                style={{ display: "block", color: "blue" }}
-                to={fileList.fileurl}
-              >
-                {fileList.filename}
-              </Link>
-            ))}
+    <Center mb={"50px"}>
+      <Box mt={"20px"} w={"1000px"}>
+        <Box mb={5}>
+          <Box w={"500px"} borderBottom={"5px solid rgb(0,35,150,0.5)"}>
+            <Heading>{boardInfo} 게시판</Heading>
           </Box>
         </Box>
-      )}
-      {/* -------------------- 버튼 섹션 -------------------- */}
-      <Flex justifyContent={"space-between"}>
-        {/* 목록 버튼 */}
-        <Button
-          colorScheme="blue"
-          onClick={() => navigate("/board/list?category=" + currentParams)}
-        >
-          목록
-        </Button>
-        {isAuthor && (
-          <Box>
-            {/* 수정 버튼 */}
-            <Button colorScheme="purple" onClick={handleEditClick} mr={"10px"}>
-              수정
-            </Button>
 
-            {/* 삭제 버튼 */}
-            <Button colorScheme="red" onClick={handleDeleteClick}>
-              삭제
-            </Button>
+        {/* -------------------- 상단 영역 -------------------- */}
+        <FormControl mt={10} mb={2}>
+          {/* 제목 */}
+          <Text fontSize={"xx-large"} as={"strong"}>
+            {board.title}
+          </Text>
+          <Flex justifyContent={"space-between"} alignItems={"center"}>
+            <Flex alignItems={"center"}>
+              {/* 프로필 */}
+              <BoardProfile board_member_id={board.board_member_id} />
+              {/* 일자 */}
+              <Text>| {formatDateTime(board.updated_at)}</Text>
+            </Flex>
+            {/* 좋아요, 조회수 */}
+            <Flex alignItems={"center"} gap={"5"}>
+              <BoardLike id={id} like={like} board={board} />
+              <Text> | 조회수 : {board.views}</Text>
+            </Flex>
+          </Flex>
+        </FormControl>
+
+        {/* -------------------- 유튜브 섹션 -------------------- */}
+        {renderYoutubeSection()}
+
+        {/* -------------------- 본문 -------------------- */}
+        <FormControl my={5}>
+          {/*<FormLabel>본문</FormLabel>*/}
+          <Box>
+            {/* CKEditor 본문 영역 onReady => 높이 설정 */}
+            {board && (
+              <CKEditor
+                disabled={"true"}
+                editor={ClassicEditor}
+                data={board.content}
+                config={editorConfig}
+                onReady={(editor) => {
+                  editor.ui.view.editable.element.style.minHeight = "500px";
+                }}
+              />
+            )}
+          </Box>
+        </FormControl>
+
+        {/* -------------------- 파일 리스트 -------------------- */}
+        {uploadFiles.length > 0 && (
+          <Box mb={2}>
+            <Text>파일 목록</Text>
+            <Box border={"1px solid #edf1f6"} h={"auto"} textIndent={"10px"}>
+              {uploadFiles.map((fileList) => (
+                <Link
+                  key={fileList.id}
+                  style={{ display: "block", color: "blue" }}
+                  to={fileList.fileurl}
+                >
+                  {fileList.filename}
+                </Link>
+              ))}
+            </Box>
           </Box>
         )}
-      </Flex>
-      {/* -------------------- 댓글 영역 -------------------- */}
+        {/* -------------------- 버튼 섹션 -------------------- */}
+        <Flex justifyContent={"right"}>
+          {isAuthor && (
+            <Box mr={"10px"}>
+              {/* 수정 버튼 */}
+              <Button
+                colorScheme="purple"
+                onClick={handleEditClick}
+                mr={"10px"}
+              >
+                수정
+              </Button>
 
-      <BoardComment board_id={id} boardData={board} />
-      <ScrollToTop />
-    </Box>
+              {/* 삭제 버튼 */}
+              <Button colorScheme="red" onClick={handleDeleteClick}>
+                삭제
+              </Button>
+            </Box>
+          )}
+          {/* 목록 버튼 */}
+          <Button
+            colorScheme="blue"
+            onClick={() => navigate("/board/list?category=" + currentParams)}
+          >
+            목록
+          </Button>
+        </Flex>
+        {/* -------------------- 댓글 영역 -------------------- */}
+
+        <BoardComment board_id={id} boardData={board} />
+        <ScrollToTop />
+      </Box>
+    </Center>
   );
 }
 

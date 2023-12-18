@@ -35,7 +35,7 @@ export function SearchMain() {
   }
 
   return (
-    <Flex width={600}>
+    <Flex width={400}>
       {/*<Box>*/}
       {/*  <Select fontSize={13}>*/}
       {/*    <option value="all">통합검색</option>*/}
@@ -47,15 +47,21 @@ export function SearchMain() {
       {/*    <option value="category">게임</option>*/}
       {/*  </Select>*/}
       {/*</Box>*/}
-      <Box width={400}>
+      <Box width={300}>
         <Input
           fontSize={13}
-          placeholder="검색어를 입력하세요"
+          placeholder="[게시판 통합검색] 검색어를 입력하세요"
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
+          borderRightRadius={0}
         />
       </Box>
-      <Button width={100} onClick={handleSearchClick}>
+      <Button
+        width={70}
+        onClick={handleSearchClick}
+        colorScheme="red"
+        borderLeftRadius={0}
+      >
         <FontAwesomeIcon icon={faSearch} />
       </Button>
     </Flex>

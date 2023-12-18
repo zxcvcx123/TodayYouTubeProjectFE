@@ -12,7 +12,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Spinner,
   Textarea,
   useDisclosure,
   useToast,
@@ -24,6 +23,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as stompClient from "immer";
 import { SocketContext } from "../socket/Socket";
 import { DetectLoginContext } from "../component/LoginProvider";
+import LoadingPage from "../component/LoadingPage";
 
 function InquiryAnswer(props) {
   // 로그인 유저 정보
@@ -49,7 +49,7 @@ function InquiryAnswer(props) {
   }, []);
 
   if (inquiry == null) {
-    return <Spinner />;
+    return <LoadingPage />;
   }
 
   // 문의 답변시 알람기능

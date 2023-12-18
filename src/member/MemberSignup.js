@@ -350,7 +350,7 @@ function MemberSignup(props) {
                       }
                     }}
                   >
-                    안전검사
+                    비밀번호 확인
                   </Button>
                 ) : (
                   <Spinner />
