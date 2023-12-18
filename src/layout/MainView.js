@@ -50,9 +50,10 @@ export function MainView() {
   const [isMonth, setIsMonth] = useState(false);
 
   const [mainShowLink, setMainShowLink] = useState(null);
+  const [mainShowTitle, setMainShowTitle] = useState(null);
+  const [mainShowId, setMainShowId] = useState(null);
   const [linkCategory, setLinkCategory] = useState(null);
   const [linkNameEng, setLinkNameEng] = useState(null);
-  const [mainShowTitle, setMainShowTitle] = useState(null);
 
   const [mainBoardList2, setMainBoardList2] = useState(null);
   const [mainBoardList3, setMainBoardList3] = useState(null);
@@ -86,6 +87,7 @@ export function MainView() {
         setOtherList(response.data.otherBoardList);
         setMainShowLink(response.data.firstBoardList.link);
         setMainShowTitle(response.data.firstBoardList.title);
+        setMainShowId(response.data.firstBoardList.id);
         setLinkCategory(response.data.firstBoardList.categoryName);
         setLinkNameEng(response.data.firstBoardList.name_eng);
         setMainBoardList2(response.data.mainBoardList2);
@@ -408,6 +410,7 @@ export function MainView() {
                   />*/
                   <>
                     <Text
+                      w={"900px"}
                       fontSize={"xx-large"}
                       fontFamily={"Nanum Gothic"}
                       fontWeight={"bold"}
@@ -415,6 +418,8 @@ export function MainView() {
                       overflow={"hidden"}
                       textOverflow={"ellipsis"}
                       color={"rgb(102,206,252)"}
+                      onClick={() => navigate("board/" + mainShowId)}
+                      _hover={{ cursor: "pointer" }}
                     >
                       추천글 : {mainShowTitle} >>
                     </Text>
@@ -475,6 +480,7 @@ export function MainView() {
               setMainShowLink(firstList.link);
               setLinkNameEng(firstList.name_eng);
               setMainShowTitle(firstList.title);
+              setMainShowId(firstList.id);
             }}
           >
             <Flex h={"20%"}>
@@ -522,6 +528,7 @@ export function MainView() {
                   setLinkCategory(other.categoryName);
                   setMainShowLink(other.link);
                   setMainShowTitle(other.title);
+                  setMainShowId(other.id);
                   setLinkNameEng(other.name_eng);
                 }}
                 _hover={{ transform: "scale(1.1)", cursor: "pointer" }}
