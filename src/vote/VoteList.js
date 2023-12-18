@@ -126,6 +126,7 @@ function VoteList() {
                     backgroundColor: "lightcyan",
                     cursor: "pointer",
                   }}
+                  my={"10px"}
                 >
                   <CardHeader p={"1%"}>
                     {/* 제목 출력 */}
