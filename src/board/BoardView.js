@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import {
   Avatar,
+  Badge,
   Box,
   Button,
   Card,
@@ -302,7 +303,7 @@ function BoardView() {
     }
 
     // 채널 설명의 최대 표시 길이
-    const maxDescriptionLength = 120;
+    const maxDescriptionLength = 200;
 
     // 채널 설명이 최대 길이보다 길 경우 일부만 표시하고 "..." 추가
     const truncatedDescription =
@@ -320,12 +321,14 @@ function BoardView() {
             alt={channelInfo.title}
             m={"20px"}
           />
-          <Box>
+          <Box display="flex" flexDirection="column" justifyContent="center">
             <Button
               size={"sm"}
-              onClick={() => window.open(board.link)}
+              onClick={() => {
+                window.open("https://www.youtube.com/" + channelInfo.customUrl);
+              }}
               colorScheme="red"
-              my={5}
+              mb={5}
             >
               채널로 이동
             </Button>
@@ -334,13 +337,13 @@ function BoardView() {
             </Button>
           </Box>
         </Flex>
-        <Text color={"white"} fontWeight={"bold"}>
+        <Text color={"white"} fontWeight={"bold"} mb={"5px"}>
           채널명 : {channelInfo.title}
         </Text>
-        <Text color={"white"} fontWeight={"bold"}>
-          채널설명
+        <Badge variant={"solid"}>채널설명</Badge>
+        <Text color={"white"} fontSize={"small"} w={"310px"}>
+          {truncatedDescription}
         </Text>
-        <Text color={"white"}>{truncatedDescription}</Text>
       </Box>
     );
   }
