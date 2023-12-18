@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Alert,
   AlertDescription,
@@ -29,45 +29,52 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
-import {useNavigate, useParams, useSearchParams} from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import Editor from "../component/Editor";
 
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faArrowTurnUp} from "@fortawesome/free-solid-svg-icons";
-import {DetectLoginContext} from "../component/LoginProvider";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowTurnUp } from "@fortawesome/free-solid-svg-icons";
+import { DetectLoginContext } from "../component/LoginProvider";
 
 import ScrollToTop from "../util/ScrollToTop";
 import LoadingPage from "../component/LoadingPage";
 import dompurify from "dompurify";
-import {SocketContext} from "../socket/Socket";
+import { SocketContext } from "../socket/Socket";
 
 function InquiryView(props) {
   // 로그인 유저 정보
-  const {token, handleLogout, loginInfo, validateToken} =
+  const { token, handleLogout, loginInfo, validateToken } =
     useContext(DetectLoginContext);
 
-  const {stompClient} = useContext(SocketContext);
+  const { stompClient } = useContext(SocketContext);
 
   const [answerContent, setAnswerContent] = useState("");
   // App에서 :id 로 넘겼을때 객체 형태로 넘어가기 때문에 {}로 받아서 사용한다.
   const [inquiry, setInquiry] = useState(null);
 
   const navigate = useNavigate();
-  const {onOpen, isOpen, onClose} = useDisclosure();
+  const { onOpen, isOpen, onClose } = useDisclosure();
   const toast = useToast();
   const [answer, setAnswer] = useState(false);
+  const [answerReadOnly, setAnswerReadOnly] = useState(false);
+  const [answerBorder, setAnswerBorder] = useState("");
 
   // App에서 :id 로 넘겼을때 객체 형태로 넘어가기 때문에 {}로 받아서 사용한다.
-  const {id} = useParams();
+  const { id } = useParams();
 
   useEffect(() => {
-    axios
-      .get("/api/inquiry/" + id)
-      .then((response) => setInquiry(response.data));
+    axios.get("/api/inquiry/" + id).then((response) => {
+      setInquiry(response.data);
+      setAnswerContent(response.data.answerContent);
+      if (response.data.answer_status === "답변완료") {
+        setAnswerReadOnly(true);
+        setAnswerBorder("none");
+      }
+    });
   }, []);
 
   if (inquiry == null) {
-    return <LoadingPage/>;
+    return <LoadingPage />;
   }
   if (!token.detectLogin) {
     return (
@@ -82,7 +89,7 @@ function InquiryView(props) {
           textAlign="center"
           height="200px"
         >
-          <AlertIcon boxSize="40px" mr={0}/>
+          <AlertIcon boxSize="40px" mr={0} />
           <AlertTitle mt={4} mb={1} fontSize="lg">
             로그인이 필요한 서비스입니다!
           </AlertTitle>
@@ -114,11 +121,11 @@ function InquiryView(props) {
   // 본문보여주기
   function ViewContents() {
     const contents = dompurify.sanitize(inquiry.content);
-    return <Box dangerouslySetInnerHTML={{__html: contents}}></Box>;
+    return <Box dangerouslySetInnerHTML={{ __html: contents }}></Box>;
   }
 
   if (inquiry == null) {
-    return <LoadingPage/>;
+    return <LoadingPage />;
   }
 
   // 문의 답변시 알람기능
@@ -157,6 +164,30 @@ function InquiryView(props) {
       });
   }
 
+  // 답변 수정
+  function handleEditBtn() {
+    axios
+      .put("/api/inquiry/answer/edit", {
+        answer_board_id: inquiry.id,
+        content: answerContent,
+      })
+      .then(() => {
+        setAnswerReadOnly(true);
+        setAnswerBorder("none");
+      })
+      .catch()
+      .finally();
+  }
+
+  function handleDeleteBtn() {
+    axios.delete("/api/inquiry/answer/delete", {
+      data: {
+        answer_board_id: inquiry.id,
+        role_name: loginInfo.role_name,
+      },
+    });
+  }
+
   return (
     <Card width={"60%"} m={"auto"}>
       <CardHeader>
@@ -178,9 +209,9 @@ function InquiryView(props) {
       </CardBody>
 
       <CardFooter justifyContent={"flex-end"}>
-        {loginInfo !== null && loginInfo.role_name === "운영자" ? (
+        {loginInfo !== null && loginInfo.role_name === "운영자" && (
           <Box>
-            {answer === true ? (
+            {answer === true && inquiry.answer_status === "답변진행중" && (
               <Button
                 colorScheme="red"
                 onClick={() => {
@@ -190,7 +221,8 @@ function InquiryView(props) {
               >
                 답변취소
               </Button>
-            ) : (
+            )}
+            {answer === false && inquiry.answer_status === "답변진행중" && (
               <Button
                 colorScheme="green"
                 onClick={() => {
@@ -201,21 +233,64 @@ function InquiryView(props) {
                 답변하기
               </Button>
             )}
+            {answer === false && inquiry.answer_status === "답변완료" && (
+              <Button
+                colorScheme="purple"
+                onClick={() => {
+                  setAnswer(true);
+                }}
+                mr={2}
+              >
+                답변보기
+              </Button>
+            )}
+            {answer === true && inquiry.answer_status === "답변완료" && (
+              <Button
+                colorScheme="orange"
+                onClick={() => {
+                  setAnswer(false);
+                }}
+                mr={2}
+              >
+                답변접기
+              </Button>
+            )}
           </Box>
         )}
+
+        {loginInfo !== null &&
+          loginInfo.role_name !== "운영자" &&
+          inquiry.answer_status === "답변완료" && (
+            <Box>
+              {answer === false && inquiry.answer_status === "답변완료" && (
+                <Button
+                  colorScheme="purple"
+                  onClick={() => {
+                    setAnswer(true);
+                  }}
+                  mr={2}
+                >
+                  답변보기
+                </Button>
+              )}
+              {answer === true && inquiry.answer_status === "답변완료" && (
+                <Button
+                  colorScheme="orange"
+                  onClick={() => {
+                    setAnswer(false);
+                  }}
+                  mr={2}
+                >
+                  답변접기
+                </Button>
+              )}
+            </Box>
+          )}
+
         {(loginInfo !== null &&
           loginInfo.member_id === inquiry.inquiry_member_id) ||
         loginInfo.role_name === "운영자" ? (
           <Box>
-            {inquiry.answer_status === "답변완료" && (<Button
-              colorScheme="purple"
-              onClick={() => {
-                setAnswer(true);
-              }}
-              mr={2}
-            >
-              답변보기
-            </Button>):
             <Button
               colorScheme="blue"
               onClick={() => navigate("/inquiry/edit/" + id)}
@@ -232,36 +307,67 @@ function InquiryView(props) {
         )}
       </CardFooter>
 
-      {
-        answer ? (
-          <Card>
-            <CardHeader>
-              <Text>답변 내용</Text>
-            </CardHeader>
-            <CardBody>
-              <Textarea
-                value={answerContent}
-                onChange={(e) => setAnswerContent(e.target.value)}
-              ></Textarea>
-            </CardBody>
-            <CardFooter justify={"flex-end"}>
-              <Button colorScheme="blue" onClick={handleAnswerComplete}>
-                답변
-              </Button>
-            </CardFooter>
-          </Card>
-        ) : (
-          <></>
-        )
-      }
+      {answer ? (
+        <Card>
+          <CardHeader>
+            <Text>답변 내용</Text>
+          </CardHeader>
+          <CardBody>
+            <Textarea
+              border={answerBorder}
+              readOnly={answerReadOnly}
+              value={answerContent}
+              onChange={(e) => setAnswerContent(e.target.value)}
+            ></Textarea>
+          </CardBody>
+          <CardFooter justify={"flex-end"}>
+            <Box>
+              {loginInfo !== null && loginInfo.role_name === "운영자" && (
+                <>
+                  {inquiry.answer_status !== "답변완료" && (
+                    <Button
+                      colorScheme="blue"
+                      onClick={handleAnswerComplete}
+                      mr={2}
+                    >
+                      답변
+                    </Button>
+                  )}
+                  {answerReadOnly && (
+                    <Button
+                      colorScheme="blue"
+                      onClick={() => {
+                        setAnswerReadOnly(false);
+                        setAnswerBorder("1px solid black");
+                      }}
+                      mr={2}
+                    >
+                      수정
+                    </Button>
+                  )}
+                  {answerReadOnly || (
+                    <Button colorScheme="blue" onClick={handleEditBtn} mr={2}>
+                      작성완료
+                    </Button>
+                  )}
+                  <Button colorScheme="red" onClick={handleDeleteBtn}>
+                    삭제
+                  </Button>
+                </>
+              )}
+            </Box>
+          </CardFooter>
+        </Card>
+      ) : (
+        <></>
+      )}
 
-      {/* 삭제 모달 */
-      }
+      {/* 삭제 모달 */}
       <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay/>
+        <ModalOverlay />
         <ModalContent>
           <ModalHeader>Modal Title</ModalHeader>
-          <ModalCloseButton/>
+          <ModalCloseButton />
           <ModalBody>문의글을 삭제하시겠습니까?</ModalBody>
           <ModalFooter>
             <Button variant={"ghost"} onClick={onClose}>
@@ -274,10 +380,9 @@ function InquiryView(props) {
         </ModalContent>
       </Modal>
 
-      <ScrollToTop/>
+      <ScrollToTop />
     </Card>
-  )
-    ;
+  );
 }
 
 export default InquiryView;

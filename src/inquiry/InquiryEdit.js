@@ -44,6 +44,7 @@ function InquiryEdit(props) {
       setInquiry(response.data);
       setTitle(response.data.title);
       setInquiry_category(response.data.category_code);
+      setContent(response.data.content);
     });
   }, []);
 
@@ -159,7 +160,7 @@ function InquiryEdit(props) {
         {/*  onChange={(e) => setContent(e.target.value)}*/}
         {/*></Textarea>*/}
         <Editor
-          data={inquiry.content}
+          data={content}
           setUuid={setUuid}
           uuid={uuid}
           setContent1={setContent}
