@@ -363,7 +363,7 @@ export function MainView() {
         {/* ------------------------------ 1 ~ 5위 썸네일 ------------------------------ */}
         <Flex w={"1500px"}>
           <Box
-            w={"280px"}
+            w={"250px"}
             // border={"1px solid black"}
             p={"10px"}
             bg={"rgb(255,255,255)"}
@@ -374,24 +374,25 @@ export function MainView() {
             alignItems={"center"}
             boxShadow={"0 4px 8px rgba(0, 0, 0, 0.3)"}
             transition={"transform 0.1s ease-in-out"}
-            _hover={{ transform: "scale(1.1)" }}
+            _hover={{ transform: "scale(1.1)", cursor: "pointer" }}
+            style={{
+              border:
+                firstList.link === mainShowLink
+                  ? "3px solid rgb(181,233,245)"
+                  : "none",
+            }}
+            onClick={() => {
+              setLinkCategory(firstList.categoryName);
+              setMainShowLink(firstList.link);
+              setLinkNameEng(firstList.name_eng);
+            }}
           >
             <Box h={"20%"} fontSize={"1.2rem"}>
               <Badge mx={1} fontSize="20px" colorScheme="green">
                 1위
               </Badge>
             </Box>
-            <Box
-              key={firstList.link}
-              _hover={{ cursor: "pointer" }}
-              w={"250px"}
-              h={"150px"}
-              onClick={() => {
-                setLinkCategory(firstList.categoryName);
-                setMainShowLink(firstList.link);
-                setLinkNameEng(firstList.name_eng);
-              }}
-            >
+            <Box key={firstList.link} w={"230px"} h={"130px"}>
               <YoutubeInfo link={firstList.link} extraThumbnail={true} />
             </Box>
           </Box>
@@ -399,7 +400,7 @@ export function MainView() {
           {otherList &&
             otherList.map((other) => (
               <Box
-                w={"280px"}
+                w={"250px"}
                 // border={"1px solid black"}
                 p={"10px"}
                 bg={"rgb(255,255,255)"}
@@ -410,7 +411,18 @@ export function MainView() {
                 alignItems={"center"}
                 boxShadow={"0 4px 8px rgba(0, 0, 0, 0.3)"}
                 transition={"transform 0.1s ease-in-out"}
-                _hover={{ transform: "scale(1.1)" }}
+                onClick={() => {
+                  setLinkCategory(other.categoryName);
+                  setMainShowLink(other.link);
+                  setLinkNameEng(other.name_eng);
+                }}
+                _hover={{ transform: "scale(1.1)", cursor: "pointer" }}
+                style={{
+                  border:
+                    other.link === mainShowLink
+                      ? "3px solid rgb(181,233,245)"
+                      : "none",
+                }}
                 key={other.id}
               >
                 <Box
@@ -424,17 +436,7 @@ export function MainView() {
                     {otherList.indexOf(other) + 2}위
                   </Badge>
                 </Box>
-                <Box
-                  w={"250px"}
-                  h={"150px"}
-                  key={other.id}
-                  onClick={() => {
-                    setLinkCategory(other.categoryName);
-                    setMainShowLink(other.link);
-                    setLinkNameEng(other.name_eng);
-                  }}
-                  _hover={{ cursor: "pointer" }}
-                >
+                <Box w={"230px"} h={"130px"} key={other.id}>
                   <YoutubeInfo link={other.link} extraThumbnail={true} />
                 </Box>
               </Box>
