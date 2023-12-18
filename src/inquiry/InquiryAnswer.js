@@ -164,33 +164,6 @@ function InquiryAnswer(props) {
           취소
         </Button>
       </Box>
-
-      {/* 작성취소 모달 */}
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>작성을 취소하시겠습니까?</ModalBody>
-          <ModalFooter>
-            <Button variant={"ghost"} onClick={onClose}>
-              닫기
-            </Button>
-            <Button
-              colorScheme="blue"
-              onClick={() => {
-                navigate("/inquiry/list");
-                toast({
-                  description: "작성이 취소되었습니다.",
-                  status: "warning",
-                });
-              }}
-            >
-              네
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
     </Box>
   );
 }

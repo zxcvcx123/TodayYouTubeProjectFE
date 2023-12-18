@@ -24,6 +24,7 @@
     "axios": "^1.6.1",
     "chart.js": "^4.4.1",
     "chartjs-plugin-datalabels": "^2.2.0",
+    "dompurify": "^3.0.6",
     "framer-motion": "^10.16.4",
     "http-proxy-middleware": "^2.0.6",
     "immer": "^10.0.3",

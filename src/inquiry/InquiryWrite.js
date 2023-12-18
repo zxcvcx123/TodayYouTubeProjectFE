@@ -34,6 +34,7 @@ import { DetectLoginContext } from "../component/LoginProvider";
 import { SocketContext } from "../socket/Socket";
 import memberInfo from "../member/memberInfo/MemberInfo";
 import { ChevronDownIcon } from "@chakra-ui/icons";
+import dompurify from "dompurify";
 
 function InquiryWrite() {
   // 유저 정보
@@ -131,7 +132,7 @@ function InquiryWrite() {
             as={Button}
             rightIcon={<ChevronDownIcon />}
           >
-            선택
+            {inquiry_category === null && "선택"}
             {inquiry_category === "1" && "개선사항"}
             {inquiry_category === "2" && "유저신고"}
             {inquiry_category === "3" && "광고 / 협찬문의"}

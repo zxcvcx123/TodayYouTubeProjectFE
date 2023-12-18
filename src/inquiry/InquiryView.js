@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {
   Alert,
   AlertDescription,
@@ -29,29 +29,36 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import {useNavigate, useParams, useSearchParams} from "react-router-dom";
 import Editor from "../component/Editor";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowTurnUp } from "@fortawesome/free-solid-svg-icons";
-import { DetectLoginContext } from "../component/LoginProvider";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faArrowTurnUp} from "@fortawesome/free-solid-svg-icons";
+import {DetectLoginContext} from "../component/LoginProvider";
 
 import ScrollToTop from "../util/ScrollToTop";
 import LoadingPage from "../component/LoadingPage";
+import dompurify from "dompurify";
+import {SocketContext} from "../socket/Socket";
 
 function InquiryView(props) {
-  const { token, handleLogout, loginInfo, validateToken } =
+  // 로그인 유저 정보
+  const {token, handleLogout, loginInfo, validateToken} =
     useContext(DetectLoginContext);
 
+  const {stompClient} = useContext(SocketContext);
+
+  const [answerContent, setAnswerContent] = useState("");
+  // App에서 :id 로 넘겼을때 객체 형태로 넘어가기 때문에 {}로 받아서 사용한다.
   const [inquiry, setInquiry] = useState(null);
 
   const navigate = useNavigate();
-  const { onOpen, isOpen, onClose } = useDisclosure();
+  const {onOpen, isOpen, onClose} = useDisclosure();
   const toast = useToast();
   const [answer, setAnswer] = useState(false);
 
   // App에서 :id 로 넘겼을때 객체 형태로 넘어가기 때문에 {}로 받아서 사용한다.
-  const { id } = useParams();
+  const {id} = useParams();
 
   useEffect(() => {
     axios
@@ -60,7 +67,7 @@ function InquiryView(props) {
   }, []);
 
   if (inquiry == null) {
-    return <LoadingPage />;
+    return <LoadingPage/>;
   }
   if (!token.detectLogin) {
     return (
@@ -75,7 +82,7 @@ function InquiryView(props) {
           textAlign="center"
           height="200px"
         >
-          <AlertIcon boxSize="40px" mr={0} />
+          <AlertIcon boxSize="40px" mr={0}/>
           <AlertTitle mt={4} mb={1} fontSize="lg">
             로그인이 필요한 서비스입니다!
           </AlertTitle>
@@ -104,12 +111,58 @@ function InquiryView(props) {
       .finally(() => console.log("done"));
   }
 
+  // 본문보여주기
+  function ViewContents() {
+    const contents = dompurify.sanitize(inquiry.content);
+    return <Box dangerouslySetInnerHTML={{__html: contents}}></Box>;
+  }
+
+  if (inquiry == null) {
+    return <LoadingPage/>;
+  }
+
+  // 문의 답변시 알람기능
+  function send() {
+    // 문의 답변 목록
+    stompClient.current.publish({
+      destination: "/app/answer/sendalarm",
+      body: JSON.stringify({
+        sender_member_id: loginInfo.member_id,
+        receiver_member_id: inquiry.inquiry_member_id,
+        inquiry_id: inquiry.id,
+        inquiry_title: inquiry.title,
+      }),
+    });
+  }
+
+  function handleAnswerComplete() {
+    axios
+      .post("/api/inquiry/answer", {
+        answer_board_id: id,
+        content: answerContent,
+      })
+      .then(() => {
+        toast({
+          description: "답변완료 등록되었습니다.",
+          status: "success",
+        });
+        navigate("/inquiry/list");
+      })
+      .catch(() => {
+        toast({
+          description: "답변등록이 실패하였습니다.",
+          status: "error",
+        });
+        console.log("bad");
+      });
+  }
+
   return (
     <Card width={"60%"} m={"auto"}>
       <CardHeader>
         <Flex justifyContent={"space-between"}>
           <Flex fontWeight={"bold"} gap={5}>
-            <Text>제목: </Text>
+            <Text w={50}>제목: </Text>
             <Text>{inquiry.title}</Text>
           </Flex>
           <Flex fontWeight={"bold"} gap={5}>
@@ -118,12 +171,14 @@ function InquiryView(props) {
         </Flex>
       </CardHeader>
       <CardBody fontWeight={"bold"}>
-        <Text>내용: </Text>
-        <Text>{inquiry.content}</Text>
+        <Flex>
+          <Text w={50}>내용: </Text>
+          <Text>{ViewContents()}</Text>
+        </Flex>
       </CardBody>
 
       <CardFooter justifyContent={"flex-end"}>
-        {loginInfo !== null && loginInfo.role_name === "운영자" && (
+        {loginInfo !== null && loginInfo.role_name === "운영자" ? (
           <Box>
             {answer === true ? (
               <Button
@@ -152,6 +207,15 @@ function InquiryView(props) {
           loginInfo.member_id === inquiry.inquiry_member_id) ||
         loginInfo.role_name === "운영자" ? (
           <Box>
+            {inquiry.answer_status === "답변완료" && (<Button
+              colorScheme="purple"
+              onClick={() => {
+                setAnswer(true);
+              }}
+              mr={2}
+            >
+              답변보기
+            </Button>):
             <Button
               colorScheme="blue"
               onClick={() => navigate("/inquiry/edit/" + id)}
@@ -168,30 +232,36 @@ function InquiryView(props) {
         )}
       </CardFooter>
 
-      {answer ? (
-        <Card>
-          <CardHeader>
-            <Text>답변 내용</Text>
-          </CardHeader>
-          <CardBody>
-            <Textarea></Textarea>
-          </CardBody>
-          <CardFooter justify={"flex-end"}>
-            <Button colorScheme="blue" onClick={onOpen}>
-              답변
-            </Button>
-          </CardFooter>
-        </Card>
-      ) : (
-        <></>
-      )}
+      {
+        answer ? (
+          <Card>
+            <CardHeader>
+              <Text>답변 내용</Text>
+            </CardHeader>
+            <CardBody>
+              <Textarea
+                value={answerContent}
+                onChange={(e) => setAnswerContent(e.target.value)}
+              ></Textarea>
+            </CardBody>
+            <CardFooter justify={"flex-end"}>
+              <Button colorScheme="blue" onClick={handleAnswerComplete}>
+                답변
+              </Button>
+            </CardFooter>
+          </Card>
+        ) : (
+          <></>
+        )
+      }
 
-      {/* 삭제 모달 */}
+      {/* 삭제 모달 */
+      }
       <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
+        <ModalOverlay/>
         <ModalContent>
           <ModalHeader>Modal Title</ModalHeader>
-          <ModalCloseButton />
+          <ModalCloseButton/>
           <ModalBody>문의글을 삭제하시겠습니까?</ModalBody>
           <ModalFooter>
             <Button variant={"ghost"} onClick={onClose}>
@@ -204,9 +274,10 @@ function InquiryView(props) {
         </ModalContent>
       </Modal>
 
-      <ScrollToTop />
+      <ScrollToTop/>
     </Card>
-  );
+  )
+    ;
 }
 
 export default InquiryView;

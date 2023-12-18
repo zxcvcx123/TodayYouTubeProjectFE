@@ -5,6 +5,10 @@ import {
   FormControl,
   FormLabel,
   Input,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -19,12 +23,15 @@ import {
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import LoadingPage from "../component/LoadingPage";
+import Editor from "../component/Editor";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 
 function InquiryEdit(props) {
   const [inquiry, setInquiry] = useState();
   const [title, setTitle] = useState([]);
   const [content, setContent] = useState([]);
   const [inquiry_category, setInquiry_category] = useState([]);
+  const [uuid, setUuid] = useState("");
 
   const navigate = useNavigate();
   const { onOpen, isOpen, onClose } = useDisclosure();
@@ -33,9 +40,11 @@ function InquiryEdit(props) {
 
   // 초기 화면
   useEffect(() => {
-    axios
-      .get("/api/inquiry/" + id)
-      .then((response) => setInquiry(response.data));
+    axios.get("/api/inquiry/" + id).then((response) => {
+      setInquiry(response.data);
+      setTitle(response.data.title);
+      setInquiry_category(response.data.category_code);
+    });
   }, []);
 
   if (inquiry == null) {
@@ -44,8 +53,36 @@ function InquiryEdit(props) {
 
   function handleUpdateButton() {
     axios
-      .put("/api/inquiry/edit/", { id, title, content, inquiry_category })
+      .put("/api/inquiry/edit", {
+        id,
+        title,
+        content,
+        inquiry_category,
+        uuSrc,
+      })
       .then(() => navigate("/inquiry/list"));
+  }
+
+  // 에디터 이미지 uuid arr 형태 변수에 담아주기
+  let uuSrc = getSrc();
+
+  // 본문 영역 이미지 소스 코드 얻어오기
+  function getSrc() {
+    let imgSrc = document.getElementsByTagName("img");
+    let arrSrc = [];
+
+    for (let i = 0; i < imgSrc.length; i++) {
+      if (
+        imgSrc[i].src.length > 0 &&
+        imgSrc[i].src.startsWith(
+          "https://mybucketcontainer1133557799.s3.ap-northeast-2.amazonaws.com/fileserver/",
+        )
+      ) {
+        arrSrc.push(imgSrc[i].src.substring(79, 115));
+      }
+    }
+
+    return arrSrc;
   }
 
   return (
@@ -54,13 +91,47 @@ function InquiryEdit(props) {
         <FormLabel fontWeight={"bold"} ml={3}>
           문의유형
         </FormLabel>
-        <Input
-          value={inquiry.inquiry_category}
-          size={"sm"}
-          width={"30%"}
-          borderColor={"black.300"}
-          onChange={(e) => setInquiry_category(e.target.value)}
-        ></Input>
+        <Menu>
+          <MenuButton
+            borderColor={"black"}
+            borderRadius="md"
+            borderWidth="1px"
+            as={Button}
+            rightIcon={<ChevronDownIcon />}
+          >
+            {inquiry_category === null && "선택"}
+            {inquiry_category === "1" && "개선사항"}
+            {inquiry_category === "2" && "유저신고"}
+            {inquiry_category === "3" && "광고 / 협찬문의"}
+            {inquiry_category === "4" && "기타 / 요청사항"}
+          </MenuButton>
+          <MenuList>
+            <MenuItem
+              value={"1"}
+              onClick={(e) => setInquiry_category(e.target.value)}
+            >
+              개선사항
+            </MenuItem>
+            <MenuItem
+              value={"2"}
+              onClick={(e) => setInquiry_category(e.target.value)}
+            >
+              유저신고
+            </MenuItem>
+            <MenuItem
+              value={"3"}
+              onClick={(e) => setInquiry_category(e.target.value)}
+            >
+              광고/협찬문의
+            </MenuItem>
+            <MenuItem
+              value={"4"}
+              onClick={(e) => setInquiry_category(e.target.value)}
+            >
+              기타/요청사항
+            </MenuItem>
+          </MenuList>
+        </Menu>
       </FormControl>
       <FormControl mb={1}>
         <FormLabel fontWeight={"bold"} ml={3}>
@@ -69,7 +140,7 @@ function InquiryEdit(props) {
         <Input
           type="text"
           width={"70%"}
-          value={inquiry.title}
+          value={title}
           onChange={(e) => setTitle(e.target.value)}
           borderColor={"black.300"}
         ></Input>
@@ -79,14 +150,20 @@ function InquiryEdit(props) {
         <FormLabel fontWeight={"bold"} ml={3}>
           문의내용
         </FormLabel>
-        <Textarea
-          padding={3}
-          size={"xl"}
-          h={"300px"}
-          value={inquiry.content}
-          borderColor={"black.300"}
-          onChange={(e) => setContent(e.target.value)}
-        ></Textarea>
+        {/*<Textarea*/}
+        {/*  padding={3}*/}
+        {/*  size={"xl"}*/}
+        {/*  h={"300px"}*/}
+        {/*  value={inquiry.content}*/}
+        {/*  borderColor={"black.300"}*/}
+        {/*  onChange={(e) => setContent(e.target.value)}*/}
+        {/*></Textarea>*/}
+        <Editor
+          data={inquiry.content}
+          setUuid={setUuid}
+          uuid={uuid}
+          setContent1={setContent}
+        />
       </FormControl>
       <Button colorScheme="blue" onClick={handleUpdateButton}>
         수정완료
