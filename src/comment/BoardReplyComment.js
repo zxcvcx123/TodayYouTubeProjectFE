@@ -44,7 +44,10 @@ function ReplyCommentForm({
   const { token, loginInfo } = useContext(DetectLoginContext);
 
   function handleReplySubmit() {
-    onSubmit({ comment_id, reply_comment });
+    onSubmit({
+      comment_id,
+      reply_comment,
+    });
   }
 
   return (
@@ -217,6 +220,7 @@ export function BoardReplyComment({
   setIsReplyFormOpen,
   isReplyListOpen,
   setIsReplyListOpen,
+  setNumberOfReply,
 }) {
   const { token, loginInfo } = useContext(DetectLoginContext);
   const replyIdRef = useRef(0);
@@ -240,6 +244,7 @@ export function BoardReplyComment({
 
         axios.get("/api/comment/reply/list?" + params).then((response) => {
           setReply_commentList(response.data);
+          setNumberOfReply(response.data.length);
         });
       }
     } else {
@@ -249,6 +254,7 @@ export function BoardReplyComment({
 
         axios.get("/api/comment/reply/list?" + params).then((response) => {
           setReply_commentList(response.data);
+          setNumberOfReply(response.data.length);
         });
       }
     }

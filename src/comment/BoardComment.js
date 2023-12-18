@@ -137,6 +137,8 @@ function CommentItem({
   const [isReplyFormOpen, setIsReplyFormOpen] = useState(false);
   const [isReplyListOpen, setIsReplyListOpen] = useState(false);
 
+  const [numberOfReply, setNumberOfReply] = useState(comment.reply_count);
+
   const toast = useToast();
 
   function handleSubmit() {
@@ -241,7 +243,7 @@ function CommentItem({
                 </Button>
               </Tooltip>
 
-              {comment.reply_count > 0 && (
+              {numberOfReply > 0 && (
                 <Button
                   size="xs"
                   colorScheme="blackAlpha"
@@ -290,6 +292,7 @@ function CommentItem({
             isReplyFormOpen={isReplyFormOpen}
             reply_commentList={reply_commentList}
             setReply_commentList={setReply_commentList}
+            setNumberOfReply={setNumberOfReply}
           />
           {isEditing && (
             <Box>
