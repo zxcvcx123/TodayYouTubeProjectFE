@@ -275,6 +275,10 @@ export function Nav({ setSocket }) {
                 variant="ghost"
                 rightIcon={<FontAwesomeIcon icon={faGhost} />}
                 backgroundColor={"rgb(184,235,246)"}
+                _hover={{
+                  backgroundColor: "rgb(94,72,147)",
+                  color: "rgb(255,255,255)",
+                }}
                 mr={"10px"}
                 style={{ fontFamily: "Nanum Gothic" }}
               >
