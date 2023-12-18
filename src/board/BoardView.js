@@ -75,8 +75,6 @@ function BoardView() {
   //  ck에디터 설정 값 (toolbar 삭제함)
   const editorConfig = {
     toolbar: [],
-    width: "800px",
-    height: "800px",
   };
 
   // 초기 렌더링
