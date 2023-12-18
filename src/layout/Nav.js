@@ -274,7 +274,7 @@ export function Nav({ setSocket }) {
                 size="md"
                 variant="ghost"
                 rightIcon={<FontAwesomeIcon icon={faGhost} />}
-                backgroundColor={"rgba(11,121,177,0.5)"}
+                backgroundColor={"rgb(184,235,246)"}
                 mr={"10px"}
                 style={{ fontFamily: "Nanum Gothic" }}
               >
