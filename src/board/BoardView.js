@@ -54,6 +54,9 @@ function BoardView() {
   const [isAuthor, setIsAuthor] = useState(false);
   // const [isReadOnly, setIsReadOnly] = useState(true);
 
+  // useState를 사용하여 채널 정보를 저장할 state 생성
+  const [channelInfo, setChannelInfo] = useState(null);
+
   //URL 매개변수 추출
   const { id } = useParams();
 
@@ -116,11 +119,12 @@ function BoardView() {
       })
       .then((response) => response.json())
       .then((data) => {
-        // 채널 썸네일 URL 가져오기
+        // 채널명 가져오기
         const channelTitle = data.items[0].snippet.title;
         console.log("채널명:", channelTitle);
 
-        // 가져온 채널 정보를 state에 저장하거나 필요한 작업 수행
+        // 채널 정보 state에 저장
+        setChannelInfo(data.items[0].snippet);
       })
       .catch((error) => console.error("에러 발생:", error));
   };
@@ -285,10 +289,11 @@ function BoardView() {
             {/*  }}*/}
             {/*/>*/}
             <Box justifyContent={"center"}>
+              {renderChannelInfo()}
               <Button
                 onClick={() => window.open(board.link)}
                 colorScheme="red"
-                mb={5}
+                my={5}
               >
                 유튜브 영상 페이지로 이동
               </Button>
@@ -299,6 +304,24 @@ function BoardView() {
           </Flex>
         </Center>
       </FormControl>
+    );
+  }
+
+  // 채널 정보가 있는 경우에만 출력하는 부분
+  function renderChannelInfo() {
+    if (!channelInfo) {
+      return null;
+    }
+
+    return (
+      <Box>
+        <Avatar
+          size="2xl"
+          src={channelInfo.thumbnails.high.url}
+          alt={channelInfo.title}
+        />
+        <Text color={"white"}>채널명: {channelInfo.title}</Text>
+      </Box>
     );
   }
 
