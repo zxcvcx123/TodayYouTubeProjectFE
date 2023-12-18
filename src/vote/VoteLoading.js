@@ -16,7 +16,7 @@ function VoteLoading({ children }) {
 
   if (loading) {
     return (
-      <Center>
+      <Center h={"800px"}>
         <div className="vote-symbol"></div>
       </Center>
     );

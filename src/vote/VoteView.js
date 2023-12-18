@@ -3,6 +3,7 @@ import {
   Avatar,
   Box,
   Button,
+  Center,
   Divider,
   Flex,
   FormControl,
@@ -217,212 +218,216 @@ function VoteView() {
   }
 
   return (
-    <Box>
-      <Box mb={5}>
-        <Heading>투표 게시판</Heading>
-      </Box>
+    <Center>
+      <Box w={"1500px"} my={"20px"}>
+        <Box mb={5}>
+          <Heading>투표 게시판</Heading>
+        </Box>
 
-      {/* -------------------- 상단 영역 -------------------- */}
-      <FormControl mt={10} mb={2}>
-        {/* 제목 */}
-        <Text fontSize={"xx-large"} as={"strong"}>
-          {board.title}
-        </Text>
-        <Flex justifyContent={"space-between"} alignItems={"center"}>
-          <Flex alignItems={"center"}>
-            {/*프로필*/}
-            <HStack>
-              <Flex width={"150px"}>
-                <Avatar src="https://i.imgur.com/lmSDJtn.jpeg" />
-                <Box ml="3">
-                  <Tooltip label={board.nickname} placement="top-start">
-                    <Text fontWeight="bold">
-                      {board.nickname.slice(0, 8)}...
-                    </Text>
-                  </Tooltip>
-                  <Text fontSize="sm">{board.rolename}</Text>
-                </Box>
-              </Flex>
-            </HStack>
-            {/* 일자 */}
-            <Text>| {board.ago}</Text>
+        {/* -------------------- 상단 영역 -------------------- */}
+        <FormControl mt={10} mb={2}>
+          {/* 제목 */}
+          <Text fontSize={"xx-large"} as={"strong"}>
+            {board.title}
+          </Text>
+          <Flex justifyContent={"space-between"} alignItems={"center"}>
+            <Flex alignItems={"center"}>
+              {/*프로필*/}
+              <HStack>
+                <Flex width={"150px"}>
+                  <Avatar src="https://i.imgur.com/lmSDJtn.jpeg" />
+                  <Box ml="3">
+                    <Tooltip label={board.nickname} placement="top-start">
+                      <Text fontWeight="bold">
+                        {board.nickname.slice(0, 8)}...
+                      </Text>
+                    </Tooltip>
+                    <Text fontSize="sm">{board.rolename}</Text>
+                  </Box>
+                </Flex>
+              </HStack>
+              {/* 일자 */}
+              <Text>| {board.ago}</Text>
+            </Flex>
+            {/* 좋아요, 조회수, 투표수 */}
+            <Flex alignItems={"center"} gap={"5"}>
+              <Text> | 투표 수 : {board.voted_all}</Text>
+            </Flex>
           </Flex>
-          {/* 좋아요, 조회수, 투표수 */}
-          <Flex alignItems={"center"} gap={"5"}>
-            <Text> | 투표 수 : {board.voted_all}</Text>
+        </FormControl>
+
+        <Divider my={5} borderColor="grey" />
+
+        {/* -------------------- 유튜브 섹션 -------------------- */}
+        {/*{renderYoutubeSection()}*/}
+        <Box w={"100%"} mb={5}>
+          <Heading textAlign={"center"}>{board.title}</Heading>
+        </Box>
+        <Box>
+          <Flex
+            mb={2}
+            alignItems={"center"}
+            w={"100%"}
+            justifyContent={"space-between"}
+          >
+            <Box>
+              <YoutubeInfo link={board.link_a} extraVideo={true} />
+              {loginInfo === null ? (
+                <Button
+                  mt={2}
+                  colorScheme="blue"
+                  w="100%"
+                  h={20}
+                  onClick={loginModal.onOpen}
+                >
+                  <FontAwesomeIcon icon={faCheck} />
+                </Button>
+              ) : (
+                <Button
+                  mt={2}
+                  colorScheme="blue"
+                  w="100%"
+                  h={20}
+                  onClick={() => {
+                    handleVoteA();
+                  }}
+                  isDisabled={
+                    (voteChecked === 1 && voteNot === 0) ||
+                    IsConnected === false
+                      ? true
+                      : false
+                  }
+                >
+                  {IsConnected === false ? (
+                    <Text>연결 중...</Text>
+                  ) : voteChecked === 1 && voteNot === 0 ? (
+                    <FontAwesomeIcon icon={faCircleCheck} size="xl" />
+                  ) : (
+                    <FontAwesomeIcon icon={faCheck} />
+                  )}
+                </Button>
+              )}
+            </Box>
+            <Box w={"20%"}>
+              <Heading textAlign={"center"}>VS</Heading>
+            </Box>
+            <Box>
+              <YoutubeInfo link={board.link_b} extraVideo={true} />
+
+              {loginInfo === null ? (
+                <Button
+                  mt={2}
+                  colorScheme="red"
+                  w="100%"
+                  h={20}
+                  onClick={loginModal.onOpen}
+                >
+                  <FontAwesomeIcon icon={faCheck} />
+                </Button>
+              ) : (
+                <Button
+                  mt={2}
+                  colorScheme="red"
+                  w="100%"
+                  h={20}
+                  onClick={() => {
+                    handleVoteB();
+                  }}
+                  isDisabled={
+                    (voteChecked !== 1 && voteNot === 0) ||
+                    IsConnected === false
+                      ? true
+                      : false
+                  }
+                >
+                  {IsConnected === false ? (
+                    <Text>연결 중...</Text>
+                  ) : voteChecked !== 1 && voteNot === 0 ? (
+                    <FontAwesomeIcon icon={faCircleCheck} size="xl" />
+                  ) : (
+                    <FontAwesomeIcon icon={faCheck} />
+                  )}
+                </Button>
+              )}
+            </Box>
           </Flex>
-        </Flex>
-      </FormControl>
+        </Box>
+        {/* -------------------- 본문 -------------------- */}
 
-      <Divider my={5} borderColor="grey" />
+        <ProgressBar
+          optionOneVotes={optionOneVotes}
+          optionTwoVotes={optionTwoVotes}
+        />
+        <Box mt={5} textAlign={"center"}>
+          <Text fontSize={"1.5rem"}>{board.content}</Text>
+        </Box>
+        <Divider my={5} borderColor="grey" />
 
-      {/* -------------------- 유튜브 섹션 -------------------- */}
-      {/*{renderYoutubeSection()}*/}
-      <Box w={"100%"} mb={5}>
-        <Heading textAlign={"center"}>{board.title}</Heading>
-      </Box>
-      <Box>
-        <Flex
-          mb={2}
-          alignItems={"center"}
-          w={"100%"}
-          justifyContent={"space-between"}
-        >
-          <Box>
-            <YoutubeInfo link={board.link_a} extraVideo={true} />
-            {loginInfo === null ? (
-              <Button
-                mt={2}
-                colorScheme="blue"
-                w="100%"
-                h={20}
-                onClick={loginModal.onOpen}
-              >
-                <FontAwesomeIcon icon={faCheck} />
-              </Button>
-            ) : (
-              <Button
-                mt={2}
-                colorScheme="blue"
-                w="100%"
-                h={20}
-                onClick={() => {
-                  handleVoteA();
-                }}
-                isDisabled={
-                  (voteChecked === 1 && voteNot === 0) || IsConnected === false
-                    ? true
-                    : false
-                }
-              >
-                {IsConnected === false ? (
-                  <Text>연결 중...</Text>
-                ) : voteChecked === 1 && voteNot === 0 ? (
-                  <FontAwesomeIcon icon={faCircleCheck} size="xl" />
-                ) : (
-                  <FontAwesomeIcon icon={faCheck} />
-                )}
-              </Button>
-            )}
-          </Box>
-          <Box w={"20%"}>
-            <Heading textAlign={"center"}>VS</Heading>
-          </Box>
-          <Box>
-            <YoutubeInfo link={board.link_b} extraVideo={true} />
-
-            {loginInfo === null ? (
-              <Button
-                mt={2}
-                colorScheme="red"
-                w="100%"
-                h={20}
-                onClick={loginModal.onOpen}
-              >
-                <FontAwesomeIcon icon={faCheck} />
-              </Button>
-            ) : (
-              <Button
-                mt={2}
-                colorScheme="red"
-                w="100%"
-                h={20}
-                onClick={() => {
-                  handleVoteB();
-                }}
-                isDisabled={
-                  (voteChecked !== 1 && voteNot === 0) || IsConnected === false
-                    ? true
-                    : false
-                }
-              >
-                {IsConnected === false ? (
-                  <Text>연결 중...</Text>
-                ) : voteChecked !== 1 && voteNot === 0 ? (
-                  <FontAwesomeIcon icon={faCircleCheck} size="xl" />
-                ) : (
-                  <FontAwesomeIcon icon={faCheck} />
-                )}
-              </Button>
-            )}
-          </Box>
-        </Flex>
-      </Box>
-      {/* -------------------- 본문 -------------------- */}
-
-      <ProgressBar
-        optionOneVotes={optionOneVotes}
-        optionTwoVotes={optionTwoVotes}
-      />
-      <Box mt={5} textAlign={"center"}>
-        <Text fontSize={"1.5rem"}>{board.content}</Text>
-      </Box>
-      <Divider my={5} borderColor="grey" />
-
-      {/* -------------------- 버튼 섹션 -------------------- */}
-      <Flex justifyContent={"flex-end"}>
-        {/* 삭제 버튼 */}
-        {loginInfo && loginInfo.member_id === board.vote_member_id && (
-          <Button colorScheme="red" onClick={delModal.onOpen} mr={3}>
-            삭제
+        {/* -------------------- 버튼 섹션 -------------------- */}
+        <Flex justifyContent={"flex-end"}>
+          {/* 삭제 버튼 */}
+          {loginInfo && loginInfo.member_id === board.vote_member_id && (
+            <Button colorScheme="red" onClick={delModal.onOpen} mr={3}>
+              삭제
+            </Button>
+          )}
+          {/* 목록 버튼 */}
+          <Button
+            colorScheme="blue"
+            onClick={() => navigate("/board/list?category=" + currentParams)}
+          >
+            목록
           </Button>
-        )}
-        {/* 목록 버튼 */}
-        <Button
-          colorScheme="blue"
-          onClick={() => navigate("/board/list?category=" + currentParams)}
-        >
-          목록
-        </Button>
-      </Flex>
-      {/* -------------------- 댓글 영역 -------------------- */}
+        </Flex>
+        {/* -------------------- 댓글 영역 -------------------- */}
 
-      <BoardComment board_id={id} boardData={board} />
-      <ScrollToTop />
-      {/* 삭제 모달 */}
-      <>
-        <Modal isOpen={delModal.isOpen} onClose={delModal.onClose}>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>삭제 확인</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody>삭제 하시겠습니까?</ModalBody>
+        <BoardComment board_id={id} boardData={board} />
+        <ScrollToTop />
+        {/* 삭제 모달 */}
+        <>
+          <Modal isOpen={delModal.isOpen} onClose={delModal.onClose}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>삭제 확인</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>삭제 하시겠습니까?</ModalBody>
 
-            <ModalFooter>
-              <Button onClick={() => delModal.onClose()}>닫기</Button>
-              <Button
-                isDisabled={isSubmitting}
-                onClick={handleDelete}
-                colorScheme="red"
-              >
-                삭제
-              </Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
-        {/* ------------------------- 모달 (비로그인 사용자 글쓰기 버튼 클릭) ------------------------- */}
-        <Modal isOpen={loginModal.isOpen} onClose={loginModal.onClose}>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>로그인 필요</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody>투표를 하기 위해서 로그인이 필요합니다.</ModalBody>
+              <ModalFooter>
+                <Button onClick={() => delModal.onClose()}>닫기</Button>
+                <Button
+                  isDisabled={isSubmitting}
+                  onClick={handleDelete}
+                  colorScheme="red"
+                >
+                  삭제
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+          {/* ------------------------- 모달 (비로그인 사용자 글쓰기 버튼 클릭) ------------------------- */}
+          <Modal isOpen={loginModal.isOpen} onClose={loginModal.onClose}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>로그인 필요</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>투표를 하기 위해서 로그인이 필요합니다.</ModalBody>
 
-            <ModalFooter>
-              <Button colorScheme="red" mr={3} onClick={loginModal.onClose}>
-                Close
-              </Button>
-              <Button
-                colorScheme="blue"
-                onClick={() => navigate("/member/login")}
-              >
-                로그인하러 가기
-              </Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
-      </>
-    </Box>
+              <ModalFooter>
+                <Button colorScheme="red" mr={3} onClick={loginModal.onClose}>
+                  Close
+                </Button>
+                <Button
+                  colorScheme="blue"
+                  onClick={() => navigate("/member/login")}
+                >
+                  로그인하러 가기
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+        </>
+      </Box>
+    </Center>
   );
 }
 
