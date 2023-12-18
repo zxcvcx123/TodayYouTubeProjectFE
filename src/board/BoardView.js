@@ -36,6 +36,7 @@ import MemberProfile from "../member/MemberProfile";
 import ScrollToTop from "../util/ScrollToTop";
 import LoadingPage from "../component/LoadingPage";
 import BoardProfile from "./BoardProfile";
+import ReactPlayer from "react-player";
 
 function BoardView() {
   /* 로그인 정보 컨텍스트 */
@@ -221,6 +222,17 @@ function BoardView() {
           <Flex m={2} ml={0} gap={5}>
             {/* 유튜브 영상 출력 */}
             <YoutubeInfo link={board.link} extraVideo={true} />
+            {/*<ReactPlayer*/}
+            {/*  className="video-container"*/}
+            {/*  url={board.link}*/}
+            {/*  config={{*/}
+            {/*    youtube: {*/}
+            {/*      playerVars: {*/}
+            {/*        autoplay: 0,*/}
+            {/*      },*/}
+            {/*    },*/}
+            {/*  }}*/}
+            {/*/>*/}
             <Box justifyContent={"center"}>
               <Button
                 onClick={() => window.open(board.link)}
