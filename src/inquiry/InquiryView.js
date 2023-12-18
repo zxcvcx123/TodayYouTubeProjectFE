@@ -106,8 +106,8 @@ function InquiryView(props) {
   console.log(inquiry);
 
   return (
-    <Box width={"60%"} m={"auto"}>
-      <Flex mb={1} w={"100%"} mb={4}>
+    <Box width={"70%"} m={"auto"} mt={10}>
+      <Flex w={"100%"} mb={4}>
         <Box fontWeight={"bold"} ml={3} w={"10%"}>
           문의유형 :
         </Box>
@@ -161,20 +161,23 @@ function InquiryView(props) {
         ></Textarea>
       </Flex>
       {loginInfo.role_name == "운영자" && (
-        <Box>
-          <Button
-            colorScheme="blue"
-            onClick={() => navigate("/inquiry/edit/" + id)}
-          >
-            수정
-          </Button>
-          <Button colorScheme="red" onClick={onOpen}>
-            삭제
-          </Button>
-          <Button ml={20} colorScheme="green" onClick={handleAnswerClick}>
-            답변하기
-          </Button>
-        </Box>
+        <Flex justifyContent={"space-between"} w={"80%"}>
+          <Box></Box>
+          <Flex>
+            <Button mr={5} colorScheme="green" onClick={handleAnswerClick}>
+              답변하기
+            </Button>
+            <Button
+              colorScheme="blue"
+              onClick={() => navigate("/inquiry/edit/" + id)}
+            >
+              수정
+            </Button>
+            <Button colorScheme="red" onClick={onOpen}>
+              삭제
+            </Button>
+          </Flex>
+        </Flex>
       )}
 
       {/* 삭제 모달 */}
@@ -195,7 +198,7 @@ function InquiryView(props) {
         </ModalContent>
       </Modal>
 
-      <Box w={"80%"} m={"auto"}>
+      <Box w={"70%"} ml={40}>
         <Box ml={5} mt={5}>
           <FontAwesomeIcon icon={faArrowTurnUp} rotation={90} size="2xl" />
         </Box>

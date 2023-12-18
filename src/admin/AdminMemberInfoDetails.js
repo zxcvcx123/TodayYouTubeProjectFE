@@ -256,7 +256,7 @@ function AdminMemberInfoDetails({
           </Stack>
         </CardBody>
         <CardFooter>
-          <Button ml="70%" colorScheme="red" onClick={onOpen}>
+          <Button ml="50%" colorScheme="red" onClick={onOpen}>
             회원정지
           </Button>
         </CardFooter>
@@ -292,9 +292,9 @@ function AdminMemberInfoDetails({
                       defaultValue={7}
                       onChange={(e) => setSuspensionPeriod(e.target.value)}
                     >
-                      <option value={7}>7</option>
-                      <option value={30}>30</option>
-                      <option value={999}>999</option>
+                      <option value={7}>7일</option>
+                      <option value={30}>30일</option>
+                      <option value={999}>999일</option>
                     </Select>
                   </Box>
                 </Stack>

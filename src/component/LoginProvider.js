@@ -68,7 +68,6 @@ export function LoginProvider({ children }) {
         setToken((prevSState) => ({
           detectLogin: false,
         }));
-        handleLogout();
       })
       .finally(() => {
         localStorage.clear();
