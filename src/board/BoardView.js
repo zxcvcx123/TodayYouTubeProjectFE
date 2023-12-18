@@ -27,6 +27,7 @@ import { DetectLoginContext } from "../component/LoginProvider";
 import MemberProfile from "../member/MemberProfile";
 import ScrollToTop from "../util/ScrollToTop";
 import LoadingPage from "../component/LoadingPage";
+import BoardProfile from "./BoardProfile";
 
 function BoardView() {
   /* 로그인 정보 컨텍스트 */
@@ -269,20 +270,7 @@ function BoardView() {
           <Flex justifyContent={"space-between"} alignItems={"center"}>
             <Flex alignItems={"center"}>
               {/* 프로필 */}
-              <HStack>
-                <Flex width={"150px"}>
-                  <Avatar src="https://i.imgur.com/lmSDJtn.jpeg" />
-                  <Box ml="3">
-                    <Tooltip label={board.nickname} placement="top-start">
-                      <Text fontWeight="bold">
-                        {board.nickname.slice(0, 8)}...
-                      </Text>
-                    </Tooltip>
-                    <Text fontSize="sm">{board.role_name}</Text>
-                  </Box>
-                </Flex>
-              </HStack>
-
+              <BoardProfile board_member_id={board.board_member_id} />
               {/* 일자 */}
               <Text>| {formatDateTime(board.updated_at)}</Text>
             </Flex>

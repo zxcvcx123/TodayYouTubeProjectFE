@@ -51,7 +51,7 @@ export function MemberInfoProfile() {
           src={profileImageSrc}
           alt=""
         />
-      ) : loginInfo.image_url !== null ? (
+      ) : loginInfo !== null ? (
         <Avatar borderRadius="full" boxSize="250px" src={loginInfo.image_url} />
       ) : (
         <Avatar

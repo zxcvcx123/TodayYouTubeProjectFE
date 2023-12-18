@@ -43,6 +43,7 @@ export function MiniHomepyHome({
   return (
     <>
       <Box
+        pt={10}
         w={"100%"}
         h={"100%"}
         bg="transparent"
@@ -87,7 +88,7 @@ export function MiniHomepyHome({
             w={"100%"}
             display={"flex"}
             justifyContent="flex-start"
-            bg=" rgba( 255, 255, 255, 0.1 )"
+            bg=" rgba( 255, 255, 255, 0.2 )"
             alignItems={"center"}
             borderRadius={"10px"}
             color={"#dcdcdc"}
@@ -116,7 +117,7 @@ export function MiniHomepyHome({
               topRankBoardList.map((boardList, index) => (
                 <Box
                   p={"15px"}
-                  bg=" rgba( 255, 255, 255, 0.2 )"
+                  bgGradient="linear(to right, black,transparent)"
                   borderRadius={"20px"}
                   key={boardList.id}
                   mt={5}
@@ -236,7 +237,7 @@ export function MiniHomepyHome({
             justifyContent="flex-start"
             alignItems={"center"}
             color={"#dcdcdc"}
-            bg=" rgba( 255, 255, 255, 0.1 )"
+            bg=" rgba( 255, 255, 255, 0.2 )"
             mb={10}
             borderRadius={"10px"}
             fontFamily={"'Jua', sans-serif"}
@@ -263,12 +264,13 @@ export function MiniHomepyHome({
                 <Box
                   p={"15px"}
                   w="fit-content"
-                  bg=" rgba( 255, 255, 255, 0.2 )"
+                  bgGradient="linear(to right, black,transparent)"
                   borderRadius={"20px"}
                   minWidth={"300px"}
                   key={boardList.id}
                   mt={5}
                   mb={5}
+                  mr={3}
                   _hover={{
                     cursor: "pointer",
                   }}
@@ -358,7 +360,7 @@ export function MiniHomepyHome({
             justifyContent="flex-start"
             alignItems={"center"}
             color={"#dcdcdc"}
-            bg=" rgba( 255, 255, 255, 0.1 )"
+            bg=" rgba( 255, 255, 255, 0.2 )"
             mb={10}
             borderRadius={"10px"}
             fontFamily={"'Jua', sans-serif"}
@@ -385,12 +387,13 @@ export function MiniHomepyHome({
                 <Box
                   p={"15px"}
                   w="fit-content"
-                  bg=" rgba( 255, 255, 255, 0.2 )"
+                  bgGradient="linear(to right, black,black,transparent)"
                   borderRadius={"20px"}
                   w="fit-content"
                   key={boardList.id}
                   mt={5}
                   mb={5}
+                  mr={3}
                   minWidth={"300px"}
                   _hover={{
                     cursor: "pointer",

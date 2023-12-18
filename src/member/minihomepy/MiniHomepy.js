@@ -10,6 +10,8 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { MiniHomepyRightContainer } from "./MiniHomepyRightContainer";
 import { config } from "../config/apikey";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSnowman } from "@fortawesome/free-solid-svg-icons/faSnowman";
 
 export let HomepyMemberContext = createContext(null);
 
@@ -26,6 +28,7 @@ export function MiniHomepy(props) {
   const [totalViews, setTotalViews] = useState(null);
   const [bgm, setBgm] = useState(null);
   const [addYoutuber, setAddYoutuber] = useState("");
+  const [isYoutuberDeleted, setIsYoutuberDeleted] = useState(false);
   const { member_id } = useParams();
   // 게시글 정보 가져오기
   const [topRankBoardList, setTopRankBoardList] = useState(null);
@@ -164,12 +167,13 @@ export function MiniHomepy(props) {
   }, [loginInfo]);
 
   useEffect(() => {
+    setIsYoutuberDeleted(false);
     axios
       .get("/api/member/minihomepy/youtuberinfo/" + member_id)
       .then((response) => {
         setYoutuberInfo(response.data.youtuberInfo);
       });
-  }, [addYoutuber]);
+  }, [addYoutuber, isYoutuberDeleted]);
 
   const [videoId, setVideoId] = useState(null);
   useEffect(() => {
@@ -202,15 +206,24 @@ export function MiniHomepy(props) {
           w={"100vw"}
           h={"100vh"}
           // bgGradient="linear( to top,#283e51,#0a2342)"
-
-          bgGradient="linear(	#000000,#0a2342,#283e51)"
           position={"relative"}
           overflow={"hidden"}
           display={"flex"}
           alignItems={"center"}
           justifyContent={"center"}
           backdropFilter={"blur(2px)"}
+          bgGradient="linear(#0a2342, #131862,#2e4482,#546bab,	#87889c)"
         >
+          <Box
+            position={"absolute"}
+            w={"110%"}
+            minWidth={"2000px"}
+            h={"350px"}
+            bg={"white"}
+            borderRadius={"50%"}
+            top="85%"
+            boxShadow={"-500px -10px #dcdcdc, 700px -40px #e9ecef"}
+          ></Box>
           <Snowflake />
           <Box
             w={"100%"}
@@ -245,7 +258,7 @@ export function MiniHomepy(props) {
               minWidth={"800px"}
               zIndex={"10"}
               borderRadius={"20px"}
-              backgroundColor={"transparent"}
+              bgGradient="linear(white, transparent,  transparent, transparent,transparent,transparent,transparent,transparent,transparent,transparent,transparent)"
               display={"flex"}
               justifyContent={"flex-end"}
               fontFamily={"'Song Myung', serif;"}
@@ -266,6 +279,7 @@ export function MiniHomepy(props) {
                 youtuberInfo={youtuberInfo}
                 addYoutuber={addYoutuber}
                 setAddYoutuber={setAddYoutuber}
+                setIsYoutuberDeleted={setIsYoutuberDeleted}
                 homepyId={homepyId}
               />
             </Box>

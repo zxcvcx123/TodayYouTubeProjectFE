@@ -34,6 +34,7 @@ function MiniHomepyMiddleContent({
   youtuberInfo,
   addYoutuber,
   setAddYoutuber,
+  setIsYoutuberDeleted,
   homepyId,
 }) {
   return (
@@ -41,7 +42,10 @@ function MiniHomepyMiddleContent({
       <Box
         w={"100%"}
         h={"100%"}
-        border="1px solid white"
+        // borderTop={"1px solid #dcdcdc"}
+        // borderRight={"1px solid #dcdcdc"}
+        borderLeft={"1px solid #dcdcdc"}
+        borderBottom={"1px solid #dcdcdc"}
         borderRadius={"10px"}
         bg={"transparent"}
         sx={{
@@ -93,9 +97,11 @@ function MiniHomepyMiddleContent({
               {name === "FAVORITE" && (
                 <MiniHomepyFavoriteList
                   loginMember={loginMember}
+                  member_id={member_id}
                   youtuberInfo={youtuberInfo}
                   addYoutuber={addYoutuber}
                   setAddYoutuber={setAddYoutuber}
+                  setIsYoutuberDeleted={setIsYoutuberDeleted}
                 />
               )}
               {name === "COMMENT" && (
@@ -105,7 +111,6 @@ function MiniHomepyMiddleContent({
                   homepyId={homepyId}
                 />
               )}
-              {name === "ABOUT" && <MiniHompeyAbout />}
             </Box>
           </Center>
           {/* 여기에 각 팝업의 내용을 추가 */}
@@ -130,6 +135,7 @@ export function MiniHomepyMiddleContainer({
   youtuberInfo,
   addYoutuber,
   setAddYoutuber,
+  setIsYoutuberDeleted,
   homepyId,
 }) {
   let navigate = useNavigate();
@@ -178,6 +184,7 @@ export function MiniHomepyMiddleContainer({
           youtuberInfo={youtuberInfo}
           addYoutuber={addYoutuber}
           setAddYoutuber={setAddYoutuber}
+          setIsYoutuberDeleted={setIsYoutuberDeleted}
           homepyId={homepyId}
         />
       )}
@@ -245,20 +252,6 @@ export function MiniHomepyMiddleContainer({
                 <span className="circle"></span>
               </a>
             </li>{" "}
-            <li
-              className="list"
-              onClick={() => {
-                showPopup("ABOUT");
-              }}
-            >
-              <a href="#">
-                <span className="icon">
-                  <FontAwesomeIcon icon={faChartPie} />
-                </span>
-                <span className="text">ABOUT</span>
-                <span className="circle"></span>
-              </a>
-            </li>
             <div className="indicator"></div>
           </ul>
         </div>
