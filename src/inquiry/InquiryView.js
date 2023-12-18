@@ -6,6 +6,10 @@ import {
   AlertTitle,
   Box,
   Button,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
   Flex,
   FormControl,
   FormLabel,
@@ -44,6 +48,7 @@ function InquiryView(props) {
   const navigate = useNavigate();
   const { onOpen, isOpen, onClose } = useDisclosure();
   const toast = useToast();
+  const [answer, setAnswer] = useState(false);
 
   // App에서 :id 로 넘겼을때 객체 형태로 넘어가기 때문에 {}로 받아서 사용한다.
   const { id } = useParams();
@@ -99,82 +104,86 @@ function InquiryView(props) {
       .finally(() => console.log("done"));
   }
 
-  function handleAnswerClick() {
-    navigate("/inquiry/answer/" + id);
-  }
-
-  console.log(inquiry);
-
   return (
-    <Box width={"60%"} m={"auto"}>
-      <Flex mb={1} w={"100%"} mb={4}>
-        <Box fontWeight={"bold"} ml={3} w={"10%"}>
-          문의유형 :
-        </Box>
-        <Input
-          value={inquiry.inquiry_category}
-          size={"sm"}
-          width={"70%"}
-          borderColor={"black.300"}
-          readOnly
-        ></Input>
-      </Flex>
-      {loginInfo.role_name == "운영자" && (
-        <Flex mb={1} w={"100%"} mb={4}>
-          <Box fontWeight={"bold"} ml={3} w={"10%"}>
-            작성자 :
-          </Box>
-          <Input
-            value={inquiry.inquiry_member_id}
-            size={"sm"}
-            width={"70%"}
-            borderColor={"black.300"}
-            readOnly
-          ></Input>
+    <Card width={"60%"} m={"auto"}>
+      <CardHeader>
+        <Flex justifyContent={"space-between"}>
+          <Flex fontWeight={"bold"} gap={5}>
+            <Text>제목: </Text>
+            <Text>{inquiry.title}</Text>
+          </Flex>
+          <Flex fontWeight={"bold"} gap={5}>
+            <Text>{inquiry.inquiry_category}</Text>
+          </Flex>
         </Flex>
-      )}
-      <Flex mb={1} mb={4}>
-        <Box fontWeight={"bold"} ml={3} w={"10%"}>
-          제 목 :
-        </Box>
-        <Input
-          type="text"
-          width={"70%"}
-          value={inquiry.title}
-          readOnly
-          borderColor={"black.300"}
-        ></Input>
-      </Flex>
-      {/*<Editor />*/}
-      <Flex mb={1} mb={4}>
-        <Box fontWeight={"bold"} ml={3} w={"10%"}>
-          문의내용 :
-        </Box>
-        <Textarea
-          w={"70%"}
-          padding={3}
-          size={"xl"}
-          h={"300px"}
-          value={inquiry.content}
-          borderColor={"black.300"}
-          readOnly
-        ></Textarea>
-      </Flex>
-      {loginInfo.role_name == "운영자" && (
-        <Box>
-          <Button
-            colorScheme="blue"
-            onClick={() => navigate("/inquiry/edit/" + id)}
-          >
-            수정
-          </Button>
-          <Button colorScheme="red" onClick={onOpen}>
-            삭제
-          </Button>
-          <Button ml={20} colorScheme="green" onClick={handleAnswerClick}>
-            답변하기
-          </Button>
-        </Box>
+      </CardHeader>
+      <CardBody fontWeight={"bold"}>
+        <Text>내용: </Text>
+        <Text>{inquiry.content}</Text>
+      </CardBody>
+
+      <CardFooter justifyContent={"flex-end"}>
+        {loginInfo !== null && loginInfo.role_name === "운영자" && (
+          <Box>
+            {answer === true ? (
+              <Button
+                colorScheme="red"
+                onClick={() => {
+                  setAnswer(false);
+                }}
+                mr={2}
+              >
+                답변취소
+              </Button>
+            ) : (
+              <Button
+                colorScheme="green"
+                onClick={() => {
+                  setAnswer(true);
+                }}
+                mr={2}
+              >
+                답변하기
+              </Button>
+            )}
+          </Box>
+        )}
+        {(loginInfo !== null &&
+          loginInfo.member_id === inquiry.inquiry_member_id) ||
+        loginInfo.role_name === "운영자" ? (
+          <Box>
+            <Button
+              colorScheme="blue"
+              onClick={() => navigate("/inquiry/edit/" + id)}
+              mr={2}
+            >
+              수정
+            </Button>
+            <Button colorScheme="red" onClick={onOpen}>
+              삭제
+            </Button>
+          </Box>
+        ) : (
+          <></>
+        )}
+      </CardFooter>
+
+      {answer ? (
+        <Card>
+          <CardHeader>
+            <Text>답변 내용</Text>
+          </CardHeader>
+          <CardBody>
+            <Textarea></Textarea>
+          </CardBody>
+          <CardFooter justify={"flex-end"}>
+            <Button colorScheme="blue" onClick={onOpen}>
+              답변
+            </Button>
+          </CardFooter>
+        </Card>
+      ) : (
+        <></>
       )}
 
       {/* 삭제 모달 */}
@@ -195,29 +204,8 @@ function InquiryView(props) {
         </ModalContent>
       </Modal>
 
-      <Box w={"80%"} m={"auto"}>
-        <Box ml={5} mt={5}>
-          <FontAwesomeIcon icon={faArrowTurnUp} rotation={90} size="2xl" />
-        </Box>
-        <FormControl mb={1}>
-          <FormLabel fontWeight={"bold"} ml={50}>
-            답변내용
-          </FormLabel>
-          <Textarea
-            padding={3}
-            size={"xl"}
-            h={"300px"}
-            border={"2px"}
-            value={inquiry.answerContent}
-            borderColor={"red"}
-            borderRadius={(2, 20)}
-            readOnly
-          ></Textarea>
-        </FormControl>
-      </Box>
-
       <ScrollToTop />
-    </Box>
+    </Card>
   );
 }
 
