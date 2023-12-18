@@ -542,7 +542,7 @@ export function MainView() {
                     {otherList.indexOf(other) + 2}위
                   </Badge>
                   <Text
-                    w={"90%"}
+                    w={"190px"}
                     lineHeight={"30px"}
                     fontFamily={"Nanum Gothic"}
                     fontWeight={"bold"}
