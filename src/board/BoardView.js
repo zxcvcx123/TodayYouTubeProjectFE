@@ -11,9 +11,17 @@ import {
   FormLabel,
   Heading,
   HStack,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Spinner,
   Text,
   Tooltip,
+  useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
@@ -38,7 +46,6 @@ function BoardView() {
   const [board, setBoard] = useState(null);
   const [thumbnail, setThumbnail] = useState(null);
   const [like, setLike] = useState(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploadFiles, setUploadFiles] = useState([]);
   /* 작성자 본인이 맞는지 확인 하는 state */
   const [isAuthor, setIsAuthor] = useState(false);
@@ -60,6 +67,10 @@ function BoardView() {
   /* use toast */
   const toast = useToast();
 
+  /* modal */
+  const { isOpen, onClose, onOpen } = useDisclosure();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   //  ck에디터 설정 값 (toolbar 삭제함)
   const editorConfig = {
     toolbar: [],
@@ -74,7 +85,7 @@ function BoardView() {
       setBoard(response.data);
 
       if (!response.data.is_show) {
-        navigate("board/list?category=notice");
+        navigate("/");
         window.alert("삭제된 게시물입니다.");
       }
 
@@ -99,6 +110,7 @@ function BoardView() {
 
   // 게시글 삭제 버튼 클릭
   function handleDeleteClick() {
+    setIsSubmitting(true);
     // 게시글 삭제 시 아이디 유효성 검증
     if (!isAuthor) {
       window.alert("작성자 본인만 삭제 가능합니다.");
@@ -125,7 +137,7 @@ function BoardView() {
           description: "삭제되었습니다.",
           status: "success",
         });
-        navigate("/board/list");
+        navigate("/board/list?" + currentParams);
       })
       .catch((error) => {
         if (error.response.status === 403) {
@@ -154,7 +166,10 @@ function BoardView() {
 
         console.log("error");
       })
-      .finally(() => console.log("done"));
+      .finally(() => {
+        onClose();
+        setIsSubmitting(false);
+      });
   }
 
   // 수정 버튼 클릭
@@ -335,7 +350,7 @@ function BoardView() {
               </Button>
 
               {/* 삭제 버튼 */}
-              <Button colorScheme="red" onClick={handleDeleteClick}>
+              <Button colorScheme="red" onClick={onOpen}>
                 삭제
               </Button>
             </Box>
@@ -353,6 +368,28 @@ function BoardView() {
         <BoardComment board_id={id} boardData={board} />
         <ScrollToTop />
       </Box>
+      {/* 삭제 모달 */}
+      <>
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>삭제 확인</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>삭제 하시겠습니까?</ModalBody>
+
+            <ModalFooter>
+              <Button onClick={onClose}>닫기</Button>
+              <Button
+                isDisabled={isSubmitting}
+                onClick={handleDeleteClick}
+                colorScheme="red"
+              >
+                삭제
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      </>
     </Center>
   );
 }

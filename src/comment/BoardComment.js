@@ -328,7 +328,6 @@ export function BoardComment({ board_id, boardData }) {
   const location = useLocation();
 
 
-
   useEffect(() => {
     if (loginInfo !== null) {
       params.set("member_id", loginInfo.member_id);

@@ -28,10 +28,11 @@ function BoardWrite() {
   const [uuid, setUuid] = useState("");
   const [titleError, setTitleError] = useState("");
   const [contentError, setContentError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isYouTubeLink, setIsYouTubeLink] = useState(false);
 
   /* useLocation */
   const location = useLocation();
-  const boardInfo = location.state;
 
   /* 현재 쿼리스트링의 category 명 가져오기 */
   const currentParams = new URLSearchParams(location.search).get("category");
@@ -49,7 +50,7 @@ function BoardWrite() {
       navigate("/member/login");
     }
 
-    console.log(boardInfo);
+    console.log(currentParams);
   }, []);
 
   // useEffect를 사용하여 titleError가 변경(에러발생)될 때마다 스크롤이 제목 라벨으로 이동
@@ -90,6 +91,7 @@ function BoardWrite() {
 
   // 작성 완료 버튼 클릭 ---------------------------------------------------
   function handleSubmit() {
+    setIsSubmitting(true);
     let uuSrc = getSrc();
 
     console.log("저장 버튼 클릭됨");
@@ -115,7 +117,7 @@ function BoardWrite() {
         uploadFiles,
         uuSrc,
         board_member_id: loginInfo.member_id,
-        name_eng: boardInfo,
+        name_eng: currentParams,
       })
       .then(() => {
         toast({
@@ -128,7 +130,7 @@ function BoardWrite() {
         if (error.response.status === 400) {
           toast({
             description:
-              "게시글 유효성 검증에 실패했습니다. 양식에 맞게 작성해주세요.",
+              "게시글 유효성 및 파일(최대 5개) 검증에 실패했습니다. 양식에 맞게 작성해주세요.",
             status: "error",
           });
           return;
@@ -152,7 +154,7 @@ function BoardWrite() {
 
         console.log("error");
       })
-      .finally(() => console.log("게시글 저장 끝"));
+      .finally(() => setIsSubmitting(false));
   }
 
   // 본문 영역 이미지 소스 코드 얻어오기
@@ -177,7 +179,7 @@ function BoardWrite() {
   return (
     <Box border={"2px solid black"} m={5}>
       <Box mb={5}>
-        <Heading>{boardInfo} 게시판</Heading>
+        <Heading>{currentParams} 게시판</Heading>
       </Box>
 
       <Heading mb={5}>유튜브 추천 :: 새 글 작성하기</Heading>
@@ -217,7 +219,11 @@ function BoardWrite() {
 
       {/* -------------------- 버튼 섹션 -------------------- */}
       {/* 저장 버튼 */}
-      <Button onClick={handleSubmit} colorScheme="blue">
+      <Button
+        onClick={handleSubmit}
+        colorScheme="blue"
+        isDisabled={isSubmitting}
+      >
         작성 완료
       </Button>
 

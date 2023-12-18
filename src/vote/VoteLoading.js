@@ -1,7 +1,7 @@
 // VoteLoading.js
 import React, { useState, useEffect } from "react";
 import "../css/voteLoading.css";
-import { Center } from "@chakra-ui/react";
+import { Box, Center } from "@chakra-ui/react";
 
 function VoteLoading({ children }) {
   const [loading, setLoading] = useState(true);
@@ -9,7 +9,7 @@ function VoteLoading({ children }) {
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 5000); // 5초 후에 로딩 상태를 false로 변경
+    }, 2200); // n초 후에 로딩 상태를 false로 변경
 
     return () => clearTimeout(timer);
   }, []);
@@ -22,7 +22,7 @@ function VoteLoading({ children }) {
     );
   }
 
-  return <>{children}</>;
+  return <Box>{children}</Box>;
 }
 
 export default VoteLoading;

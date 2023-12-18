@@ -133,7 +133,6 @@ function BoardList() {
 
   // 글쓰기 버튼 클릭
   function handleWriteClick() {
-    console.log("token.detectLogin = " + token.detectLogin);
     // 글쓰기 버튼 클릭시 로그인 되어 있지 않다면 로그인 창으로 이동
     if (!token.detectLogin) {
       onOpen();
@@ -154,9 +153,9 @@ function BoardList() {
               <FontAwesomeIcon icon={faComment} /> {board.count_comment}
             </Flex>
           </Tooltip>
-          {boardInfo === "all" && (
+          {boardInfo === "통합" && (
             <Box ml={"auto"}>
-              <Text>{board.categoryName} </Text>
+              <Text>{board.categoryName}</Text>
             </Box>
           )}
         </>

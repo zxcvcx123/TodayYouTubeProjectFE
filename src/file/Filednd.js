@@ -51,11 +51,16 @@ export function Filednd({
     // 파일이 있으면 동작 실행
     if (uploadFiles.length !== 0) {
       // 수정할 파일 개수와 새로 첨부할 파일 개수가 5개 초과 방지
-      if (editUploadFiles.length > 0) {
+      if (editUploadFiles && editUploadFiles.length > 0) {
         let max = editUploadFiles.length + uploadFiles.length;
         if (max > 5) {
           alert("파일은 최대 5개까지 첨부 가능합니다.");
           let startIndex = 5 - editUploadFiles.length;
+
+          // 만약 수정할 파일 + 업로드할 파일 수 5개 이상 넘길시 splice로 잘라버리기
+          if (uploadFiles.length === 1) {
+            uploadFiles.splice(startIndex, 1);
+          }
           uploadFiles.splice(startIndex, uploadFiles.length - 1);
           setUploadFiles(uploadFiles);
         }
