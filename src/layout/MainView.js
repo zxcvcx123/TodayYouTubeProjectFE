@@ -21,6 +21,7 @@ import {
   Heading,
   CardBody,
   CardFooter,
+  Badge,
 } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
 import { MainBoardList } from "./MainBoardList";
@@ -350,17 +351,15 @@ export function MainView() {
         <Flex border={"3px solid blue"} backgroundColor={"gray"}>
           <Box>
             <Flex h={"15%"} color={"white"} fontSize={"1.5rem"}>
-              <Text variant={"outline"} color={"wthie"} ml={10}>
+              <Badge fontSize="20px" colorScheme="blue">
                 1위
-              </Text>
+              </Badge>
             </Flex>
             <Box
               key={firstList.link}
               _hover={{ cursor: "pointer" }}
               w={"100%"}
               h={"82%"}
-              border={"1px"}
-              borderColor={"orange"}
               onClick={() => {
                 setLinkCategory(firstList.categoryName);
                 setMainShowLink(firstList.link);
@@ -389,14 +388,14 @@ export function MainView() {
                     mb={"25px"}
                   >
                     <br />
-                    {otherList.indexOf(other) + 2}위
+                    <Badge mx={1} fontSize="20px" colorScheme="green">
+                      {otherList.indexOf(other) + 2}위
+                    </Badge>
                   </Box>
                   <Box
                     w="100%"
                     h="60%"
                     key={other.id}
-                    border={"1px"}
-                    borderColor={"orange"}
                     onClick={() => {
                       setLinkCategory(other.categoryName);
                       setMainShowLink(other.link);
