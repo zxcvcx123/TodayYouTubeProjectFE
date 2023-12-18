@@ -37,6 +37,7 @@ import ScrollToTop from "../util/ScrollToTop";
 import LoadingPage from "../component/LoadingPage";
 import BoardProfile from "./BoardProfile";
 import ReactPlayer from "react-player";
+import dompurify from "dompurify";
 
 function BoardView() {
   /* 로그인 정보 컨텍스트 */
@@ -277,6 +278,15 @@ function BoardView() {
     return `${year}-${month}-${day} ${hour}:${minute}`;
   }
 
+  function Ex() {
+    if (board.content !== undefined) {
+      const contents = dompurify.sanitize(board.content);
+      return <Box dangerouslySetInnerHTML={{ __html: contents }}></Box>;
+    } else {
+      return <Box></Box>;
+    }
+  }
+
   return (
     <Center mb={"50px"}>
       <Box mt={"20px"} w={"1000px"}>
@@ -314,18 +324,20 @@ function BoardView() {
         <FormControl my={5}>
           {/*<FormLabel>본문</FormLabel>*/}
           <Box>
+            {board.content !== undefined && Ex()}
+
             {/* CKEditor 본문 영역 onReady => 높이 설정 */}
-            {board && (
-              <CKEditor
-                disabled={"true"}
-                editor={ClassicEditor}
-                data={board.content}
-                config={editorConfig}
-                onReady={(editor) => {
-                  editor.ui.view.editable.element.style.minHeight = "500px";
-                }}
-              />
-            )}
+            {/*{board && (*/}
+            {/*  <CKEditor*/}
+            {/*    disabled={"true"}*/}
+            {/*    editor={ClassicEditor}*/}
+            {/*    data={board.content}*/}
+            {/*    config={editorConfig}*/}
+            {/*    onReady={(editor) => {*/}
+            {/*      editor.ui.view.editable.element.style.minHeight = "500px";*/}
+            {/*    }}*/}
+            {/*  />*/}
+            {/*)}*/}
           </Box>
         </FormControl>
 
