@@ -263,9 +263,17 @@ function BoardView() {
       });
   }
 
+  // 유효한 YouTube 링크인지 확인하는 함수
+  function isValidYoutubeLink(link) {
+    // 정규 표현식을 사용하여 유효한 YouTube 링크인지 확인
+    const youtubeLinkRegex =
+      /^(https?:\/\/)?(www\.)?(youtube\.com\/(.*\/)?|youtu\.be\/)([^\?&"'>]+)/;
+    return youtubeLinkRegex.test(link);
+  }
+
   // 유튜브 섹션 렌더링 여부 결정 함수
   function renderYoutubeSection() {
-    if (!board.link) {
+    if (!board.link || !isValidYoutubeLink(board.link)) {
       return <></>;
     }
 
