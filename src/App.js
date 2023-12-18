@@ -33,8 +33,12 @@ import AdminMemberList from "./admin/AdminMemberList";
 import VoteList from "./vote/VoteList";
 import AdminMemberInfo from "./admin/AdminMemberInfo";
 import VoteLoading from "./vote/VoteLoading";
+
+import "./index.css";
+
 import AdminManageSuspension from "./admin/AdminManageSuspension";
 import SuspensionMemberLoginPage from "./admin/SuspensionMemberLoginPage";
+
 
 const routes = createBrowserRouter(
   createRoutesFromElements(

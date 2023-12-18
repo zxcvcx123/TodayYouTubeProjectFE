@@ -25,7 +25,9 @@ function VisitorCountCard() {
       boxShadow="0px 4px 8px rgba(0, 0, 0, 0.2)"
     >
       <Flex>
-        <Text mb={1} fontWeight={"bold"}>
+        <Text mb={1} fontWeight={"bold"}
+              style={{ fontFamily: "Nanum Gothic" }}
+        >
           전체 방문자 수
           <Badge mx={1} fontSize="13px" colorScheme="green">
             {countVisitorAll}
@@ -34,7 +36,9 @@ function VisitorCountCard() {
         </Text>
       </Flex>
       <Flex>
-        <Text fontWeight={"bold"}>
+        <Text fontWeight={"bold"}
+              style={{ fontFamily: "Nanum Gothic" }}
+        >
           오늘 방문자 수
           <Badge mx={1} fontSize="13px" colorScheme="blue">
             {countVisitorToday}
