@@ -371,14 +371,14 @@ export function MainView() {
             mx={"10px"}
             display={"flex"}
             flexDirection={"column"}
-            alignItems={"center"}
+            alignItems={"flex-start"}
             boxShadow={"0 4px 8px rgba(0, 0, 0, 0.3)"}
             transition={"transform 0.1s ease-in-out"}
             _hover={{ transform: "scale(1.1)", cursor: "pointer" }}
             style={{
               border:
                 firstList.link === mainShowLink
-                  ? "3px solid rgb(181,233,245)"
+                  ? "1px solid rgb(181,233,245)"
                   : "none",
               transform:
                 firstList.link === mainShowLink ? "scale(1.1)" : undefined,
@@ -389,11 +389,28 @@ export function MainView() {
               setLinkNameEng(firstList.name_eng);
             }}
           >
-            <Box h={"20%"} fontSize={"1.2rem"}>
-              <Badge mx={1} fontSize="20px" colorScheme="green">
+            <Flex h={"20%"}>
+              <Badge
+                fontSize="20px"
+                colorScheme="green"
+                h={"90%"}
+                mr={"5px"}
+                variant={"solid"}
+              >
                 1위
               </Badge>
-            </Box>
+              <Text
+                w={"90%"}
+                lineHeight={"30px"}
+                fontFamily={"Nanum Gothic"}
+                fontWeight={"bold"}
+                whiteSpace={"nowrap"}
+                overflow={"hidden"}
+                textOverflow={"ellipsis"}
+              >
+                {firstList.title}
+              </Text>
+            </Flex>
             <Box key={firstList.link} w={"230px"} h={"130px"}>
               <YoutubeInfo link={firstList.link} extraThumbnail={true} />
             </Box>
@@ -410,7 +427,7 @@ export function MainView() {
                 mx={"10px"}
                 display={"flex"}
                 flexDirection={"column"}
-                alignItems={"center"}
+                alignItems={"flex-start"}
                 boxShadow={"0 4px 8px rgba(0, 0, 0, 0.3)"}
                 transition={"transform 0.1s ease-in-out"}
                 onClick={() => {
@@ -422,24 +439,35 @@ export function MainView() {
                 style={{
                   border:
                     other.link === mainShowLink
-                      ? "3px solid rgb(181,233,245)"
+                      ? "1px solid rgb(181,233,245)"
                       : "none",
                   transform:
                     other.link === mainShowLink ? "scale(1.1)" : undefined,
                 }}
                 key={other.id}
               >
-                <Box
-                  h={"20%"}
-                  color={"white"}
-                  key={other.link}
-                  fontSize={"1.2rem"}
-                  // border={"1px solid green"}
-                >
-                  <Badge mx={1} fontSize="20px" colorScheme="green">
+                <Flex key={other.link}>
+                  <Badge
+                    fontSize="20px"
+                    colorScheme="green"
+                    h={"90%"}
+                    mr={"5px"}
+                    variant={"solid"}
+                  >
                     {otherList.indexOf(other) + 2}위
                   </Badge>
-                </Box>
+                  <Text
+                    w={"90%"}
+                    lineHeight={"30px"}
+                    fontFamily={"Nanum Gothic"}
+                    fontWeight={"bold"}
+                    whiteSpace={"nowrap"}
+                    overflow={"hidden"}
+                    textOverflow={"ellipsis"}
+                  >
+                    {other.title}
+                  </Text>
+                </Flex>
                 <Box w={"230px"} h={"130px"} key={other.id}>
                   <YoutubeInfo link={other.link} extraThumbnail={true} />
                 </Box>
