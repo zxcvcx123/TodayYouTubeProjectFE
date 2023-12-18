@@ -394,7 +394,7 @@ function BoardView() {
       <Box mt={"20px"} w={"1000px"}>
         <Box mb={5}>
           <Box w={"500px"} borderBottom={"5px solid rgb(0,35,150,0.5)"}>
-            <Heading>{boardInfo} 게시판</Heading>
+            <Heading>{board.categoryName} 게시판</Heading>
           </Box>
         </Box>
 
