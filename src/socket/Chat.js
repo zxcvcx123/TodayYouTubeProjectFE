@@ -7,6 +7,7 @@ import {
   Button,
   Center,
   Flex,
+  Heading,
   Input,
   Spinner,
   Text,
@@ -26,7 +27,9 @@ function Chat() {
   const [connection, setConnection] = useState(true);
 
   useEffect(() => {
-    setSetIdAccess(true);
+    if (loginInfo !== null) {
+      setSetIdAccess(true);
+    }
     chatContent();
   }, [chat]);
 
@@ -63,6 +66,13 @@ function Chat() {
 
   return (
     <>
+      {setIdAccess || (
+        <Center h={"700px"}>
+          <Box>
+            <Heading>로그인 한 사용자만 이용 가능합니다.</Heading>
+          </Box>
+        </Center>
+      )}
       {setIdAccess && (
         <Center>
           <Box w={"50%"} h={"500px"}>

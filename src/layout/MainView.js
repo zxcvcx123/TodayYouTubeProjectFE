@@ -323,15 +323,27 @@ export function MainView() {
               bg={"white"}
               p={"50px"}
             >
-              <Box key={mainShowLink}>
+              <Box>
                 {mainShowLink && (
-                  <YoutubeInfo
-                    link={mainShowLink}
-                    extraVideo={true}
-                    opts={{ height: "500px", width: "900px" }}
+                  <ReactPlayer
+                    className="video-container"
+                    url={mainShowLink}
+                    config={{
+                      youtube: {
+                        playerVars: {
+                          autoplay: 0,
+                        },
+                      },
+                    }}
                   />
+                  // <YoutubeInfo
+                  //   link={mainShowLink}
+                  //   extraVideo={true}
+                  //   opts={{ height: "500px", width: "900px" }}
+                  // />
                 )}
               </Box>
+
               <Box>
                 <Button color={"rgb(11,121,168)"} variant={"link"} bg={"white"}>
                   {linkCategory}게시판으로 이동하기 >
@@ -376,7 +388,7 @@ export function MainView() {
                   <Box
                     h={"20%"}
                     color={"white"}
-                    key={other.link}
+                    // key={other.link}
                     ml={12}
                     fontSize={"1.2rem"}
                     mt={"20px"}

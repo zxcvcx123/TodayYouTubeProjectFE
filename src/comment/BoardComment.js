@@ -327,42 +327,43 @@ export function BoardComment({ board_id, boardData }) {
   const params = new URLSearchParams();
   const location = useLocation();
 
-
   useEffect(() => {
-    if (loginInfo !== null) {
-      params.set("member_id", loginInfo.member_id);
-      params.set("board_id", board_id);
-      if (location.pathname.includes("vote")) {
-        if (loginInfo !== null) {
-          if (!isSubmitting) {
-            axios.get("/api/comment/vote/list?" + params).then((response) => {
-              setCommentList(response.data);
-            });
-          }
-
-          // 로그인 하지 않은 사용자도 댓글이 보이게
-        } else {
-          params.set("board_id", board_id);
-          if (!isSubmitting) {
-            axios.get("/api/comment/vote/list?" + params).then((response) => {
-              setCommentList(response.data);
-            });
-          }
-        }
-      } else {
+    if (location.pathname.includes("vote")) {
+      if (loginInfo !== null) {
+        params.set("member_id", loginInfo.member_id);
+        params.set("board_id", board_id);
         if (!isSubmitting) {
-          axios.get("/api/comment/list?" + params).then((response) => {
+          axios.get("/api/comment/vote/list?" + params).then((response) => {
             setCommentList(response.data);
           });
         }
 
         // 로그인 하지 않은 사용자도 댓글이 보이게
-        else {
-          if (!isSubmitting) {
-            axios.get("/api/comment/list?" + params).then((response) => {
-              setCommentList(response.data);
-            });
-          }
+      } else {
+        params.set("board_id", board_id);
+        if (!isSubmitting) {
+          axios.get("/api/comment/vote/list?" + params).then((response) => {
+            setCommentList(response.data);
+          });
+        }
+      }
+    } else {
+      if (loginInfo !== null) {
+        params.set("member_id", loginInfo.member_id);
+        params.set("board_id", board_id);
+        if (!isSubmitting) {
+          axios.get("/api/comment/list?" + params).then((response) => {
+            setCommentList(response.data);
+          });
+        }
+      }
+      // 로그인 하지 않은 사용자도 댓글이 보이게
+      else {
+        params.set("board_id", board_id);
+        if (!isSubmitting) {
+          axios.get("/api/comment/list?" + params).then((response) => {
+            setCommentList(response.data);
+          });
         }
       }
     }

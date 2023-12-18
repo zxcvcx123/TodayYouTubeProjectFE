@@ -139,6 +139,7 @@ function InquiryWrite() {
           send();
         }}
         colorScheme={"blue"}
+        mr={2}
       >
         작성완료
       </Button>

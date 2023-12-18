@@ -78,7 +78,6 @@ export function Nav({ setSocket }) {
         })
         .then((res) => {
           setAlarmList(res.data);
-          console.log(res.data);
         })
         .catch()
         .finally();
@@ -89,7 +88,6 @@ export function Nav({ setSocket }) {
         })
         .then((res) => {
           setAlarmCount(res.data);
-          console.log(res.data);
         })
         .catch()
         .finally();
@@ -191,9 +189,7 @@ export function Nav({ setSocket }) {
                   게시판
                   <ChevronDownIcon />
                 </MenuButton>
-                <MenuList
-                  style={{ fontFamily: "Nanum Gothic" }}
-                >
+                <MenuList style={{ fontFamily: "Nanum Gothic" }}>
                   <MenuItem
                     onClick={(e) => {
                       navigate("board/list?category=notice");
@@ -262,8 +258,8 @@ export function Nav({ setSocket }) {
                   <Divider />
                   {token.detectLogin && loginInfo.role_name === "운영자" && (
                     <MenuItem onClick={() => navigate("/admin")}>
-                    관리자(임시)
-                  </MenuItem>
+                      관리자(임시)
+                    </MenuItem>
                   )}
                 </MenuList>
               </Menu>
@@ -410,7 +406,6 @@ export function Nav({ setSocket }) {
                           onClick={() => {
                             handleLogout();
                             navigate("/");
-
                           }}
                         >
                           로그아웃
