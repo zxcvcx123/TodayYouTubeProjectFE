@@ -289,6 +289,8 @@ export function Nav({ setSocket }) {
             <Box>
               <SearchMain />
             </Box>
+
+            {/* ---------- 방문자 통계 ---------- */}
             <Box>
               <VisitorCountCard />
             </Box>
