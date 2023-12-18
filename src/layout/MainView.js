@@ -380,6 +380,8 @@ export function MainView() {
                 firstList.link === mainShowLink
                   ? "3px solid rgb(181,233,245)"
                   : "none",
+              transform:
+                firstList.link === mainShowLink ? "scale(1.1)" : undefined,
             }}
             onClick={() => {
               setLinkCategory(firstList.categoryName);
@@ -422,6 +424,8 @@ export function MainView() {
                     other.link === mainShowLink
                       ? "3px solid rgb(181,233,245)"
                       : "none",
+                  transform:
+                    other.link === mainShowLink ? "scale(1.1)" : undefined,
                 }}
                 key={other.id}
               >
