@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -25,8 +25,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import LoadingPage from "../component/LoadingPage";
 import Editor from "../component/Editor";
 import { ChevronDownIcon } from "@chakra-ui/icons";
+import { DetectLoginContext } from "../component/LoginProvider";
 
 function InquiryEdit(props) {
+  // 로그인 유저 정보
+  const { token, handleLogout, loginInfo, validateToken } =
+    useContext(DetectLoginContext);
+
   const [inquiry, setInquiry] = useState();
   const [title, setTitle] = useState([]);
   const [content, setContent] = useState([]);
@@ -60,6 +65,8 @@ function InquiryEdit(props) {
         content,
         inquiry_category,
         uuSrc,
+        inquiry_member_id: inquiry.inquiry_member_id,
+        login_member_id: loginInfo.member_id,
       })
       .then(() => navigate("/inquiry/list"));
   }

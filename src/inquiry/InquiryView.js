@@ -106,7 +106,12 @@ function InquiryView(props) {
 
   function handleDeleteButton() {
     axios
-      .delete("/api/inquiry/delete/" + id)
+      .delete("/api/inquiry/delete/" + id, {
+        data: {
+          login_member_id: loginInfo.member_id,
+          inquiry_member_id: inquiry.inquiry_member_id,
+        },
+      })
       .then(() => {
         navigate("/inquiry/list");
         toast({
@@ -183,6 +188,7 @@ function InquiryView(props) {
     axios.delete("/api/inquiry/answer/delete", {
       data: {
         answer_board_id: inquiry.id,
+        login_member_id: loginInfo.member_id,
         role_name: loginInfo.role_name,
       },
     });
