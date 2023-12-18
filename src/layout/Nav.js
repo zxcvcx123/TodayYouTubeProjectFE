@@ -29,7 +29,11 @@ import * as PropTypes from "prop-types";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { ChevronDownIcon, CloseIcon } from "@chakra-ui/icons";
 import { SearchMain } from "./SearchMain";
-import { faBell, faCircleXmark } from "@fortawesome/free-regular-svg-icons";
+import {
+  faBell,
+  faCircleXmark,
+  faStar,
+} from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { DetectLoginContext } from "../component/LoginProvider";
@@ -38,8 +42,9 @@ import * as SockJS from "sockjs-client";
 import { Stomp } from "@stomp/stompjs";
 import { SocketContext } from "../socket/Socket";
 import axios from "axios";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import { Logo1WithText } from "../assets/Image";
+import { faGhost, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { Logo1WithText, Logo1WithText3 } from "../assets/Image";
+import VisitorCountCard from "../admin/VisitorCountCard";
 
 Stack.propTypes = {
   p: PropTypes.number,
@@ -55,7 +60,6 @@ export function Nav({ setSocket }) {
 
   let navigate = useNavigate();
   let location = useLocation();
-  console.log(location);
 
   const {
     stompClient,
@@ -66,16 +70,6 @@ export function Nav({ setSocket }) {
     setAlarmCount,
   } = useContext(SocketContext);
 
-  const navBackground = document.querySelector(".navBackground");
-  if (navBackground) {
-    if (location.pathname === "/member/minihomepy/admin123123") {
-      document.querySelector(".navBackground").style.background =
-        "linear-gradient(112.1deg, rgb(32, 38, 57) 11.4%, rgb(63, 76, 119) 70.2%)";
-    } else {
-      document.querySelector(".navBackground").style.background =
-        "linear-gradient(#FF0000,#990000)";
-    }
-  }
   useEffect(() => {
     if (loginInfo !== null) {
       axios
@@ -166,7 +160,7 @@ export function Nav({ setSocket }) {
   return (
     <>
       <div className="navBackground">
-        <Center bg="white" borderBottom={"5px solid rgb(255,0,0,0.5)"}>
+        <Center bg="transparent" boxShadow="0px 4px 8px rgba(0, 0, 0, 0.2)">
           <Flex
             // ml="100px"
             mt={2}
@@ -175,14 +169,14 @@ export function Nav({ setSocket }) {
             alignItems="center"
             justifyContent={"space-around"}
             // bg="blackAlpha.100"
-            bg="white"
+            bg="transparent"
           >
             <button
               onClick={() => {
                 navigate("/");
               }}
             >
-              <Image src={Logo1WithText} minW={"200px"} maxW={"200px"} />
+              <Image src={Logo1WithText3} minW={"200px"} maxW={"200px"} />
             </button>
 
             <Flex>
@@ -250,7 +244,6 @@ export function Nav({ setSocket }) {
                   </MenuItem>
                   <MenuItem onClick={() => navigate("/chat")}>채팅</MenuItem>
                   <Divider />
-
                   <MenuItem
                     onClick={(e) => {
                       navigate("/inquiry/list");
@@ -258,12 +251,11 @@ export function Nav({ setSocket }) {
                   >
                     문의게시판
                   </MenuItem>
-
                   <Divider />
                   {token.detectLogin && loginInfo.role_name === "운영자" && (
                     <MenuItem onClick={() => navigate("/admin")}>
-                      관리자(임시)
-                    </MenuItem>
+                    관리자(임시)
+                  </MenuItem>
                   )}
                 </MenuList>
               </Menu>
@@ -273,13 +265,19 @@ export function Nav({ setSocket }) {
                 borderStyle={"solid"}
                 size="md"
                 variant="ghost"
+                rightIcon={<FontAwesomeIcon icon={faGhost} />}
+                backgroundColor={"rgba(11,121,177,0.5)"}
+                mr={"10px"}
               >
-                오늘 뭐 볼까?
+                랜덤 추천
               </Button>
             </Flex>
             {/* ---------- 통합검색 ---------- */}
             <Box>
               <SearchMain />
+            </Box>
+            <Box>
+              <VisitorCountCard />
             </Box>
 
             <Flex gap={10} ml={2}>
@@ -403,11 +401,13 @@ export function Nav({ setSocket }) {
                           onClick={() => {
                             handleLogout();
                             navigate("/");
+
                           }}
                         >
                           로그아웃
                         </MenuItem>
                         <Divider />
+
                         <MenuItem
                           onClick={() => {
                             navigate("/member/info");
@@ -415,7 +415,15 @@ export function Nav({ setSocket }) {
                         >
                           마이페이지
                         </MenuItem>
-                        <MenuItem>준비중</MenuItem>
+                        <MenuItem
+                          onClick={() => {
+                            navigate(
+                              "/member/minihomepy/" + loginInfo.member_id,
+                            );
+                          }}
+                        >
+                          내 미니홈피
+                        </MenuItem>
                       </MenuList>
                     </Menu>
                   </>

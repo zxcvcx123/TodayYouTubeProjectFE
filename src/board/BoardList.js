@@ -49,6 +49,7 @@ import PageCount from "../page/PageCount";
 import { DetectLoginContext } from "../component/LoginProvider";
 import ScrollToTop from "../util/ScrollToTop";
 import pageCount from "../page/PageCount";
+import LoadingPage from "../component/LoadingPage";
 
 function BoardList() {
   /* 로그인 정보 컨텍스트 */
@@ -62,6 +63,8 @@ function BoardList() {
   const [currentView, setCurrentView] = useState("list");
   const [boardInfo, setBoardInfo] = useState("");
   const [listCount, setListCount] = useState(null);
+  // Loading state
+  const [loading, setLoading] = useState(true);
 
   const [params] = useSearchParams("");
 
@@ -93,12 +96,20 @@ function BoardList() {
       .catch((error) => {
         console.error("Error fetching board list:", error);
         window.alert("게시글 목록을 가져오는 중에 오류가 발생했습니다.");
+      })
+      .finally(() => {
+        setLoading(false);
       });
 
     if (params.get("s") === null) {
       setPageCount(10);
     }
   }, [location]);
+
+  // 로딩중일 경우 페이지 표시
+  if (loading) {
+    return <LoadingPage />;
+  }
 
   // 게시물 목록 한 페이지에 보여줄 게시글의 갯수 설정 버튼
   function handlePageCount(e) {
@@ -213,20 +224,22 @@ function BoardList() {
 
   // -------------------------------------------------- 화면 렌더링 --------------------------------------------------
   return (
-    <Flex justifyContent={"center"}>
+    <Flex justifyContent={"center"} mb={"50px"}>
       <Box>
         {/* ------------------------- 게시글 목록 상단 바 ------------------------- */}
         <Box my={5}>
-          {params.get("category") !== "all" ? (
-            <Heading>{boardInfo} 게시판</Heading>
-          ) : (
-            <>
-              <Heading>통합검색</Heading>
-              <Text>
-                {params.get("k")}의 검색결과 ({listCount})건
-              </Text>
-            </>
-          )}
+          <Box w={"500px"} borderBottom={"5px solid rgb(0,35,150,0.5)"}>
+            {params.get("category") !== "all" ? (
+              <Heading>{boardInfo} 게시판</Heading>
+            ) : (
+              <>
+                <Heading>통합검색</Heading>
+                <Text>
+                  {params.get("k")}의 검색결과 ({listCount})건
+                </Text>
+              </>
+            )}
+          </Box>
         </Box>
         <Flex justify={"flex-end"} mb={5}>
           <Flex>
@@ -350,7 +363,7 @@ function BoardList() {
                         >
                           <Flex align={"center"} gap={"10px"}>
                             {/* 썸네일 출력 */}
-                            <Box w={"50%"}>
+                            <Box w={"120px"} h={"70px"}>
                               <YoutubeInfo
                                 link={board.link}
                                 extraThumbnail={true}
@@ -417,7 +430,7 @@ function BoardList() {
         ) : (
           <>
             {/* ---------------------------------------- 그리드 형태 보기 ---------------------------------------------*/}
-            <SimpleGrid columns={[1, 2, 3, 4, 5]} spacing={[4]}>
+            <SimpleGrid columns={[1, 2, 3, 4]} spacing={[4]}>
               {boardList &&
                 boardList
                   /* board.is_show=true 만 필터 */
@@ -434,16 +447,15 @@ function BoardList() {
                         cursor: "pointer",
                       }}
                     >
-                      <CardHeader p={"10px"}>
-                        {/* 썸네일 출력 */}
-                        <YoutubeInfo
-                          link={board.link}
-                          extraThumbnail={true}
-                          thumbnailWidth={250}
-                          thumbnailHeight={150}
-                        />
-                      </CardHeader>
-
+                      <Center>
+                        <CardHeader p={"10px"} w={"250px"} h={"150px"}>
+                          {/* 썸네일 출력 */}
+                          <YoutubeInfo
+                            link={board.link}
+                            extraThumbnail={true}
+                          />
+                        </CardHeader>
+                      </Center>
                       <CardBody p={"10px"}>
                         {/* 제목 출력 */}
                         {renderGreedTitle(board)}

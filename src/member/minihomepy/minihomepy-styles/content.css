@@ -29,9 +29,10 @@
 
 .navigation {
     position: relative;
-    height: 380px;
+    height: 310px;
     width: 60px;
-    background: linear-gradient(112.1deg, rgb(32, 38, 57) 11.4%, rgb(63, 76, 119) 70.2%);
+    background: linear-gradient(
+            to top, #F71735,#FF0000, #ffffff);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -116,8 +117,12 @@
     transform: translateX(0);
     width:70px;
     height:70px;
-    background: linear-gradient(112.1deg, rgb(32, 38, 57) 11.4%, rgb(63, 76, 119) 70.2%);
-    border:6px solid #243a4f;
+    background: #046241;
+    background: linear-gradient(
+            to top,  #046241, #036b46, #ffffff);
+    /*background: linear-gradient(*/
+    /*        #F71735,#FF0000, #FF7878);*/
+    /*border:6px solid #04624;*/
     border-radius: 50%;
     display: flex;
     justify-content: center;

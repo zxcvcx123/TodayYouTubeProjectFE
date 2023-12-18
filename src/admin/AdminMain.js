@@ -16,13 +16,16 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { BarChart } from "./BarChart";
+import { BarChart } from "../component/BarChart";
 import axios from "axios";
 import { DoughnutChart } from "./DoughnutChart";
 import { LineChart } from "./LineChart";
 import LoadingPage from "../component/LoadingPage";
 import { DetectLoginContext } from "../component/LoginProvider";
 import { useNavigate } from "react-router-dom";
+import { DoughnutChart } from "../component/DoughnutChart";
+import { LineChart } from "../component/LineChart";
+
 
 // 도넛 차트 출력 형식
 const DoughnutChartBox = ({ title, chartData }) => (
@@ -111,6 +114,7 @@ function AdminMain() {
   const [countVisitorAll, setCountVisitorAll] = useState(null);
   const [countVisitorToday, setCountVisitorToday] = useState(null);
 
+  /* ---------- 게시글, 좋아요, 댓글 작성 불러와 state 셋팅 ---------- */
   useEffect(() => {
     axios.get("/api/admin/user").then((response) => {
       setUserWriteRankDataList(response.data.userWriteRankDataList);
@@ -232,7 +236,7 @@ function AdminMain() {
     });
   }, []);
 
-  // 방문자 데이터
+  // 방문자 데이터 불러와 state 세팅 및 라인차트 세팅
   useEffect(() => {
     // 방문자 통계 데이터 가져오기
     // visitorCountAll, visitorCountToday, visitorCountMonthlyLastYear
@@ -293,7 +297,7 @@ function AdminMain() {
   }
 
   return (
-    <Flex>
+    <Flex border={"1px solid blue"}>
       {/* ---------- 사이드 바 ----------*/}
       <Sidenav />
       {/* ---------- 메인 ----------*/}
