@@ -213,7 +213,7 @@ function BoardView() {
     }
 
     return (
-      <FormControl mb={2} backgroundColor={"rgba(0,0,0,0.9)"} p={"10px"}>
+      <FormControl backgroundColor={"rgba(0,0,0,0.9)"} p={"10px"}>
         <FormLabel fontSize="xl" fontWeight="bold" color={"rgb(255,255,255)"}>
           추천 유튜브 영상
         </FormLabel>
@@ -321,7 +321,7 @@ function BoardView() {
         {renderYoutubeSection()}
 
         {/* -------------------- 본문 -------------------- */}
-        <FormControl my={5}>
+        <FormControl my={"50px"}>
           {/*<FormLabel>본문</FormLabel>*/}
           <Box>
             {board.content !== undefined && Ex()}
