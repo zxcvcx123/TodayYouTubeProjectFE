@@ -31,6 +31,7 @@ import YoutubeInfo from "../component/YoutubeInfo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRankingStar, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import { DetectLoginContext } from "../component/LoginProvider";
+import LoadingPage from "../component/LoadingPage";
 
 export function MainView() {
   /* 로그인 정보 컨텍스트 */
@@ -47,6 +48,7 @@ export function MainView() {
 
   const [mainShowLink, setMainShowLink] = useState(null);
   const [linkCategory, setLinkCategory] = useState(null);
+  const [linkNameEng, setLinkNameEng] = useState(null);
 
   const [mainBoardList2, setMainBoardList2] = useState(null);
   const [mainBoardList3, setMainBoardList3] = useState(null);
@@ -80,6 +82,7 @@ export function MainView() {
         setOtherList(response.data.otherBoardList);
         setMainShowLink(response.data.firstBoardList.link);
         setLinkCategory(response.data.firstBoardList.categoryName);
+        setLinkNameEng(response.data.firstBoardList.name_eng);
         setMainBoardList2(response.data.mainBoardList2);
         setMainBoardList3(response.data.mainBoardList3);
         setMainBoardList4(response.data.mainBoardList4);
@@ -149,7 +152,7 @@ export function MainView() {
   if (firstList == null || otherList == null) {
     return (
       <>
-        {showSpinner && <Spinner />}
+        {showSpinner && <LoadingPage />}
         {showSpinner || (
           <>
             <Card
@@ -203,190 +206,202 @@ export function MainView() {
   // console.log("출력될 링크:" + mainShowLink);
   // 임시메인
   return (
-    <Box w="100%" h="2180px" p={4} border={"1px"} borderColor="pink">
-      <Flex w="100%" mb="200px" bg="black">
-        <Box w="18%">
-          <Box>
-            <Flex ml={10} mb={1} mt={3}>
-              <Button
-                colorScheme={isDay ? "red" : "gray"}
-                mr={2}
-                value="daily"
-                onClick={(e) => {
-                  setIsDay(true);
-                  setIsWeek(false);
-                  setIsMonth(false);
-                  handleDateClick(e);
-                }}
-              >
-                하루
-              </Button>
-              <Button
-                colorScheme={isWeek ? "red" : "gray"}
-                mr={2}
-                value="weekly"
-                onClick={(e) => {
-                  setIsDay(false);
-                  setIsWeek(true);
-                  setIsMonth(false);
-                  handleDateClick(e);
-                }}
-              >
-                이번주
-              </Button>
-              <Button
-                colorScheme={isMonth ? "red" : "gray"}
-                value="monthly"
-                onClick={(e) => {
-                  setIsDay(false);
-                  setIsWeek(false);
-                  setIsMonth(true);
-                  handleDateClick(e);
-                }}
-              >
-                이번달
-              </Button>
-            </Flex>
-          </Box>
-          <Box color="white" ml={10}>
-            <FontAwesomeIcon icon={faRankingStar} /> {dateSort} 베스트 영상
-            <Text fontSize="0.8rem" color="gray.400">
-              - {dateSort} 가장 추천을 많이 받은 영상들입니다.
-            </Text>
-          </Box>
-          <Select
-            onChange={handleCategoryChange}
-            width="60%"
-            backgroundColor="white"
-            mt={10}
-            ml={10}
-            size="sm"
-            alignItems="center"
-          >
-            <option value="all">전체게시판</option>
-            <option value="C002">스포츠게시판</option>
-            <option value="C003">먹방게시판</option>
-            <option value="C004">일상게시판</option>
-            <option value="C005">요리게시판</option>
-            <option value="C006">영화/드라마 게시판</option>
-            <option value="C007">게임게시판</option>
-          </Select>
-          {/*<Box mt={50} ml={10}>*/}
-          {/*  <Text color={"red.300"}>**둘 중에 하나만 사용할 예정**</Text>*/}
-          {/*  <Button mb={1} onClick={() => setBaseOnCurrent(true)}>*/}
-          {/*    현재날짜 기준으로 -7*/}
-          {/*  </Button>*/}
-          {/*  <Button onClick={() => setBaseOnCurrent(false)}>*/}
-          {/*    현재날짜가 속한 요일,달 기준으로*/}
-          {/*  </Button>*/}
-          {/*</Box>*/}
-        </Box>
-
-        <Box w={"85%"}>
-          <Flex
-            w="86%"
-            h="67%"
-            m="auto"
-            ml={10}
-            border={"1px"}
-            borderColor={"red"}
-          >
-            <Box width={"80%"} height="100%" key={mainShowLink}>
-              {mainShowLink && (
-                <YoutubeInfo
-                  link={mainShowLink}
-                  extraVideo={true}
-                  opts={{ height: 550, width: 1100 }}
-                />
-              )}
-            </Box>
-
-            <Button w={"1%"} color="white" mt={300} ml={100} variant={"link"}>
-              {linkCategory}게시판으로 이동하기 >
-            </Button>
-          </Flex>
-          <Box
-            ml={"-10%"}
-            w={"100%"}
-            mt={6}
-            h={"37%"}
-            border={"1px"}
-            borderColor={"blue"}
-          >
-            <Flex w="100%" h="100%">
-              <Box>
-                <Flex h={"15%"} color={"white"} fontSize={"1.5rem"}>
-                  <Text variant={"outline"} color={"wthie"} ml={10}>
-                    1위
-                  </Text>
-                </Flex>
-                <Box
-                  key={firstList.link}
-                  _hover={{ cursor: "pointer" }}
-                  w={"100%"}
-                  h={"82%"}
-                  border={"1px"}
-                  borderColor={"orange"}
-                  onClick={() => {
-                    setLinkCategory(firstList.categoryName);
-                    setMainShowLink(firstList.link);
+    <Center>
+      <Box w="1400px" h="2180px" p={4} border={"1px"} borderColor="pink">
+        <Flex w="100%" mb="200px" bg="black">
+          <Box w="18%">
+            <Box>
+              <Flex ml={10} mb={1} mt={3}>
+                <Button
+                  colorScheme={isDay ? "red" : "gray"}
+                  mr={2}
+                  value="daily"
+                  onClick={(e) => {
+                    setIsDay(true);
+                    setIsWeek(false);
+                    setIsMonth(false);
+                    handleDateClick(e);
                   }}
                 >
-                  <YoutubeInfo link={firstList.link} extraThumbnail={true} />
-                </Box>
+                  하루
+                </Button>
+                <Button
+                  colorScheme={isWeek ? "red" : "gray"}
+                  mr={2}
+                  value="weekly"
+                  onClick={(e) => {
+                    setIsDay(false);
+                    setIsWeek(true);
+                    setIsMonth(false);
+                    handleDateClick(e);
+                  }}
+                >
+                  이번주
+                </Button>
+                <Button
+                  colorScheme={isMonth ? "red" : "gray"}
+                  value="monthly"
+                  onClick={(e) => {
+                    setIsDay(false);
+                    setIsWeek(false);
+                    setIsMonth(true);
+                    handleDateClick(e);
+                  }}
+                >
+                  이번달
+                </Button>
+              </Flex>
+            </Box>
+            <Box color="white" ml={10}>
+              <FontAwesomeIcon icon={faRankingStar} /> {dateSort} 베스트 영상
+              <Text fontSize="0.8rem" color="gray.400">
+                - {dateSort} 가장 추천을 많이 받은 영상들입니다.
+              </Text>
+            </Box>
+            <Select
+              onChange={handleCategoryChange}
+              width="60%"
+              backgroundColor="white"
+              mt={10}
+              ml={10}
+              size="sm"
+              alignItems="center"
+            >
+              <option value="all">전체게시판</option>
+              <option value="C002">스포츠게시판</option>
+              <option value="C003">먹방게시판</option>
+              <option value="C004">일상게시판</option>
+              <option value="C005">요리게시판</option>
+              <option value="C006">영화/드라마 게시판</option>
+              <option value="C007">게임게시판</option>
+            </Select>
+            {/*<Box mt={50} ml={10}>*/}
+            {/*  <Text color={"red.300"}>**둘 중에 하나만 사용할 예정**</Text>*/}
+            {/*  <Button mb={1} onClick={() => setBaseOnCurrent(true)}>*/}
+            {/*    현재날짜 기준으로 -7*/}
+            {/*  </Button>*/}
+            {/*  <Button onClick={() => setBaseOnCurrent(false)}>*/}
+            {/*    현재날짜가 속한 요일,달 기준으로*/}
+            {/*  </Button>*/}
+            {/*</Box>*/}
+          </Box>
+
+          <Box w={"85%"}>
+            <Flex
+              w="86%"
+              h="67%"
+              m="auto"
+              ml={10}
+              border={"1px"}
+              borderColor={"red"}
+            >
+              <Box width={"80%"} height="100%" key={mainShowLink}>
+                {mainShowLink && (
+                  <YoutubeInfo
+                    link={mainShowLink}
+                    extraVideo={true}
+                    opts={{ height: 550, width: 1100 }}
+                  />
+                )}
               </Box>
-              <Flex w={"80%"} ml={5}>
-                {otherList &&
-                  otherList.map((other) => (
-                    <Box
-                      w={"25%"}
-                      border={"1px"}
-                      borderColor={"white"}
-                      key={other.id}
-                    >
+              <Button w={"1%"} color="white" mt={300} ml={100} variant={"link"} onClick={() => navigate("board/list?category=" + linkNameEng)}>
+                {linkCategory}게시판으로 이동하기 >
+              </Button>
+            </Flex>
+            <Box
+              ml={"-10%"}
+              w={"100%"}
+              mt={6}
+              h={"37%"}
+              border={"1px"}
+              borderColor={"blue"}
+            >
+              <Flex w="100%" h="100%">
+                <Box>
+                  <Flex h={"15%"} color={"white"} fontSize={"1.5rem"}>
+                    <Text variant={"outline"} color={"wthie"} ml={10}>
+                      1위
+                    </Text>
+                  </Flex>
+                  <Box
+                    key={firstList.link}
+                    _hover={{ cursor: "pointer" }}
+                    w={"100%"}
+                    h={"82%"}
+                    border={"1px"}
+                    borderColor={"orange"}
+                    onClick={() => {
+                      setLinkCategory(firstList.categoryName);
+                      setMainShowLink(firstList.link);
+                      setLinkNameEng(firstList.name_eng);
+                    }}
+                  >
+                    <YoutubeInfo link={firstList.link} extraThumbnail={true} />
+                  </Box>
+                </Box>
+                <Flex w={"80%"} ml={5}>
+                  {otherList &&
+                    otherList.map((other) => (
                       <Box
-                        h={"20%"}
-                        color={"white"}
-                        key={other.link}
-                        ml={12}
-                        fontSize={"1.2rem"}
-                        mt={"20px"}
-                        mb={"25px"}
-                      >
-                        <br />
-                        {otherList.indexOf(other) + 2}위
-                      </Box>
-                      <Box
-                        w="100%"
-                        h="60%"
-                        key={other.id}
+                        w={"25%"}
                         border={"1px"}
-                        borderColor={"orange"}
+                        borderColor={"white"}
                         onClick={() => {
                           setLinkCategory(other.categoryName);
                           setMainShowLink(other.link);
+                          setLinkNameEng(other.name_eng);
                         }}
                         _hover={{ cursor: "pointer" }}
+                        key={other.id}
+
                       >
-                        <YoutubeInfo link={other.link} extraThumbnail={true} />
+                        <Box
+                          h={"20%"}
+                          color={"white"}
+                          key={other.link}
+                          ml={12}
+                          fontSize={"1.2rem"}
+                          mt={"20px"}
+                          mb={"25px"}
+                        >
+                          <br />
+                          {otherList.indexOf(other) + 2}위
+                        </Box>
+                        <Box
+                          w="100%"
+                          h="60%"
+                          key={other.id}
+                          border={"1px"}
+                          borderColor={"orange"}
+                          onClick={() => {
+                            setLinkCategory(other.categoryName);
+                            setMainShowLink(other.link);
+                          }}
+                          _hover={{ cursor: "pointer" }}
+                        >
+                          <YoutubeInfo
+                            link={other.link}
+                            extraThumbnail={true}
+                          />
+                        </Box>
                       </Box>
-                    </Box>
-                  ))}
+                    ))}
+                </Flex>
               </Flex>
-            </Flex>
+            </Box>
           </Box>
-        </Box>
-      </Flex>
-      <MainBoardList
-        mainBoardList2={mainBoardList2}
-        mainBoardList3={mainBoardList3}
-        mainBoardList4={mainBoardList4}
-        mainBoardList5={mainBoardList5}
-        mainBoardList6={mainBoardList6}
-        mainBoardList7={mainBoardList7}
-        mainHitsBoardList={mainHitsBoardList}
-        mainRecommendBoardList={mainRecommendBoardList}
-      />
-    </Box>
+        </Flex>
+        <MainBoardList
+          mainBoardList2={mainBoardList2}
+          mainBoardList3={mainBoardList3}
+          mainBoardList4={mainBoardList4}
+          mainBoardList5={mainBoardList5}
+          mainBoardList6={mainBoardList6}
+          mainBoardList7={mainBoardList7}
+          mainHitsBoardList={mainHitsBoardList}
+          mainRecommendBoardList={mainRecommendBoardList}
+        />
+      </Box>
+    </Center>
   );
 }

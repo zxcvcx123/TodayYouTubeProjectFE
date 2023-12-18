@@ -39,7 +39,6 @@ export function LoginProvider({ children }) {
     axios({
       method: "post",
       url: "/api/member/loginProvider",
-      params: { member_id: memberInfo },
     })
       .then((response) => {
         setLoginInfo((prevState) => ({
@@ -69,6 +68,7 @@ export function LoginProvider({ children }) {
         setToken((prevSState) => ({
           detectLogin: false,
         }));
+        handleLogout();
       })
       .finally(() => {
         localStorage.clear();

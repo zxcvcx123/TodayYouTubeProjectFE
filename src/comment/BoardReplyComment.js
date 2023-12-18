@@ -30,6 +30,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { DetectLoginContext } from "../component/LoginProvider";
+import { useLocation } from "react-router-dom";
 
 function ReplyCommentForm({
   comment_id,
@@ -38,22 +39,32 @@ function ReplyCommentForm({
   isReplyFormOpen,
 }) {
   const [reply_comment, setReply_comment] = useState("");
-
+  const { token, loginInfo } = useContext(DetectLoginContext);
   function handleReplySubmit() {
     onSubmit({ comment_id, reply_comment });
   }
 
   return (
-    <Box>
-      <Flex>
+    <Box mb={2}>
+      <Flex gap={2}>
         <Textarea
+          border="1px solid black"
+          borderRadius="5"
+          mt={2}
+          ml={5}
           value={reply_comment}
           onChange={(e) => setReply_comment(e.target.value)}
+          isDisabled={!loginInfo.member_id}
+          placeholder={
+            loginInfo.member_id ? "댓글을 입력하세요" : "로그인 해주세요"
+          }
         />
         <Button
+          colorScheme="telegram"
+          mt={2}
           size="sm"
           h="80px"
-          isDisabled={isSubmitting}
+          isDisabled={isSubmitting || !loginInfo.member_id}
           onClick={handleReplySubmit}
         >
           쓰기
@@ -69,6 +80,7 @@ function ReplyCommentItem({
   setIsSubmitting,
 }) {
   const { token, loginInfo } = useContext(DetectLoginContext);
+
   const [isEditing, setIsEditing] = useState(false);
 
   const toast = useToast();
@@ -125,7 +137,9 @@ function ReplyCommentItem({
                 )}
 
                 <Button
-                  onClick={() => onDeleteModalOpen(reply_comment.id)}
+                  onClick={() =>
+                    onDeleteModalOpen(reply_comment.id, reply_comment.member_id)
+                  }
                   size="xs"
                   colorScheme="red"
                 >
@@ -165,9 +179,12 @@ function ReplyCommentList({
   setIsSubmitting,
 }) {
   return (
-    <Card ml={5}>
+    <Card ml={5} border="1px solid black" borderRadius="5" mt={2}>
       <CardBody>
-        <Stack divider={<StackDivider />} spacing={4}>
+        <Stack
+          divider={<StackDivider border={"1px solid lightgray"} />}
+          spacing={4}
+        >
           {reply_commentList.map((reply_comment) => (
             <ReplyCommentItem
               key={reply_comment.id}
@@ -189,22 +206,37 @@ export function BoardReplyComment({
   setIsReplyFormOpen,
 }) {
   const { token, loginInfo } = useContext(DetectLoginContext);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const replyIdRef = useRef(0);
+  const replyMeberId = useRef("");
 
   const toast = useToast();
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [reply_commentList, setReply_commentList] = useState([]);
 
   const { isOpen, onClose, onOpen } = useDisclosure();
 
-  useEffect(() => {
-    if (!isSubmitting) {
-      const params = new URLSearchParams();
-      params.set("reply_id", comment_id);
+  const location = useLocation();
 
-      axios.get("/api/comment/reply/list?" + params).then((response) => {
-        setReply_commentList(response.data);
-      });
+  useEffect(() => {
+    if (loginInfo !== null) {
+      if (!isSubmitting) {
+        const params = new URLSearchParams();
+        params.set("reply_id", comment_id);
+
+        axios.get("/api/comment/reply/list?" + params).then((response) => {
+          setReply_commentList(response.data);
+        });
+      }
+    } else {
+      if (!isSubmitting) {
+        const params = new URLSearchParams();
+        params.set("reply_id", comment_id);
+
+        axios.get("/api/comment/reply/list?" + params).then((response) => {
+          setReply_commentList(response.data);
+        });
+      }
     }
   }, [isSubmitting]);
 
@@ -212,27 +244,47 @@ export function BoardReplyComment({
     setIsSubmitting(true);
     setIsReplyFormOpen(true);
 
-    axios
-      .post("/api/comment/reply/add", {
-        reply_comment: reply_comment.reply_comment,
-        comment_id: reply_comment.comment_id,
-        member_id: loginInfo.member_id,
-      })
-      .then(() => {
-        toast({
-          description: "댓글이 등록되었습니다.",
-          status: "success",
+    if (location.pathname.includes("vote")) {
+      axios
+        .post("/api/comment/reply/vote/add", {
+          reply_comment: reply_comment.reply_comment,
+          comment_id: reply_comment.comment_id,
+          member_id: loginInfo.member_id,
+        })
+        .then(() => {
+          toast({
+            description: "댓글이 등록되었습니다.",
+            status: "success",
+          });
+        })
+        .catch((error) => console.log("bad"))
+        .finally(() => {
+          setIsSubmitting(false);
+          setIsReplyFormOpen(false);
         });
-      })
-      .catch((error) => console.log("bad"))
-      .finally(() => {
-        setIsSubmitting(false);
-        setIsReplyFormOpen(false);
-      });
+    } else {
+      axios
+        .post("/api/comment/reply/add", {
+          reply_comment: reply_comment.reply_comment,
+          comment_id: reply_comment.comment_id,
+          member_id: loginInfo.member_id,
+        })
+        .then(() => {
+          toast({
+            description: "댓글이 등록되었습니다.",
+            status: "success",
+          });
+        })
+        .catch((error) => console.log("bad"))
+        .finally(() => {
+          setIsSubmitting(false);
+          setIsReplyFormOpen(false);
+        });
+    }
   }
 
-  function handleReplyDelete(reply_comment) {
-    if (loginInfo.member_id === reply_comment.member_id) {
+  function handleReplyDelete() {
+    if (loginInfo.member_id === replyMeberId.current) {
       setIsSubmitting(true);
 
       axios
@@ -251,8 +303,10 @@ export function BoardReplyComment({
     }
   }
 
-  function handleReplyDeleteModalOpen(reply_id) {
+  function handleReplyDeleteModalOpen(reply_id, memberid) {
     replyIdRef.current = reply_id;
+    replyMeberId.current = memberid;
+
     onOpen();
   }
 
@@ -300,3 +354,4 @@ export function BoardReplyComment({
     </Box>
   );
 }
+// 커밋

@@ -29,7 +29,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import MemberInfoMyInfo from "./MemberInfoMyInfo";
-import { MemberInfoMyFavoriteBoard } from "./MemberInfoMyFavoriteBoard";
+import { MemberInfoMyFriendList } from "./MemberInfoMyFriendList";
 import YoutubeInfo from "../../component/YoutubeInfo";
 import MemberInfoPageNation from "./MemberInfoPageNation";
 import { AttachmentIcon } from "@chakra-ui/icons";
@@ -52,29 +52,26 @@ function MemberInfo(props) {
   const location = useLocation();
   /* react-router-dom */
   useEffect(() => {
-    const grantType = localStorage.getItem("grantType");
-    const accessToken = localStorage.getItem("accessToken");
-    params.set("ob", categoryOrdedBy); // 정렬 기준
-    params.set("ct", categoryTopics); // 리스트 기준
-    params.set("member_id", loginInfo.member_id);
-    axios
-      .get("/api/member/info/myBoardList?" + params, {
-        headers: {
-          Authorization: `${grantType} ${accessToken}`,
-        },
-      })
-      .then((response) => {
-        setMyBoardList(response.data.myBoardList);
-        setPageNumberInformation(response.data.pagingInformation);
-        console.log(response.data.pagingInformation);
-      })
-      .catch((error) => {
-        toast({
-          description: "비정상적인 접근입니다.",
-          status: "error",
+    if (loginInfo !== null) {
+      const grantType = localStorage.getItem("grantType");
+      const accessToken = localStorage.getItem("accessToken");
+      params.set("ob", categoryOrdedBy); // 정렬 기준
+      params.set("ct", categoryTopics); // 리스트 기준
+      params.set("member_id", loginInfo.member_id);
+      axios
+        .get("/api/member/info/myBoardList?" + params)
+        .then((response) => {
+          setMyBoardList(response.data.myBoardList);
+          setPageNumberInformation(response.data.pagingInformation);
+        })
+        .catch((error) => {
+          toast({
+            description: "비정상적인 접근입니다.",
+            status: "error",
+          });
+          navigate("/");
         });
-        navigate("/");
-      });
+    }
   }, [myBoardListDependency, categoryOrdedBy, categoryTopics, location]);
   function handleMemberInfoMyInfo() {
     setMyInfo(true);
@@ -169,7 +166,7 @@ function MemberInfo(props) {
                 color={"white"}
                 className="myFavoriteBoardBtn"
               >
-                내 미니 홈피
+                팔로우/팔로워
               </Button>
             </div>
           </Flex>
@@ -222,31 +219,34 @@ function MemberInfo(props) {
                             </Tr>
                           </Thead>
                           <Tbody>
-                            {myBoardList.map((myBoard) => (
-                              <Tr
-                                _hover={{
-                                  cursor: "pointer",
-                                }}
-                                key={myBoard.id}
-                                onClick={() => navigate("/board/" + myBoard.id)}
-                              >
-                                {categoryTopics !== "origin" && (
-                                  <Td>
-                                    <YoutubeInfo
-                                      link={myBoard.link}
-                                      extraThumbnail={true}
-                                      thumbnailWidth={120}
-                                      thumbnailHeight={70}
-                                    />
-                                  </Td>
-                                )}
-                                <Td>{myBoard.title}</Td>
-                                <Td>{myBoard.nickname}</Td>
-                                <Td>{myBoard.created_at}</Td>
-                                <Td>{myBoard.countlike}</Td>
-                                <Td>{myBoard.views}</Td>
-                              </Tr>
-                            ))}
+                            {myBoardList !== null &&
+                              myBoardList.map((myBoard) => (
+                                <Tr
+                                  _hover={{
+                                    cursor: "pointer",
+                                  }}
+                                  key={myBoard.id}
+                                  onClick={() =>
+                                    navigate("/board/" + myBoard.id)
+                                  }
+                                >
+                                  {categoryTopics !== "origin" && (
+                                    <Td>
+                                      <YoutubeInfo
+                                        link={myBoard.link}
+                                        extraThumbnail={true}
+                                        thumbnailWidth={120}
+                                        thumbnailHeight={70}
+                                      />
+                                    </Td>
+                                  )}
+                                  <Td>{myBoard.title}</Td>
+                                  <Td>{myBoard.nickname}</Td>
+                                  <Td>{myBoard.created_at}</Td>
+                                  <Td>{myBoard.countlike}</Td>
+                                  <Td>{myBoard.views}</Td>
+                                </Tr>
+                              ))}
                           </Tbody>
                         </Table>
                       </TableContainer>{" "}
@@ -262,7 +262,7 @@ function MemberInfo(props) {
             <CardFooter></CardFooter>
           </Card>
         )}
-        {myFavoriteBoard && <MemberInfoMyFavoriteBoard loginInfo={loginInfo} />}
+        {myFavoriteBoard && <MemberInfoMyFriendList loginInfo={loginInfo} />}
       </Flex>
     </>
   );
