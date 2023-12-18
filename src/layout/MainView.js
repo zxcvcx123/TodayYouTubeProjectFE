@@ -22,23 +22,21 @@ import {
   CardBody,
   CardFooter,
 } from "@chakra-ui/react";
-import React, {useContext, useEffect, useState} from "react";
-import {MainBoardList} from "./MainBoardList";
+import React, { useContext, useEffect, useState } from "react";
+import { MainBoardList } from "./MainBoardList";
 import axios from "axios";
-import {AddIcon, ChevronDownIcon, HamburgerIcon} from "@chakra-ui/icons";
-import {useLocation, useNavigate} from "react-router-dom";
+import { AddIcon, ChevronDownIcon, HamburgerIcon } from "@chakra-ui/icons";
+import { useLocation, useNavigate } from "react-router-dom";
 import YoutubeInfo from "../component/YoutubeInfo";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faRankingStar, faThumbsUp} from "@fortawesome/free-solid-svg-icons";
-import {DetectLoginContext} from "../component/LoginProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRankingStar, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import { DetectLoginContext } from "../component/LoginProvider";
+import ReactPlayer from "react-player";
 import LoadingPage from "../component/LoadingPage";
 
 export function MainView() {
   /* 로그인 정보 컨텍스트 */
-  const {token, handleLogout, loginInfo, validateToken} =
+  const { token, handleLogout, loginInfo, validateToken } =
     useContext(DetectLoginContext);
 
   const [category, setCategory] = useState("all");
@@ -123,7 +121,7 @@ export function MainView() {
     if (loginInfo !== null) {
       const memberInfo = loginInfo.member_id;
 
-      axios.get("/api/visitor", {params: {member_id: memberInfo}});
+      axios.get("/api/visitor", { params: { member_id: memberInfo } });
     }
   }, []);
 
@@ -211,16 +209,24 @@ export function MainView() {
   return (
     <Center>
       <Box w="1400px" h="2180px" pt={"50px"}>
-        <Flex mb={"30px"} >
-
+        <Flex mb={"30px"}>
           {/* --------------- 사이드 베스트 영상 선택 창 --------------- */}
-          <Box w="300px" bg={"white"} boxShadow={"0px 4px 10px rgba(0, 0, 0, 0.1)"}>
+          <Box
+            w="300px"
+            bg={"white"}
+            boxShadow={"0px 4px 10px rgba(0, 0, 0, 0.1)"}
+          >
             <Box>
               <Flex my={"10px"} justifyContent={"space-around"}>
                 <Button
-                  backgroundColor={isDay ? "rgb(94,72,147)" : "rgb(184,235,246)"}
+                  backgroundColor={
+                    isDay ? "rgb(94,72,147)" : "rgb(184,235,246)"
+                  }
                   color={isDay ? "rgb(255,255,255)" : "rgb(0,0,0)"}
-                  _hover={{backgroundColor: "rgb(94,72,147)", color: "rgb(255,255,255)"}}
+                  _hover={{
+                    backgroundColor: "rgb(94,72,147)",
+                    color: "rgb(255,255,255)",
+                  }}
                   value="daily"
                   onClick={(e) => {
                     setIsDay(true);
@@ -233,9 +239,14 @@ export function MainView() {
                   하루
                 </Button>
                 <Button
-                  backgroundColor={isWeek ? "rgb(94,72,147)" : "rgb(184,235,246)"}
+                  backgroundColor={
+                    isWeek ? "rgb(94,72,147)" : "rgb(184,235,246)"
+                  }
                   color={isWeek ? "rgb(255,255,255)" : "rgb(0,0,0)"}
-                  _hover={{backgroundColor: "rgb(94,72,147)", color: "rgb(255,255,255)"}}
+                  _hover={{
+                    backgroundColor: "rgb(94,72,147)",
+                    color: "rgb(255,255,255)",
+                  }}
                   value="weekly"
                   onClick={(e) => {
                     setIsDay(false);
@@ -248,9 +259,14 @@ export function MainView() {
                   이번주
                 </Button>
                 <Button
-                  backgroundColor={isMonth ? "rgb(94,72,147)" : "rgb(184,235,246)"}
+                  backgroundColor={
+                    isMonth ? "rgb(94,72,147)" : "rgb(184,235,246)"
+                  }
                   color={isMonth ? "rgb(255,255,255)" : "rgb(0,0,0)"}
-                  _hover={{backgroundColor: "rgb(94,72,147)", color: "rgb(255,255,255)"}}
+                  _hover={{
+                    backgroundColor: "rgb(94,72,147)",
+                    color: "rgb(255,255,255)",
+                  }}
                   value="monthly"
                   onClick={(e) => {
                     setIsDay(false);
@@ -265,7 +281,7 @@ export function MainView() {
               </Flex>
             </Box>
             <Box ml={2}>
-              <FontAwesomeIcon icon={faRankingStar}/> {dateSort} 베스트 영상
+              <FontAwesomeIcon icon={faRankingStar} /> {dateSort} 베스트 영상
               <Text fontSize="0.8rem" color={"rgb(50,50,50)"}>
                 - {dateSort} 가장 추천을 많이 받은 영상들입니다.
               </Text>
@@ -298,22 +314,26 @@ export function MainView() {
             {/*</Box>*/}
           </Box>
 
-
           {/* --------------- 메인 유튜브 영상 출력 --------------- */}
           <Center w={"1100px"}>
-            <Box boxShadow={"0px 4px 10px rgba(0, 0, 0, 0.1)"} h={"600px"} w={"1000px"} bg={"white"}
-                 p={"50px"}>
+            <Box
+              boxShadow={"0px 4px 10px rgba(0, 0, 0, 0.1)"}
+              h={"600px"}
+              w={"1000px"}
+              bg={"white"}
+              p={"50px"}
+            >
               <Box key={mainShowLink}>
                 {mainShowLink && (
                   <YoutubeInfo
                     link={mainShowLink}
                     extraVideo={true}
-                    opts={{height: "500px", width: "900px"}}
+                    opts={{ height: "500px", width: "900px" }}
                   />
                 )}
               </Box>
               <Box>
-                <Button color={"rgb(11,121,168)"} variant={"link"} bg={"white"} onClick={() => navigate("board/list?category=" + linkNameEng)}>
+                <Button color={"rgb(11,121,168)"} variant={"link"} bg={"white"}>
                   {linkCategory}게시판으로 이동하기 >
                 </Button>
               </Box>
@@ -321,9 +341,7 @@ export function MainView() {
           </Center>
         </Flex>
 
-
-        {/* --------------- 1 ~ 5위 썸네일 --------------- */
-        }
+        {/* --------------- 1 ~ 5위 썸네일 --------------- */}
         <Flex border={"3px solid blue"} backgroundColor={"gray"}>
           <Box>
             <Flex h={"15%"} color={"white"} fontSize={"1.5rem"}>
@@ -333,7 +351,7 @@ export function MainView() {
             </Flex>
             <Box
               key={firstList.link}
-              _hover={{cursor: "pointer"}}
+              _hover={{ cursor: "pointer" }}
               w={"100%"}
               h={"82%"}
               border={"1px"}
@@ -343,7 +361,7 @@ export function MainView() {
                 setMainShowLink(firstList.link);
               }}
             >
-              <YoutubeInfo link={firstList.link} extraThumbnail={true}/>
+              <YoutubeInfo link={firstList.link} extraThumbnail={true} />
             </Box>
           </Box>
           <Flex w={"80%"} ml={5}>
@@ -364,7 +382,7 @@ export function MainView() {
                     mt={"20px"}
                     mb={"25px"}
                   >
-                    <br/>
+                    <br />
                     {otherList.indexOf(other) + 2}위
                   </Box>
                   <Box
@@ -374,76 +392,19 @@ export function MainView() {
                     border={"1px"}
                     borderColor={"orange"}
                     onClick={() => {
-                      setLinkCategory(firstList.categoryName);
-                      setMainShowLink(firstList.link);
-                      setLinkNameEng(firstList.name_eng);
+                      setLinkCategory(other.categoryName);
+                      setMainShowLink(other.link);
                     }}
-                    _hover={{cursor: "pointer"}}
+                    _hover={{ cursor: "pointer" }}
                   >
-                    <YoutubeInfo
-                      link={other.link}
-                      extraThumbnail={true}
-                    />
+                    <YoutubeInfo link={other.link} extraThumbnail={true} />
                   </Box>
                 </Box>
               ))}
           </Flex>
-                <Flex w={"80%"} ml={5}>
-                  {otherList &&
-                    otherList.map((other) => (
-                      <Box
-                        w={"25%"}
-                        border={"1px"}
-                        borderColor={"white"}
-                        onClick={() => {
-                          setLinkCategory(other.categoryName);
-                          setMainShowLink(other.link);
-                          setLinkNameEng(other.name_eng);
-                        }}
-                        _hover={{ cursor: "pointer" }}
-                        key={other.id}
-
-                      >
-                        <Box
-                          h={"20%"}
-                          color={"white"}
-                          key={other.link}
-                          ml={12}
-                          fontSize={"1.2rem"}
-                          mt={"20px"}
-                          mb={"25px"}
-                        >
-                          <br />
-                          {otherList.indexOf(other) + 2}위
-                        </Box>
-                        <Box
-                          w="100%"
-                          h="60%"
-                          key={other.id}
-                          border={"1px"}
-                          borderColor={"orange"}
-                          onClick={() => {
-                            setLinkCategory(other.categoryName);
-                            setMainShowLink(other.link);
-                          }}
-                          _hover={{ cursor: "pointer" }}
-                        >
-                          <YoutubeInfo
-                            link={other.link}
-                            extraThumbnail={true}
-                          />
-                        </Box>
-                      </Box>
-                    ))}
-                </Flex>
-              </Flex>
-            </Box>
-          </Box>
         </Flex>
 
-
-        {/* --------------- 최신 게시글 리스트 --------------- */
-        }
+        {/* --------------- 최신 게시글 리스트 --------------- */}
         <MainBoardList
           mainBoardList2={mainBoardList2}
           mainBoardList3={mainBoardList3}
@@ -456,6 +417,5 @@ export function MainView() {
         />
       </Box>
     </Center>
-  )
-    ;
+  );
 }

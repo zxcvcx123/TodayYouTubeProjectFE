@@ -14,6 +14,7 @@ import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { Filednd } from "../file/Filednd";
 import Editor from "../component/Editor";
 import { DetectLoginContext } from "../component/LoginProvider";
+import LoadingPage from "../component/LoadingPage";
 
 function BoardWrite() {
   /* 로그인 정보 컨텍스트 */
@@ -42,16 +43,6 @@ function BoardWrite() {
 
   /* use toast */
   const toast = useToast();
-
-  // 비로그인 상태로 글쓰기 경로 직접 접근시 경고 발생 후 로그인페이지로 이동
-  useEffect(() => {
-    if (!token.detectLogin) {
-      window.alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-      navigate("/member/login");
-    }
-
-    console.log(currentParams);
-  }, []);
 
   // useEffect를 사용하여 titleError가 변경(에러발생)될 때마다 스크롤이 제목 라벨으로 이동
   useEffect(() => {
@@ -91,6 +82,11 @@ function BoardWrite() {
 
   // 작성 완료 버튼 클릭 ---------------------------------------------------
   function handleSubmit() {
+    if (!token.detectLogin) {
+      window.alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+      navigate("/member/login");
+    }
+
     setIsSubmitting(true);
     let uuSrc = getSrc();
 

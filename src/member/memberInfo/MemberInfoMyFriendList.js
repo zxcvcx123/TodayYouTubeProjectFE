@@ -282,7 +282,7 @@ export function MemberInfoMyFriendList({ loginInfo }) {
                 </Box>
               </Box>
               <Box>
-                {followingList !== null ? (
+                {followingList !== undefined ? (
                   followingList.map((following) => (
                     <Box
                       display={"flex"}
