@@ -333,7 +333,12 @@ export function MainView() {
                 )}
               </Box>
               <Box>
-                <Button color={"rgb(11,121,168)"} variant={"link"} bg={"white"}>
+                <Button
+                  color={"rgb(11,121,168)"}
+                  variant={"link"}
+                  bg={"white"}
+                  onClick={() => navigate("board/list?category=" + linkNameEng)}
+                >
                   {linkCategory}게시판으로 이동하기 >
                 </Button>
               </Box>
@@ -359,6 +364,7 @@ export function MainView() {
               onClick={() => {
                 setLinkCategory(firstList.categoryName);
                 setMainShowLink(firstList.link);
+                setLinkNameEng(firstList.name_eng);
               }}
             >
               <YoutubeInfo link={firstList.link} extraThumbnail={true} />
@@ -394,6 +400,7 @@ export function MainView() {
                     onClick={() => {
                       setLinkCategory(other.categoryName);
                       setMainShowLink(other.link);
+                      setLinkNameEng(other.name_eng);
                     }}
                     _hover={{ cursor: "pointer" }}
                   >
