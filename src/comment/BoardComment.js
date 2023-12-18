@@ -42,6 +42,7 @@ import { faHeart as faHeartRegular } from "@fortawesome/free-regular-svg-icons";
 import commentLike from "../like/CommentLike";
 import { DetectLoginContext } from "../component/LoginProvider";
 import { SocketContext } from "../socket/Socket";
+import { useLocation } from "react-router-dom";
 
 function CommentForm({
   board_id,
@@ -88,9 +89,14 @@ function CommentForm({
   }
 
   return (
-    <Flex>
-      <Textarea value={comment} onChange={(e) => setComment(e.target.value)} />
+    <Flex gap={2}>
+      <Textarea
+        bg="white"
+        value={comment}
+        onChange={(e) => setComment(e.target.value)}
+      />
       <Button
+        colorScheme="telegram"
         isDisabled={isSubmitting}
         h="80px"
         onClick={() => {
@@ -147,7 +153,6 @@ function CommentItem({
         comment_id: comment.id,
       })
       .then((response) => {
-        // setCommentLike(response.data);
         onCommentLikeClick({ ...response.data, comment_id: comment.id });
         console.log(response.data);
       })
@@ -281,11 +286,14 @@ function CommentList({
   onCommentLikeClick,
 }) {
   return (
-    <Card border="1px solid black" borderRadius="5" mt={3}>
-      <CardHeader size="md">댓글 목록</CardHeader>
-      <Divider colorScheme="whiteAlpha" />
+    <Card border="1px solid black" borderRadius="5" mt={2}>
+      {/*<CardHeader size="md">댓글 목록</CardHeader>*/}
+      {/*<Divider colorScheme="black" />*/}
       <CardBody>
-        <Stack divider={<StackDivider />} spacing="5">
+        <Stack
+          divider={<StackDivider border={"1px solid lightgray"} />}
+          spacing="5"
+        >
           {commentList.map((comment) => (
             <CommentItem
               key={comment.id}
@@ -308,32 +316,55 @@ export function BoardComment({ board_id, boardData }) {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [commentLike, setCommentLike] = useState(null);
+  const [commentList, setCommentList] = useState([]);
+  const [hasReplies, setHasReplies] = useState(true);
 
   const commentIdRef = useRef(0);
   const toast = useToast();
 
-  const [commentList, setCommentList] = useState([]);
-
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   const params = new URLSearchParams();
+  const location = useLocation();
+
+
 
   useEffect(() => {
     if (loginInfo !== null) {
       params.set("member_id", loginInfo.member_id);
       params.set("board_id", board_id);
-      if (!isSubmitting) {
-        axios.get("/api/comment/list?" + params).then((response) => {
-          setCommentList(response.data);
-        });
-      }
-      // 로그인 하지 않은 사용자도 댓글이 보이게
-    } else {
-      if (!isSubmitting) {
-        params.set("board_id", board_id);
-        axios.get("/api/comment/list?" + params).then((response) => {
-          setCommentList(response.data);
-        });
+      if (location.pathname.includes("vote")) {
+        if (loginInfo !== null) {
+          if (!isSubmitting) {
+            axios.get("/api/comment/vote/list?" + params).then((response) => {
+              setCommentList(response.data);
+            });
+          }
+
+          // 로그인 하지 않은 사용자도 댓글이 보이게
+        } else {
+          params.set("board_id", board_id);
+          if (!isSubmitting) {
+            axios.get("/api/comment/vote/list?" + params).then((response) => {
+              setCommentList(response.data);
+            });
+          }
+        }
+      } else {
+        if (!isSubmitting) {
+          axios.get("/api/comment/list?" + params).then((response) => {
+            setCommentList(response.data);
+          });
+        }
+
+        // 로그인 하지 않은 사용자도 댓글이 보이게
+        else {
+          if (!isSubmitting) {
+            axios.get("/api/comment/list?" + params).then((response) => {
+              setCommentList(response.data);
+            });
+          }
+        }
       }
     }
   }, [isSubmitting, loginInfo]);
@@ -358,20 +389,37 @@ export function BoardComment({ board_id, boardData }) {
   function handleSubmit(comment) {
     setIsSubmitting(true);
     console.log("실행 여부 확인");
-    axios
-      .post("/api/comment/add", {
-        comment: comment.comment,
-        board_id: comment.board_id,
-        member_id: loginInfo.member_id,
-      })
-      .then(() => {
-        toast({
-          description: "댓글이 등록되었습니다.",
-          status: "success",
-        });
-      })
-      .catch((error) => console.log(error))
-      .finally(() => setIsSubmitting(false));
+    if (location.pathname.includes("vote")) {
+      axios
+        .post("/api/comment/vote/add", {
+          comment: comment.comment,
+          board_id: comment.board_id,
+          member_id: loginInfo.member_id,
+        })
+        .then(() => {
+          toast({
+            description: "댓글이 등록되었습니다.",
+            status: "success",
+          });
+        })
+        .catch((error) => console.log(error))
+        .finally(() => setIsSubmitting(false));
+    } else {
+      axios
+        .post("/api/comment/add", {
+          comment: comment.comment,
+          board_id: comment.board_id,
+          member_id: loginInfo.member_id,
+        })
+        .then(() => {
+          toast({
+            description: "댓글이 등록되었습니다.",
+            status: "success",
+          });
+        })
+        .catch((error) => console.log(error))
+        .finally(() => setIsSubmitting(false));
+    }
   }
 
   // 댓글 알람가게 하기
