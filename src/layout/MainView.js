@@ -333,19 +333,21 @@ export function MainView() {
                     extraVideo={true}
                     opts={{ height: "500px", width: "900px" }}
                   />*/
-                  <ReactPlayer
-                    className="video-container"
-                    url={mainShowLink}
-                    width={"900px"}
-                    height={"500px"}
-                    config={{
-                      youtube: {
-                        playerVars: {
-                          autoplay: 0,
+                  <>
+                    <ReactPlayer
+                      className="video-container"
+                      url={mainShowLink}
+                      width={"900px"}
+                      height={"500px"}
+                      config={{
+                        youtube: {
+                          playerVars: {
+                            autoplay: 0,
+                          },
                         },
-                      },
-                    }}
-                  />
+                      }}
+                    />
+                  </>
                 )}
               </Box>
               <Box>
