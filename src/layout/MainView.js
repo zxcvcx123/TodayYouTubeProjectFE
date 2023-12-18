@@ -215,7 +215,7 @@ export function MainView() {
           <Box
             w="300px"
             bg={"white"}
-            boxShadow={"0px 4px 10px rgba(0, 0, 0, 0.1)"}
+            boxShadow={"0px 4px 10px rgba(0, 0, 0, 0.3)"}
           >
             <Box>
               <Flex my={"10px"} justifyContent={"space-around"}>
@@ -318,10 +318,10 @@ export function MainView() {
           {/* --------------- 메인 유튜브 영상 출력 --------------- */}
           <Center w={"1100px"}>
             <Box
-              boxShadow={"0px 4px 10px rgba(0, 0, 0, 0.1)"}
+              boxShadow={"0px 4px 10px rgba(0, 0, 0, 0.3)"}
               h={"600px"}
               w={"1000px"}
-              bg={"white"}
+              bg={"rgb(210,210,210)"}
               p={"50px"}
             >
               <Box key={mainShowLink}>
@@ -392,10 +392,10 @@ export function MainView() {
             <Flex h={"20%"}>
               <Badge
                 fontSize="20px"
-                colorScheme="green"
+                colorScheme="yellow"
                 h={"90%"}
                 mr={"5px"}
-                variant={"solid"}
+                variant={"subtle"}
               >
                 1위
               </Badge>
@@ -449,10 +449,21 @@ export function MainView() {
                 <Flex key={other.link}>
                   <Badge
                     fontSize="20px"
-                    colorScheme="green"
+                    colorScheme={
+                      otherList.indexOf(other) + 2 === 2
+                        ? "blue"
+                        : otherList.indexOf(other) + 2 === 3
+                          ? "orange"
+                          : "purple"
+                    }
                     h={"90%"}
                     mr={"5px"}
-                    variant={"solid"}
+                    variant={
+                      otherList.indexOf(other) + 2 === 2 ||
+                      otherList.indexOf(other) + 2 === 3
+                        ? "subtle"
+                        : "outline"
+                    }
                   >
                     {otherList.indexOf(other) + 2}위
                   </Badge>
