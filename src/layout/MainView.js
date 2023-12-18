@@ -126,10 +126,12 @@ export function MainView() {
   useEffect(() => {
     if (loginInfo !== null) {
       const memberInfo = loginInfo.member_id;
-
+      console.log("멤버 아이디 방문자 보내기" + loginInfo.member_id);
       axios.get("/api/visitor", { params: { member_id: memberInfo } });
+    } else {
+      console.log("loginInfo null이라서 방문자 안 보내지는거??");
     }
-  }, []);
+  }, [loginInfo]);
 
   // 사이드바 카테고리 변경
   const handleCategoryChange = (newCategory) => {
