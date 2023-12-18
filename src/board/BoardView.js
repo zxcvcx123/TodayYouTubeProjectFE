@@ -270,7 +270,11 @@ function BoardView() {
     }
 
     return (
-      <FormControl backgroundColor={"rgba(0,0,0,0.9)"} p={"10px"}>
+      <FormControl
+        backgroundColor={"rgba(0,0,0,0.9)"}
+        p={"10px"}
+        boxShadow={"0 2px 10px rgba(0, 0, 0, 0.3)"}
+      >
         <FormLabel fontSize="xl" fontWeight="bold" color={"rgb(255,255,255)"}>
           추천 유튜브 영상
         </FormLabel>
