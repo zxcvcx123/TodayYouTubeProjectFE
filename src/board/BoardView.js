@@ -301,6 +301,15 @@ function BoardView() {
       return null;
     }
 
+    // 채널 설명의 최대 표시 길이
+    const maxDescriptionLength = 120;
+
+    // 채널 설명이 최대 길이보다 길 경우 일부만 표시하고 "..." 추가
+    const truncatedDescription =
+      channelInfo.description.length > maxDescriptionLength
+        ? `${channelInfo.description.slice(0, maxDescriptionLength)}...`
+        : channelInfo.description;
+
     return (
       <Box>
         <Flex>
@@ -328,7 +337,10 @@ function BoardView() {
         <Text color={"white"} fontWeight={"bold"}>
           채널명 : {channelInfo.title}
         </Text>
-        <Text color={"white"}>{channelInfo.description}</Text>
+        <Text color={"white"} fontWeight={"bold"}>
+          채널설명
+        </Text>
+        <Text color={"white"}>{truncatedDescription}</Text>
       </Box>
     );
   }
