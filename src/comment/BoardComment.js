@@ -43,6 +43,7 @@ import commentLike from "../like/CommentLike";
 import { DetectLoginContext } from "../component/LoginProvider";
 import { SocketContext } from "../socket/Socket";
 import { useLocation } from "react-router-dom";
+import { css } from "@emotion/react";
 
 function CommentForm({
   board_id,
@@ -94,10 +95,16 @@ function CommentForm({
         bg="white"
         value={comment}
         onChange={(e) => setComment(e.target.value)}
+        isDisabled={!loginInfo} // Disable textarea if member_id is null
+        placeholder={
+          loginInfo
+            ? "댓글을 입력하세요."
+            : "로그인한 사용자만 댓글 입력이 가능합니다."
+        }
       />
       <Button
         colorScheme="telegram"
-        isDisabled={isSubmitting}
+        isDisabled={isSubmitting || !loginInfo}
         h="80px"
         onClick={() => {
           handleSubmit();
@@ -327,43 +334,19 @@ export function BoardComment({ board_id, boardData }) {
   const params = new URLSearchParams();
   const location = useLocation();
 
-
   useEffect(() => {
-    if (loginInfo !== null) {
-      params.set("member_id", loginInfo.member_id);
-      params.set("board_id", board_id);
-      if (location.pathname.includes("vote")) {
-        if (loginInfo !== null) {
-          if (!isSubmitting) {
-            axios.get("/api/comment/vote/list?" + params).then((response) => {
-              setCommentList(response.data);
-            });
-          }
-
-          // 로그인 하지 않은 사용자도 댓글이 보이게
-        } else {
-          params.set("board_id", board_id);
-          if (!isSubmitting) {
-            axios.get("/api/comment/vote/list?" + params).then((response) => {
-              setCommentList(response.data);
-            });
-          }
-        }
-      } else {
-        if (!isSubmitting) {
-          axios.get("/api/comment/list?" + params).then((response) => {
-            setCommentList(response.data);
-          });
-        }
-
-        // 로그인 하지 않은 사용자도 댓글이 보이게
-        else {
-          if (!isSubmitting) {
-            axios.get("/api/comment/list?" + params).then((response) => {
-              setCommentList(response.data);
-            });
-          }
-        }
+    params.set("board_id", board_id);
+    if (location.pathname.includes("vote")) {
+      if (!isSubmitting) {
+        axios.get("/api/comment/vote/list?" + params).then((response) => {
+          setCommentList(response.data);
+        });
+      }
+    } else {
+      if (!isSubmitting) {
+        axios.get("/api/comment/list?" + params).then((response) => {
+          setCommentList(response.data);
+        });
       }
     }
   }, [isSubmitting, loginInfo]);
