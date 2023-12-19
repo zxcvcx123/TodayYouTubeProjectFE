@@ -419,7 +419,7 @@ export function MainView() {
                       whiteSpace={"nowrap"}
                       overflow={"hidden"}
                       textOverflow={"ellipsis"}
-                      color={"rgb(102,206,252)"}
+                      color={"rgb(255,255,255)"}
                       onClick={() => navigate("board/" + mainShowId)}
                       _hover={{ cursor: "pointer" }}
                     >
