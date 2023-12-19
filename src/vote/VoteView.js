@@ -43,6 +43,7 @@ import { CheckIcon } from "@chakra-ui/icons";
 import { SocketContext } from "../socket/Socket";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faAward,
   faCheck,
   faCheckDouble,
   faCircleCheck,
@@ -74,6 +75,9 @@ function VoteView() {
 
   const totalVotes = (optionOneVotes || 0) + (optionTwoVotes || 0);
 
+  // 투표 마감기한 (현재 7일)
+  const [voteEndTime, setVoteEndTime] = useState(0);
+
   //URL 매개변수 추출
   const { id } = useParams();
 
@@ -102,6 +106,9 @@ function VoteView() {
       // count된 숫자 넣고 숫자에 따라서 set 해서 처음 % 반영
       setOptionOneVotes(res.data.voted_a);
       setOptionTwoVotes(res.data.voted_b);
+
+      // 마감기한 설정
+      setVoteEndTime(1);
     });
 
     // axios.get 해서 버튼을 눌렀는지 안눌렀는지 게시판번호/아이디 기준으로 조회
@@ -217,7 +224,7 @@ function VoteView() {
   }
 
   return (
-    <Box>
+    <Box w={"80%"} m={"0 auto"}>
       <Box mb={5}>
         <Heading>투표 게시판</Heading>
       </Box>
@@ -250,10 +257,10 @@ function VoteView() {
           {/* 좋아요, 조회수, 투표수 */}
           <Flex alignItems={"center"} gap={"5"}>
             <Text> | 투표 수 : {board.voted_all}</Text>
-            {board.voteAgo < 8 && (
-              <Text> | 마감기한 : D-{8 - board.voteAgo}</Text>
+            {board.voteAgo < voteEndTime && (
+              <Text> | 마감기한 : D-{voteEndTime - board.voteAgo}</Text>
             )}
-            {board.voteAgo >= 8 && <Text> | 마감된 투표</Text>}
+            {board.voteAgo >= voteEndTime && <Text> | 마감된 투표</Text>}
           </Flex>
         </Flex>
       </FormControl>
@@ -263,8 +270,8 @@ function VoteView() {
       {/* -------------------- 유튜브 섹션 -------------------- */}
       {/*{renderYoutubeSection()}*/}
       <Box position={"relative"} w={"100%"}>
-        {/* 투표 마감시 나오는 화면 */}
-        {board.voteAgo >= 8 && (
+        {/* 투표 마감시 나오는 화면 시작 */}
+        {board.voteAgo >= voteEndTime && (
           <>
             <Box
               position={"absolute"}
@@ -272,6 +279,7 @@ function VoteView() {
               h={"100%"}
               opacity={"0.3"}
               bgColor={"gray"}
+              zIndex={"-100"}
             ></Box>
             <Box
               opacity={"1"}
@@ -280,11 +288,13 @@ function VoteView() {
               left={"50%"}
               transform={"translate(-50%, -50%)"}
               bg={"gray"}
+              zIndex={"901"}
             >
               <Heading fontSize={"5rem"}>투표 마감</Heading>
             </Box>
           </>
         )}
+        {/* 투표 마감시 나오는 화면 끝*/}
         <Box mb={5}>
           <Heading textAlign={"center"}>{board.title}</Heading>
         </Box>
@@ -295,7 +305,31 @@ function VoteView() {
             w={"100%"}
             justifyContent={"space-between"}
           >
-            <Box>
+            <Box position={"relative"}>
+              {/* 투표 마감시 나오는 메달 시작 */}
+              {board.voteAgo >= voteEndTime &&
+                optionOneVotes > optionTwoVotes && (
+                  <Box position={"absolute"}>
+                    <FontAwesomeIcon
+                      icon={faAward}
+                      fontSize={"150px"}
+                      color="blue"
+                      zIndex={"902"}
+                    />
+                  </Box>
+                )}
+              {board.voteAgo >= voteEndTime &&
+                optionOneVotes === optionTwoVotes && (
+                  <Box position={"absolute"}>
+                    <FontAwesomeIcon
+                      icon={faAward}
+                      fontSize={"150px"}
+                      color="blue"
+                      zIndex={"902"}
+                    />
+                  </Box>
+                )}
+              {/* 투표 마감시 나오는 메달 끝 */}
               <YoutubeInfo link={board.link_a} extraVideo={true} />
               {loginInfo === null ? (
                 <Button
@@ -337,8 +371,31 @@ function VoteView() {
               <Heading textAlign={"center"}>VS</Heading>
             </Box>
             <Box>
+              {/* 투표 마감시 나오는 메달 시작 */}
+              {board.voteAgo >= voteEndTime &&
+                optionOneVotes < optionTwoVotes && (
+                  <Box position={"absolute"}>
+                    <FontAwesomeIcon
+                      icon={faAward}
+                      fontSize={"150px"}
+                      color="red"
+                      zIndex={"902"}
+                    />
+                  </Box>
+                )}
+              {board.voteAgo >= voteEndTime &&
+                optionOneVotes === optionTwoVotes && (
+                  <Box position={"absolute"}>
+                    <FontAwesomeIcon
+                      icon={faAward}
+                      fontSize={"150px"}
+                      color="red"
+                      zIndex={"902"}
+                    />
+                  </Box>
+                )}
+              {/* 투표 마감시 나오는 메달 끝 */}
               <YoutubeInfo link={board.link_b} extraVideo={true} />
-
               {loginInfo === null ? (
                 <Button
                   mt={2}

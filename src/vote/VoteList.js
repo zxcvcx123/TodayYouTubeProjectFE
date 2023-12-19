@@ -58,6 +58,8 @@ function VoteList() {
   const [boardList, setBoardList] = useState(null);
   const [page, setPage] = useState([]);
   const [listProgressBar, setListProgressBar] = useState();
+  //투표 마감기한 (기본 7일)
+  const [voteEndTime, setVoteEndTime] = useState(0);
 
   // 현재 URL 파악하기
   const location = useLocation();
@@ -73,6 +75,8 @@ function VoteList() {
     axios.get("/api/vote/list?" + params).then((res) => {
       setBoardList(res.data.vote);
       setPage(res.data.page);
+      // 투표 마감기한 초기 설정
+      setVoteEndTime(8);
     });
   }, [location]);
 
@@ -130,7 +134,7 @@ function VoteList() {
                     cursor: "pointer",
                   }}
                 >
-                  {board.voteAgo >= 8 && (
+                  {board.voteAgo >= voteEndTime && (
                     <>
                       <Box
                         position={"absolute"}
@@ -177,9 +181,9 @@ function VoteList() {
                         <Flex mr={"5px"}>
                           <Box>
                             <Heading fontSize={"1.25rem"}>
-                              {board.voteAgo >= 8
+                              {board.voteAgo >= voteEndTime
                                 ? "투표 종료"
-                                : `D-${8 - board.voteAgo}`}
+                                : `D-${voteEndTime - board.voteAgo}`}
                             </Heading>
                           </Box>
                         </Flex>
