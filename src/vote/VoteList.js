@@ -10,6 +10,7 @@ import {
   Center,
   Flex,
   Heading,
+  Img,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -46,6 +47,7 @@ import pageCount from "../page/PageCount";
 import VotePage from "./VotePage";
 import VoteSearch from "./VoteSearch";
 import ProgressBar from "./ProgressBar";
+import { voteEndImg } from "../assets/Image";
 
 function VoteList() {
   /* 로그인 정보 컨텍스트 */
@@ -119,6 +121,7 @@ function VoteList() {
               boardList.map((board) => (
                 <Card
                   key={board.id}
+                  position={"relative"}
                   w={"100%"}
                   border={"1px solid lightgray"}
                   onClick={() => navigate("/board/vote/" + board.id)}
@@ -127,6 +130,27 @@ function VoteList() {
                     cursor: "pointer",
                   }}
                 >
+                  {board.voteAgo >= 8 && (
+                    <>
+                      <Box
+                        position={"absolute"}
+                        w={"100%"}
+                        h={"100%"}
+                        opacity={"0.3"}
+                        bgColor={"gray"}
+                      ></Box>
+                      <Box
+                        opacity={"1"}
+                        position={"absolute"}
+                        top={"50%"}
+                        left={"50%"}
+                        transform={"translate(-50%, -50%)"}
+                        bg={"gray"}
+                      >
+                        <Heading fontSize={"3rem"}>투표 마감</Heading>
+                      </Box>
+                    </>
+                  )}
                   <CardHeader p={"1%"}>
                     {/* 제목 출력 */}
                     <Flex justifyContent={"space-between"}>
@@ -137,17 +161,28 @@ function VoteList() {
                       </Box>
                       <Flex
                         alignItems={"end"}
-                        w={"17%"}
-                        justifyContent={"space-evenly"}
+                        w={"25%"}
+                        justifyContent={"space-between"}
                       >
-                        <Box>
-                          <Heading fontSize={"1.25rem"}>투표 현황: </Heading>
-                        </Box>
-                        <Box>
-                          <Heading fontSize={"1.25rem"}>
-                            {board.voted_all}
-                          </Heading>
-                        </Box>
+                        <Flex gap={5} mr={"40px"}>
+                          <Box>
+                            <Heading fontSize={"1.25rem"}>투표 현황 </Heading>
+                          </Box>
+                          <Box>
+                            <Heading fontSize={"1.25rem"}>
+                              {board.voted_all}
+                            </Heading>
+                          </Box>
+                        </Flex>
+                        <Flex mr={"5px"}>
+                          <Box>
+                            <Heading fontSize={"1.25rem"}>
+                              {board.voteAgo >= 8
+                                ? "투표 종료"
+                                : `D-${8 - board.voteAgo}`}
+                            </Heading>
+                          </Box>
+                        </Flex>
                       </Flex>
                     </Flex>
                   </CardHeader>

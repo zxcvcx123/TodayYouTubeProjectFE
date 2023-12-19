@@ -250,6 +250,10 @@ function VoteView() {
           {/* 좋아요, 조회수, 투표수 */}
           <Flex alignItems={"center"} gap={"5"}>
             <Text> | 투표 수 : {board.voted_all}</Text>
+            {board.voteAgo < 8 && (
+              <Text> | 마감기한 : D-{8 - board.voteAgo}</Text>
+            )}
+            {board.voteAgo >= 8 && <Text> | 마감된 투표</Text>}
           </Flex>
         </Flex>
       </FormControl>
@@ -258,104 +262,130 @@ function VoteView() {
 
       {/* -------------------- 유튜브 섹션 -------------------- */}
       {/*{renderYoutubeSection()}*/}
-      <Box w={"100%"} mb={5}>
-        <Heading textAlign={"center"}>{board.title}</Heading>
-      </Box>
-      <Box>
-        <Flex
-          mb={2}
-          alignItems={"center"}
-          w={"100%"}
-          justifyContent={"space-between"}
-        >
-          <Box>
-            <YoutubeInfo link={board.link_a} extraVideo={true} />
-            {loginInfo === null ? (
-              <Button
-                mt={2}
-                colorScheme="blue"
-                w="100%"
-                h={20}
-                onClick={loginModal.onOpen}
-              >
-                <FontAwesomeIcon icon={faCheck} />
-              </Button>
-            ) : (
-              <Button
-                mt={2}
-                colorScheme="blue"
-                w="100%"
-                h={20}
-                onClick={() => {
-                  handleVoteA();
-                }}
-                isDisabled={
-                  (voteChecked === 1 && voteNot === 0) || IsConnected === false
-                    ? true
-                    : false
-                }
-              >
-                {IsConnected === false ? (
-                  <Text>연결 중...</Text>
-                ) : voteChecked === 1 && voteNot === 0 ? (
-                  <FontAwesomeIcon icon={faCircleCheck} size="xl" />
-                ) : (
+      <Box position={"relative"} w={"100%"}>
+        {/* 투표 마감시 나오는 화면 */}
+        {board.voteAgo >= 8 && (
+          <>
+            <Box
+              position={"absolute"}
+              w={"100%"}
+              h={"100%"}
+              opacity={"0.3"}
+              bgColor={"gray"}
+            ></Box>
+            <Box
+              opacity={"1"}
+              position={"absolute"}
+              top={"50%"}
+              left={"50%"}
+              transform={"translate(-50%, -50%)"}
+              bg={"gray"}
+            >
+              <Heading fontSize={"5rem"}>투표 마감</Heading>
+            </Box>
+          </>
+        )}
+        <Box mb={5}>
+          <Heading textAlign={"center"}>{board.title}</Heading>
+        </Box>
+        <Box>
+          <Flex
+            mb={2}
+            alignItems={"center"}
+            w={"100%"}
+            justifyContent={"space-between"}
+          >
+            <Box>
+              <YoutubeInfo link={board.link_a} extraVideo={true} />
+              {loginInfo === null ? (
+                <Button
+                  mt={2}
+                  colorScheme="blue"
+                  w="100%"
+                  h={20}
+                  onClick={loginModal.onOpen}
+                >
                   <FontAwesomeIcon icon={faCheck} />
-                )}
-              </Button>
-            )}
-          </Box>
-          <Box w={"20%"}>
-            <Heading textAlign={"center"}>VS</Heading>
-          </Box>
-          <Box>
-            <YoutubeInfo link={board.link_b} extraVideo={true} />
+                </Button>
+              ) : (
+                <Button
+                  mt={2}
+                  colorScheme="blue"
+                  w="100%"
+                  h={20}
+                  onClick={() => {
+                    handleVoteA();
+                  }}
+                  isDisabled={
+                    (voteChecked === 1 && voteNot === 0) ||
+                    IsConnected === false
+                      ? true
+                      : false
+                  }
+                >
+                  {IsConnected === false ? (
+                    <Text>연결 중...</Text>
+                  ) : voteChecked === 1 && voteNot === 0 ? (
+                    <FontAwesomeIcon icon={faCircleCheck} size="xl" />
+                  ) : (
+                    <FontAwesomeIcon icon={faCheck} />
+                  )}
+                </Button>
+              )}
+            </Box>
+            <Box w={"20%"}>
+              <Heading textAlign={"center"}>VS</Heading>
+            </Box>
+            <Box>
+              <YoutubeInfo link={board.link_b} extraVideo={true} />
 
-            {loginInfo === null ? (
-              <Button
-                mt={2}
-                colorScheme="red"
-                w="100%"
-                h={20}
-                onClick={loginModal.onOpen}
-              >
-                <FontAwesomeIcon icon={faCheck} />
-              </Button>
-            ) : (
-              <Button
-                mt={2}
-                colorScheme="red"
-                w="100%"
-                h={20}
-                onClick={() => {
-                  handleVoteB();
-                }}
-                isDisabled={
-                  (voteChecked !== 1 && voteNot === 0) || IsConnected === false
-                    ? true
-                    : false
-                }
-              >
-                {IsConnected === false ? (
-                  <Text>연결 중...</Text>
-                ) : voteChecked !== 1 && voteNot === 0 ? (
-                  <FontAwesomeIcon icon={faCircleCheck} size="xl" />
-                ) : (
+              {loginInfo === null ? (
+                <Button
+                  mt={2}
+                  colorScheme="red"
+                  w="100%"
+                  h={20}
+                  onClick={loginModal.onOpen}
+                >
                   <FontAwesomeIcon icon={faCheck} />
-                )}
-              </Button>
-            )}
-          </Box>
-        </Flex>
-      </Box>
-      {/* -------------------- 본문 -------------------- */}
+                </Button>
+              ) : (
+                <Button
+                  mt={2}
+                  colorScheme="red"
+                  w="100%"
+                  h={20}
+                  onClick={() => {
+                    handleVoteB();
+                  }}
+                  isDisabled={
+                    (voteChecked !== 1 && voteNot === 0) ||
+                    IsConnected === false
+                      ? true
+                      : false
+                  }
+                >
+                  {IsConnected === false ? (
+                    <Text>연결 중...</Text>
+                  ) : voteChecked !== 1 && voteNot === 0 ? (
+                    <FontAwesomeIcon icon={faCircleCheck} size="xl" />
+                  ) : (
+                    <FontAwesomeIcon icon={faCheck} />
+                  )}
+                </Button>
+              )}
+            </Box>
+          </Flex>
+        </Box>
+        {/* -------------------- 본문 -------------------- */}
 
-      <ProgressBar
-        optionOneVotes={optionOneVotes}
-        optionTwoVotes={optionTwoVotes}
-      />
-      <Box mt={5} textAlign={"center"}>
-        <Text fontSize={"1.5rem"}>{board.content}</Text>
+        <ProgressBar
+          optionOneVotes={optionOneVotes}
+          optionTwoVotes={optionTwoVotes}
+        />
+        <Box mt={5} textAlign={"center"}>
+          <Text fontSize={"1.5rem"}>{board.content}</Text>
+        </Box>
       </Box>
       <Divider my={5} borderColor="grey" />
 
