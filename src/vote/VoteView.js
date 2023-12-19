@@ -279,7 +279,7 @@ function VoteView() {
               h={"100%"}
               opacity={"0.3"}
               bgColor={"gray"}
-              zIndex={"-100"}
+              zIndex={"900"}
             ></Box>
             <Box
               opacity={"1"}
@@ -338,6 +338,11 @@ function VoteView() {
                   w="100%"
                   h={20}
                   onClick={loginModal.onOpen}
+                  isDisabled={
+                    IsConnected === false || board.voteAgo >= voteEndTime
+                      ? true
+                      : false
+                  }
                 >
                   <FontAwesomeIcon icon={faCheck} />
                 </Button>
@@ -352,7 +357,8 @@ function VoteView() {
                   }}
                   isDisabled={
                     (voteChecked === 1 && voteNot === 0) ||
-                    IsConnected === false
+                    IsConnected === false ||
+                    board.voteAgo >= voteEndTime
                       ? true
                       : false
                   }
@@ -403,6 +409,11 @@ function VoteView() {
                   w="100%"
                   h={20}
                   onClick={loginModal.onOpen}
+                  isDisabled={
+                    IsConnected === false || board.voteAgo >= voteEndTime
+                      ? true
+                      : false
+                  }
                 >
                   <FontAwesomeIcon icon={faCheck} />
                 </Button>
@@ -417,7 +428,8 @@ function VoteView() {
                   }}
                   isDisabled={
                     (voteChecked !== 1 && voteNot === 0) ||
-                    IsConnected === false
+                    IsConnected === false ||
+                    board.voteAgo >= voteEndTime
                       ? true
                       : false
                   }
