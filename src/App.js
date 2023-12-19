@@ -38,7 +38,7 @@ import "./index.css";
 
 import AdminManageSuspension from "./admin/AdminManageSuspension";
 import SuspensionMemberLoginPage from "./admin/SuspensionMemberLoginPage";
-
+import { AdminReportManagement } from "./admin/AdminReportManagement";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -75,6 +75,7 @@ const routes = createBrowserRouter(
         <Route path="admin" element={<AdminMain />} />
         <Route path="admin/member/list" element={<AdminMemberList />} />
         <Route path="admin/suspension" element={<AdminManageSuspension />} />
+        <Route path="admin/report" element={<AdminReportManagement />} />
         <Route path="/:member_id" element={<SuspensionMemberLoginPage />} />
         <Route path="admin/member/:member_id" element={<AdminMemberInfo />} />
         <Route path="search" element={<SearchResult />} />

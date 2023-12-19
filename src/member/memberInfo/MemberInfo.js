@@ -53,8 +53,6 @@ function MemberInfo(props) {
   /* react-router-dom */
   useEffect(() => {
     if (loginInfo !== null) {
-      const grantType = localStorage.getItem("grantType");
-      const accessToken = localStorage.getItem("accessToken");
       params.set("ob", categoryOrdedBy); // 정렬 기준
       params.set("ct", categoryTopics); // 리스트 기준
       params.set("member_id", loginInfo.member_id);

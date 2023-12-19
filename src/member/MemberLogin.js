@@ -30,6 +30,14 @@ export function MemberLogin() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const toast = useToast();
+  const { loginInfo } = useContext(DetectLoginContext);
+  if (loginInfo !== null) {
+    navigate("/");
+    toast({
+      description: "로그아웃 후 이용 바랍니다.",
+      status: "error",
+    });
+  }
   function handleLogin(event) {
     event.preventDefault();
 
