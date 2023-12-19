@@ -42,10 +42,10 @@ export function MainView() {
   const [category, setCategory] = useState("all");
   const [firstList, setFirstList] = useState(null);
   const [otherList, setOtherList] = useState(null);
-  const [dateSort, setDateSort] = useState("weekly");
+  const [dateSort, setDateSort] = useState("monthly");
   const [isDay, setIsDay] = useState(false);
-  const [isWeek, setIsWeek] = useState(true);
-  const [isMonth, setIsMonth] = useState(false);
+  const [isWeek, setIsWeek] = useState(false);
+  const [isMonth, setIsMonth] = useState(true);
 
   const [mainShowLink, setMainShowLink] = useState(null);
   const [linkCategory, setLinkCategory] = useState(null);
@@ -323,15 +323,27 @@ export function MainView() {
               bg={"white"}
               p={"50px"}
             >
-              <Box key={mainShowLink}>
+              <Box>
                 {mainShowLink && (
-                  <YoutubeInfo
-                    link={mainShowLink}
-                    extraVideo={true}
-                    opts={{ height: "500px", width: "900px" }}
+                  <ReactPlayer
+                    className="video-container"
+                    url={mainShowLink}
+                    config={{
+                      youtube: {
+                        playerVars: {
+                          autoplay: 0,
+                        },
+                      },
+                    }}
                   />
+                  // <YoutubeInfo
+                  //   link={mainShowLink}
+                  //   extraVideo={true}
+                  //   opts={{ height: "500px", width: "900px" }}
+                  // />
                 )}
               </Box>
+
               <Box>
                 <Button color={"rgb(11,121,168)"} variant={"link"} bg={"white"}>
                   {linkCategory}게시판으로 이동하기 >
@@ -376,7 +388,7 @@ export function MainView() {
                   <Box
                     h={"20%"}
                     color={"white"}
-                    key={other.link}
+                    // key={other.link}
                     ml={12}
                     fontSize={"1.2rem"}
                     mt={"20px"}

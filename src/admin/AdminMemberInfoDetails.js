@@ -30,6 +30,7 @@ import {
   Stack,
   StackDivider,
   Text,
+  Tooltip,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
@@ -50,17 +51,20 @@ function AdminMemberInfoDetails({
 
   const [suspensionReason, setSuspensionReason] = useState("");
   const [suspensionPeriod, setSuspensionPeriod] = useState(7);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const toast = useToast();
   const { onClose, isOpen, onOpen } = useDisclosure();
   const navigate = useNavigate();
 
   function handleSuspensionButton() {
+    setIsSubmitting(true);
     axios
       .put("/api/admin/member", {
         member_id: memberInfo.member_id,
         period: suspensionPeriod,
         reason: suspensionReason,
+        role_name: loginInfo.role_name,
       })
       .then(() => {
         toast({
@@ -69,7 +73,13 @@ function AdminMemberInfoDetails({
         });
         navigate("/admin/member/list?p=1");
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        toast({
+          description: "정지사유를 입력해주세요.",
+          status: "warning",
+        });
+      })
+      .finally(() => setIsSubmitting(false));
   }
 
   if (!token.detectLogin || loginInfo.role_name !== "운영자") {
@@ -129,23 +139,13 @@ function AdminMemberInfoDetails({
                     </Flex>
                   </Flex>
                   <Flex w={"100%"}>
-                    <Flex w={"50%"} borderRight={"1px solid #E2E4E8"} mr={4}>
+                    <Flex w={"50%"} mr={4}>
                       <Box>
                         <Heading size="s" textTransform="uppercase">
                           이메일
                         </Heading>
                         <Text pl={2} mt={1} pt="2" fontSize="sm">
                           {memberInfo.email}
-                        </Text>
-                      </Box>
-                    </Flex>
-                    <Flex w={"50%"}>
-                      <Box>
-                        <Heading size="s" textTransform="uppercase">
-                          전화번호
-                        </Heading>
-                        <Text pl={2} mt={1} pt="2" fontSize="sm">
-                          {memberInfo.phone_number}
                         </Text>
                       </Box>
                     </Flex>
@@ -255,10 +255,20 @@ function AdminMemberInfoDetails({
             </Card>
           </Stack>
         </CardBody>
-        <CardFooter>
-          <Button ml="70%" colorScheme="red" onClick={onOpen}>
-            회원정지
-          </Button>
+        <CardFooter w={"60%"}>
+          <Tooltip
+            label="정지중인 회원입니다"
+            isDisabled={memberInfo.role_name !== "정지회원"}
+          >
+            <Button
+              isDisabled={memberInfo.role_name === "정지회원"}
+              ml="80%"
+              colorScheme="red"
+              onClick={onOpen}
+            >
+              회원정지
+            </Button>
+          </Tooltip>
         </CardFooter>
       </Card>
 
@@ -292,9 +302,9 @@ function AdminMemberInfoDetails({
                       defaultValue={7}
                       onChange={(e) => setSuspensionPeriod(e.target.value)}
                     >
-                      <option value={7}>7</option>
-                      <option value={30}>30</option>
-                      <option value={999}>999</option>
+                      <option value={7}>7일</option>
+                      <option value={30}>30일</option>
+                      <option value={999}>999일</option>
                     </Select>
                   </Box>
                 </Stack>
@@ -305,7 +315,11 @@ function AdminMemberInfoDetails({
             <Button variant={"ghost"} onClick={onClose}>
               닫기
             </Button>
-            <Button colorScheme="red" onClick={handleSuspensionButton}>
+            <Button
+              isDisabled={isSubmitting}
+              colorScheme="red"
+              onClick={handleSuspensionButton}
+            >
               정지
             </Button>
           </ModalFooter>

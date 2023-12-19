@@ -4,8 +4,8 @@ import { Center } from "@chakra-ui/react";
 function LoadingPage(props) {
   const text = "페이지 불러오는 중...";
   return (
-    <Center h={"1000px"}>
-      <div class="header-text">
+    <Center h={"800px"}>
+      <div className="header-text">
         <span>페</span>
         <span>이</span>
         <span>지</span>

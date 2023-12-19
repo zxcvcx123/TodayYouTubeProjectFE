@@ -148,13 +148,6 @@ function AdminMemberList(props) {
                 borderColor={"black"}
                 textAlign={"center"}
               >
-                연락처
-              </Td>
-              <Td
-                fontWeight={"bold"}
-                borderColor={"black"}
-                textAlign={"center"}
-              >
                 가입일시
               </Td>
             </Tr>
@@ -164,7 +157,7 @@ function AdminMemberList(props) {
               memberList.map((member) => (
                 <Tr
                   key={member.member_id}
-                  _hover={{ backgroundColor: "red.100" }}
+                  _hover={{ backgroundColor: "red.100", cursor: "pointer" }}
                   onClick={() => navigate("/admin/member/" + member.member_id)}
                 >
                   <Td
@@ -193,7 +186,6 @@ function AdminMemberList(props) {
                     <Td textAlign={"center"}>일반[{member.role_name}]</Td>
                   )}
                   <Td textAlign={"center"}>{member.email}</Td>
-                  <Td textAlign={"center"}>{member.phone_number}</Td>
                   <Td textAlign={"center"}>{member.created_at}</Td>
                 </Tr>
               ))}

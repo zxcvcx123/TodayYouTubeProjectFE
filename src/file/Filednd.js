@@ -267,7 +267,7 @@ export function Filednd({
               </Box>
             )}
             <Text lineHeight={"50px"}>
-              파일 용량은 최대 10MB, 1개당 1MB, 최대 5개까지 가능 합니다.
+              파일 용량은 최대 10MB, 1개당 2MB, 최대 5개까지 가능 합니다.
             </Text>
           </FormLabel>
         </FormControl>

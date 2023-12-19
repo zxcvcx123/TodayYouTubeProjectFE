@@ -1,5 +1,4 @@
-
-import { Box, Button,  Flex, Heading, VStack, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Heading, VStack, Text } from "@chakra-ui/react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -46,7 +45,10 @@ export function Sidenav() {
       >
         회원목록
       </Button>
-      <Button {...buttonStyles} onClick={() => navigate("/admin/suspension")}>
+      <Button
+        {...buttonStyles}
+        onClick={() => navigate("/admin/suspension/?p=1")}
+      >
         회원정지관리
       </Button>
     </VStack>

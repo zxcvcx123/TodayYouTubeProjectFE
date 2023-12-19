@@ -62,7 +62,7 @@ function InquiryList(props) {
   // 로그인 안했을시 로그인화면으로 이동
   if (!token.detectLogin) {
     return (
-      <Box w={"80%"} m={"auto"}>
+      <Box w={"100%"} m={"auto"} h={"700px"}>
         <Alert
           // colorScheme="red"
           status="warning"
@@ -71,7 +71,7 @@ function InquiryList(props) {
           alignItems="center"
           justifyContent="center"
           textAlign="center"
-          height="200px"
+          height="100%"
         >
           <AlertIcon boxSize="40px" mr={0} />
           <AlertTitle mt={4} mb={1} fontSize="lg">
