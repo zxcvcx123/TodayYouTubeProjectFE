@@ -45,13 +45,11 @@ function BoardWrite() {
   /* use toast */
   const toast = useToast();
 
+  /* ck에디터 이미지 첨부 개수 확인 */
+  let imgSrc = document.getElementsByTagName("figure");
+
   // useEffect를 사용하여 titleError가 변경(에러발생)될 때마다 스크롤이 제목 라벨으로 이동
   useEffect(() => {
-    if (!token.detectLogin) {
-      window.alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-      navigate("/member/login");
-    }
-
     // 동시에 발생했을 경우에는 title로 먼저 스크롤 된다.
     if (titleError && contentError) {
       const errorElement = document.getElementById("title");
@@ -95,14 +93,6 @@ function BoardWrite() {
 
     setIsSubmitting(true);
     let uuSrc = getSrc();
-    console.log(uuSrc.length);
-    // if (uuSrc.length > 5) {
-    //   toast({
-    //     description: "첨부된 이미지 개수를 확인해주세요 (최대 5개)",
-    //     status: "info",
-    //   });
-    //   setIsSubmitting(false);
-    // }
 
     // 제목이 null이거나 공백일 경우 에러메시지 세팅 후 반환
     if (!title || title.trim() === "") {
