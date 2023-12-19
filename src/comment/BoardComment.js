@@ -102,7 +102,7 @@ function CommentForm({
         placeholder={
           loginInfo
             ? "댓글을 입력하세요."
-            : "로그인한 사용자만 댓글 입력이 가능합니다."
+            : "로그인한 사용자만 입력이 가능합니다."
         }
       />
       <Button
@@ -184,99 +184,137 @@ function CommentItem({
           <Text size="xs" as="sub">
             {comment.ago}
           </Text>
-          {loginInfo && loginInfo.member_id === comment.member_id && (
-            <Flex gap={0.5}>
-              {isEditing || (
-                <Button
-                  size="xs"
-                  colorScheme="purple"
-                  onClick={() => setIsEditing(true)}
-                >
-                  <FontAwesomeIcon icon={faPenToSquare} />
-                </Button>
-              )}
-              {isEditing && (
-                <Button
-                  size="xs"
-                  colorScheme="gray"
-                  onClick={() => setIsEditing(false)}
-                >
-                  <FontAwesomeIcon icon={faXmark} />
-                </Button>
-              )}
-              <Button
-                onClick={() => onDeleteModalOpen(comment.id)}
-                colorScheme="red"
-                size="xs"
-              >
-                <FontAwesomeIcon icon={faTrash} />
-              </Button>
-            </Flex>
-          )}
+          {/*{loginInfo && loginInfo.member_id === comment.member_id && (*/}
+          {/*  <Flex gap={0.5}>*/}
+          {/*    {isEditing || (*/}
+          {/*      <Button*/}
+          {/*        size="xs"*/}
+          {/*        colorScheme="purple"*/}
+          {/*        onClick={() => setIsEditing(true)}*/}
+          {/*      >*/}
+          {/*        <FontAwesomeIcon icon={faPenToSquare} />*/}
+          {/*      </Button>*/}
+          {/*    )}*/}
+          {/*    {isEditing && (*/}
+          {/*      <Button*/}
+          {/*        size="xs"*/}
+          {/*        colorScheme="gray"*/}
+          {/*        onClick={() => setIsEditing(false)}*/}
+          {/*      >*/}
+          {/*        <FontAwesomeIcon icon={faXmark} />*/}
+          {/*      </Button>*/}
+          {/*    )}*/}
+          {/*    <Button*/}
+          {/*      onClick={() => onDeleteModalOpen(comment.id)}*/}
+          {/*      colorScheme="red"*/}
+          {/*      size="xs"*/}
+          {/*    >*/}
+          {/*      <FontAwesomeIcon icon={faTrash} />*/}
+          {/*    </Button>*/}
+          {/*  </Flex>*/}
+          {/*)}*/}
         </Flex>
       </Flex>
       <Flex justifyContent="space-between" alignItems="center">
         <Box flex={1}>
-          <Flex alignItems="center" gap={2}>
-            <Text
-              sx={{ whiteSpace: "pre-wrap" }}
-              pt="2"
-              fontSize="sm"
-              alignItems="center"
-              justifyContent="center"
-            >
-              {comment.comment}
-            </Text>
-            <Flex gap={0.3} mt={2}>
-              <Tooltip
-                label={
-                  loginInfo ? "답글쓰기" : "로그인한 사용자만 작성 가능합니다."
-                }
+          <Flex alignItems="center" gap={2} justifyContent="space-between">
+            <Flex>
+              <Text
+                sx={{ whiteSpace: "pre-wrap" }}
+                pt="2"
+                fontSize="sm"
+                alignItems="center"
+                justifyContent="center"
               >
-                <Button
-                  size="xs"
-                  colorScheme="blackAlpha"
-                  onClick={() => setIsReplyFormOpen(!isReplyFormOpen)}
-                  isDisabled={!loginInfo}
-                >
-                  <FontAwesomeIcon icon={faPen} />
-                </Button>
-              </Tooltip>
+                {comment.comment}
+              </Text>
 
-              {numberOfReply > 0 && (
-                <Button
-                  size="xs"
-                  colorScheme="blackAlpha"
-                  onClick={() => setIsReplyListOpen(!isReplyListOpen)}
+              <Flex gap={0.3} mt={1.5} ml={3}>
+                <Tooltip
+                  label={
+                    loginInfo
+                      ? "답글쓰기"
+                      : "로그인한 사용자만 작성 가능합니다."
+                  }
                 >
-                  답글보기
-                </Button>
-              )}
-
-              <Flex alignItems="center">
-                <Button
-                  variant="ghost"
-                  size="xs"
-                  colorScheme="red"
-                  onClick={handleCommentLike}
-                  isDisabled={!loginInfo}
-                >
-                  <Tooltip
-                    label={
-                      loginInfo ? (
-                        <FontAwesomeIcon icon={faHeartRegular} />
-                      ) : (
-                        "로그인한 사용자만 가능합니다."
-                      )
-                    }
+                  <Button
+                    size="xs"
+                    colorScheme="blackAlpha"
+                    onClick={() => setIsReplyFormOpen(!isReplyFormOpen)}
+                    isDisabled={!loginInfo}
+                    variant="ghost"
                   >
-                    <FontAwesomeIcon
-                      icon={comment.likeHeart ? faHeartSolid : faHeartRegular}
-                    />
-                  </Tooltip>
-                </Button>
-                <Text fontSize="x-small">{comment.count_comment_like}</Text>
+                    <FontAwesomeIcon icon={faPen} />
+                  </Button>
+                </Tooltip>
+
+                {numberOfReply > 0 && (
+                  <Button
+                    size="xs"
+                    colorScheme="blackAlpha"
+                    onClick={() => setIsReplyListOpen(!isReplyListOpen)}
+                    variant="ghost"
+                  >
+                    답글보기
+                  </Button>
+                )}
+
+                <Flex alignItems="center">
+                  <Button
+                    variant="ghost"
+                    size="xs"
+                    colorScheme="red"
+                    onClick={handleCommentLike}
+                    isDisabled={!loginInfo}
+                  >
+                    <Tooltip
+                      label={
+                        loginInfo ? (
+                          <FontAwesomeIcon icon={faHeartRegular} />
+                        ) : (
+                          "로그인한 사용자만 가능합니다."
+                        )
+                      }
+                    >
+                      <FontAwesomeIcon
+                        icon={comment.likeHeart ? faHeartSolid : faHeartRegular}
+                      />
+                    </Tooltip>
+                  </Button>
+                  <Text fontSize="x-small">{comment.count_comment_like}</Text>
+                </Flex>
               </Flex>
+            </Flex>
+            <Flex mt={3}>
+              {loginInfo && loginInfo.member_id === comment.member_id && (
+                <Flex gap={0.5}>
+                  {isEditing || (
+                    <Button
+                      size="xs"
+                      colorScheme="purple"
+                      onClick={() => setIsEditing(true)}
+                    >
+                      <FontAwesomeIcon icon={faPenToSquare} />
+                    </Button>
+                  )}
+                  {isEditing && (
+                    <Button
+                      size="xs"
+                      colorScheme="gray"
+                      onClick={() => setIsEditing(false)}
+                    >
+                      <FontAwesomeIcon icon={faXmark} />
+                    </Button>
+                  )}
+                  <Button
+                    onClick={() => onDeleteModalOpen(comment.id)}
+                    colorScheme="red"
+                    size="xs"
+                  >
+                    <FontAwesomeIcon icon={faTrash} />
+                  </Button>
+                </Flex>
+              )}
             </Flex>
           </Flex>
 
