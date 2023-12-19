@@ -42,12 +42,19 @@ function ReplyCommentForm({
 }) {
   const [reply_comment, setReply_comment] = useState("");
   const { token, loginInfo } = useContext(DetectLoginContext);
-
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   function handleReplySubmit() {
-    onSubmit({
-      comment_id,
-      reply_comment,
-    });
+    if (isButtonDisabled || !loginInfo) {
+      return;
+    }
+
+    setIsButtonDisabled(true);
+
+    onSubmit({ comment_id, reply_comment });
+
+    setTimeout(() => {
+      setIsButtonDisabled(false);
+    }, 2000);
   }
 
   return (
@@ -72,7 +79,7 @@ function ReplyCommentForm({
           mt={2}
           size="sm"
           h="80px"
-          isDisabled={isSubmitting || !loginInfo.member_id}
+          isDisabled={isSubmitting || !loginInfo || isButtonDisabled}
           onClick={handleReplySubmit}
         >
           쓰기
@@ -120,54 +127,85 @@ function ReplyCommentItem({
     <Box>
       <Flex justifyContent="space-between">
         <Heading size="xs" bg="whitesmoke" borderRadius="5">
-          {reply_comment.nickname}({reply_comment.member_id})
+          {reply_comment.nickname} ({reply_comment.member_id})
         </Heading>
         <Flex gap={2} alignItems="center">
           <Text fontSize="xs">{reply_comment.ago}</Text>
-          {/*{loginInfo.member_id === reply_comment.member_id && (*/}
-          <Box>
-            {loginInfo && loginInfo.member_id === reply_comment.member_id && (
-              <Flex gap={0.5}>
-                {isEditing || (
-                  <Button
-                    size="xs"
-                    colorScheme="purple"
-                    onClick={() => setIsEditing(true)}
-                  >
-                    <FontAwesomeIcon icon={faPenToSquare} />
-                  </Button>
-                )}
-                {isEditing && (
-                  <Button
-                    size="xs"
-                    colorScheme="gray"
-                    onClick={() => setIsEditing(false)}
-                  >
-                    <FontAwesomeIcon icon={faXmark} />
-                  </Button>
-                )}
 
-                <Button
-                  onClick={() =>
-                    onDeleteModalOpen(reply_comment.id, reply_comment.member_id)
-                  }
-                  size="xs"
-                  colorScheme="red"
-                >
-                  <FontAwesomeIcon icon={faTrash} />
-                </Button>
-              </Flex>
-            )}
-          </Box>
+          {/*<Box>*/}
+          {/*{loginInfo && loginInfo.member_id === reply_comment.member_id && (*/}
+          {/*  <Flex gap={0.5}>*/}
+          {/*    {isEditing || (*/}
+          {/*      <Button*/}
+          {/*        size="xs"*/}
+          {/*        colorScheme="purple"*/}
+          {/*        onClick={() => setIsEditing(true)}*/}
+          {/*      >*/}
+          {/*        <FontAwesomeIcon icon={faPenToSquare} />*/}
+          {/*      </Button>*/}
+          {/*    )}*/}
+          {/*    {isEditing && (*/}
+          {/*      <Button*/}
+          {/*        size="xs"*/}
+          {/*        colorScheme="gray"*/}
+          {/*        onClick={() => setIsEditing(false)}*/}
+          {/*      >*/}
+          {/*        <FontAwesomeIcon icon={faXmark} />*/}
+          {/*      </Button>*/}
+          {/*    )}*/}
+
+          {/*    <Button*/}
+          {/*      onClick={() =>*/}
+          {/*        onDeleteModalOpen(reply_comment.id, reply_comment.member_id)*/}
+          {/*      }*/}
+          {/*      size="xs"*/}
+          {/*      colorScheme="red"*/}
+          {/*    >*/}
+          {/*      <FontAwesomeIcon icon={faTrash} />*/}
+          {/*    </Button>*/}
+          {/*  </Flex>*/}
           {/*)}*/}
+          {/*</Box>*/}
         </Flex>
       </Flex>
 
       <Flex justifyContent="space-between" alignItems="center">
         <Box flex={1}>
-          <Text sx={{ whiteSpace: "pre-wrap" }} pt={2} fontSize="sm">
-            {reply_comment.reply_comment}
-          </Text>
+          <Flex justifyContent="space-between">
+            <Text sx={{ whiteSpace: "pre-wrap" }} pt={2} fontSize="sm">
+              {reply_comment.reply_comment}
+            </Text>
+            <Flex gap={0.5} mt={1}>
+              {isEditing || (
+                <Button
+                  size="xs"
+                  colorScheme="purple"
+                  onClick={() => setIsEditing(true)}
+                >
+                  <FontAwesomeIcon icon={faPenToSquare} />
+                </Button>
+              )}
+              {isEditing && (
+                <Button
+                  size="xs"
+                  colorScheme="gray"
+                  onClick={() => setIsEditing(false)}
+                >
+                  <FontAwesomeIcon icon={faXmark} />
+                </Button>
+              )}
+
+              <Button
+                onClick={() =>
+                  onDeleteModalOpen(reply_comment.id, reply_comment.member_id)
+                }
+                size="xs"
+                colorScheme="red"
+              >
+                <FontAwesomeIcon icon={faTrash} />
+              </Button>
+            </Flex>
+          </Flex>
           {isEditing && (
             <Box>
               <Textarea

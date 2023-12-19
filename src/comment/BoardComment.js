@@ -62,9 +62,19 @@ function CommentForm({
   const { stompClient, setToId } = useContext(SocketContext);
 
   const [comment, setComment] = useState("");
-
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   function handleSubmit() {
+    if (isButtonDisabled || !loginInfo) {
+      return;
+    }
+
+    setIsButtonDisabled(true);
+
     onSubmit({ board_id, comment });
+
+    setTimeout(() => {
+      setIsButtonDisabled(false);
+    }, 2000);
   }
 
   // 댓글작성시 알람기능
@@ -98,7 +108,7 @@ function CommentForm({
         bg="white"
         value={comment}
         onChange={(e) => setComment(e.target.value)}
-        isDisabled={!loginInfo} // Disable textarea if member_id is null
+        isDisabled={!loginInfo}
         placeholder={
           loginInfo
             ? "댓글을 입력하세요."
@@ -107,7 +117,7 @@ function CommentForm({
       />
       <Button
         colorScheme="telegram"
-        isDisabled={isSubmitting || !loginInfo}
+        isDisabled={isSubmitting || !loginInfo || isButtonDisabled}
         h="80px"
         onClick={() => {
           handleSubmit();
@@ -177,8 +187,8 @@ function CommentItem({
   return (
     <Box>
       <Flex justifyContent="space-between">
-        <Heading size="xs" bg="whitesmoke" borderRadius="5">
-          {comment.nickname}({comment.member_id})
+        <Heading size="xs" bg="#f2f2f2" borderRadius="5">
+          {comment.nickname} ({comment.member_id})
         </Heading>
         <Flex gap={2} alignItems="center">
           <Text size="xs" as="sub">
