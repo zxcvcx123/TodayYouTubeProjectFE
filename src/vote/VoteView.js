@@ -273,14 +273,15 @@ function VoteView() {
         {/* 투표 마감시 나오는 화면 시작 */}
         {board.voteAgo >= voteEndTime && (
           <>
-            <Box
-              position={"absolute"}
-              w={"100%"}
-              h={"100%"}
-              opacity={"0.3"}
-              bgColor={"gray"}
-              zIndex={"900"}
-            ></Box>
+            {/* 배경처리 회색으로 처리 */}
+            {/*<Box*/}
+            {/*  position={"absolute"}*/}
+            {/*  w={"100%"}*/}
+            {/*  h={"100%"}*/}
+            {/*  opacity={"0.3"}*/}
+            {/*  bgColor={"gray"}*/}
+            {/*  zIndex={"900"}*/}
+            {/*></Box>*/}
             <Box
               opacity={"1"}
               position={"absolute"}
