@@ -76,7 +76,7 @@ function VoteList() {
       setBoardList(res.data.vote);
       setPage(res.data.page);
       // 투표 마감기한 초기 설정
-      setVoteEndTime(8);
+      setVoteEndTime(1);
     });
   }, [location]);
 
