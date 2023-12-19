@@ -70,8 +70,7 @@ function MemberSignup(props) {
     checkNicknameResult &&
     true &&
     passwordTypeResult &&
-    birth_date !== null &&
-    phone_number.length > 12;
+    birth_date !== null;
 
   /* ChakraUI*/
   const toast = useToast();
@@ -94,7 +93,6 @@ function MemberSignup(props) {
         birth_date,
         nickname,
         email,
-        phone_number,
       })
       .then(() => {
         toast({
@@ -132,6 +130,7 @@ function MemberSignup(props) {
       .then((response) => {
         const result = response.data;
         toast({
+          position: "top",
           description: result,
           status: "success",
         });
@@ -151,6 +150,7 @@ function MemberSignup(props) {
       .catch((error) => {
         const result = error.response.data;
         toast({
+          position: "top",
           description: result,
           status: "warning",
         });
@@ -342,11 +342,13 @@ function MemberSignup(props) {
                       if (validatePassword(password)) {
                         setPasswordTypeResult(true);
                         toast({
+                          position: "top",
                           description: "안전한 비밀번호입니다",
                           status: "success",
                         });
                       } else {
                         toast({
+                          position: "top",
                           description: "안전하지 않은 비밀번호입니다.",
                           status: "warning",
                         });
@@ -434,26 +436,6 @@ function MemberSignup(props) {
                   <Radio value="w">여자</Radio>
                 </HStack>
               </RadioGroup>
-            </FormControl>
-            {/* 전화번호 ---------------------------------------------------------------------------------- */}
-            <FormControl mt={4} isRequired>
-              <FormLabel>휴대폰 번호</FormLabel>
-              <Input
-                m={"2xs"}
-                type="tel"
-                placeholder="전화번호"
-                maxLength={"15"}
-                onChange={(e) => {
-                  setPhone_number(
-                    (e.target.value = e.target.value
-                      .replace(/[^0-9]/g, "")
-                      .replace(
-                        /(^02.{0}|^01.{1}|[0-9]{3,4})([0-9]{3,4})([0-9]{4})/g,
-                        "$1-$2-$3",
-                      )),
-                  );
-                }}
-              />
             </FormControl>
           </CardBody>
           <CardFooter gap={6}>
