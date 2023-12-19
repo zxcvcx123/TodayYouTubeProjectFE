@@ -19,6 +19,7 @@ import {
   Text,
   Textarea,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
@@ -37,9 +38,11 @@ function InquiryEdit(props) {
   const [content, setContent] = useState([]);
   const [inquiry_category, setInquiry_category] = useState([]);
   const [uuid, setUuid] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const navigate = useNavigate();
   const { onOpen, isOpen, onClose } = useDisclosure();
+  const toast = useToast();
 
   const { id } = useParams();
 
@@ -58,6 +61,7 @@ function InquiryEdit(props) {
   }
 
   function handleUpdateButton() {
+    setIsSubmitting(true);
     axios
       .put("/api/inquiry/edit", {
         id,
@@ -68,7 +72,20 @@ function InquiryEdit(props) {
         inquiry_member_id: inquiry.inquiry_member_id,
         login_member_id: loginInfo.member_id,
       })
-      .then(() => navigate("/inquiry/list"));
+      .then(() => {
+        navigate("/inquiry/list");
+        toast({
+          description: "수정이 완료되었습니다.",
+          status: "success",
+        });
+      })
+      .catch((error) => {
+        toast({
+          description: "권한이 없습니다.",
+          status: "error",
+        });
+      })
+      .finally(() => setIsSubmitting(false));
   }
 
   // 에디터 이미지 uuid arr 형태 변수에 담아주기
@@ -173,10 +190,42 @@ function InquiryEdit(props) {
           setContent1={setContent}
         />
       </FormControl>
-      <Button colorScheme="blue" onClick={handleUpdateButton}>
+      <Button
+        isDisabled={isSubmitting}
+        colorScheme="blue"
+        onClick={handleUpdateButton}
+      >
         수정완료
       </Button>
       <Button onClick={onOpen}>취소</Button>
+
+      {/* 수정 취소모달 */}
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Modal Title</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>수정을 취소하시겠습니까?</ModalBody>
+          <ModalFooter>
+            <Button variant={"ghost"} onClick={onClose}>
+              닫기
+            </Button>
+            <Button
+              isDisabled={isSubmitting}
+              colorScheme="blue"
+              onClick={() => {
+                navigate("/inquiry/" + id);
+                toast({
+                  description: "수정이 취소되었습니다.",
+                  status: "warning",
+                });
+              }}
+            >
+              수정취소
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 }

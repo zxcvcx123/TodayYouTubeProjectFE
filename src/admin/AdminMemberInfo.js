@@ -237,7 +237,21 @@ function AdminMemberInfo(props) {
                           <Tbody>
                             {memberInfoBoardList &&
                               memberInfoBoardList.map((mList) => (
-                                <Tr key={mList.id}>
+                                <Tr
+                                  key={mList.id}
+                                  _hover={{
+                                    cursor: "pointer",
+                                    bg: "gray.200",
+                                  }}
+                                  onClick={() =>
+                                    navigate(
+                                      "/board/" +
+                                        mList.id +
+                                        "?category=" +
+                                        mList.name_eng,
+                                    )
+                                  }
+                                >
                                   <Td textAlign={"center"} w={"10%"}>
                                     <YoutubeInfo
                                       link={mList.link}
@@ -311,7 +325,16 @@ function AdminMemberInfo(props) {
                           <Tbody>
                             {memberInfoCommentList &&
                               memberInfoCommentList.map((mComment) => (
-                                <Tr key={mComment.id}>
+                                <Tr
+                                  key={mComment.id}
+                                  _hover={{
+                                    cursor: "pointer",
+                                    bg: "gray.200",
+                                  }}
+                                  onClick={() =>
+                                    navigate("/board/" + mComment.board_id)
+                                  }
+                                >
                                   <Td>
                                     {memberInfoCommentList.indexOf(mComment) +
                                       1}

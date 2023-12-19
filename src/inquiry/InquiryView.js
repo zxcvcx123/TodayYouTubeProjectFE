@@ -51,9 +51,13 @@ function InquiryView(props) {
   const [answerContent, setAnswerContent] = useState("");
   // App에서 :id 로 넘겼을때 객체 형태로 넘어가기 때문에 {}로 받아서 사용한다.
   const [inquiry, setInquiry] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const navigate = useNavigate();
-  const { onOpen, isOpen, onClose } = useDisclosure();
+  // 모달 여러개 쓰기
+  const contentDeleteModal = useDisclosure();
+  const answerDeleteModal = useDisclosure();
+
   const toast = useToast();
   const [answer, setAnswer] = useState(false);
   const [answerReadOnly, setAnswerReadOnly] = useState(false);
@@ -152,6 +156,7 @@ function InquiryView(props) {
       .post("/api/inquiry/answer", {
         answer_board_id: id,
         content: answerContent,
+        role_name: loginInfo.role_name,
       })
       .then(() => {
         toast({
@@ -171,27 +176,47 @@ function InquiryView(props) {
 
   // 답변 수정
   function handleEditBtn() {
+    setIsSubmitting(true);
     axios
       .put("/api/inquiry/answer/edit", {
         answer_board_id: inquiry.id,
         content: answerContent,
+        role_name: loginInfo.role_name,
       })
       .then(() => {
         setAnswerReadOnly(true);
         setAnswerBorder("none");
+        toast({
+          description: "수정이 완료되었습니다.",
+          status: "success",
+        });
       })
       .catch()
-      .finally();
+      .finally(() => {
+        setIsSubmitting(false);
+      });
   }
 
   function handleDeleteBtn() {
-    axios.delete("/api/inquiry/answer/delete", {
-      data: {
-        answer_board_id: inquiry.id,
-        login_member_id: loginInfo.member_id,
-        role_name: loginInfo.role_name,
-      },
-    });
+    axios
+      .delete("/api/inquiry/answer/delete", {
+        data: {
+          answer_board_id: inquiry.id,
+          login_member_id: loginInfo.member_id,
+          role_name: loginInfo.role_name,
+        },
+      })
+      .then(() => {
+        toast({
+          description: "답변삭제가 완료되었습니다.",
+          status: "success",
+        });
+      })
+      .catch((error) => console.log("error"))
+      .finally(() => {
+        answerDeleteModal.onClose();
+        navigate("/inquiry/list");
+      });
   }
 
   return (
@@ -304,7 +329,7 @@ function InquiryView(props) {
             >
               수정
             </Button>
-            <Button colorScheme="red" onClick={onOpen}>
+            <Button colorScheme="red" onClick={contentDeleteModal.onOpen}>
               삭제
             </Button>
           </Box>
@@ -352,11 +377,16 @@ function InquiryView(props) {
                     </Button>
                   )}
                   {answerReadOnly || (
-                    <Button colorScheme="blue" onClick={handleEditBtn} mr={2}>
+                    <Button
+                      isDisabled={isSubmitting}
+                      colorScheme="blue"
+                      onClick={handleEditBtn}
+                      mr={2}
+                    >
                       작성완료
                     </Button>
                   )}
-                  <Button colorScheme="red" onClick={handleDeleteBtn}>
+                  <Button colorScheme="red" onClick={answerDeleteModal.onOpen}>
                     삭제
                   </Button>
                 </>
@@ -369,18 +399,42 @@ function InquiryView(props) {
       )}
 
       {/* 삭제 모달 */}
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal
+        isOpen={contentDeleteModal.isOpen}
+        onClose={contentDeleteModal.onClose}
+      >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Modal Title</ModalHeader>
           <ModalCloseButton />
           <ModalBody>문의글을 삭제하시겠습니까?</ModalBody>
           <ModalFooter>
-            <Button variant={"ghost"} onClick={onClose}>
+            <Button variant={"ghost"} onClick={contentDeleteModal.onClose}>
               닫기
             </Button>
             <Button colorScheme="blue" onClick={handleDeleteButton}>
               삭제
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      {/* 답변삭제 모달 */}
+      <Modal
+        isOpen={answerDeleteModal.isOpen}
+        onClose={answerDeleteModal.onClose}
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Modal Title</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>답변을 삭제하시겠습니까?</ModalBody>
+          <ModalFooter>
+            <Button variant={"ghost"} onClick={answerDeleteModal.onClose}>
+              닫기
+            </Button>
+            <Button colorScheme="blue" onClick={handleDeleteBtn}>
+              답변삭제
             </Button>
           </ModalFooter>
         </ModalContent>

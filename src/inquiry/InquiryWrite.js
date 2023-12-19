@@ -45,6 +45,7 @@ function InquiryWrite() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [inquiry_category, setInquiry_category] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -64,6 +65,7 @@ function InquiryWrite() {
   let uuSrc = getSrc();
 
   function handleWriteButton() {
+    setIsSubmitting(true);
     axios
       .post("/api/inquiry/write", {
         title,
@@ -85,7 +87,10 @@ function InquiryWrite() {
           status: "warning",
         }),
       )
-      .finally(() => console.log("done"));
+      .finally(() => {
+        console.log("done");
+        setIsSubmitting(false);
+      });
   }
 
   // 문의글 등록시 운영자에게 알림
@@ -193,6 +198,7 @@ function InquiryWrite() {
         <Editor setUuid={setUuid} uuid={uuid} setContent1={setContent} />
       </FormControl>
       <Button
+        isDisabled={isSubmitting}
         onClick={() => {
           handleWriteButton();
           send();

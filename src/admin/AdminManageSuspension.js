@@ -41,6 +41,7 @@ function AdminManageSuspension(props) {
   const [isReleasing, setIsReleasing] = useState(false);
   const [sendingRelease, setSendingRelease] = useState(null);
   const [pageInfo, setPageInfo] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { onClose, isOpen, onOpen } = useDisclosure();
   const location = useLocation();
@@ -67,14 +68,19 @@ function AdminManageSuspension(props) {
 
   function handleReleaseSuspension(sendingRelease) {
     setIsReleasing(true);
+    setIsSubmitting(true);
     axios
       .put("/api/admin/suspension", {
         id: sendingRelease.id,
         member_id: sendingRelease.member_id,
+        role_name: loginInfo.role_name,
       })
       .then(onClose)
       .catch((error) => console.log(error))
-      .finally(() => setIsReleasing(false));
+      .finally(() => {
+        setIsReleasing(false);
+        setIsSubmitting(false);
+      });
   }
 
   function handleModalClick(release) {
@@ -258,6 +264,7 @@ function AdminManageSuspension(props) {
                 닫기
               </Button>
               <Button
+                isDisabled={isSubmitting}
                 colorScheme="blue"
                 onClick={() => handleReleaseSuspension(sendingRelease)}
               >
