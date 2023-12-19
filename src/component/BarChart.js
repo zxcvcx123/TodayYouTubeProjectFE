@@ -10,8 +10,6 @@ export function BarChart({ chartData }) {
     interaction: {
       mode: "index",
       intersect: false,
-      width: "500px",
-      height: "500px",
     },
   };
 
