@@ -341,6 +341,11 @@ function VoteView() {
                     w="100%"
                     h={20}
                     onClick={loginModal.onOpen}
+                    isDisabled={
+                      IsConnected === false || board.voteAgo >= voteEndTime
+                        ? true
+                        : false
+                    }
                   >
                     <FontAwesomeIcon icon={faCheck} />
                   </Button>
@@ -355,49 +360,6 @@ function VoteView() {
                     }}
                     isDisabled={
                       IsConnected === false || board.voteAgo >= voteEndTime
-                        ? true
-                        : false
-                    }
-                  >
-                    {IsConnected === false ? (
-                      <Text>연결 중...</Text>
-                    ) : voteChecked === 1 && voteNot === 0 ? (
-                      <FontAwesomeIcon icon={faCircleCheck} size="xl" />
-                    ) : (
-                      <FontAwesomeIcon icon={faCheck} />
-                    )}
-                  </Button>
-                )}
-              </Box>
-              <Box w={"20%"}>
-                <Heading textAlign={"center"}>VS</Heading>
-              </Box>
-              <Box>
-                <YoutubeInfo link={board.link_b} extraVideo={true} />
-
-                {loginInfo === null ? (
-                  <Button
-                    mt={2}
-                    colorScheme="red"
-                    w="100%"
-                    h={20}
-                    onClick={loginModal.onOpen}
-                  >
-                    <FontAwesomeIcon icon={faCheck} />
-                  </Button>
-                ) : (
-                  <Button
-                    mt={2}
-                    colorScheme="blue"
-                    w="100%"
-                    h={20}
-                    onClick={() => {
-                      handleVoteA();
-                    }}
-                    isDisabled={
-                      (voteChecked === 1 && voteNot === 0) ||
-                      IsConnected === false ||
-                      board.voteAgo >= voteEndTime
                         ? true
                         : false
                     }
