@@ -23,6 +23,7 @@ import {
   AlertIcon,
   AlertTitle,
   Alert,
+  useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { Sidenav } from "./Sidenav";
@@ -43,6 +44,7 @@ function AdminManageSuspension(props) {
   const [pageInfo, setPageInfo] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const toast = useToast();
   const { onClose, isOpen, onOpen } = useDisclosure();
   const location = useLocation();
   const navigate = useNavigate();
@@ -75,7 +77,13 @@ function AdminManageSuspension(props) {
         member_id: sendingRelease.member_id,
         role_name: loginInfo.role_name,
       })
-      .then(onClose)
+      .then(() => {
+        onClose();
+        toast({
+          description: "정지가 해제되었습니다.",
+          status: "success",
+        });
+      })
       .catch((error) => console.log(error))
       .finally(() => {
         setIsReleasing(false);

@@ -376,7 +376,7 @@ function InquiryView(props) {
                       수정
                     </Button>
                   )}
-                  {answerReadOnly || (
+                  {answer || (
                     <Button
                       isDisabled={isSubmitting}
                       colorScheme="blue"
