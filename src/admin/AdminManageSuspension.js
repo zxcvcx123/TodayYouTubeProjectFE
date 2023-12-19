@@ -26,9 +26,10 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { Sidenav } from "./Sidenav";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import LoadingPage from "../component/LoadingPage";
 import { DetectLoginContext } from "../component/LoginProvider";
+import Pagination from "../page/Pagination";
 
 function AdminManageSuspension(props) {
   // 로그인 유저 정보
@@ -39,35 +40,47 @@ function AdminManageSuspension(props) {
   const [releaseList, setReleaseList] = useState(null);
   const [isReleasing, setIsReleasing] = useState(false);
   const [sendingRelease, setSendingRelease] = useState(null);
+  const [pageInfo, setPageInfo] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { onClose, isOpen, onOpen } = useDisclosure();
   const location = useLocation();
   const navigate = useNavigate();
 
+  const [params] = useSearchParams();
+
   useEffect(() => {
     axios
-      .get("/api/admin/suspension")
+      .get("/api/admin/suspension?" + params)
       .then((response) => {
         setReleaseList(response.data.releaseList);
         setSuspensionList(response.data.suspensionList);
+        setPageInfo(response.data.pageInfo);
       })
       .catch(() => console.log("bad"));
-  }, [isReleasing]);
+  }, [isReleasing, location]);
 
-  if (suspensionList == null || releaseList == null) {
+  console.log(params);
+
+  if (suspensionList == null || releaseList == null || pageInfo == null) {
     return <LoadingPage />;
   }
 
   function handleReleaseSuspension(sendingRelease) {
     setIsReleasing(true);
+    setIsSubmitting(true);
     axios
       .put("/api/admin/suspension", {
         id: sendingRelease.id,
         member_id: sendingRelease.member_id,
+        role_name: loginInfo.role_name,
       })
       .then(onClose)
       .catch((error) => console.log(error))
-      .finally(() => setIsReleasing(false));
+      .finally(() => {
+        setIsReleasing(false);
+        setIsSubmitting(false);
+      });
   }
 
   function handleModalClick(release) {
@@ -101,6 +114,11 @@ function AdminManageSuspension(props) {
     );
   }
 
+  function handleEarlyRelease(suspension) {
+    setSendingRelease(suspension);
+    onOpen();
+  }
+
   return (
     <Flex>
       <Sidenav />
@@ -113,7 +131,7 @@ function AdminManageSuspension(props) {
                 <CardHeader>
                   <Flex justifyContent={"space-between"}>
                     <Heading size="md">
-                      정지 회원 이름 : {release.member_id}
+                      정지회원 ID : {release.member_id}
                     </Heading>
                     <Button
                       colorScheme="red"
@@ -127,24 +145,24 @@ function AdminManageSuspension(props) {
                 <CardBody>
                   <Stack divider={<StackDivider />} spacing="4">
                     <Box>
-                      <Heading size="xs" textTransform="uppercase">
-                        정지사유
+                      <Heading size="sm" textTransform="uppercase">
+                        [정지사유]
                       </Heading>
                       <Text pt="2" fontSize="sm">
                         {release.reason}
                       </Text>
                     </Box>
                     <Box>
-                      <Heading size="xs" textTransform="uppercase">
-                        정지시작 일짜
+                      <Heading size="sm" textTransform="uppercase">
+                        [정지시작 일짜]
                       </Heading>
                       <Text pt="2" fontSize="sm">
                         {release.start_date}
                       </Text>
                     </Box>
                     <Box>
-                      <Heading size="xs" textTransform="uppercase">
-                        정지해제 일자
+                      <Heading size="sm" textTransform="uppercase">
+                        [정지해제 일자]
                       </Heading>
                       <Text pt="2" fontSize="sm">
                         {release.end_date}
@@ -167,40 +185,62 @@ function AdminManageSuspension(props) {
           <Heading mt={90}>정지중인 회원들</Heading>
           {suspensionList &&
             suspensionList.map((suspension) => (
-              <Card w={"50%"} m={"auto"} mt={10}>
+              <Card w={"50%"} m={"auto"} mt={10} mb={5}>
                 <CardHeader>
                   <Flex justifyContent={"space-between"}>
                     <Heading size="md">
-                      정지 회원 이름 : {suspension.member_id}
+                      정지회원 ID : {suspension.member_id}
                     </Heading>
-                    <Button colorScheme="blue">
-                      정지 해제 : {suspension.remaindate}일 +{" "}
-                      {suspension.remaintime}
-                    </Button>
+                    <Box
+                      h={"50px"}
+                      w={"40%"}
+                      bgColor="blue.200"
+                      borderRadius={(2, 20)}
+                    >
+                      <Text
+                        lineHeight={"50px"}
+                        fontWeight={"bold"}
+                        m={"auto"}
+                        textAlign={"center"}
+                        alignItems={"center"}
+                      >
+                        정지 해제까지 : {suspension.remaindate}일 +{" "}
+                        {suspension.remaintime}
+                      </Text>
+                      <Flex justifyContent={"space-between"} mt={3}>
+                        <Box></Box>
+                        <Button
+                          colorScheme="red"
+                          onClick={() => handleEarlyRelease(suspension)}
+                        >
+                          조기 정지해제
+                        </Button>
+                      </Flex>
+                    </Box>
                   </Flex>
                 </CardHeader>
 
                 <CardBody>
                   <Stack divider={<StackDivider />} spacing="4">
                     <Box>
-                      <Heading size="xs" textTransform="uppercase">
-                        정지사유
+                      <Heading size="sm" textTransform="uppercase">
+                        [정지사유]
                       </Heading>
                       <Text pt="2" fontSize="sm">
                         {suspension.reason}
                       </Text>
                     </Box>
                     <Box>
-                      <Heading size="xs" textTransform="uppercase">
-                        정지시작 일짜
+                      <Heading size="sm" textTransform="uppercase">
+                        [정지시작 일자]
                       </Heading>
                       <Text pt="2" fontSize="sm">
                         {suspension.start_date}
                       </Text>
                     </Box>
                     <Box>
-                      <Heading size="xs" textTransform="uppercase">
-                        정지해제 일자
+                      <Heading size="sm" textTransform="uppercase">
+                        [정지해제 일자]
                       </Heading>
                       <Text pt="2" fontSize="sm">
                         {suspension.end_date}
@@ -210,6 +250,7 @@ function AdminManageSuspension(props) {
                 </CardBody>
               </Card>
             ))}
+          <Pagination pageInfo={pageInfo} />
         </Box>
         {/* 삭제 모달 */}
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -223,6 +264,7 @@ function AdminManageSuspension(props) {
                 닫기
               </Button>
               <Button
+                isDisabled={isSubmitting}
                 colorScheme="blue"
                 onClick={() => handleReleaseSuspension(sendingRelease)}
               >

@@ -78,7 +78,6 @@ export function Nav({ setSocket }) {
         })
         .then((res) => {
           setAlarmList(res.data);
-          console.log(res.data);
         })
         .catch()
         .finally();
@@ -89,7 +88,6 @@ export function Nav({ setSocket }) {
         })
         .then((res) => {
           setAlarmCount(res.data);
-          console.log(res.data);
         })
         .catch()
         .finally();

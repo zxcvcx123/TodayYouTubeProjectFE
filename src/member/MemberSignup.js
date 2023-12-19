@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Box,
   Button,
@@ -29,6 +29,7 @@ import {
   validatePassword,
   validateEmail,
 } from "./memberUtil/memberSignUpMethods";
+import { DetectLoginContext } from "../component/LoginProvider";
 
 function MemberSignup(props) {
   /* 회원 상태---------------------------------------------------------------------------------- */
@@ -62,6 +63,7 @@ function MemberSignup(props) {
     useState("비밀번호가 일치하지 않습니다");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [timer, setTimer] = useState(null);
+  const { loginInfo } = useContext(DetectLoginContext);
 
   const submitAvailable =
     checkIdResult &&
@@ -74,7 +76,13 @@ function MemberSignup(props) {
   /* ChakraUI*/
   const toast = useToast();
   const navigate = useNavigate();
-
+  if (loginInfo !== null) {
+    navigate("/");
+    toast({
+      description: "로그아웃 후 이용 바랍니다.",
+      status: "error",
+    });
+  }
   /* 회원 가입 요청 ----------------------------------------------------------------------------------*/
   function handleSignupForm() {
     setIsSubmitting(true);

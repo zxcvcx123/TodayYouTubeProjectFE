@@ -46,8 +46,8 @@ export function MainView() {
   const [otherList, setOtherList] = useState(null);
   const [dateSort, setDateSort] = useState("monthly");
   const [isDay, setIsDay] = useState(false);
-  const [isWeek, setIsWeek] = useState(true);
-  const [isMonth, setIsMonth] = useState(false);
+  const [isWeek, setIsWeek] = useState(false);
+  const [isMonth, setIsMonth] = useState(true);
 
   const [mainShowLink, setMainShowLink] = useState(null);
   const [mainShowTitle, setMainShowTitle] = useState(null);
@@ -403,7 +403,7 @@ export function MainView() {
               bg={"rgb(0,0,0)"}
               p={"20px 50px"}
             >
-              <Box key={mainShowLink}>
+              <Box>
                 {mainShowLink && (
                   /*<YoutubeInfo
                     link={mainShowLink}
@@ -445,6 +445,7 @@ export function MainView() {
                   </>
                 )}
               </Box>
+
               <Box>
                 <Button
                   color={"rgb(102,206,252)"}

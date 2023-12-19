@@ -44,6 +44,7 @@ import { CheckIcon } from "@chakra-ui/icons";
 import { SocketContext } from "../socket/Socket";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faAward,
   faCheck,
   faCheckDouble,
   faCircleCheck,
@@ -75,6 +76,9 @@ function VoteView() {
 
   const totalVotes = (optionOneVotes || 0) + (optionTwoVotes || 0);
 
+  // 투표 마감기한 (현재 7일)
+  const [voteEndTime, setVoteEndTime] = useState(0);
+
   //URL 매개변수 추출
   const { id } = useParams();
 
@@ -103,6 +107,9 @@ function VoteView() {
       // count된 숫자 넣고 숫자에 따라서 set 해서 처음 % 반영
       setOptionOneVotes(res.data.voted_a);
       setOptionTwoVotes(res.data.voted_b);
+
+      // 마감기한 설정
+      setVoteEndTime(8);
     });
 
     // axios.get 해서 버튼을 눌렀는지 안눌렀는지 게시판번호/아이디 기준으로 조회
@@ -249,18 +256,49 @@ function VoteView() {
               {/* 일자 */}
               <Text>| {board.ago}</Text>
             </Flex>
-            {/* 좋아요, 조회수, 투표수 */}
-            <Flex alignItems={"center"} gap={"5"}>
-              <Text> | 투표 수 : {board.voted_all}</Text>
+           {/* 좋아요, 조회수, 투표수 */}
+          <Flex alignItems={"center"} gap={"5"}>
+            <Text> | 투표 수 : {board.voted_all}</Text>
+            {board.voteAgo < voteEndTime && (
+              <Text> | 마감기한 : D-{voteEndTime - board.voteAgo}</Text>
+            )}
+            {board.voteAgo >= voteEndTime && <Text> | 마감된 투표</Text>}
             </Flex>
           </Flex>
         </FormControl>
 
         <Divider my={5} borderColor="grey" />
 
-        {/* -------------------- 유튜브 섹션 -------------------- */}
-        {/*{renderYoutubeSection()}*/}
-        <Box w={"100%"} mb={5}>
+      {/* -------------------- 유튜브 섹션 -------------------- */}
+      {/*{renderYoutubeSection()}*/}
+      <Box position={"relative"} w={"100%"}>
+        {/* 투표 마감시 나오는 화면 시작 */}
+        {board.voteAgo >= voteEndTime && (
+          <>
+            {/* 배경처리 회색으로 처리 */}
+            {/*<Box*/}
+            {/*  position={"absolute"}*/}
+            {/*  w={"100%"}*/}
+            {/*  h={"100%"}*/}
+            {/*  opacity={"0.3"}*/}
+            {/*  bgColor={"gray"}*/}
+            {/*  zIndex={"900"}*/}
+            {/*></Box>*/}
+            <Box
+              opacity={"1"}
+              position={"absolute"}
+              top={"50%"}
+              left={"50%"}
+              transform={"translate(-50%, -50%)"}
+              bg={"gray"}
+              zIndex={"901"}
+            >
+              <Heading fontSize={"5rem"}>투표 마감</Heading>
+            </Box>
+          </>
+        )}
+        {/* 투표 마감시 나오는 화면 끝*/}
+        <Box mb={5}>
           <Heading textAlign={"center"}>{board.title}</Heading>
         </Box>
         <Box>
@@ -270,7 +308,31 @@ function VoteView() {
             w={"100%"}
             justifyContent={"space-between"}
           >
-            <Box>
+            <Box position={"relative"}>
+              {/* 투표 마감시 나오는 메달 시작 */}
+              {board.voteAgo >= voteEndTime &&
+                optionOneVotes > optionTwoVotes && (
+                  <Box position={"absolute"}>
+                    <FontAwesomeIcon
+                      icon={faAward}
+                      fontSize={"150px"}
+                      color="blue"
+                      zIndex={"902"}
+                    />
+                  </Box>
+                )}
+              {board.voteAgo >= voteEndTime &&
+                optionOneVotes === optionTwoVotes && (
+                  <Box position={"absolute"}>
+                    <FontAwesomeIcon
+                      icon={faAward}
+                      fontSize={"150px"}
+                      color="blue"
+                      zIndex={"902"}
+                    />
+                  </Box>
+                )}
+              {/* 투표 마감시 나오는 메달 끝 */}
               <YoutubeInfo link={board.link_a} extraVideo={true} />
               {loginInfo === null ? (
                 <Button
@@ -279,6 +341,7 @@ function VoteView() {
                   w="100%"
                   h={20}
                   onClick={loginModal.onOpen}
+
                 >
                   <FontAwesomeIcon icon={faCheck} />
                 </Button>
@@ -292,12 +355,12 @@ function VoteView() {
                     handleVoteA();
                   }}
                   isDisabled={
-                    (voteChecked === 1 && voteNot === 0) ||
-                    IsConnected === false
+                    IsConnected === false || board.voteAgo >= voteEndTime
                       ? true
                       : false
                   }
                 >
+
                   {IsConnected === false ? (
                     <Text>연결 중...</Text>
                   ) : voteChecked === 1 && voteNot === 0 ? (
@@ -327,6 +390,77 @@ function VoteView() {
               ) : (
                 <Button
                   mt={2}
+                  colorScheme="blue"
+                  w="100%"
+                  h={20}
+                  onClick={() => {
+                    handleVoteA();
+                  }}
+                  isDisabled={
+                    (voteChecked === 1 && voteNot === 0) ||
+                    IsConnected === false ||
+                    board.voteAgo >= voteEndTime
+                      ? true
+                      : false
+                  }
+                >
+                  {IsConnected === false ? (
+                    <Text>연결 중...</Text>
+                  ) : voteChecked === 1 && voteNot === 0 ? (
+                    <FontAwesomeIcon icon={faCircleCheck} size="xl" />
+                  ) : (
+                    <FontAwesomeIcon icon={faCheck} />
+                  )}
+                </Button>
+              )}
+            </Box>
+            <Box w={"20%"}>
+              <Heading textAlign={"center"}>VS</Heading>
+            </Box>
+            <Box>
+              {/* 투표 마감시 나오는 메달 시작 */}
+              {board.voteAgo >= voteEndTime &&
+                optionOneVotes < optionTwoVotes && (
+                  <Box position={"absolute"}>
+                    <FontAwesomeIcon
+                      icon={faAward}
+                      fontSize={"150px"}
+                      color="red"
+                      zIndex={"902"}
+                    />
+                  </Box>
+                )}
+              {board.voteAgo >= voteEndTime &&
+                optionOneVotes === optionTwoVotes && (
+                  <Box position={"absolute"}>
+                    <FontAwesomeIcon
+                      icon={faAward}
+                      fontSize={"150px"}
+                      color="red"
+                      zIndex={"902"}
+                    />
+                  </Box>
+                )}
+              {/* 투표 마감시 나오는 메달 끝 */}
+              <YoutubeInfo link={board.link_b} extraVideo={true} />
+              {loginInfo === null ? (
+                <Button
+                  mt={2}
+                  colorScheme="red"
+                  w="100%"
+                  h={20}
+                  onClick={loginModal.onOpen}
+                  isDisabled={
+                    IsConnected === false || board.voteAgo >= voteEndTime
+                      ? true
+                      : false
+                  }
+                >
+                  <FontAwesomeIcon icon={faCheck} />
+                </Button>
+              ) : (
+                <Button
+                  mt={2}
                   colorScheme="red"
                   w="100%"
                   h={20}
@@ -335,7 +469,8 @@ function VoteView() {
                   }}
                   isDisabled={
                     (voteChecked !== 1 && voteNot === 0) ||
-                    IsConnected === false
+                    IsConnected === false ||
+                    board.voteAgo >= voteEndTime
                       ? true
                       : false
                   }
@@ -361,7 +496,8 @@ function VoteView() {
         <Box mt={5} textAlign={"center"}>
           <Text fontSize={"1.5rem"}>{board.content}</Text>
         </Box>
-        <Divider my={5} borderColor="grey" />
+      </Box>
+      <Divider my={5} borderColor="grey" />
 
         {/* -------------------- 버튼 섹션 -------------------- */}
         <Flex justifyContent={"flex-end"}>

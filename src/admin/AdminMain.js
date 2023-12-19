@@ -273,7 +273,7 @@ function AdminMain() {
   }, []);
 
   if (countCategoryBoard == null) {
-    return <Spinner />;
+    return <LoadingPage />;
   }
 
   if (isLoading) {

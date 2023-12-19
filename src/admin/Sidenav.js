@@ -43,9 +43,13 @@ export function Sidenav() {
       <Button
         {...buttonStyles}
         leftIcon={<FontAwesomeIcon icon={faBan} />}
-        onClick={() => navigate("/admin/suspension")}
+         onClick={() => navigate("/admin/suspension/?p=1")}
       >
         회원정지관리
+      </Button>
+
+      <Button {...buttonStyles} onClick={() => navigate("/admin/report")}>
+        신고관리
       </Button>
     </VStack>
   );

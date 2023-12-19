@@ -415,7 +415,10 @@ function BoardView() {
           <Flex justifyContent={"space-between"} alignItems={"center"}>
             <Flex alignItems={"center"}>
               {/* 프로필 */}
-              <BoardProfile board_member_id={board.board_member_id} />
+              <BoardProfile
+                board_id={board.id}
+                board_member_id={board.board_member_id}
+              />
               {/* 일자 */}
               <Text>| {formatDateTime(board.updated_at)}</Text>
             </Flex>

@@ -18,6 +18,7 @@ import {
   StackDivider,
   Text,
   Textarea,
+  Tooltip,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
@@ -43,6 +44,7 @@ import commentLike from "../like/CommentLike";
 import { DetectLoginContext } from "../component/LoginProvider";
 import { SocketContext } from "../socket/Socket";
 import { useLocation } from "react-router-dom";
+import { css } from "@emotion/react";
 
 function CommentForm({
   board_id,
@@ -50,6 +52,8 @@ function CommentForm({
   onSubmit,
   setCommentLike,
   boardData,
+  reply_commentList,
+  setReply_commentList,
 }) {
   // 로그인 유저 정보
   const { token, handleLogout, loginInfo, validateToken } =
@@ -94,10 +98,16 @@ function CommentForm({
         bg="white"
         value={comment}
         onChange={(e) => setComment(e.target.value)}
+        isDisabled={!loginInfo} // Disable textarea if member_id is null
+        placeholder={
+          loginInfo
+            ? "댓글을 입력하세요."
+            : "로그인한 사용자만 댓글 입력이 가능합니다."
+        }
       />
       <Button
         colorScheme="telegram"
-        isDisabled={isSubmitting}
+        isDisabled={isSubmitting || !loginInfo}
         h="80px"
         onClick={() => {
           handleSubmit();
@@ -117,6 +127,8 @@ function CommentItem({
   isSubmitting,
   setCommentLike,
   onCommentLikeClick,
+  reply_commentList,
+  setReply_commentList,
 }) {
   const { token, loginInfo } = useContext(DetectLoginContext);
 
@@ -124,6 +136,8 @@ function CommentItem({
   const [commentEdited, setCommentEdited] = useState(comment.comment);
   const [isReplyFormOpen, setIsReplyFormOpen] = useState(false);
   const [isReplyListOpen, setIsReplyListOpen] = useState(false);
+
+  const [numberOfReply, setNumberOfReply] = useState(comment.reply_count);
 
   const toast = useToast();
 
@@ -168,7 +182,7 @@ function CommentItem({
         </Heading>
         <Flex gap={2} alignItems="center">
           <Text size="xs" as="sub">
-            {comment.created_at}
+            {comment.ago}
           </Text>
           {loginInfo && loginInfo.member_id === comment.member_id && (
             <Flex gap={0.5}>
@@ -214,20 +228,30 @@ function CommentItem({
               {comment.comment}
             </Text>
             <Flex gap={0.3} mt={2}>
-              <Button
-                size="xs"
-                colorScheme="blackAlpha"
-                onClick={() => setIsReplyFormOpen(!isReplyFormOpen)}
+              <Tooltip
+                label={
+                  loginInfo ? "답글쓰기" : "로그인한 사용자만 작성 가능합니다."
+                }
               >
-                <FontAwesomeIcon icon={faPen} />
-              </Button>
-              <Button
-                size="xs"
-                colorScheme="blackAlpha"
-                onClick={() => setIsReplyListOpen(!isReplyListOpen)}
-              >
-                답글보기
-              </Button>
+                <Button
+                  size="xs"
+                  colorScheme="blackAlpha"
+                  onClick={() => setIsReplyFormOpen(!isReplyFormOpen)}
+                  isDisabled={!loginInfo}
+                >
+                  <FontAwesomeIcon icon={faPen} />
+                </Button>
+              </Tooltip>
+
+              {numberOfReply > 0 && (
+                <Button
+                  size="xs"
+                  colorScheme="blackAlpha"
+                  onClick={() => setIsReplyListOpen(!isReplyListOpen)}
+                >
+                  답글보기
+                </Button>
+              )}
 
               <Flex alignItems="center">
                 <Button
@@ -235,10 +259,21 @@ function CommentItem({
                   size="xs"
                   colorScheme="red"
                   onClick={handleCommentLike}
+                  isDisabled={!loginInfo}
                 >
-                  <FontAwesomeIcon
-                    icon={comment.likeHeart ? faHeartSolid : faHeartRegular}
-                  />
+                  <Tooltip
+                    label={
+                      loginInfo ? (
+                        <FontAwesomeIcon icon={faHeartRegular} />
+                      ) : (
+                        "로그인한 사용자만 가능합니다."
+                      )
+                    }
+                  >
+                    <FontAwesomeIcon
+                      icon={comment.likeHeart ? faHeartSolid : faHeartRegular}
+                    />
+                  </Tooltip>
                 </Button>
                 <Text fontSize="x-small">{comment.count_comment_like}</Text>
               </Flex>
@@ -248,12 +283,16 @@ function CommentItem({
           <BoardReplyComment
             setIsReplyFormOpen={setIsReplyFormOpen}
             isReplyFormOpen={isReplyFormOpen}
+            setIsReplyListOpen={setIsReplyListOpen}
             isReplyListOpen={isReplyListOpen}
             comment_id={comment.id}
             onClick={() => {
               setIsReplyFormOpen(false);
             }}
             isReplyFormOpen={isReplyFormOpen}
+            reply_commentList={reply_commentList}
+            setReply_commentList={setReply_commentList}
+            setNumberOfReply={setNumberOfReply}
           />
           {isEditing && (
             <Box>
@@ -284,6 +323,10 @@ function CommentList({
   setIsSubmitting,
   setCommentLike,
   onCommentLikeClick,
+  reply_commentList,
+  setReply_commentList,
+  isReplyListOpen,
+  setIsReplyListOpen,
 }) {
   return (
     <Card border="1px solid black" borderRadius="5" mt={2}>
@@ -303,6 +346,10 @@ function CommentList({
               onDeleteModalOpen={onDeleteModalOpen}
               setCommentLike={setCommentLike}
               onCommentLikeClick={onCommentLikeClick}
+              reply_commentList={reply_commentList}
+              setReply_commentList={setReply_commentList}
+              isReplyListOpen={isReplyListOpen}
+              setIsReplyListOpen={setIsReplyListOpen}
             />
           ))}
         </Stack>
@@ -317,7 +364,8 @@ export function BoardComment({ board_id, boardData }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [commentLike, setCommentLike] = useState(null);
   const [commentList, setCommentList] = useState([]);
-  const [hasReplies, setHasReplies] = useState(true);
+  const [reply_commentList, setReply_commentList] = useState([]);
+  const [isReplyListOpen, setIsReplyListOpen] = useState(false);
 
   const commentIdRef = useRef(0);
   const toast = useToast();
@@ -327,42 +375,43 @@ export function BoardComment({ board_id, boardData }) {
   const params = new URLSearchParams();
   const location = useLocation();
 
-
   useEffect(() => {
-    if (loginInfo !== null) {
-      params.set("member_id", loginInfo.member_id);
-      params.set("board_id", board_id);
-      if (location.pathname.includes("vote")) {
-        if (loginInfo !== null) {
-          if (!isSubmitting) {
-            axios.get("/api/comment/vote/list?" + params).then((response) => {
-              setCommentList(response.data);
-            });
-          }
-
-          // 로그인 하지 않은 사용자도 댓글이 보이게
-        } else {
-          params.set("board_id", board_id);
-          if (!isSubmitting) {
-            axios.get("/api/comment/vote/list?" + params).then((response) => {
-              setCommentList(response.data);
-            });
-          }
-        }
-      } else {
+    if (location.pathname.includes("vote")) {
+      if (loginInfo !== null) {
+        params.set("member_id", loginInfo.member_id);
+        params.set("board_id", board_id);
         if (!isSubmitting) {
-          axios.get("/api/comment/list?" + params).then((response) => {
+          axios.get("/api/comment/vote/list?" + params).then((response) => {
             setCommentList(response.data);
           });
         }
 
         // 로그인 하지 않은 사용자도 댓글이 보이게
-        else {
-          if (!isSubmitting) {
-            axios.get("/api/comment/list?" + params).then((response) => {
-              setCommentList(response.data);
-            });
-          }
+      } else {
+        params.set("board_id", board_id);
+        if (!isSubmitting) {
+          axios.get("/api/comment/vote/list?" + params).then((response) => {
+            setCommentList(response.data);
+          });
+        }
+      }
+    } else {
+      if (loginInfo !== null) {
+        params.set("member_id", loginInfo.member_id);
+        params.set("board_id", board_id);
+        if (!isSubmitting) {
+          axios.get("/api/comment/list?" + params).then((response) => {
+            setCommentList(response.data);
+          });
+        }
+      }
+      // 로그인 하지 않은 사용자도 댓글이 보이게
+      else {
+        params.set("board_id", board_id);
+        if (!isSubmitting) {
+          axios.get("/api/comment/list?" + params).then((response) => {
+            setCommentList(response.data);
+          });
         }
       }
     }
@@ -454,6 +503,8 @@ export function BoardComment({ board_id, boardData }) {
         onSubmit={handleSubmit}
         setCommentLike={setCommentLike}
         boardData={boardData}
+        reply_commentList={reply_commentList}
+        setReply_commentList={setReply_commentList}
       />
       <CommentList
         board_id={board_id}
@@ -463,6 +514,10 @@ export function BoardComment({ board_id, boardData }) {
         onDeleteModalOpen={handleCommentDeleteModalOpen}
         setCommentLike={setCommentLike}
         onCommentLikeClick={handleCommentLike}
+        reply_commentList={reply_commentList}
+        setReply_commentList={setReply_commentList}
+        setIsReplyListOpen={setIsReplyListOpen}
+        isReplyListOpen={isReplyListOpen}
       />
 
       {/* 삭제 모달 */}
