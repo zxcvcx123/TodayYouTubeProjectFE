@@ -55,6 +55,8 @@ function BoardView() {
   const [isAuthor, setIsAuthor] = useState(false);
   // const [isReadOnly, setIsReadOnly] = useState(true);
 
+  const [isAdmin, setIsAdmin] = useState(false);
+
   // useState를 사용하여 채널 정보를 저장할 state 생성
   const [channelInfo, setChannelInfo] = useState(null);
 
@@ -141,6 +143,9 @@ function BoardView() {
           navigate("/");
           window.alert("삭제된 게시물입니다.");
         }
+        if (loginInfo.role_name === "운영자") {
+          setIsAdmin(true);
+        }
 
         // 게시글 데이터를 가져온 후 작성자 여부를 확인하여 isAuthor 설정
         if (
@@ -174,7 +179,7 @@ function BoardView() {
   function handleDeleteClick() {
     setIsSubmitting(true);
     // 게시글 삭제 시 아이디 유효성 검증
-    if (!isAuthor && loginInfo.role_name !== "운영자") {
+    if (!isAuthor && !isAdmin) {
       window.alert("작성자 본인만 삭제 가능합니다.");
       return;
     }
@@ -479,7 +484,7 @@ function BoardView() {
         )}
         {/* -------------------- 버튼 섹션 -------------------- */}
         <Flex justifyContent={"right"}>
-          {isAuthor && loginInfo.role_name === "운영자" && (
+          {(isAuthor || isAdmin) && (
             <Box mr={"10px"}>
               {/* 수정 버튼 */}
               <Button
