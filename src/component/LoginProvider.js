@@ -68,7 +68,6 @@ export function LoginProvider({ children }) {
         setToken((prevSState) => ({
           detectLogin: false,
         }));
-        handleLogout();
       })
       .finally(() => {
         localStorage.clear();
@@ -78,13 +77,15 @@ export function LoginProvider({ children }) {
   // 사용자 활동을 감지
 
   const handleLogout = () => {
-    setLoginInfo(null);
-
-    setToken({
-      detectLogin: false,
-    });
     localStorage.clear();
-    axios.post("/api/member/logout");
+    axios.post("/api/member/logout").finally(() => {
+      setLoginInfo(null);
+
+      setToken({
+        detectLogin: false,
+      });
+      window.location.reload();
+    });
   };
 
   return (

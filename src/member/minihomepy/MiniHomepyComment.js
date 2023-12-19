@@ -149,39 +149,76 @@ export function MiniHomepyComment({ homepyId }) {
               />
             )}
           </Box>
-          <FormControl>
-            <Flex w={"100%"} flexDirection="column" alignItems={"flex-end"}>
-              <Textarea
-                w="100%"
-                placeholder="방명록을 남겨주세요(최대 500자)"
-                maxLength={"499"}
-                border={"1px solid white"}
-                h={"150px"}
-                mb={2}
-                color={"#dcdcdc"}
-                maxHieght={"150px"}
-                onChange={(e) => {
-                  setComment(e.target.value);
-                }}
-              />
-              {isSubmitting ? (
-                <Spinner />
-              ) : (
-                <Button
-                  fontSize={"20px"}
-                  display={"flex"}
-                  justifyContent={"center"}
-                  alignItems={"center"}
-                  onClick={handleAddComment}
-                  bg={"transparent"}
-                  variant={"link"}
+          {loginInfo !== null ? (
+            <FormControl>
+              <Flex w={"100%"} flexDirection="column" alignItems={"flex-end"}>
+                <Textarea
+                  w="100%"
+                  placeholder="방명록을 남겨주세요(최대 500자)"
+                  maxLength={"499"}
+                  border={"1px solid white"}
+                  h={"150px"}
+                  mb={2}
                   color={"#dcdcdc"}
-                >
-                  등록
-                </Button>
-              )}
-            </Flex>
-          </FormControl>
+                  maxHieght={"150px"}
+                  onChange={(e) => {
+                    setComment(e.target.value);
+                  }}
+                />
+                {isSubmitting ? (
+                  <Spinner />
+                ) : (
+                  <Button
+                    fontSize={"20px"}
+                    display={"flex"}
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                    onClick={handleAddComment}
+                    bg={"transparent"}
+                    variant={"link"}
+                    color={"#dcdcdc"}
+                  >
+                    등록
+                  </Button>
+                )}
+              </Flex>
+            </FormControl>
+          ) : (
+            <FormControl>
+              <Flex w={"100%"} flexDirection="column" alignItems={"flex-end"}>
+                <Textarea
+                  readOnly={"readonly"}
+                  w="100%"
+                  placeholder="로그인 후 이용바랍니다."
+                  border={"1px solid white"}
+                  h={"150px"}
+                  mb={2}
+                  color={"#dcdcdc"}
+                  maxHieght={"150px"}
+                  onChange={(e) => {
+                    setComment(e.target.value);
+                  }}
+                />
+                {isSubmitting ? (
+                  <Spinner />
+                ) : (
+                  <Button
+                    isDisabled={true}
+                    fontSize={"20px"}
+                    display={"flex"}
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                    onClick={handleAddComment}
+                    bg={"transparent"}
+                    variant={"link"}
+                    color={"#dcdcdc"}
+                  >
+                    등록
+                  </Button>
+                )}
+              </Flex>
+            </FormControl>
+          )}
         </Box>
         {commentList !== null ? (
           commentList.map((comments) => (

@@ -42,6 +42,7 @@ import axios from "axios";
 import BoardProfile from "../../board/BoardProfile";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import MemberInfoFollowProfile from "./MemberInfoFollowProfile";
 
 export function MemberInfoMyFriendList({ loginInfo }) {
   const [searchInput, setSearchInput] = useState("");
@@ -282,7 +283,7 @@ export function MemberInfoMyFriendList({ loginInfo }) {
                 </Box>
               </Box>
               <Box>
-                {followingList !== undefined ? (
+                {followingList !== null &&
                   followingList.map((following) => (
                     <Box
                       display={"flex"}
@@ -293,7 +294,9 @@ export function MemberInfoMyFriendList({ loginInfo }) {
                       borderBottom={"1px solid black"}
                     >
                       <Box w={"220px"}>
-                        <BoardProfile board_member_id={following.member_id} />
+                        <MemberInfoFollowProfile
+                          board_member_id={following.member_id}
+                        />
                       </Box>
 
                       <Box
@@ -353,10 +356,7 @@ export function MemberInfoMyFriendList({ loginInfo }) {
                         삭제
                       </Button>
                     </Box>
-                  ))
-                ) : (
-                  <></>
-                )}
+                  ))}
               </Box>
             </Box>
             {/* 팔로워 리스트 -------------------------------------------------------*/}
@@ -411,7 +411,7 @@ export function MemberInfoMyFriendList({ loginInfo }) {
                   </Box>
                 </Box>
                 <Box>
-                  {followerList !== null ? (
+                  {followerList !== null &&
                     followerList.map((follower) => (
                       <Box
                         display={"flex"}
@@ -422,7 +422,9 @@ export function MemberInfoMyFriendList({ loginInfo }) {
                         borderBottom={"1px solid black"}
                       >
                         <Box w={"220px"}>
-                          <BoardProfile board_member_id={follower.member_id} />
+                          <MemberInfoFollowProfile
+                            board_member_id={follower.member_id}
+                          />
                         </Box>
 
                         <Box
@@ -465,10 +467,7 @@ export function MemberInfoMyFriendList({ loginInfo }) {
                           {follower.total_board}
                         </Box>
                       </Box>
-                    ))
-                  ) : (
-                    <></>
-                  )}
+                    ))}
                 </Box>
               </Box>
             </Box>

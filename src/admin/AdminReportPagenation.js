@@ -1,16 +1,14 @@
-import React from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Badge, Box, Button, Center, Flex, Kbd } from "@chakra-ui/react";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
+import { Box, Button, Center, Flex, Kbd } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import React from "react";
 
 function PageButton({ variant, pageNumber, children }) {
   const [params] = useSearchParams();
   const navigate = useNavigate();
   function handleClick() {
     params.set("pg", pageNumber);
-    console.log(pageNumber);
     navigate("?" + params);
   }
   return (
@@ -27,7 +25,7 @@ function PageButton({ variant, pageNumber, children }) {
   );
 }
 
-function MemberInfoPageNation({ pageNumberInformation }) {
+export function AdminReportPagenation({ pageNumberInformation }) {
   const pageNumbers = [];
   if (pageNumberInformation !== null) {
     for (
@@ -40,19 +38,20 @@ function MemberInfoPageNation({ pageNumberInformation }) {
   }
   return (
     <>
-      <Center marginTop={"20px"} w={"100%"}>
+      <Center marginTop={"30px"} w={"100%"}>
         <Box>
           <Flex flexDirection={"column"}>
             <Flex justifyContent={"center"} mb={2}>
               {/* 이전 페이지 그룹이 있을 때만 출력 */}
-              {pageNumberInformation !== null && (
-                <PageButton
-                  variant="ghost"
-                  pageNumber={pageNumberInformation.prevPageNumber}
-                >
-                  <FontAwesomeIcon icon={faAngleLeft} />
-                </PageButton>
-              )}
+              {pageNumberInformation !== null &&
+                pageNumberInformation.prevPageNumber && (
+                  <PageButton
+                    variant="ghost"
+                    pageNumber={pageNumberInformation.prevPageNumber}
+                  >
+                    <FontAwesomeIcon icon={faAngleLeft} />
+                  </PageButton>
+                )}
               {/* 위 pageNumbers 배열에 저장된 번호를 map을 이용해 각각 UI를 그려주고 navigate 값을 설정한다. */}
               {pageNumberInformation !== null &&
                 pageNumbers.map((pageNumber) => (
@@ -70,14 +69,15 @@ function MemberInfoPageNation({ pageNumberInformation }) {
                   </PageButton>
                 ))}
               {/* 이후 페이지 그룹이 있을 때만 출력 */}
-              {pageNumberInformation !== null && (
-                <PageButton
-                  variant="ghost"
-                  pageNumber={pageNumberInformation.nextPageNumber}
-                >
-                  <FontAwesomeIcon icon={faAngleRight} />
-                </PageButton>
-              )}
+              {pageNumberInformation !== null &&
+                pageNumberInformation.nextPageNumber && (
+                  <PageButton
+                    variant="ghost"
+                    pageNumber={pageNumberInformation.nextPageNumber}
+                  >
+                    <FontAwesomeIcon icon={faAngleRight} />
+                  </PageButton>
+                )}
             </Flex>
             <Center>
               <span>
@@ -95,5 +95,3 @@ function MemberInfoPageNation({ pageNumberInformation }) {
     </>
   );
 }
-
-export default MemberInfoPageNation;
