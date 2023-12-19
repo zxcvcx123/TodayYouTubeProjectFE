@@ -132,25 +132,30 @@ function BoardView() {
 
   // 초기 렌더링
   useEffect(() => {
-    console.log("랜더링 테스트");
-    axios.get("/api/board/id/" + id).then((response) => {
-      setBoard(response.data);
+    if (loginInfo !== null) {
+      console.log("랜더링 테스트");
+      axios.get("/api/board/id/" + id).then((response) => {
+        setBoard(response.data);
 
-      if (!response.data.is_show) {
-        navigate("/");
-        window.alert("삭제된 게시물입니다.");
-      }
+        if (!response.data.is_show) {
+          navigate("/");
+          window.alert("삭제된 게시물입니다.");
+        }
 
-      // 게시글 데이터를 가져온 후 작성자 여부를 확인하여 isAuthor 설정
-      if (loginInfo && loginInfo.member_id === response.data.board_member_id) {
-        setIsAuthor(true);
-      }
+        // 게시글 데이터를 가져온 후 작성자 여부를 확인하여 isAuthor 설정
+        if (
+          loginInfo &&
+          loginInfo.member_id === response.data.board_member_id
+        ) {
+          setIsAuthor(true);
+        }
 
-      // 게시글 정보를 가져온 후 채널 정보를 가져오는 함수 호출
-      if (response.data.link) {
-        fetchChannelInfo(response.data.link);
-      }
-    });
+        // 게시글 정보를 가져온 후 채널 정보를 가져오는 함수 호출
+        if (response.data.link) {
+          fetchChannelInfo(response.data.link);
+        }
+      });
+    }
   }, [isSubmitting, location, loginInfo]);
 
   // 초기 렌더링 파일 목록 가져오기
@@ -169,7 +174,7 @@ function BoardView() {
   function handleDeleteClick() {
     setIsSubmitting(true);
     // 게시글 삭제 시 아이디 유효성 검증
-    if (!isAuthor) {
+    if (!isAuthor && loginInfo.role_name !== "운영자") {
       window.alert("작성자 본인만 삭제 가능합니다.");
       return;
     }
@@ -188,6 +193,7 @@ function BoardView() {
         countlike: board.countlike,
         views: board.views,
         login_member_id: loginInfo.member_id,
+        role_name: loginInfo.role_name,
       })
       .then(() => {
         toast({
@@ -473,7 +479,7 @@ function BoardView() {
         )}
         {/* -------------------- 버튼 섹션 -------------------- */}
         <Flex justifyContent={"right"}>
-          {isAuthor && (
+          {isAuthor && loginInfo.role_name === "운영자" && (
             <Box mr={"10px"}>
               {/* 수정 버튼 */}
               <Button
