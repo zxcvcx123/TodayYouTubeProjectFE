@@ -23,7 +23,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import { InfoOutlineIcon } from "@chakra-ui/icons";
 
-
 export function MainBoardList({
   mainBoardList2,
   mainBoardList3,
@@ -34,7 +33,6 @@ export function MainBoardList({
   mainRecommendBoardList,
   mainHitsBoardList,
 }) {
-
   // chakra ui 버튼 커스텀
   const CircleIcon = ({ color, ...props }) => (
     <Icon viewBox="0 0 200 200" {...props}>
@@ -77,7 +75,7 @@ export function MainBoardList({
     <Box>
       <Flex width="80%" m="auto" mt={"100px"} justifyContent={"space-around"}>
         <Card width="40%" borderTopRadius={10}>
-          <CardHeader width="100%" bg="blackAlpha.50" borderTopRadius={10}>
+          <CardHeader width="100%" bg={"rgb(218,181,181)"} borderTopRadius={10}>
             <Heading width="100%" fontWeight="bold" fontSize="1.2rem">
               통합 최다 추천글
             </Heading>
@@ -100,7 +98,7 @@ export function MainBoardList({
           </CardBody>
         </Card>
         <Card width="40%" borderTopRadius={10}>
-          <CardHeader width="100%" bg="blackAlpha.50" borderTopRadius={10}>
+          <CardHeader width="100%" bg={"rgb(216,218,181)"} borderTopRadius={10}>
             <Heading width="100%" fontWeight="bold" fontSize="1.2rem">
               통합 최다 조회수 글
             </Heading>
@@ -126,7 +124,7 @@ export function MainBoardList({
 
       <Flex width="80%" m="auto" mt={"50px"} justifyContent={"space-evenly"}>
         <Card width="27%" borderTopRadius={10}>
-          <CardHeader width="100%" bg="blackAlpha.50" borderTopRadius={10}>
+          <CardHeader width="100%" bg={"rgb(186,218,181)"} borderTopRadius={10}>
             <Heading width="100%" fontWeight="bold" fontSize="1.2rem">
               스포츠 게시판 최신글
             </Heading>
@@ -148,7 +146,7 @@ export function MainBoardList({
           </CardBody>
         </Card>
         <Card width="27%" borderTopRadius={10}>
-          <CardHeader width="100%" bg="blackAlpha.50" borderTopRadius={10}>
+          <CardHeader width="100%" bg={"rgb(181,218,209)"} borderTopRadius={10}>
             <Heading width="100%" fontWeight="bold" fontSize="1.2rem">
               먹방 게시판 최신글
             </Heading>
@@ -170,7 +168,7 @@ export function MainBoardList({
           </CardBody>
         </Card>
         <Card width="27%" borderTopRadius={10}>
-          <CardHeader width="100%" bg="blackAlpha.50" borderTopRadius={10}>
+          <CardHeader width="100%" bg={"rgb(181,196,218)"} borderTopRadius={10}>
             <Heading width="100%" fontWeight="bold" fontSize="1.2rem">
               게임 게시판 최신글
               <InfoOutlineIcon />
@@ -196,7 +194,7 @@ export function MainBoardList({
 
       <Flex width="80%" m="auto" mt={"50px"} justifyContent={"space-evenly"}>
         <Card width="27%" borderTopRadius={10}>
-          <CardHeader width="100%" bg="blackAlpha.50" borderTopRadius={10}>
+          <CardHeader width="100%" bg={"rgb(201,181,218)"} borderTopRadius={10}>
             <Heading width="100%" fontWeight="bold" fontSize="1.2rem">
               일상 게시판 최신글
             </Heading>
@@ -218,7 +216,7 @@ export function MainBoardList({
           </CardBody>
         </Card>
         <Card width="27%" borderTopRadius={10}>
-          <CardHeader width="100%" bg="blackAlpha.50" borderTopRadius={10}>
+          <CardHeader width="100%" bg={"rgb(218,181,192)"} borderTopRadius={10}>
             <Heading width="100%" fontWeight="bold" fontSize="1.2rem">
               영화/드라마 게시판 최신글
             </Heading>
@@ -240,7 +238,7 @@ export function MainBoardList({
           </CardBody>
         </Card>
         <Card width="27%" borderTopRadius={10}>
-          <CardHeader width="100%" bg="blackAlpha.50" borderTopRadius={10}>
+          <CardHeader width="100%" bg={"rgb(218,196,181)"} borderTopRadius={10}>
             <Heading width="100%" fontWeight="bold" fontSize="1.2rem">
               요리 게시판 최신글
             </Heading>

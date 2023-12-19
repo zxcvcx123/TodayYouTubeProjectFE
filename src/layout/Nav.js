@@ -44,7 +44,7 @@ import { SocketContext } from "../socket/Socket";
 import axios from "axios";
 import { faGhost, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { Logo1WithText, Logo1WithText3 } from "../assets/Image";
-import VisitorCountCard from "../admin/VisitorCountCard";
+import VisitorCountCard from "../component/VisitorCountCard";
 
 Stack.propTypes = {
   p: PropTypes.number,
@@ -158,7 +158,7 @@ export function Nav({ setSocket }) {
   return (
     <>
       <div className="navBackground">
-        <Center bg="transparent" boxShadow="0px 4px 8px rgba(0, 0, 0, 0.2)">
+        <Center bg="white" boxShadow="0px 4px 8px rgba(0, 0, 0, 0.2)">
           <Flex
             // ml="100px"
             mt={2}
@@ -239,6 +239,8 @@ export function Nav({ setSocket }) {
                   >
                     게임
                   </MenuItem>
+                  <Divider />
+
                   <MenuItem
                     onClick={() => {
                       navigate("board/vote/list?p=1");
@@ -246,7 +248,7 @@ export function Nav({ setSocket }) {
                   >
                     투표
                   </MenuItem>
-                  <MenuItem onClick={() => navigate("/chat")}>채팅</MenuItem>
+                  {/*<MenuItem onClick={() => navigate("/chat")}>채팅</MenuItem>*/}
                   <Divider />
                   <MenuItem
                     onClick={(e) => {
@@ -270,7 +272,11 @@ export function Nav({ setSocket }) {
                 size="md"
                 variant="ghost"
                 rightIcon={<FontAwesomeIcon icon={faGhost} />}
-                backgroundColor={"rgba(11,121,177,0.5)"}
+                backgroundColor={"rgb(184,235,246)"}
+                _hover={{
+                  backgroundColor: "rgb(94,72,147)",
+                  color: "rgb(255,255,255)",
+                }}
                 mr={"10px"}
                 style={{ fontFamily: "Nanum Gothic" }}
               >
@@ -281,6 +287,8 @@ export function Nav({ setSocket }) {
             <Box>
               <SearchMain />
             </Box>
+
+            {/* ---------- 방문자 통계 ---------- */}
             <Box>
               <VisitorCountCard />
             </Box>

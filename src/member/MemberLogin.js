@@ -13,6 +13,7 @@ import {
   FormControl,
   FormLabel,
   Heading,
+  Image,
   Input,
   Text,
   useToast,
@@ -23,6 +24,7 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { DetectLoginContext } from "../component/LoginProvider";
+import { Logo1Background_Removal, Logo1WithText3 } from "../assets/Image";
 
 export function MemberLogin() {
   /* 아이디 */
@@ -86,13 +88,11 @@ export function MemberLogin() {
 
   return (
     <>
-      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 mt-10">
+      <div className="flex min-h-screen flex-1 flex-col justify-center px-6 py-0 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <img
-            className="mx-auto h-20 w-auto"
-            src="https://img.freepik.com/premium-vector/red-youtube-logo-social-media-logo_197792-1803.jpg"
-            alt="Your Company"
-          />
+          <Center>
+            <Image src={Logo1WithText3} w={"300px"} />
+          </Center>
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">

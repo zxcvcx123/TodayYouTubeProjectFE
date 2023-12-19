@@ -26,8 +26,16 @@ import { LineChart } from "../component/LineChart";
 
 // 도넛 차트 출력 형식
 const DoughnutChartBox = ({ title, chartData }) => (
-  <Box width={"150px"} alignItems={"center"}>
-    <Text textAlign={"center"}>{title}</Text>
+  <Box
+    display={"flex"}
+    flexDirection={"column"}
+    alignItems={"center"}
+    mx={"15px"}
+    w={"150px"}
+  >
+    <Badge fontSize={"18px"} colorScheme={"blue"}>
+      {title}
+    </Badge>
     <DoughnutChart chartData={chartData} />
   </Box>
 );
@@ -36,7 +44,12 @@ const DoughnutChartBox = ({ title, chartData }) => (
 function CreateRankingCard({ title, data, countField }) {
   return (
     <>
-      <Card w={"250px"} p={"10px"} alignItems={"center"}>
+      <Card
+        w={"250px"}
+        p={"10px"}
+        alignItems={"center"}
+        boxShadow={"0 2px 10px rgba(0, 0, 0, 0.3)"}
+      >
         <CardHeader>
           <Heading size="sm">{title}</Heading>
         </CardHeader>
@@ -294,93 +307,111 @@ function AdminMain() {
   }
 
   return (
-    <Flex border={"1px solid blue"}>
+    <Flex>
       {/* ---------- 사이드 바 ----------*/}
       <Sidenav />
       {/* ---------- 메인 ----------*/}
-      <Box>
-        <Card p={1} w={"200px"}>
-          <Flex>
-            <Text mb={1} fontWeight={"bold"}>
-              전체 방문자 수
-              <Badge mx={1} fontSize="13px" colorScheme="green">
-                {countVisitorAll}
-              </Badge>
-              명
-            </Text>
-          </Flex>
-          <Flex>
-            <Text fontWeight={"bold"}>
-              오늘 방문자 수
-              <Badge mx={1} fontSize="13px" colorScheme="blue">
-                {countVisitorToday}
-              </Badge>
-              명
-            </Text>
-          </Flex>
-        </Card>
+      <Box p={"20px"}>
         <Flex>
-          <Box>
+          <Box
+            bg={"white"}
+            boxShadow={"0 2px 10px rgba(0, 0, 0, 0.3)"}
+            w={"500px"}
+            m={"10px"}
+            p={"10px"}
+            display="flex"
+            flexDirection="column"
+            alignItems="center" // 가로 가운데 정렬
+          >
+            <Badge fontSize={"18px"} colorScheme={"green"}>
+              카테고리 별 게시글 수
+            </Badge>
             <BarChart chartData={countCategoryBoard} />
+            <Badge fontSize={"18px"} colorScheme={"blue"} mt={"20px"}>
+              카테고리 별 게시글 작성 성비
+            </Badge>
             <BarChart chartData={countCategoryGender} />
           </Box>
-          <Box w={"500px"}>
+          <Box
+            bg={"white"}
+            boxShadow={"0 2px 10px rgba(0, 0, 0, 0.3)"}
+            w={"500px"}
+            m={"10px"}
+            p={"10px"}
+            display="flex"
+            flexDirection="column"
+            alignItems="center" // 가로 가운데 정렬
+          >
+            <Badge fontSize={"18px"} colorScheme={"purple"}>
+              카테고리별 게시글 조회수
+            </Badge>
             <LineChart chartData={countCategoryView} />
+            <Badge fontSize={"18px"} colorScheme={"orange"} mt={"20px"}>
+              사이트 월별 방문자 수 (12개월)
+            </Badge>
             <LineChart chartData={countVisitorMonthlyData} />
           </Box>
-          <Box bg={"whitesmoke"} h={"100%"} borderRadius={"30px"} p={"10px"}>
-            <Flex mb={"10px"}>
-              <DoughnutChartBox
-                title="스포츠"
-                chartData={countCategoryGenderSports}
-              />
-              <DoughnutChartBox
-                title="먹방"
-                chartData={countCategoryGenderMukbang}
-              />
-              <DoughnutChartBox
-                title="일상"
-                chartData={countCategoryGenderDaily}
-              />
-            </Flex>
-            <Flex>
-              <DoughnutChartBox
-                title="요리"
-                chartData={countCategoryGenderCooking}
-              />
-              <DoughnutChartBox
-                title="영화/드라마"
-                chartData={countCategoryGenderMovie}
-              />
-              <DoughnutChartBox
-                title="게임"
-                chartData={countCategoryGenderGame}
-              />
-            </Flex>
-          </Box>
-        </Flex>
-        <Flex gap={2}>
-          {/* ---------- 게시글 작성 순위 ---------- */}
-          <CreateRankingCard
-            title={"게시글 작성 순위"}
-            data={userWriteRankDataList}
-            countField={"write"}
-          />
+          <Flex m={"10px"} gap={2} flexDirection={"column"}>
+            {/* ---------- 게시글 작성 순위 ---------- */}
+            <CreateRankingCard
+              title={"게시글 작성 순위"}
+              data={userWriteRankDataList}
+              countField={"write"}
+            />
 
-          {/* ---------- 좋아요 작성 순위 ---------- */}
-          <CreateRankingCard
-            title={"좋아요 작성 순위"}
-            data={userLikeRankDataList}
-            countField={"like"}
-          />
+            {/* ---------- 좋아요 작성 순위 ---------- */}
+            <CreateRankingCard
+              title={"좋아요 작성 순위"}
+              data={userLikeRankDataList}
+              countField={"like"}
+            />
 
-          {/* ---------- 댓글 작성 순위 ---------- */}
-          <CreateRankingCard
-            title={"댓글 작성 순위"}
-            data={userCommentRankDataList}
-            countField={"comment"}
-          />
+            {/* ---------- 댓글 작성 순위 ---------- */}
+            <CreateRankingCard
+              title={"댓글 작성 순위"}
+              data={userCommentRankDataList}
+              countField={"comment"}
+            />
+          </Flex>
         </Flex>
+        <Box
+          bg={"white"}
+          w={"1290px"}
+          p={"10px"}
+          m={"10px"}
+          display="flex"
+          flexDirection="column"
+          justifyContent="center" // 세로 가운데 정렬
+          alignItems="center" // 가로 가운데 정렬
+          boxShadow={"0 2px 10px rgba(0, 0, 0, 0.3)"}
+        >
+          <Flex mb={"10px"}>
+            <DoughnutChartBox
+              title="스포츠"
+              chartData={countCategoryGenderSports}
+            />
+            <DoughnutChartBox
+              title="먹방"
+              chartData={countCategoryGenderMukbang}
+            />
+            <DoughnutChartBox
+              title="일상"
+              chartData={countCategoryGenderDaily}
+            />
+            <DoughnutChartBox
+              title="요리"
+              chartData={countCategoryGenderCooking}
+            />
+            <DoughnutChartBox
+              title="영화/드라마"
+              chartData={countCategoryGenderMovie}
+            />
+            <DoughnutChartBox
+              title="게임"
+              chartData={countCategoryGenderGame}
+            />
+          </Flex>
+        </Box>
       </Box>
     </Flex>
   );

@@ -21,6 +21,8 @@ import {
   Heading,
   CardBody,
   CardFooter,
+  Badge,
+  ButtonGroup,
 } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
 import { MainBoardList } from "./MainBoardList";
@@ -48,6 +50,8 @@ export function MainView() {
   const [isMonth, setIsMonth] = useState(true);
 
   const [mainShowLink, setMainShowLink] = useState(null);
+  const [mainShowTitle, setMainShowTitle] = useState(null);
+  const [mainShowId, setMainShowId] = useState(null);
   const [linkCategory, setLinkCategory] = useState(null);
   const [linkNameEng, setLinkNameEng] = useState(null);
 
@@ -82,6 +86,8 @@ export function MainView() {
         setFirstList(response.data.firstBoardList);
         setOtherList(response.data.otherBoardList);
         setMainShowLink(response.data.firstBoardList.link);
+        setMainShowTitle(response.data.firstBoardList.title);
+        setMainShowId(response.data.firstBoardList.id);
         setLinkCategory(response.data.firstBoardList.categoryName);
         setLinkNameEng(response.data.firstBoardList.name_eng);
         setMainBoardList2(response.data.mainBoardList2);
@@ -120,15 +126,17 @@ export function MainView() {
   useEffect(() => {
     if (loginInfo !== null) {
       const memberInfo = loginInfo.member_id;
-
+      console.log("멤버 아이디 방문자 보내기" + loginInfo.member_id);
       axios.get("/api/visitor", { params: { member_id: memberInfo } });
+    } else {
+      console.log("loginInfo null이라서 방문자 안 보내지는거??");
     }
-  }, []);
+  }, [loginInfo]);
 
-  function handleCategoryChange(e) {
-    // setMainShowLink(null);
-    setCategory(e.target.value);
-  }
+  // 사이드바 카테고리 변경
+  const handleCategoryChange = (newCategory) => {
+    setCategory(newCategory);
+  };
 
   //
   // if (firstList == null) {
@@ -214,7 +222,7 @@ export function MainView() {
           <Box
             w="300px"
             bg={"white"}
-            boxShadow={"0px 4px 10px rgba(0, 0, 0, 0.1)"}
+            boxShadow={"0px 4px 10px rgba(0, 0, 0, 0.3)"}
           >
             <Box>
               <Flex my={"10px"} justifyContent={"space-around"}>
@@ -286,7 +294,76 @@ export function MainView() {
                 - {dateSort} 가장 추천을 많이 받은 영상들입니다.
               </Text>
             </Box>
-            <Select
+
+            <Box>
+              <Flex mt={10} flexDirection="column">
+                <Button
+                  onClick={() => handleCategoryChange("all")}
+                  backgroundColor={category === "all" ? "black" : "white"}
+                  color={category === "all" ? "white" : "black"}
+                  _hover={{ backgroundColor: "black", color: "white" }}
+                  borderRadius={"0px"}
+                >
+                  전체게시판
+                </Button>
+                <Button
+                  onClick={() => handleCategoryChange("C002")}
+                  backgroundColor={category === "C002" ? "black" : "white"}
+                  color={category === "C002" ? "white" : "black"}
+                  _hover={{ backgroundColor: "black", color: "white" }}
+                  borderRadius={"0px"}
+                >
+                  스포츠
+                </Button>
+                <Button
+                  onClick={() => handleCategoryChange("C003")}
+                  backgroundColor={category === "C003" ? "black" : "white"}
+                  color={category === "C003" ? "white" : "black"}
+                  _hover={{ backgroundColor: "black", color: "white" }}
+                  borderRadius={"0px"}
+                >
+                  먹방
+                </Button>
+                <Button
+                  onClick={() => handleCategoryChange("C004")}
+                  backgroundColor={category === "C004" ? "black" : "white"}
+                  color={category === "C004" ? "white" : "black"}
+                  _hover={{ backgroundColor: "black", color: "white" }}
+                  borderRadius={"0px"}
+                >
+                  일상
+                </Button>
+                <Button
+                  onClick={() => handleCategoryChange("C005")}
+                  backgroundColor={category === "C005" ? "black" : "white"}
+                  color={category === "C005" ? "white" : "black"}
+                  _hover={{ backgroundColor: "black", color: "white" }}
+                  borderRadius={"0px"}
+                >
+                  요리
+                </Button>
+                <Button
+                  onClick={() => handleCategoryChange("C006")}
+                  backgroundColor={category === "C006" ? "black" : "white"}
+                  color={category === "C006" ? "white" : "black"}
+                  _hover={{ backgroundColor: "black", color: "white" }}
+                  borderRadius={"0px"}
+                >
+                  영화/드라마
+                </Button>
+                <Button
+                  onClick={() => handleCategoryChange("C007")}
+                  backgroundColor={category === "C007" ? "black" : "white"}
+                  color={category === "C007" ? "white" : "black"}
+                  _hover={{ backgroundColor: "black", color: "white" }}
+                  borderRadius={"0px"}
+                >
+                  게임
+                </Button>
+              </Flex>
+            </Box>
+
+            {/*<Select
               onChange={handleCategoryChange}
               width="60%"
               backgroundColor="white"
@@ -302,7 +379,8 @@ export function MainView() {
               <option value="C005">요리게시판</option>
               <option value="C006">영화/드라마 게시판</option>
               <option value="C007">게임게시판</option>
-            </Select>
+            </Select>*/}
+
             {/*<Box mt={50} ml={10}>*/}
             {/*  <Text color={"red.300"}>**둘 중에 하나만 사용할 예정**</Text>*/}
             {/*  <Button mb={1} onClick={() => setBaseOnCurrent(true)}>*/}
@@ -316,104 +394,200 @@ export function MainView() {
 
           {/* --------------- 메인 유튜브 영상 출력 --------------- */}
           <Center w={"1100px"}>
-            <Box
-              boxShadow={"0px 4px 10px rgba(0, 0, 0, 0.1)"}
+            <Flex
+              flexDirection="column"
+              alignItems="flex-end"
+              boxShadow={"0px 4px 10px rgba(0, 0, 0, 0.3)"}
               h={"600px"}
               w={"1000px"}
-              bg={"white"}
-              p={"50px"}
+              bg={"rgb(0,0,0)"}
+              p={"20px 50px"}
             >
               <Box>
                 {mainShowLink && (
-                  <ReactPlayer
-                    className="video-container"
-                    url={mainShowLink}
-                    config={{
-                      youtube: {
-                        playerVars: {
-                          autoplay: 0,
+                  /*<YoutubeInfo
+                    link={mainShowLink}
+                    extraVideo={true}
+                    opts={{ height: "500px", width: "900px" }}
+                  />*/
+                  <>
+                    <Text
+                      w={"900px"}
+                      fontSize={"xx-large"}
+                      fontFamily={"Nanum Gothic"}
+                      fontWeight={"bold"}
+                      whiteSpace={"nowrap"}
+                      overflow={"hidden"}
+                      textOverflow={"ellipsis"}
+                      color={"rgb(255,255,255)"}
+                      onClick={() => navigate("board/" + mainShowId)}
+                      _hover={{
+                        cursor: "pointer",
+                        textDecoration: "underline",
+                        color: "rgb(200, 200, 200)",
+                      }}
+                    >
+                      추천글 : {mainShowTitle} >>
+                    </Text>
+                    <ReactPlayer
+                      className="video-container"
+                      url={mainShowLink}
+                      width={"900px"}
+                      height={"500px"}
+                      config={{
+                        youtube: {
+                          playerVars: {
+                            autoplay: 0,
+                          },
                         },
-                      },
-                    }}
-                  />
-                  // <YoutubeInfo
-                  //   link={mainShowLink}
-                  //   extraVideo={true}
-                  //   opts={{ height: "500px", width: "900px" }}
-                  // />
+                      }}
+                    />
+                  </>
                 )}
               </Box>
 
               <Box>
-                <Button color={"rgb(11,121,168)"} variant={"link"} bg={"white"}>
+                <Button
+                  color={"rgb(102,206,252)"}
+                  variant={"link"}
+                  onClick={() => navigate("board/list?category=" + linkNameEng)}
+                >
                   {linkCategory}게시판으로 이동하기 >
                 </Button>
               </Box>
-            </Box>
+            </Flex>
           </Center>
         </Flex>
 
-        {/* --------------- 1 ~ 5위 썸네일 --------------- */}
-        <Flex border={"3px solid blue"} backgroundColor={"gray"}>
-          <Box>
-            <Flex h={"15%"} color={"white"} fontSize={"1.5rem"}>
-              <Text variant={"outline"} color={"wthie"} ml={10}>
+        {/* ------------------------------ 1 ~ 5위 썸네일 ------------------------------ */}
+        <Flex w={"1500px"}>
+          <Box
+            w={"250px"}
+            // border={"1px solid black"}
+            p={"10px"}
+            bg={"rgb(255,255,255)"}
+            borderRadius={"20px"}
+            mx={"10px"}
+            display={"flex"}
+            flexDirection={"column"}
+            alignItems={"flex-start"}
+            boxShadow={"0 4px 8px rgba(0, 0, 0, 0.3)"}
+            transition={"transform 0.1s ease-in-out"}
+            _hover={{ transform: "scale(1.1)", cursor: "pointer" }}
+            style={{
+              border:
+                firstList.link === mainShowLink
+                  ? "1px solid rgb(181,233,245)"
+                  : "none",
+              transform:
+                firstList.link === mainShowLink ? "scale(1.1)" : undefined,
+            }}
+            onClick={() => {
+              setLinkCategory(firstList.categoryName);
+              setMainShowLink(firstList.link);
+              setLinkNameEng(firstList.name_eng);
+              setMainShowTitle(firstList.title);
+              setMainShowId(firstList.id);
+            }}
+          >
+            <Flex h={"20%"}>
+              <Badge
+                fontSize="20px"
+                colorScheme="yellow"
+                h={"90%"}
+                mr={"5px"}
+                variant={"subtle"}
+              >
                 1위
+              </Badge>
+              <Text
+                w={"90%"}
+                lineHeight={"30px"}
+                fontFamily={"Nanum Gothic"}
+                fontWeight={"bold"}
+                whiteSpace={"nowrap"}
+                overflow={"hidden"}
+                textOverflow={"ellipsis"}
+              >
+                {firstList.title}
               </Text>
             </Flex>
-            <Box
-              key={firstList.link}
-              _hover={{ cursor: "pointer" }}
-              w={"100%"}
-              h={"82%"}
-              border={"1px"}
-              borderColor={"orange"}
-              onClick={() => {
-                setLinkCategory(firstList.categoryName);
-                setMainShowLink(firstList.link);
-              }}
-            >
+            <Box key={firstList.link} w={"230px"} h={"130px"}>
               <YoutubeInfo link={firstList.link} extraThumbnail={true} />
             </Box>
           </Box>
-          <Flex w={"80%"} ml={5}>
-            {otherList &&
-              otherList.map((other) => (
-                <Box
-                  w={"25%"}
-                  border={"1px"}
-                  borderColor={"white"}
-                  key={other.id}
-                >
-                  <Box
-                    h={"20%"}
-                    color={"white"}
-                    // key={other.link}
-                    ml={12}
-                    fontSize={"1.2rem"}
-                    mt={"20px"}
-                    mb={"25px"}
+          {/*<Flex w={"80%"} ml={5}>*/}
+          {otherList &&
+            otherList.map((other) => (
+              <Box
+                w={"250px"}
+                // border={"1px solid black"}
+                p={"10px"}
+                bg={"rgb(255,255,255)"}
+                borderRadius={"20px"}
+                mx={"10px"}
+                display={"flex"}
+                flexDirection={"column"}
+                alignItems={"flex-start"}
+                boxShadow={"0 4px 8px rgba(0, 0, 0, 0.3)"}
+                transition={"transform 0.1s ease-in-out"}
+                onClick={() => {
+                  setLinkCategory(other.categoryName);
+                  setMainShowLink(other.link);
+                  setMainShowTitle(other.title);
+                  setMainShowId(other.id);
+                  setLinkNameEng(other.name_eng);
+                }}
+                _hover={{ transform: "scale(1.1)", cursor: "pointer" }}
+                style={{
+                  border:
+                    other.link === mainShowLink
+                      ? "1px solid rgb(181,233,245)"
+                      : "none",
+                  transform:
+                    other.link === mainShowLink ? "scale(1.1)" : undefined,
+                }}
+                key={other.id}
+              >
+                <Flex key={other.link}>
+                  <Badge
+                    fontSize="20px"
+                    colorScheme={
+                      otherList.indexOf(other) + 2 === 2
+                        ? "blue"
+                        : otherList.indexOf(other) + 2 === 3
+                          ? "orange"
+                          : "purple"
+                    }
+                    h={"90%"}
+                    mr={"5px"}
+                    variant={
+                      otherList.indexOf(other) + 2 === 2 ||
+                      otherList.indexOf(other) + 2 === 3
+                        ? "subtle"
+                        : "outline"
+                    }
                   >
-                    <br />
                     {otherList.indexOf(other) + 2}위
-                  </Box>
-                  <Box
-                    w="100%"
-                    h="60%"
-                    key={other.id}
-                    border={"1px"}
-                    borderColor={"orange"}
-                    onClick={() => {
-                      setLinkCategory(other.categoryName);
-                      setMainShowLink(other.link);
-                    }}
-                    _hover={{ cursor: "pointer" }}
+                  </Badge>
+                  <Text
+                    w={"190px"}
+                    lineHeight={"30px"}
+                    fontFamily={"Nanum Gothic"}
+                    fontWeight={"bold"}
+                    whiteSpace={"nowrap"}
+                    overflow={"hidden"}
+                    textOverflow={"ellipsis"}
                   >
-                    <YoutubeInfo link={other.link} extraThumbnail={true} />
-                  </Box>
+                    {other.title}
+                  </Text>
+                </Flex>
+                <Box w={"230px"} h={"130px"} key={other.id}>
+                  <YoutubeInfo link={other.link} extraThumbnail={true} />
                 </Box>
-              ))}
-          </Flex>
+              </Box>
+            ))}
+          {/*</Flex>*/}
         </Flex>
 
         {/* --------------- 최신 게시글 리스트 --------------- */}

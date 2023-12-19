@@ -111,7 +111,7 @@ function VoteList() {
 
   // -------------------------------------------------- 화면 렌더링 --------------------------------------------------
   return (
-    <Box w={"60%"} m={"0 auto"}>
+    <Box w={"60%"} m={"20px auto"}>
       <Box>
         {/* ------------------------- 게시글 목록 상단 바 ------------------------- */}
         <Box mb={5}>
@@ -133,6 +133,7 @@ function VoteList() {
                     backgroundColor: "lightcyan",
                     cursor: "pointer",
                   }}
+                  my={"10px"}
                 >
                   {board.voteAgo >= voteEndTime && (
                     <>

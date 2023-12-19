@@ -13,5 +13,5 @@ export function BarChart({ chartData }) {
     },
   };
 
-  return <Bar data={chartData} options={options} style={{ width: "500px" }} />;
+  return <Bar data={chartData} options={options} />;
 }
