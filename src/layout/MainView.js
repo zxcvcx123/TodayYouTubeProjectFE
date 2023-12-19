@@ -421,7 +421,11 @@ export function MainView() {
                       textOverflow={"ellipsis"}
                       color={"rgb(255,255,255)"}
                       onClick={() => navigate("board/" + mainShowId)}
-                      _hover={{ cursor: "pointer" }}
+                      _hover={{
+                        cursor: "pointer",
+                        textDecoration: "underline",
+                        color: "rgb(200, 200, 200)",
+                      }}
                     >
                       추천글 : {mainShowTitle} >>
                     </Text>
