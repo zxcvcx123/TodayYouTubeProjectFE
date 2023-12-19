@@ -44,7 +44,7 @@ import { SocketContext } from "../socket/Socket";
 import axios from "axios";
 import { faGhost, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { Logo1WithText, Logo1WithText3 } from "../assets/Image";
-import VisitorCountCard from "../admin/VisitorCountCard";
+import VisitorCountCard from "../component/VisitorCountCard";
 
 Stack.propTypes = {
   p: PropTypes.number,
