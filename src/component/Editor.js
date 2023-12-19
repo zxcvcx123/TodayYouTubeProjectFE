@@ -61,16 +61,10 @@ const Editor = ({ uuid, setUuid, setContent1, data }) => {
         <CKEditor
           editor={ClassicEditor}
           data={data || ""}
-          config={{ extraPlugins: [uploadPlugin, formattingPlugin] }}
-          onReady={(editor) => {
-            console.log("Ready.");
-            // You can store the "editor" and use when it is needed.
-            // console.log("Editor is ready to use!", editor);
-          }}
+          config={{ extraPlugins: [uploadPlugin] }}
+          onReady={(editor) => {}}
           onChange={(event, editor) => {
             setContent1(editor.getData());
-            const data1 = editor.getData();
-            console.log({ event, editor, data1 });
           }}
           onFocus={(event, editor) => {
             editor.ui.view.editable.element.style.minHeight = "500px";

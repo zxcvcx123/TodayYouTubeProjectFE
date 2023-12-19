@@ -32,6 +32,7 @@ function BoardWrite() {
   const [contentError, setContentError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isYouTubeLink, setIsYouTubeLink] = useState(false);
+  const [returnData, setReturnData] = useState(content);
 
   /* useLocation */
   const location = useLocation();
@@ -84,11 +85,6 @@ function BoardWrite() {
     }
   }, [title, content]);
 
-  //  ck에디터 설정 값 (toolbar 삭제함)
-  const editorConfig = {
-    toolbar: [],
-  };
-
   // 작성 완료 버튼 클릭 ---------------------------------------------------
   function handleSubmit() {
     if (!token.detectLogin) {
@@ -98,21 +94,21 @@ function BoardWrite() {
 
     console.log(imgFile.length);
     console.log(imgFile);
+    console.log(content);
 
     setIsSubmitting(true);
+
     if (imgFile.length > 5) {
-      const figuresArray = Array.from(imgFile);
-
-      // 각 <figure> 태그를 순회하면서 DOM에서 제거합니다.
-      figuresArray.forEach((figure) => {
-        figure.remove();
-      });
-
       toast({
         description: "이미지 개수를 초과했습니다. (최대 5개)",
         status: "info",
       });
-
+      let htmlContent = content; // 여기에 HTML 컨텐츠를 넣으세요.
+      htmlContent = htmlContent.replace(
+        /<figure[^>]*>([\s\S]*?)<\/figure>/g,
+        "",
+      );
+      setReturnData(htmlContent);
       setIsSubmitting(false);
     }
 
@@ -240,10 +236,10 @@ function BoardWrite() {
           <FormLabel id="content">본문</FormLabel>
           {/* CKEditor 본문 영역 */}
           <Editor
+            data={returnData}
             setUuid={setUuid}
             uuid={uuid}
             setContent1={setContent}
-            config={editorConfig}
           />
           <FormErrorMessage>{contentError}</FormErrorMessage>
         </FormControl>
