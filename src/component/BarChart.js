@@ -10,8 +10,10 @@ export function BarChart({ chartData }) {
     interaction: {
       mode: "index",
       intersect: false,
+      width: "500px",
+      height: "500px",
     },
   };
 
-  return <Bar data={chartData} options={options} style={{ width: "500px" }} />;
+  return <Bar data={chartData} options={options} />;
 }

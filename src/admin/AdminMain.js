@@ -26,8 +26,16 @@ import { LineChart } from "../component/LineChart";
 
 // 도넛 차트 출력 형식
 const DoughnutChartBox = ({ title, chartData }) => (
-  <Box width={"150px"} alignItems={"center"}>
-    <Text textAlign={"center"}>{title}</Text>
+  <Box
+    display={"flex"}
+    flexDirection={"column"}
+    alignItems={"center"}
+    mx={"15px"}
+    w={"150px"}
+  >
+    <Badge fontSize={"18px"} colorScheme={"blue"}>
+      {title}
+    </Badge>
     <DoughnutChart chartData={chartData} />
   </Box>
 );
@@ -309,7 +317,11 @@ function AdminMain() {
             m={"5px"}
             bg={"white"}
             boxShadow={"0 2px 10px rgba(0, 0, 0, 0.3)"}
+            w={"500px"}
           >
+            <Badge fontSize={"18px"} colorScheme={"blue"}>
+              아아아
+            </Badge>
             <BarChart chartData={countCategoryBoard} />
             <BarChart chartData={countCategoryGender} />
           </Box>
@@ -317,7 +329,11 @@ function AdminMain() {
             m={"5px"}
             bg={"white"}
             boxShadow={"0 2px 10px rgba(0, 0, 0, 0.3)"}
+            w={"500px"}
           >
+            <Badge fontSize={"18px"} colorScheme={"blue"}>
+              아아아
+            </Badge>
             <LineChart chartData={countCategoryView} />
             <LineChart chartData={countVisitorMonthlyData} />
           </Box>
@@ -346,7 +362,7 @@ function AdminMain() {
         </Flex>
         <Box
           bg={"white"}
-          w={"500px"}
+          w={"1270px"}
           p={"10px"}
           m={"5px"}
           display="flex"
@@ -368,8 +384,6 @@ function AdminMain() {
               title="일상"
               chartData={countCategoryGenderDaily}
             />
-          </Flex>
-          <Flex>
             <DoughnutChartBox
               title="요리"
               chartData={countCategoryGenderCooking}
