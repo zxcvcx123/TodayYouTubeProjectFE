@@ -48,6 +48,12 @@ const Editor = ({ uuid, setUuid, setContent1, data }) => {
     };
   }
 
+  function formattingPlugin(editor) {
+    editor.model.schema.setAttributeProperties("linkHref", {
+      isFormatting: true,
+    });
+  }
+
   return (
     <Box>
       <section>
@@ -55,7 +61,7 @@ const Editor = ({ uuid, setUuid, setContent1, data }) => {
         <CKEditor
           editor={ClassicEditor}
           data={data || ""}
-          config={{ extraPlugins: [uploadPlugin] }}
+          config={{ extraPlugins: [uploadPlugin, formattingPlugin] }}
           onReady={(editor) => {
             console.log("Ready.");
             // You can store the "editor" and use when it is needed.

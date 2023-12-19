@@ -84,6 +84,11 @@ function BoardWrite() {
     }
   }, [title, content]);
 
+  //  ck에디터 설정 값 (toolbar 삭제함)
+  const editorConfig = {
+    toolbar: [],
+  };
+
   // 작성 완료 버튼 클릭 ---------------------------------------------------
   function handleSubmit() {
     if (!token.detectLogin) {
@@ -234,7 +239,12 @@ function BoardWrite() {
         <FormControl mb={2} isInvalid={contentError}>
           <FormLabel id="content">본문</FormLabel>
           {/* CKEditor 본문 영역 */}
-          <Editor setUuid={setUuid} uuid={uuid} setContent1={setContent} />
+          <Editor
+            setUuid={setUuid}
+            uuid={uuid}
+            setContent1={setContent}
+            config={editorConfig}
+          />
           <FormErrorMessage>{contentError}</FormErrorMessage>
         </FormControl>
 
