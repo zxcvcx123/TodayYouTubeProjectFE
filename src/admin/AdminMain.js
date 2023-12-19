@@ -314,30 +314,44 @@ function AdminMain() {
       <Box p={"20px"}>
         <Flex>
           <Box
-            m={"5px"}
             bg={"white"}
             boxShadow={"0 2px 10px rgba(0, 0, 0, 0.3)"}
             w={"500px"}
+            m={"10px"}
+            p={"10px"}
+            display="flex"
+            flexDirection="column"
+            alignItems="center" // 가로 가운데 정렬
           >
-            <Badge fontSize={"18px"} colorScheme={"blue"}>
-              아아아
+            <Badge fontSize={"18px"} colorScheme={"green"}>
+              카테고리 별 게시글 수
             </Badge>
             <BarChart chartData={countCategoryBoard} />
+            <Badge fontSize={"18px"} colorScheme={"blue"} mt={"20px"}>
+              카테고리 별 게시글 작성 성비
+            </Badge>
             <BarChart chartData={countCategoryGender} />
           </Box>
           <Box
-            m={"5px"}
             bg={"white"}
             boxShadow={"0 2px 10px rgba(0, 0, 0, 0.3)"}
             w={"500px"}
+            m={"10px"}
+            p={"10px"}
+            display="flex"
+            flexDirection="column"
+            alignItems="center" // 가로 가운데 정렬
           >
-            <Badge fontSize={"18px"} colorScheme={"blue"}>
-              아아아
+            <Badge fontSize={"18px"} colorScheme={"purple"}>
+              카테고리별 게시글 조회수
             </Badge>
             <LineChart chartData={countCategoryView} />
+            <Badge fontSize={"18px"} colorScheme={"orange"} mt={"20px"}>
+              사이트 월별 방문자 수 (12개월)
+            </Badge>
             <LineChart chartData={countVisitorMonthlyData} />
           </Box>
-          <Flex m={"5px"} gap={2} flexDirection={"column"}>
+          <Flex m={"10px"} gap={2} flexDirection={"column"}>
             {/* ---------- 게시글 작성 순위 ---------- */}
             <CreateRankingCard
               title={"게시글 작성 순위"}
@@ -362,9 +376,9 @@ function AdminMain() {
         </Flex>
         <Box
           bg={"white"}
-          w={"1270px"}
+          w={"1290px"}
           p={"10px"}
-          m={"5px"}
+          m={"10px"}
           display="flex"
           flexDirection="column"
           justifyContent="center" // 세로 가운데 정렬
