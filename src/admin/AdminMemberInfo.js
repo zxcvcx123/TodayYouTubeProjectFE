@@ -238,12 +238,10 @@ function AdminMemberInfo(props) {
                             {memberInfoBoardList &&
                               memberInfoBoardList.map((mList) => (
                                 <Tr key={mList.id}>
-                                  <Td textAlign={"center"}>
+                                  <Td textAlign={"center"} w={"10%"}>
                                     <YoutubeInfo
                                       link={mList.link}
                                       extraThumbnail={true}
-                                      thumbnailWidth={120}
-                                      thumbnailHeight={70}
                                     />
                                   </Td>
                                   <Td

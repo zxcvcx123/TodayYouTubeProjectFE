@@ -157,7 +157,7 @@ function AdminMemberList(props) {
               memberList.map((member) => (
                 <Tr
                   key={member.member_id}
-                  _hover={{ backgroundColor: "red.100" }}
+                  _hover={{ backgroundColor: "red.100", cursor: "pointer" }}
                   onClick={() => navigate("/admin/member/" + member.member_id)}
                 >
                   <Td

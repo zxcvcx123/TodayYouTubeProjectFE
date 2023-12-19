@@ -119,7 +119,7 @@ function InquiryWrite() {
   }
 
   return (
-    <Box width={"80%"} m={"auto"}>
+    <Box width={"80%"} m={"auto"} mt={10}>
       <FormControl mb={5}>
         <FormLabel fontWeight={"bold"} ml={3}>
           문의유형

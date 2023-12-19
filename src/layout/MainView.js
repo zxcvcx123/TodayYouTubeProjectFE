@@ -42,10 +42,10 @@ export function MainView() {
   const [category, setCategory] = useState("all");
   const [firstList, setFirstList] = useState(null);
   const [otherList, setOtherList] = useState(null);
-  const [dateSort, setDateSort] = useState("weekly");
+  const [dateSort, setDateSort] = useState("monthly");
   const [isDay, setIsDay] = useState(false);
-  const [isWeek, setIsWeek] = useState(true);
-  const [isMonth, setIsMonth] = useState(false);
+  const [isWeek, setIsWeek] = useState(false);
+  const [isMonth, setIsMonth] = useState(true);
 
   const [mainShowLink, setMainShowLink] = useState(null);
   const [linkCategory, setLinkCategory] = useState(null);

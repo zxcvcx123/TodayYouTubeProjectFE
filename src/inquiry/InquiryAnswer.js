@@ -89,7 +89,7 @@ function InquiryAnswer(props) {
   }
 
   return (
-    <Box>
+    <Box mt={10}>
       {/*// 문의 내용시작*/}
       <Box width={"80%"} m={"auto"}>
         <FormControl mb={1}>
