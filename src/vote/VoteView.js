@@ -108,7 +108,7 @@ function VoteView() {
       setOptionTwoVotes(res.data.voted_b);
 
       // 마감기한 설정
-      setVoteEndTime(1);
+      setVoteEndTime(8);
     });
 
     // axios.get 해서 버튼을 눌렀는지 안눌렀는지 게시판번호/아이디 기준으로 조회
