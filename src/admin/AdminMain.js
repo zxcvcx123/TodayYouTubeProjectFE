@@ -294,31 +294,11 @@ function AdminMain() {
   }
 
   return (
-    <Flex border={"1px solid blue"}>
+    <Flex>
       {/* ---------- 사이드 바 ----------*/}
       <Sidenav />
       {/* ---------- 메인 ----------*/}
       <Box>
-        <Card p={1} w={"200px"}>
-          <Flex>
-            <Text mb={1} fontWeight={"bold"}>
-              전체 방문자 수
-              <Badge mx={1} fontSize="13px" colorScheme="green">
-                {countVisitorAll}
-              </Badge>
-              명
-            </Text>
-          </Flex>
-          <Flex>
-            <Text fontWeight={"bold"}>
-              오늘 방문자 수
-              <Badge mx={1} fontSize="13px" colorScheme="blue">
-                {countVisitorToday}
-              </Badge>
-              명
-            </Text>
-          </Flex>
-        </Card>
         <Flex>
           <Box>
             <BarChart chartData={countCategoryBoard} />

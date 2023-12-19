@@ -1,5 +1,4 @@
-
-import { Box, Button,  Flex, Heading, VStack, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Heading, VStack, Text } from "@chakra-ui/react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -22,13 +21,7 @@ export function Sidenav() {
   };
 
   return (
-    <VStack
-      bg={"rgb(53,53,53)"}
-      color={"white"}
-      w={40}
-      h={1000}
-      border={"1px solid red"}
-    >
+    <VStack bg={"rgb(53,53,53)"} color={"white"} w={40} h={1000}>
       <Heading as="h4" size="md" my={"15px"}>
         관리자 페이지
       </Heading>
