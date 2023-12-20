@@ -62,8 +62,6 @@ function AdminManageSuspension(props) {
       .catch(() => console.log("bad"));
   }, [isReleasing, location]);
 
-  console.log(params);
-
   if (suspensionList == null || releaseList == null || pageInfo == null) {
     return <LoadingPage />;
   }
@@ -84,7 +82,7 @@ function AdminManageSuspension(props) {
           status: "success",
         });
       })
-      .catch((error) => console.log(error))
+      .catch(() => console.log("bad"))
       .finally(() => {
         setIsReleasing(false);
         setIsSubmitting(false);
