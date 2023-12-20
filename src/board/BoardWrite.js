@@ -3,11 +3,13 @@ import {
   Box,
   Button,
   Center,
+  Flex,
   FormControl,
   FormErrorMessage,
   FormLabel,
   Heading,
   Input,
+  Text,
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
@@ -240,7 +242,16 @@ function BoardWrite() {
 
         {/* -------------------- 본문 -------------------- */}
         <FormControl isInvalid={contentError}>
-          <FormLabel id="content">본문</FormLabel>
+          <FormLabel id="content">
+            <Flex>
+              <Text>본문</Text>
+              <Flex alignItems={"end"}>
+                <Text color="gray" fontSize={"0.75rem"}>
+                  (본문 내 이미지는 최대 5개 / 1개당 최대 500kb / 총 1mb)
+                </Text>
+              </Flex>
+            </Flex>
+          </FormLabel>
           {/* CKEditor 본문 영역 */}
           <Editor
             data={returnData}
@@ -256,21 +267,24 @@ function BoardWrite() {
 
         {/* -------------------- 버튼 섹션 -------------------- */}
         {/* 저장 버튼 */}
-        <Button
-          onClick={handleSubmit}
-          colorScheme="blue"
-          isDisabled={isSubmitting}
-        >
-          작성 완료
-        </Button>
+        <Box mt={2}>
+          <Button
+            onClick={handleSubmit}
+            colorScheme="blue"
+            isDisabled={isSubmitting}
+            mr={2}
+          >
+            작성 완료
+          </Button>
 
-        {/* 취소 버튼 */}
-        <Button
-          onClick={() => navigate("/board/list?category=" + currentParams)}
-          colorScheme="red"
-        >
-          취소
-        </Button>
+          {/* 취소 버튼 */}
+          <Button
+            onClick={() => navigate("/board/list?category=" + currentParams)}
+            colorScheme="red"
+          >
+            취소
+          </Button>
+        </Box>
       </Box>
     </Center>
 

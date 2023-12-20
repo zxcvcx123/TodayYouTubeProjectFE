@@ -8,8 +8,10 @@ import {
   Box,
   Button,
   Divider,
+  Flex,
   FormControl,
   FormLabel,
+  Heading,
   Input,
   Menu,
   MenuButton,
@@ -24,6 +26,7 @@ import {
   ModalOverlay,
   Select,
   Spinner,
+  Text,
   Textarea,
   useDisclosure,
   useToast,
@@ -49,12 +52,15 @@ function InquiryWrite() {
   const [content, setContent] = useState("");
   const [inquiry_category, setInquiry_category] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [returnData, setReturnData] = useState(content);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const navigate = useNavigate();
   const toast = useToast();
 
+  /* ck에디터 이미지 첨부 개수 확인 */
+  let imgFile = document.getElementsByTagName("figure");
   // write 도메인에 쳐서 들어올경우
   useEffect(() => {
     if (!token.detectLogin) {
@@ -62,35 +68,52 @@ function InquiryWrite() {
     }
   }, []);
 
-  // 에디터 이미지 uuid arr 형태 변수에 담아주기
-  let uuSrc = getSrc();
-
   function handleWriteButton() {
     setIsSubmitting(true);
-    axios
-      .post("/api/inquiry/write", {
-        title,
-        content,
-        inquiry_category,
-        inquiry_member_id: loginInfo.member_id,
-        uuSrc,
-      })
-      .then(() => {
-        navigate("/inquiry/list");
-        toast({
-          description: "문의가 접수되었습니다.",
-          status: "success",
-        });
-      })
-      .catch(() =>
-        toast({
-          description: "작성을 완료해주세요",
-          status: "warning",
-        }),
-      )
-      .finally(() => {
-        setIsSubmitting(false);
+
+    if (imgFile.length > 5) {
+      toast({
+        description: "이미지 개수를 초과했습니다. (최대 5개)",
+        status: "info",
       });
+      let htmlContent = content; // 여기에 HTML 컨텐츠를 넣으세요.
+      htmlContent = htmlContent.replace(
+        /<figure[^>]*>([\s\S]*?)<\/figure>/g,
+        "",
+      );
+      setReturnData(htmlContent);
+      setIsSubmitting(false);
+    }
+
+    if (imgFile.length < 6) {
+      // 에디터 이미지 uuid arr 형태 변수에 담아주기
+      let uuSrc = getSrc();
+
+      axios
+        .post("/api/inquiry/write", {
+          title,
+          content,
+          inquiry_category,
+          inquiry_member_id: loginInfo.member_id,
+          uuSrc,
+        })
+        .then(() => {
+          navigate("/inquiry/list");
+          toast({
+            description: "문의가 접수되었습니다.",
+            status: "success",
+          });
+        })
+        .catch(() =>
+          toast({
+            description: "작성을 완료해주세요",
+            status: "warning",
+          }),
+        )
+        .finally(() => {
+          setIsSubmitting(false);
+        });
+    }
   }
 
   // 문의글 등록시 운영자에게 알림
@@ -125,9 +148,11 @@ function InquiryWrite() {
 
   return (
     <Box width={"80%"} m={"auto"} mt={10}>
+      <Heading mb={5}>문의하기</Heading>
+
       <FormControl mb={5}>
-        <FormLabel fontWeight={"bold"} ml={3}>
-          문의유형
+        <FormLabel fontWeight={"bold"}>
+          <Text>문의유형</Text>
         </FormLabel>
         <Menu>
           <MenuButton
@@ -172,9 +197,7 @@ function InquiryWrite() {
         </Menu>
       </FormControl>
       <FormControl mb={5}>
-        <FormLabel fontWeight={"bold"} ml={3}>
-          제목
-        </FormLabel>
+        <FormLabel fontWeight={"bold"}>제목</FormLabel>
         <Input
           borderColor={"black.300"}
           type="text"
@@ -184,8 +207,15 @@ function InquiryWrite() {
       </FormControl>
       {/*<Editor />*/}
       <FormControl mb={5}>
-        <FormLabel fontWeight={"bold"} ml={3}>
-          문의내용
+        <FormLabel fontWeight={"bold"}>
+          <Flex>
+            <Text>문의 내용</Text>
+            <Flex alignItems={"end"}>
+              <Text color="gray" fontSize={"0.75rem"}>
+                (본문 내 이미지는 최대 5개 / 1개당 최대 500kb / 총 1mb)
+              </Text>
+            </Flex>
+          </Flex>
         </FormLabel>
         {/*<Textarea*/}
         {/*  borderColor={"black.300"}*/}
@@ -195,7 +225,12 @@ function InquiryWrite() {
         {/*  placeholder="문의하실 내용을 입력해주세요"*/}
         {/*  onChange={(e) => setContent(e.target.value)}*/}
         {/*></Textarea>*/}
-        <Editor setUuid={setUuid} uuid={uuid} setContent1={setContent} />
+        <Editor
+          setUuid={setUuid}
+          uuid={uuid}
+          setContent1={setContent}
+          data={returnData}
+        />
       </FormControl>
       {IsConnected && (
         <Button

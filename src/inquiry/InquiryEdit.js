@@ -2,8 +2,10 @@ import React, { useContext, useEffect, useState } from "react";
 import {
   Box,
   Button,
+  Flex,
   FormControl,
   FormLabel,
+  Heading,
   Input,
   Menu,
   MenuButton,
@@ -46,6 +48,9 @@ function InquiryEdit(props) {
 
   const { id } = useParams();
 
+  /* ck에디터 이미지 첨부 개수 확인 */
+  let imgFile = document.getElementsByTagName("figure");
+
   // 초기 화면
   useEffect(() => {
     axios.get("/api/inquiry/" + id).then((response) => {
@@ -60,36 +65,49 @@ function InquiryEdit(props) {
     return <LoadingPage />;
   }
 
-  function handleUpdateButton() {
+  function handleUpdateButton(boardId) {
     setIsSubmitting(true);
-    axios
-      .put("/api/inquiry/edit", {
-        id,
-        title,
-        content,
-        inquiry_category,
-        uuSrc,
-        inquiry_member_id: inquiry.inquiry_member_id,
-        login_member_id: loginInfo.member_id,
-      })
-      .then(() => {
-        navigate("/inquiry/list");
-        toast({
-          description: "수정이 완료되었습니다.",
-          status: "success",
-        });
-      })
-      .catch((error) => {
-        toast({
-          description: "권한이 없습니다.",
-          status: "error",
-        });
-      })
-      .finally(() => setIsSubmitting(false));
-  }
 
-  // 에디터 이미지 uuid arr 형태 변수에 담아주기
-  let uuSrc = getSrc();
+    if (imgFile.length > 5) {
+      toast({
+        description:
+          "이미지 개수를 초과했습니다. (최대 5개) 다시 작성해주세요.",
+        status: "warning",
+      });
+      navigate("/inquiry/" + boardId);
+      setIsSubmitting(false);
+    }
+
+    if (imgFile.length < 6) {
+      // 에디터 이미지 uuid arr 형태 변수에 담아주기
+      let uuSrc = getSrc();
+
+      axios
+        .put("/api/inquiry/edit", {
+          id,
+          title,
+          content,
+          inquiry_category,
+          uuSrc,
+          inquiry_member_id: inquiry.inquiry_member_id,
+          login_member_id: loginInfo.member_id,
+        })
+        .then(() => {
+          navigate("/inquiry/list");
+          toast({
+            description: "수정이 완료되었습니다.",
+            status: "success",
+          });
+        })
+        .catch((error) => {
+          toast({
+            description: "권한이 없습니다.",
+            status: "error",
+          });
+        })
+        .finally(() => setIsSubmitting(false));
+    }
+  }
 
   // 본문 영역 이미지 소스 코드 얻어오기
   function getSrc() {
@@ -112,10 +130,11 @@ function InquiryEdit(props) {
 
   return (
     <Box width={"80%"} m={"auto"}>
-      <FormControl mb={1}>
-        <FormLabel fontWeight={"bold"} ml={3}>
-          문의유형
-        </FormLabel>
+      <Heading mt={10} mb={7}>
+        문의 수정
+      </Heading>
+      <FormControl>
+        <FormLabel fontWeight={"bold"}>문의유형</FormLabel>
         <Menu>
           <MenuButton
             borderColor={"black"}
@@ -158,10 +177,8 @@ function InquiryEdit(props) {
           </MenuList>
         </Menu>
       </FormControl>
-      <FormControl mb={1}>
-        <FormLabel fontWeight={"bold"} ml={3}>
-          제목
-        </FormLabel>
+      <FormControl my={5}>
+        <FormLabel fontWeight={"bold"}>제목</FormLabel>
         <Input
           type="text"
           width={"70%"}
@@ -171,9 +188,16 @@ function InquiryEdit(props) {
         ></Input>
       </FormControl>
       {/*<Editor />*/}
-      <FormControl mb={1}>
-        <FormLabel fontWeight={"bold"} ml={3}>
-          문의내용
+      <FormControl>
+        <FormLabel fontWeight={"bold"}>
+          <Flex>
+            <Text>문의 내용</Text>
+            <Flex alignItems={"end"}>
+              <Text color="gray" fontSize={"0.75rem"}>
+                (본문 내 이미지는 최대 5개 / 1개당 최대 500kb / 총 1mb)
+              </Text>
+            </Flex>
+          </Flex>
         </FormLabel>
         {/*<Textarea*/}
         {/*  padding={3}*/}
@@ -193,7 +217,8 @@ function InquiryEdit(props) {
       <Button
         isDisabled={isSubmitting}
         colorScheme="blue"
-        onClick={handleUpdateButton}
+        onClick={() => handleUpdateButton(inquiry.id)}
+        mr={2}
       >
         수정완료
       </Button>
