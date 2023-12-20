@@ -26,6 +26,7 @@ function VoteSearch({ params }) {
           placeholder="주제를 입력해 주세요."
           onChange={(e) => setKeyword(e.target.value)}
           mr={"1%"}
+          bg={"white"}
         />
         <Button>
           <SearchIcon

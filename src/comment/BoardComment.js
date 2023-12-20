@@ -14,6 +14,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Spacer,
   Stack,
   StackDivider,
   Text,
@@ -174,7 +175,7 @@ function CommentItem({
       .catch((error) => {
         if (error.response.status === 403) {
           toast({
-            description: " 댓글 수정은 작성자만 가능합니다.",
+            description: "댓글 수정은 작성자만 가능합니다.",
             status: "error",
           });
           return;
@@ -584,19 +585,23 @@ export function BoardComment({ board_id, boardData }) {
         reply_commentList={reply_commentList}
         setReply_commentList={setReply_commentList}
       />
-      <CommentList
-        board_id={board_id}
-        isSubmitting={isSubmitting}
-        setIsSubmitting={setIsSubmitting}
-        commentList={commentList}
-        onDeleteModalOpen={handleCommentDeleteModalOpen}
-        setCommentLike={setCommentLike}
-        onCommentLikeClick={handleCommentLike}
-        reply_commentList={reply_commentList}
-        setReply_commentList={setReply_commentList}
-        setIsReplyListOpen={setIsReplyListOpen}
-        isReplyListOpen={isReplyListOpen}
-      />
+      {commentList.length > 0 ? (
+        <CommentList
+          board_id={board_id}
+          isSubmitting={isSubmitting}
+          setIsSubmitting={setIsSubmitting}
+          commentList={commentList}
+          onDeleteModalOpen={handleCommentDeleteModalOpen}
+          setCommentLike={setCommentLike}
+          onCommentLikeClick={handleCommentLike}
+          reply_commentList={reply_commentList}
+          setReply_commentList={setReply_commentList}
+          setIsReplyListOpen={setIsReplyListOpen}
+          isReplyListOpen={isReplyListOpen}
+        />
+      ) : (
+        <Box h="2rem" />
+      )}
 
       {/* 삭제 모달 */}
       <Modal isOpen={isOpen} onClose={onClose}>
