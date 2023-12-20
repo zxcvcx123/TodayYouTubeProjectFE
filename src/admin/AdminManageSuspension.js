@@ -48,7 +48,6 @@ function AdminManageSuspension(props) {
   const { onClose, isOpen, onOpen } = useDisclosure();
   const location = useLocation();
   const navigate = useNavigate();
-  let toast = useToast();
   const [params] = useSearchParams();
 
   useEffect(() => {

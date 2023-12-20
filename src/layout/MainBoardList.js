@@ -20,7 +20,7 @@ import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import BoardList from "../board/BoardList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
+import { faCircleInfo, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { InfoOutlineIcon } from "@chakra-ui/icons";
 
 export function MainBoardList({
@@ -49,7 +49,7 @@ export function MainBoardList({
     navigate(`/board/${postId}`);
   };
 
-  const renderListItem = (board, index) => (
+  const renderListItem = (board, index, item, titleName) => (
     <ListItem
       _hover={{ cursor: "pointer" }}
       key={index}
@@ -58,15 +58,21 @@ export function MainBoardList({
     >
       <ListIcon as={CircleIcon} color={"whitesmoke"} mb={"3px"} />
       <Tooltip label={board.title}>
-        <Text
-          _hover={{ textDecoration: "underline" }}
-          display="inline"
-          whiteSpace="nowrap"
-          overflow="hidden"
-          textOverflow="ellipsis"
-        >
-          {`${board.title.slice(0, 20)}`}
-        </Text>
+        <Flex justifyContent={"space-between"}>
+          <Text
+            _hover={{ textDecoration: "underline" }}
+            display="inline"
+            whiteSpace="nowrap"
+            overflow="hidden"
+            textOverflow="ellipsis"
+          >
+            {`${board.title.slice(0, 20)}`}
+          </Text>
+          <Text>
+            {titleName === "추천" && <FontAwesomeIcon icon={faHeart} />}
+            {item}
+          </Text>
+        </Flex>
       </Tooltip>
     </ListItem>
   );
@@ -96,7 +102,7 @@ export function MainBoardList({
               {mainRecommendBoardList.map((board, index) => (
                 <Box key={board.uuid}>
                   {index > 0 && <Divider />}
-                  {renderListItem(board, index)}
+                  {renderListItem(board, index, board.countlike, "추천")}
                 </Box>
               ))}
             </List>
@@ -124,7 +130,7 @@ export function MainBoardList({
               {mainHitsBoardList.map((board, index) => (
                 <Box key={board.uuid}>
                   {index > 0 && <Divider />}
-                  {renderListItem(board, index)}
+                  {renderListItem(board, index, board.views, "조회수")}
                 </Box>
               ))}
             </List>

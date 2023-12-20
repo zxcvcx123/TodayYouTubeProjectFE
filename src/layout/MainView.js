@@ -85,11 +85,13 @@ export function MainView() {
       .then((response) => {
         setFirstList(response.data.firstBoardList);
         setOtherList(response.data.otherBoardList);
-        setMainShowLink(response.data.firstBoardList.link);
-        setMainShowTitle(response.data.firstBoardList.title);
-        setMainShowId(response.data.firstBoardList.id);
-        setLinkCategory(response.data.firstBoardList.categoryName);
-        setLinkNameEng(response.data.firstBoardList.name_eng);
+        if (response.data.firstBoardList !== null) {
+          setMainShowLink(response.data.firstBoardList.link);
+          setMainShowTitle(response.data.firstBoardList.title);
+          setMainShowId(response.data.firstBoardList.id);
+          setLinkCategory(response.data.firstBoardList.categoryName);
+          setLinkNameEng(response.data.firstBoardList.name_eng);
+        }
         setMainBoardList2(response.data.mainBoardList2);
         setMainBoardList3(response.data.mainBoardList3);
         setMainBoardList4(response.data.mainBoardList4);
@@ -147,13 +149,13 @@ export function MainView() {
   // }
   // console.log(otherList);
 
-  function handleHomeClick() {
+  function handleHomeClick(handleHomeClickSet) {
+    navigate("/");
     setCategory("all");
     setDateSort("monthly");
     setIsMonth(true);
     setIsDay(false);
     setIsWeek(false);
-    navigate("/");
   }
 
   if (firstList == null || otherList == null) {
@@ -161,7 +163,7 @@ export function MainView() {
       <>
         {showSpinner && <LoadingPage />}
         {showSpinner || (
-          <>
+          <Box h={"700px"}>
             <Card
               align="center"
               w={"60%"}
@@ -170,12 +172,7 @@ export function MainView() {
               variant={"filled"}
             >
               <CardHeader>
-                <Heading size="md">
-                  [ {dateSort == "daily" && "오늘은 "}
-                  {dateSort == "weekly" && "이번주엔 "}
-                  {dateSort == "monthly" && "이번달엔 "}
-                  아직 작성된 게시물이 없어요! ]
-                </Heading>
+                <Heading size="md">[아직 작성된 게시물이 없어요! ]</Heading>
               </CardHeader>
               <CardBody>
                 <Text>게시글을 올려서 추천을 받아보세요!</Text>
@@ -186,7 +183,7 @@ export function MainView() {
                   color="black"
                   colorScheme="red"
                   variant={"outline"}
-                  onClick={handleHomeClick}
+                  onClick={() => handleHomeClick()}
                 >
                   홈으로 가기
                 </Button>
@@ -200,7 +197,7 @@ export function MainView() {
                 </Button>
               </CardFooter>
             </Card>
-          </>
+          </Box>
         )}
       </>
     );
