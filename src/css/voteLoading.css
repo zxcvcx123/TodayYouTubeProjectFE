@@ -11,7 +11,7 @@
 
 .vote-symbol {
     animation: growAndShrink 2s ease-in-out forwards;
-    background-image: url('https://mybucketcontainer1133557799.s3.ap-northeast-2.amazonaws.com/fileserver/4ff08c09-5558-4e24-99c6-561d6ffeb069/1702550179809.png'); /* 배경 이미지 설정 */
+    /*background-image: url('https://mybucketcontainer1133557799.s3.ap-northeast-2.amazonaws.com/fileserver/4ff08c09-5558-4e24-99c6-561d6ffeb069/1702550179809.png'); !* 배경 이미지 설정 *!*/
     background-size: cover; /* 이미지 크기 조정 */
     background-position: center; /* 이미지 위치 조정 */
     width: 500px; /* 적절한 크기 설정 */

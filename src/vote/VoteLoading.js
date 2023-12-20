@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import "../css/voteLoading.css";
 import { Box, Center } from "@chakra-ui/react";
+import { vote } from "../assets/Image";
 
 function VoteLoading({ children }) {
   const [loading, setLoading] = useState(true);
@@ -17,7 +18,7 @@ function VoteLoading({ children }) {
   if (loading) {
     return (
       <Center h={"800px"}>
-        <div className="vote-symbol"></div>
+        <Box className="vote-symbol" backgroundImage={vote}></Box>
       </Center>
     );
   }
