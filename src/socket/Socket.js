@@ -100,7 +100,6 @@ function Socket({ children }) {
     // 좋아요 실시간 최신화
     stompClient.current.subscribe("/topic/like", (res) => {
       const data = JSON.parse(res.body);
-
       setCountLike(data.countlike);
     });
 
@@ -136,10 +135,27 @@ function Socket({ children }) {
       },
     );
 
-    // 답변 알람
+    // 문의 알람
     stompClient.current.subscribe(
       "/queue/inquiry/alarm/" + loginInfo.member_id,
+      (res) => {
+        const data = JSON.parse(res.body);
+        setAlarmList(data);
+      },
+    );
 
+    // 문의 개수
+    stompClient.current.subscribe(
+      "/queue/inquiry/alarm/count/" + loginInfo.member_id,
+      (res) => {
+        const data = JSON.parse(res.body);
+        setAlarmCount(data);
+      },
+    );
+
+    // 답변 알람
+    stompClient.current.subscribe(
+      "/queue/answer/alarm/" + loginInfo.member_id,
       (res) => {
         const data = JSON.parse(res.body);
         setAlarmList(data);
@@ -148,7 +164,7 @@ function Socket({ children }) {
 
     // 답변 개수
     stompClient.current.subscribe(
-      "/queue/inquiry/alarm/count/" + loginInfo.member_id,
+      "/queue/answer/alarm/count/" + loginInfo.member_id,
       (res) => {
         const data = JSON.parse(res.body);
         setAlarmCount(data);

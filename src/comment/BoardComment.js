@@ -59,7 +59,7 @@ function CommentForm({
   const { token, handleLogout, loginInfo, validateToken } =
     useContext(DetectLoginContext);
 
-  const { stompClient, setToId } = useContext(SocketContext);
+  const { stompClient, setToId, IsConnected } = useContext(SocketContext);
 
   const [comment, setComment] = useState("");
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
@@ -115,17 +115,24 @@ function CommentForm({
             : "로그인한 사용자만 입력이 가능합니다."
         }
       />
-      <Button
-        colorScheme="telegram"
-        isDisabled={isSubmitting || !loginInfo || isButtonDisabled}
-        h="80px"
-        onClick={() => {
-          handleSubmit();
-          send();
-        }}
-      >
-        쓰기
-      </Button>
+      {IsConnected && (
+        <Button
+          colorScheme="telegram"
+          isDisabled={isSubmitting || !loginInfo || isButtonDisabled}
+          h="80px"
+          onClick={() => {
+            handleSubmit();
+            send();
+          }}
+        >
+          쓰기
+        </Button>
+      )}
+      {IsConnected || (
+        <Button colorScheme="telegram" isDisabled={true} h="80px">
+          연결중
+        </Button>
+      )}
     </Flex>
   );
 }
