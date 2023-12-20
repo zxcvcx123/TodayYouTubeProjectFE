@@ -92,10 +92,6 @@ function BoardWrite() {
       navigate("/member/login");
     }
 
-    console.log(imgFile.length);
-    console.log(imgFile);
-    console.log(content);
-
 
     // 제목이 null이거나 공백일 경우 에러메시지 세팅 후 반환
     if (!title || title.trim() === "") {

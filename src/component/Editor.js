@@ -68,7 +68,6 @@ const Editor = ({ uuid, setUuid, setContent1, data }) => {
           }}
           onFocus={(event, editor) => {
             editor.ui.view.editable.element.style.minHeight = "500px";
-            console.log("Focus.");
           }}
         />
       </section>

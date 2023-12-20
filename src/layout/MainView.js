@@ -101,7 +101,7 @@ export function MainView() {
         // navigate("?" + params);
         return () => clearTimeout(timer);
       })
-      .catch(() => console.log("글이 없습니다"));
+      .catch();
   }, [category, dateSort]);
 
   // 나머지 영상 바뀔때 메인화면에 출력
@@ -119,17 +119,15 @@ export function MainView() {
         // navigate("?" + params);
         return () => clearTimeout(timer);
       })
-      .catch(() => console.log("글이 없습니다."));
+      .catch();
   }, [category, dateSort, mainShowLink]);
 
   // 메인페이지 접속시 방문자 증가
   useEffect(() => {
     if (loginInfo !== null) {
       const memberInfo = loginInfo.member_id;
-      console.log("멤버 아이디 방문자 보내기" + loginInfo.member_id);
       axios.get("/api/visitor", { params: { member_id: memberInfo } });
     } else {
-      console.log("loginInfo null이라서 방문자 안 보내지는거??");
     }
   }, [loginInfo]);
 

@@ -61,8 +61,6 @@ function BoardLike({ id }) {
     }
   }, [like, countLike, loginInfo]);
 
-  console.log(stompClient.current);
-
   // 좋아요 눌렀을때 본인 하트 현황 확인
   // 실시간으로 좋아요 갯수 최신화 하기
   function send() {

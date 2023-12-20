@@ -15,7 +15,6 @@ function VoteSearch({ params }) {
   }, []);
 
   function handleSearchClick() {
-    console.log("실행");
     navigate("/board/vote/list?p=" + params.get("p") + "&k=" + keyword);
   }
 

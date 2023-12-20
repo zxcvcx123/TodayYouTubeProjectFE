@@ -124,7 +124,6 @@ function MemberSignup(props) {
     setIsSubmitting(true);
     const params = new URLSearchParams();
     params.set(itemName, item);
-    console.log(params);
     axios
       .get("/api/signup/check?" + params)
       .then((response) => {
@@ -424,7 +423,6 @@ function MemberSignup(props) {
                 w={"2xs"}
                 type="date"
                 onChange={(e) => {
-                  console.log(e.target.value);
                   setBirth_date(e.target.value);
                 }}
               />

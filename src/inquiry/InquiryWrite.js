@@ -88,7 +88,6 @@ function InquiryWrite() {
         }),
       )
       .finally(() => {
-        console.log("done");
         setIsSubmitting(false);
       });
   }

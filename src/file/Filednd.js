@@ -89,8 +89,6 @@ export function Filednd({
             // 배열에 추가된 파일이랑 기존 파일이 같으면
             if (newPreviews.length === uploadFiles.length) {
               // 가공된 파일 배열을 새 state에 추가
-              console.log("new파일길이: " + newPreviews.length);
-              console.log("upload파일길이: " + uploadFiles.length);
               setPreviews(newPreviews);
             }
           };

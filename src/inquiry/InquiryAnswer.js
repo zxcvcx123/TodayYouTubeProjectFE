@@ -83,7 +83,6 @@ function InquiryAnswer(props) {
           description: "답변등록이 실패하였습니다.",
           status: "error",
         });
-        console.log("bad");
       });
   }
 

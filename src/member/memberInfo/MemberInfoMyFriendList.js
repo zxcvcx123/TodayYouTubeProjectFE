@@ -66,10 +66,8 @@ export function MemberInfoMyFriendList({ loginInfo }) {
           },
         })
         .then((response) => {
-          console.log(response.data);
           setFollowerList(response.data.followerList);
           setFollowingList(response.data.followingList);
-          console.log(followingList);
         });
     }
   }, [loginInfo, dependency]);

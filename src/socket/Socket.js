@@ -55,8 +55,6 @@ function Socket({ children }) {
   // IsConnected true = 연결;
 
   function connect() {
-    console.log(stompClient.current);
-
     if (
       stompClient.current === undefined ||
       stompClient.current.connected === false
@@ -88,7 +86,6 @@ function Socket({ children }) {
 
   // 채팅
   const chatSocket = () => {
-    console.log("채팅연결 성공");
     stompClient.current.subscribe("/topic/greetings", (res) => {
       const json = JSON.parse(res.body);
       setChatId(json.id);
@@ -100,8 +97,6 @@ function Socket({ children }) {
 
   // 게시판 좋아요 실시간
   const boardLikeSocket = () => {
-    console.log("BoardLike에서 소켓연결");
-
     // 좋아요 실시간 최신화
     stompClient.current.subscribe("/topic/like", (res) => {
       const data = JSON.parse(res.body);
@@ -115,7 +110,6 @@ function Socket({ children }) {
       "/queue/like/" + loginInfo.member_id,
       (res) => {
         const data = JSON.parse(res.body);
-        console.log(data);
         setLike(data.like);
       },
     );
@@ -123,15 +117,12 @@ function Socket({ children }) {
 
   // 댓글 알람
   const boardCommentAlramSocket = () => {
-    console.log("댓글 알람 소켓연결");
-
     //  알람목록
     stompClient.current.subscribe(
       "/queue/comment/alarm/" + loginInfo.member_id,
 
       (res) => {
         const data = JSON.parse(res.body);
-        console.log(data);
         setAlarmList(data);
       },
     );
@@ -141,7 +132,6 @@ function Socket({ children }) {
       "/queue/comment/alarm/count/" + loginInfo.member_id,
       (res) => {
         const data = JSON.parse(res.body);
-        console.log(data);
         setAlarmCount(data);
       },
     );
@@ -152,7 +142,6 @@ function Socket({ children }) {
 
       (res) => {
         const data = JSON.parse(res.body);
-        console.log(data);
         setAlarmList(data);
       },
     );
@@ -162,7 +151,6 @@ function Socket({ children }) {
       "/queue/inquiry/alarm/count/" + loginInfo.member_id,
       (res) => {
         const data = JSON.parse(res.body);
-        console.log(data);
         setAlarmCount(data);
       },
     );
@@ -170,22 +158,17 @@ function Socket({ children }) {
 
   // 투표 결과
   const vote = () => {
-    console.log("투표 소켓 연결됨");
     stompClient.current.subscribe("/topic/voteresult", (res) => {
       const data = JSON.parse(res.body);
-      console.log(data);
       setVoteResult(data);
       setOptionOneVotes(data.voted_a);
       setOptionTwoVotes(data.voted_b);
     });
 
-    console.log("큐 비낕쪽 실행 ");
     stompClient.current.subscribe(
       "/queue/votecheck/" + loginInfo.member_id,
       (res) => {
-        console.log("큐 안쪽 실행");
         const data = JSON.parse(res.body);
-        console.log(data);
         setVoteChecked(data.checked_vote_a);
         if (data.checked_vote_not === null) {
           setVoteNot(0);

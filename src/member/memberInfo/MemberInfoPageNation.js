@@ -10,7 +10,6 @@ function PageButton({ variant, pageNumber, children }) {
   const navigate = useNavigate();
   function handleClick() {
     params.set("pg", pageNumber);
-    console.log(pageNumber);
     navigate("?" + params);
   }
   return (

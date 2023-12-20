@@ -181,7 +181,6 @@ export function MiniHomepyLeftContainer({
                     value={introduce}
                     onChange={(e) => {
                       setIntroduce(e.target.value);
-                      console.log(introduce);
                     }}
                   />
                   <Flex w={"100%"} justifyContent={"flex-end"} mt={3}>

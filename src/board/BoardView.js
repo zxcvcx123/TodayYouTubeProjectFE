@@ -130,7 +130,6 @@ function BoardView() {
 
   // 초기 렌더링
   useEffect(() => {
-    console.log("랜더링 테스트");
     axios
       .get("/api/board/id/" + id)
       .then((response) => {
@@ -156,11 +155,6 @@ function BoardView() {
           loginInfo.role_name === "운영자"
         ) {
           setIsAdmin(true);
-        }
-
-        if (loginInfo) {
-          console.log(loginInfo.role_name);
-          console.log(loginInfo.role_name === "운영자");
         }
 
         // 게시글 정보를 가져온 후 채널 정보를 가져오는 함수 호출
@@ -235,8 +229,6 @@ function BoardView() {
             });
             return;
           }
-
-          console.log("error");
         })
         .finally(() => {
           onClose();

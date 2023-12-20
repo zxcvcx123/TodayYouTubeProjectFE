@@ -53,8 +53,6 @@ function Chat() {
 
   function disconnectSocket() {
     stompClient.current.disconnect();
-    console.log("소켓통신 종료");
-    console.log(stompClient.current);
     setSetIdAccess(false);
     setConnection(false);
   }

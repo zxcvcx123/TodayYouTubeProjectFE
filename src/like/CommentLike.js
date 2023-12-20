@@ -14,8 +14,8 @@ function CommentLike({ id }) {
     axios
       .get("/api/like/comment/" + id)
       .then((response) => setCommentlike(response.data))
-      .catch(() => console.log("bad"))
-      .finally(() => console.log("done"));
+      .catch()
+      .finally();
   }, []);
 
   return (

@@ -105,9 +105,7 @@ export function MiniHomepy(props) {
         setHomepyId(response.data.homepy_id);
         originBgmValue = response.data.bgm_link;
       })
-      .catch((error) => {
-        console.log(bgm);
-      });
+      .catch((error) => {});
   }, []);
 
   useEffect(() => {
@@ -117,7 +115,6 @@ export function MiniHomepy(props) {
         setTopRankBoardList(response.data.topBoardList);
         setNewBoardList(response.data.newBoardList);
         setFavoriteBoardList(response.data.favoriteBoardList);
-        console.log(topRankBoardList);
       });
   }, []);
 
@@ -136,9 +133,7 @@ export function MiniHomepy(props) {
           },
         );
         setBoardListAll(response.data.boardListAll);
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     };
     if (searchingKeyword) {
       fetchData();

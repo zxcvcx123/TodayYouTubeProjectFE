@@ -123,8 +123,8 @@ function InquiryView(props) {
           status: "success",
         });
       })
-      .catch(() => console.log("bad"))
-      .finally(() => console.log("done"));
+      .catch()
+      .finally();
   }
 
   // 본문보여주기
@@ -170,7 +170,6 @@ function InquiryView(props) {
           description: "답변등록이 실패하였습니다.",
           status: "error",
         });
-        console.log("bad");
       });
   }
 
@@ -212,7 +211,7 @@ function InquiryView(props) {
           status: "success",
         });
       })
-      .catch((error) => console.log("error"))
+      .catch()
       .finally(() => {
         answerDeleteModal.onClose();
         navigate("/inquiry/list");

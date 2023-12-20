@@ -57,7 +57,6 @@ function VoteWrite() {
         navigate("/member/login");
       }
     }
-    console.log(boardInfo);
   }, [loginInfo]);
 
   // useEffect를 사용하여 titleError가 변경(에러발생)될 때마다 스크롤이 제목 라벨으로 이동
@@ -197,8 +196,6 @@ function VoteWrite() {
           });
           return;
         }
-
-        console.log("error");
       })
       .finally(() => setIsSubmitting(false));
   }

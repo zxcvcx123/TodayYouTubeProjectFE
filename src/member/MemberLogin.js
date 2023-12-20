@@ -43,9 +43,6 @@ export function MemberLogin() {
   function handleLogin(event) {
     event.preventDefault();
 
-    console.log(member_id);
-    console.log(password);
-
     axios
       .post("/api/member/login", {
         member_id,
@@ -60,7 +57,6 @@ export function MemberLogin() {
         navigate("/");
       })
       .catch((error) => {
-        console.log(error);
         if (error.response && error.response.status === 401) {
           toast({
             description: "정지된 회원입니다.",

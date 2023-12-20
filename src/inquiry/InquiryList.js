@@ -53,7 +53,7 @@ function InquiryList(props) {
           setPageInfo(response.data.pageInfo);
           setInquiryNotice(response.data.inquiryNotice);
         })
-        .catch(() => console.log("bad"));
+        .catch();
     }
   }, [location, params, loginInfo]);
 

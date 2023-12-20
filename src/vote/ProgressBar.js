@@ -11,8 +11,6 @@ const ProgressBar = ({ optionOneVotes, optionTwoVotes }) => {
     optionTwoPercentage = ((optionTwoVotes / totalVotes) * 100).toFixed(1);
   }
 
-  console.log("option: " + optionOnePercentage);
-
   const styleOne = {
     width: `${optionOnePercentage}%`,
     backgroundColor: "#4299E1",

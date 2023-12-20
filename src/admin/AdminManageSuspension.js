@@ -59,7 +59,7 @@ function AdminManageSuspension(props) {
         setSuspensionList(response.data.suspensionList);
         setPageInfo(response.data.pageInfo);
       })
-      .catch(() => console.log("bad"));
+      .catch();
   }, [isReleasing, location]);
 
   if (suspensionList == null || releaseList == null || pageInfo == null) {
@@ -82,7 +82,7 @@ function AdminManageSuspension(props) {
           status: "success",
         });
       })
-     
+
       .catch((error) => {
         if (error.response && error.response.status === 403) {
           toast({
