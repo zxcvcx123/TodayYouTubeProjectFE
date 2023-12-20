@@ -167,6 +167,15 @@ function MemberInfoFollowProfile({ board_member_id }) {
                     ADMIN
                   </Badge>
                 )}
+                {roleName === "정지회원" && (
+                  <Badge
+                    backgroundColor={"#dcdcdc"}
+                    color="black"
+                    borderRadius={"8px"}
+                  >
+                    정지회원
+                  </Badge>
+                )}
                 <Text fontWeight="bold">{nickName}</Text>
               </Box>
             </Flex>

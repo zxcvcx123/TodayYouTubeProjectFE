@@ -16,6 +16,7 @@ import {
   Text,
   Thead,
   Tr,
+  useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import Pagination from "../page/Pagination";
@@ -34,7 +35,7 @@ function AdminMemberList(props) {
   const [pageInfo, setPageInfo] = useState(null);
   const [searchById, setSearchById] = useState("");
   const [isManaging, setIsManaging] = useState(false);
-
+  let toast = useToast();
   const navigate = useNavigate();
   let [params] = useSearchParams();
   let location = useLocation();
@@ -46,7 +47,15 @@ function AdminMemberList(props) {
         setMemberList(response.data.memberList);
         setPageInfo(response.data.pageInfo);
       })
-      .catch(() => console.log("bad"));
+      .catch((error) => {
+        if (error.response && error.response.status === 403) {
+          toast({
+            description: "접근 불가한 경로입니다.",
+            status: "error",
+          });
+          navigate("/");
+        }
+      });
   }, [location, searchById]);
 
   if (pageInfo == null) {

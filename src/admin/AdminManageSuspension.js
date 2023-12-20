@@ -23,6 +23,7 @@ import {
   AlertIcon,
   AlertTitle,
   Alert,
+  useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { Sidenav } from "./Sidenav";
@@ -46,7 +47,7 @@ function AdminManageSuspension(props) {
   const { onClose, isOpen, onOpen } = useDisclosure();
   const location = useLocation();
   const navigate = useNavigate();
-
+  let toast = useToast();
   const [params] = useSearchParams();
 
   useEffect(() => {
@@ -76,7 +77,15 @@ function AdminManageSuspension(props) {
         role_name: loginInfo.role_name,
       })
       .then(onClose)
-      .catch((error) => console.log(error))
+      .catch((error) => {
+        if (error.response && error.response.status === 403) {
+          toast({
+            description: "접근 불가한 경로입니다.",
+            status: "error",
+          });
+          navigate("/");
+        }
+      })
       .finally(() => {
         setIsReleasing(false);
         setIsSubmitting(false);

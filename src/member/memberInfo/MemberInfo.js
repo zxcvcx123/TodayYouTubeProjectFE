@@ -36,7 +36,7 @@ import { AttachmentIcon } from "@chakra-ui/icons";
 import { MemberInfoProfile } from "./MemberInfoProfile";
 
 function MemberInfo(props) {
-  const { loginInfo, token } = useContext(DetectLoginContext);
+  const { loginInfo, token, handleLogout } = useContext(DetectLoginContext);
   let navigate = useNavigate("");
   let toast = useToast();
   const [myInfo, setMyInfo] = useState(true);
@@ -169,7 +169,7 @@ function MemberInfo(props) {
             </div>
           </Flex>
         </Card>
-        {myInfo && <MemberInfoMyInfo loginInfo={loginInfo} />}
+        {myInfo && <MemberInfoMyInfo loginInfo={(loginInfo, handleLogout)} />}
         {popMyBoardList && (
           <Card minWidth="1200px" w={"80%"} p={"20px"} boxShadow={"none"}>
             <CardBody>

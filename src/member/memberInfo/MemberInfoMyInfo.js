@@ -32,13 +32,14 @@ import { useNavigate } from "react-router-dom";
 import MemberInfoMyInfoPopover from "./MemberInfoMyInfoPopover";
 import MemberInfoMyInfoEdit from "./MemberInfoMyInfoEdit";
 
-function MemberInfoMyInfo({ loginInfo }) {
+function MemberInfoMyInfo({ loginInfo, handleLogout }) {
   /* ----------------- 비밀번호 상태------------------------*/
   const [editMemberInfoPassword, setEditMemberInfoPassword] = useState("");
   const [editMemberInfoPasswordCheck, setEditMemberInfoPasswordCheck] =
     useState("");
   let toast = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+
   let navigate = useNavigate();
   /*---------------------------------------------------*/
   const [isMemberInfoEditValidated, setIsMemberInfoEditValidated] =
@@ -56,6 +57,7 @@ function MemberInfoMyInfo({ loginInfo }) {
   );
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const withdrawalModal = useDisclosure();
   const [overlay, setOverlay] = React.useState(<CustomOverlay />);
   /*---------------------------------*/
   function handleMemberInfoEditValidatePassword() {
@@ -98,6 +100,25 @@ function MemberInfoMyInfo({ loginInfo }) {
         })
         .finally(setIsSubmitting(false));
     }
+  }
+
+  function handleMemberWithdrawal() {
+    setIsSubmitting(true);
+    axios
+      .post("/api/member/withdrawal", {
+        member_id: loginInfo.member_id,
+      })
+      .then(() => {
+        toast({
+          description: "탈퇴처리가 완료되었습니다.",
+          status: "error",
+        });
+        navigate("/");
+        handleLogout();
+      })
+      .finally(() => {
+        setIsSubmitting(false);
+      });
   }
 
   return (
@@ -272,8 +293,13 @@ function MemberInfoMyInfo({ loginInfo }) {
               >
                 변경
               </Button>
-              <Button variant="ghost" colorScheme="blue">
-                삭제
+
+              <Button
+                variant="ghost"
+                colorScheme="red"
+                onClick={withdrawalModal.onOpen}
+              >
+                탈퇴
               </Button>
             </ButtonGroup>
             <Modal
@@ -341,6 +367,34 @@ function MemberInfoMyInfo({ loginInfo }) {
                       onClose();
                     }}
                   >
+                    취소
+                  </Button>
+                </ModalFooter>
+              </ModalContent>
+            </Modal>
+            <Modal
+              isOpen={withdrawalModal.isOpen}
+              onClose={withdrawalModal.onClose}
+            >
+              <ModalOverlay />
+              <ModalContent>
+                <ModalHeader>회원탈퇴</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody></ModalBody>
+
+                <ModalFooter>
+                  {isSubmitting ? (
+                    <Spinner />
+                  ) : (
+                    <Button
+                      colorScheme="blue"
+                      mr={3}
+                      onClick={handleMemberWithdrawal}
+                    >
+                      탈퇴
+                    </Button>
+                  )}
+                  <Button variant="ghost" onClick={withdrawalModal.onClose}>
                     취소
                   </Button>
                 </ModalFooter>

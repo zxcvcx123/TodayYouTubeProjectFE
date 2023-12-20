@@ -24,6 +24,7 @@ import {
   Thead,
   Tooltip,
   Tr,
+  useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import {
@@ -58,7 +59,7 @@ function AdminMemberInfo(props) {
   const [MemberComment, setMemberComment] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-
+  let toast = useToast();
   const [params] = useSearchParams();
 
   useEffect(() => {
@@ -72,7 +73,15 @@ function AdminMemberInfo(props) {
         setPageInfo(response.data.pageInfo);
         setPageInfo2(response.data.pageInfo2);
       })
-      .catch(() => console.log("bad"));
+      .catch((error) => {
+        if (error.response && error.response.status === 403) {
+          toast({
+            description: "접근 불가한 경로입니다.",
+            status: "error",
+          });
+          navigate("/");
+        }
+      });
   }, [location]);
 
   function handleMemberInfoMyInfo() {
