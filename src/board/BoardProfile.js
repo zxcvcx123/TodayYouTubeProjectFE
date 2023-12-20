@@ -269,7 +269,11 @@ function BoardProfile({ board_member_id, board_id }) {
                     정지회원
                   </Badge>
                 )}
-                <Text fontWeight="bold">{nickName}</Text>
+                <Text fontWeight="bold">
+                  {nickName.length > 8
+                    ? `${nickName.slice(0, 8)}...`
+                    : nickName}
+                </Text>
               </Box>
             </Flex>
           </HStack>

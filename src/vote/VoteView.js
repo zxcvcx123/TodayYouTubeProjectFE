@@ -50,6 +50,7 @@ import {
   faCircleCheck,
 } from "@fortawesome/free-solid-svg-icons";
 import LoadingPage from "../component/LoadingPage";
+import BoardProfile from "../board/BoardProfile";
 
 function VoteView() {
   const { token, handleLogout, loginInfo, validateToken } =
@@ -241,20 +242,22 @@ function VoteView() {
             <Flex alignItems={"center"}>
               {/*프로필*/}
               <HStack>
-                <Flex width={"150px"}>
-                  <Avatar src="https://i.imgur.com/lmSDJtn.jpeg" />
-                  <Box ml="3">
-                    <Tooltip label={board.nickname} placement="top-start">
-                      <Text fontWeight="bold">
-                        {board.nickname.slice(0, 8)}...
-                      </Text>
-                    </Tooltip>
-                    <Text fontSize="sm">{board.rolename}</Text>
+                <Flex width={"300px"}>
+                  <Box
+                    ml="3"
+                    display={"flex"}
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                  >
+                    <BoardProfile
+                      board_id={board.id}
+                      board_member_id={board.vote_member_id}
+                    />
+                    <Text>| {board.ago}</Text>
                   </Box>
                 </Flex>
               </HStack>
               {/* 일자 */}
-              <Text>| {board.ago}</Text>
             </Flex>
             {/* 좋아요, 조회수, 투표수 */}
             <Flex alignItems={"center"} gap={"5"}>

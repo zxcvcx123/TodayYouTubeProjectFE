@@ -72,12 +72,8 @@ export function MemberInfoProfile() {
         top={"240px"}
         left={"230px"}
       >
-        <Button borderRadius={"25px"}>
-          <AttachmentIcon
-            color="black"
-            fontSize={"18px"}
-            onClick={handleProfileButtonClick}
-          />
+        <Button borderRadius={"25px"} onClick={handleProfileButtonClick}>
+          <AttachmentIcon color="black" fontSize={"18px"} />
         </Button>
         <input
           type="file"
