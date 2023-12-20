@@ -417,7 +417,11 @@ export function MainView() {
                       overflow={"hidden"}
                       textOverflow={"ellipsis"}
                       color={"rgb(255,255,255)"}
-                      onClick={() => navigate("board/" + mainShowId)}
+                      onClick={() =>
+                        navigate(
+                          "board/" + mainShowId + "?category=" + linkNameEng,
+                        )
+                      }
                       _hover={{
                         cursor: "pointer",
                         textDecoration: "underline",
