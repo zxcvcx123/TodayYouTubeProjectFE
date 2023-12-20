@@ -83,6 +83,15 @@ function BoardList() {
   // navigate
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    // 'category' 쿼리스트링이 없다면 추가
+    if (!searchParams.has("category")) {
+      searchParams.set("category", "sports");
+      navigate(`${location.pathname}?${searchParams.toString()}`);
+    }
+  }, [navigate, location]);
+
   // 게시물 목록 불러오기
   useEffect(() => {
     axios
