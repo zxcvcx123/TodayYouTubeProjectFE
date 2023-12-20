@@ -3,3 +3,7 @@ export { default as Logo1WithText2 } from "./logo1_withText2.png";
 export { default as Logo1WithText3 } from "./logo1_withText3.png";
 export { default as Logo1Background_Removal } from "./logo1_Background_Removal.png";
 export { default as voteEndImg } from "./voteEndImg.png";
+export { default as medal } from "./medal.png";
+export { default as medal1 } from "./medal1.png";
+export { default as medal2 } from "./medal2.png";
+export { default as medal3 } from "./medal3.png";

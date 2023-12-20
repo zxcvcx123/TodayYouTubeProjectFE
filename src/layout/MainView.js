@@ -23,6 +23,7 @@ import {
   CardFooter,
   Badge,
   ButtonGroup,
+  Img,
 } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
 import { MainBoardList } from "./MainBoardList";
@@ -35,6 +36,7 @@ import { faRankingStar, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import { DetectLoginContext } from "../component/LoginProvider";
 import ReactPlayer from "react-player";
 import LoadingPage from "../component/LoadingPage";
+import { medal, medal1, medal2, medal3 } from "../assets/Image";
 
 export function MainView() {
   /* 로그인 정보 컨텍스트 */
@@ -485,7 +487,7 @@ export function MainView() {
               setMainShowId(firstList.id);
             }}
           >
-            <Flex h={"20%"}>
+            <Flex h={"20%"} position={"relative"}>
               <Badge
                 fontSize="20px"
                 colorScheme="yellow"
@@ -506,6 +508,15 @@ export function MainView() {
               >
                 {firstList.title}
               </Text>
+              <Box
+                position={"absolute"}
+                w={"50px"}
+                h={"50px"}
+                top={"-20px"}
+                right={"-80px"}
+              >
+                <Img src={medal1} />
+              </Box>
             </Flex>
             <Box key={firstList.link} w={"230px"} h={"130px"}>
               <YoutubeInfo link={firstList.link} extraThumbnail={true} />
@@ -544,7 +555,7 @@ export function MainView() {
                 }}
                 key={other.id}
               >
-                <Flex key={other.link}>
+                <Flex key={other.link} position={"relative"}>
                   <Badge
                     fontSize="20px"
                     colorScheme={
@@ -576,6 +587,23 @@ export function MainView() {
                   >
                     {other.title}
                   </Text>
+                  <Box
+                    position={"absolute"}
+                    w={"50px"}
+                    h={"50px"}
+                    top={"-20px"}
+                    right={"-20px"}
+                  >
+                    <Img
+                      src={
+                        otherList.indexOf(other) + 2 === 2
+                          ? medal2
+                          : otherList.indexOf(other) + 2 === 3
+                            ? medal3
+                            : ""
+                      }
+                    />
+                  </Box>
                 </Flex>
                 <Box w={"230px"} h={"130px"} key={other.id}>
                   <YoutubeInfo link={other.link} extraThumbnail={true} />
