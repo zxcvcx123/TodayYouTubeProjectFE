@@ -58,6 +58,7 @@ function MemberInfoMyInfo({ loginInfo, handleLogout }) {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const withdrawalModal = useDisclosure();
+  const withdrawalPasswordCheckModal = useDisclosure();
   const [overlay, setOverlay] = React.useState(<CustomOverlay />);
   /*---------------------------------*/
   function handleMemberInfoEditValidatePassword() {
@@ -103,22 +104,56 @@ function MemberInfoMyInfo({ loginInfo, handleLogout }) {
   }
 
   function handleMemberWithdrawal() {
-    setIsSubmitting(true);
-    axios
-      .post("/api/member/withdrawal", {
-        member_id: loginInfo.member_id,
-      })
-      .then(() => {
-        toast({
-          description: "탈퇴처리가 완료되었습니다.",
-          status: "error",
+    if (editMemberInfoPassword === editMemberInfoPasswordCheck) {
+      setIsSubmitting(true);
+
+      axios
+        .post("/api/member/info/passwordCheck", {
+          member_id: loginInfo.member_id,
+          password: editMemberInfoPassword,
+        })
+        .then((response) => {
+          axios
+            .post("/api/member/withdrawal", {
+              member_id: loginInfo.member_id,
+            })
+            .then(() => {
+              toast({
+                description: "탈퇴처리가 완료되었습니다.",
+                status: "error",
+              });
+              navigate("/");
+              handleLogout();
+            });
+        })
+        .catch((error) => {
+          if (error.response.status === 403) {
+            toast({
+              description: "사용자 검증에 실패하였습니다.",
+              status: "warning",
+            });
+          } else if (
+            error.response.status >= 400 &&
+            error.response.status <= 499
+          ) {
+            toast({
+              description: "잘못된 요청입니다",
+              status: "error",
+            });
+          } else {
+            toast({
+              description: "서버에 오류가 발생했습니다. 잠시 후 시도해주세요",
+              status: "error",
+            });
+          }
+          setIsMemberInfoEditValidated(false);
+        })
+        .finally(() => {
+          setIsSubmitting(false);
+          withdrawalPasswordCheckModal.onClose();
+          withdrawalModal.onClose();
         });
-        navigate("/");
-        handleLogout();
-      })
-      .finally(() => {
-        setIsSubmitting(false);
-      });
+    }
   }
 
   return (
@@ -380,21 +415,109 @@ function MemberInfoMyInfo({ loginInfo, handleLogout }) {
               <ModalContent>
                 <ModalHeader>회원탈퇴</ModalHeader>
                 <ModalCloseButton />
-                <ModalBody></ModalBody>
+                <ModalBody>
+                  <Box
+                    w={"100%"}
+                    display={"flex"}
+                    flexDirection={"column"}
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                  >
+                    <Text fontSize={"18px"} fontWeight={"bold"}>
+                      {" "}
+                      탈퇴시 복구가 불가합니다.
+                    </Text>
+                    <Text fontSize={"18px"} fontWeight={"bold"}>
+                      {" "}
+                      탈퇴하시겠습니까?{" "}
+                    </Text>
+                  </Box>
+                </ModalBody>
 
                 <ModalFooter>
                   {isSubmitting ? (
                     <Spinner />
                   ) : (
                     <Button
-                      colorScheme="blue"
+                      variant="ghost"
+                      colorScheme="red"
                       mr={3}
-                      onClick={handleMemberWithdrawal}
+                      onClick={withdrawalPasswordCheckModal.onOpen}
                     >
                       탈퇴
                     </Button>
                   )}
                   <Button variant="ghost" onClick={withdrawalModal.onClose}>
+                    취소
+                  </Button>
+                </ModalFooter>
+              </ModalContent>
+            </Modal>
+
+            {/* 비밀번호 확인 모달 */}
+            <Modal
+              isOpen={withdrawalPasswordCheckModal.isOpen}
+              onClose={withdrawalPasswordCheckModal.onClose}
+            >
+              <ModalContent>
+                <ModalHeader>비밀번호</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody pb={6}>
+                  <FormControl isRequired>
+                    <FormLabel>비밀번호</FormLabel>
+                    <Input
+                      type="password"
+                      ref={initialRef}
+                      placeholder="비밀번호"
+                      onChange={(e) => {
+                        setEditMemberInfoPassword(e.target.value);
+                      }}
+                    />
+                  </FormControl>
+
+                  <FormControl
+                    mt={4}
+                    isRequired
+                    isInvalid={
+                      editMemberInfoPassword === editMemberInfoPasswordCheck
+                        ? false
+                        : true
+                    }
+                  >
+                    <FormLabel>비밀번호 재확인</FormLabel>
+                    <Input
+                      type="password"
+                      placeholder="비밀번호 재확인"
+                      onChange={(e) => {
+                        setEditMemberInfoPasswordCheck(e.target.value);
+                      }}
+                    />{" "}
+                    <FormErrorMessage>
+                      비밀번호가 일치하지 않습니다
+                    </FormErrorMessage>
+                  </FormControl>
+                </ModalBody>
+
+                <ModalFooter>
+                  {!isSubmitting ? (
+                    <Button
+                      colorScheme="red"
+                      variant={"ghost"}
+                      mr={3}
+                      onClick={handleMemberWithdrawal}
+                    >
+                      탈퇴
+                    </Button>
+                  ) : (
+                    <Spinner />
+                  )}
+                  <Button
+                    onClick={() => {
+                      setEditMemberInfoPassword("");
+                      setEditMemberInfoPasswordCheck("");
+                      withdrawalPasswordCheckModal.onClose();
+                    }}
+                  >
                     취소
                   </Button>
                 </ModalFooter>

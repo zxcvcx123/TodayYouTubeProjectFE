@@ -169,7 +169,9 @@ function MemberInfo(props) {
             </div>
           </Flex>
         </Card>
-        {myInfo && <MemberInfoMyInfo loginInfo={(loginInfo, handleLogout)} />}
+        {myInfo && (
+          <MemberInfoMyInfo loginInfo={loginInfo} handleLogout={handleLogout} />
+        )}
         {popMyBoardList && (
           <Card minWidth="1200px" w={"80%"} p={"20px"} boxShadow={"none"}>
             <CardBody>
