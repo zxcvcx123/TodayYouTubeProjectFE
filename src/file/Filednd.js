@@ -46,6 +46,8 @@ export function Filednd({
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   // 파일 미리보기
   // re-render 시켜야 첨부한 파일을 인식 (Drop 이벤트 경우)
   useEffect(() => {
@@ -59,8 +61,8 @@ export function Filednd({
           let startIndex = 5 - editUploadFiles.length;
 
           // 만약 수정할 파일 + 업로드할 파일 수 5개 이상 넘길시 splice로 잘라버리기
-          if (uploadFiles.length === 1) {
-            uploadFiles.splice(startIndex, 1);
+          if (editUploadFiles.length === 5) {
+            uploadFiles.splice(0, uploadFiles.length);
           }
           uploadFiles.splice(startIndex, uploadFiles.length - 1);
           setUploadFiles(uploadFiles);
@@ -135,6 +137,7 @@ export function Filednd({
 
   // 수정 게시판에서 기존 파일 제거
   function handleDeleteFile() {
+    setIsSubmitting(true);
     axios
       .delete("/api/file/delete/" + boardId + "/" + fileKey)
       .then((res) => {
@@ -154,16 +157,21 @@ export function Filednd({
         }
       })
       .catch()
-      .finally(() => onClose());
+      .finally(() => {
+        onClose();
+        setIsSubmitting(false);
+      });
   }
 
   return (
     <>
       {/* 파일 리스트 */}
       {mode === "Update" && (
-        <Box h={"200px"} border={"3px dashed black"} borderBottom={"none"}>
-          <Heading fontSize={"1.5rem"}>기존 파일</Heading>
-          <Box display={"flex"} h={"100%"} alignItems={"center"} gap={5}>
+        <Box h={"300px"} border={"3px dashed black"} borderBottom={"none"}>
+          <Heading fontSize={"1.5rem"} my={3}>
+            기존 파일
+          </Heading>
+          <Box display={"flex"} h={"225px"} alignItems={"center"} gap={5}>
             {editUploadFiles.map((fileList) => (
               <Card key={fileList.id} h={"100%"} w={"25%"}>
                 <CardBody
@@ -278,7 +286,11 @@ export function Filednd({
               <Button colorScheme="blue" mr={3} onClick={onClose}>
                 취소
               </Button>
-              <Button variant="ghost" onClick={handleDeleteFile}>
+              <Button
+                variant="ghost"
+                onClick={handleDeleteFile}
+                isDisabled={isSubmitting}
+              >
                 삭제
               </Button>
             </ModalFooter>

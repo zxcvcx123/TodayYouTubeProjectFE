@@ -166,6 +166,7 @@ function BoardEdit() {
           login_member_id: loginInfo.member_id,
           uuSrc,
           uploadFiles,
+          editUploadFiles: editUploadFiles.length,
         })
         .then(() => {
           toast({
