@@ -98,6 +98,7 @@ function VoteView() {
   const delModal = useDisclosure();
   const loginModal = useDisclosure();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmittingVote, setIsSubmittingVote] = useState(false);
 
   // 초기 렌더링
   useEffect(() => {
@@ -155,6 +156,13 @@ function VoteView() {
 
   // 투표 A
   function handleVoteA() {
+    if (isSubmittingVote) {
+      //투표 중이라면 처리하지 않음
+      return;
+    }
+
+    setIsSubmittingVote(true);
+
     stompClient.current.publish({
       destination: "/app/votea",
       body: JSON.stringify({
@@ -162,10 +170,22 @@ function VoteView() {
         vote_member_id: loginInfo.member_id,
       }),
     });
+
+    // 투표 후 2초 이후에 isSubmitting을 false로 설정
+    setTimeout(() => {
+      setIsSubmittingVote(false);
+    }, 2000);
   }
 
   // 투표 B
   function handleVoteB() {
+    if (isSubmittingVote) {
+      // 투표 중이라면 처리하지 않음
+      return;
+    }
+
+    setIsSubmittingVote(true);
+
     stompClient.current.publish({
       destination: "/app/voteb",
       body: JSON.stringify({
@@ -173,6 +193,11 @@ function VoteView() {
         vote_member_id: loginInfo.member_id,
       }),
     });
+
+    // 투표 후 2초 이후에 isSubmitting을 false로 설정
+    setTimeout(() => {
+      setIsSubmittingVote(false);
+    }, 2000);
   }
 
   // 삭제 버튼
