@@ -162,7 +162,7 @@ export function AdminReportManagement() {
         <Box w={"80%"} ml={"3%"}>
           <Box boxShadow={"none"}>
             <Box w={"100%"}>
-              <Flex>
+              <Flex mt={10}>
                 <Heading size="xl">신고 목록</Heading>
               </Flex>
               <Box mt={"5"} w={"100%"} mr={5}>
