@@ -162,7 +162,22 @@ function CommentItem({
           status: "success",
         });
       })
-      .catch(console.log("bad"))
+      .catch((error) => {
+        if (error.response.status === 403) {
+          toast({
+            description: " 댓글 수정은 작성자만 가능합니다.",
+            status: "error",
+          });
+          return;
+        }
+        if (error.response.status === 401) {
+          toast({
+            description: "권한 정보가 없습니다.",
+            status: "error",
+          });
+          return;
+        }
+      })
       .finally(() => {
         setIsSubmitting(false);
         setIsEditing(false);
@@ -178,10 +193,17 @@ function CommentItem({
       })
       .then((response) => {
         onCommentLikeClick({ ...response.data, comment_id: comment.id });
-        console.log(response.data);
       })
-      .catch((error) => console.log("bad"))
-      .finally(() => console.log("done"));
+      .catch((error) => {
+        if (error.response.status === 401) {
+          toast({
+            description: "권한 정보가 없습니다.",
+            status: "error",
+          });
+          return;
+        }
+      })
+      .finally();
   }
 
   return (
@@ -194,35 +216,6 @@ function CommentItem({
           <Text size="xs" as="sub">
             {comment.ago}
           </Text>
-          {/*{loginInfo && loginInfo.member_id === comment.member_id && (*/}
-          {/*  <Flex gap={0.5}>*/}
-          {/*    {isEditing || (*/}
-          {/*      <Button*/}
-          {/*        size="xs"*/}
-          {/*        colorScheme="purple"*/}
-          {/*        onClick={() => setIsEditing(true)}*/}
-          {/*      >*/}
-          {/*        <FontAwesomeIcon icon={faPenToSquare} />*/}
-          {/*      </Button>*/}
-          {/*    )}*/}
-          {/*    {isEditing && (*/}
-          {/*      <Button*/}
-          {/*        size="xs"*/}
-          {/*        colorScheme="gray"*/}
-          {/*        onClick={() => setIsEditing(false)}*/}
-          {/*      >*/}
-          {/*        <FontAwesomeIcon icon={faXmark} />*/}
-          {/*      </Button>*/}
-          {/*    )}*/}
-          {/*    <Button*/}
-          {/*      onClick={() => onDeleteModalOpen(comment.id)}*/}
-          {/*      colorScheme="red"*/}
-          {/*      size="xs"*/}
-          {/*    >*/}
-          {/*      <FontAwesomeIcon icon={faTrash} />*/}
-          {/*    </Button>*/}
-          {/*  </Flex>*/}
-          {/*)}*/}
         </Flex>
       </Flex>
       <Flex justifyContent="space-between" alignItems="center">
@@ -484,7 +477,6 @@ export function BoardComment({ board_id, boardData }) {
   // 댓글 쓰기 버튼
   function handleSubmit(comment) {
     setIsSubmitting(true);
-    console.log("실행 여부 확인");
     if (location.pathname.includes("vote")) {
       axios
         .post("/api/comment/vote/add", {
@@ -498,7 +490,15 @@ export function BoardComment({ board_id, boardData }) {
             status: "success",
           });
         })
-        .catch((error) => console.log(error))
+        .catch((error) => {
+          if (error.response.status === 401) {
+            toast({
+              description: "권한 정보가 없습니다.",
+              status: "error",
+            });
+            return;
+          }
+        })
         .finally(() => setIsSubmitting(false));
     } else {
       axios
@@ -513,7 +513,15 @@ export function BoardComment({ board_id, boardData }) {
             status: "success",
           });
         })
-        .catch((error) => console.log(error))
+        .catch((error) => {
+          if (error.response.status === 401) {
+            toast({
+              description: "권한 정보가 없습니다.",
+              status: "error",
+            });
+            return;
+          }
+        })
         .finally(() => setIsSubmitting(false));
     }
   }
@@ -531,7 +539,22 @@ export function BoardComment({ board_id, boardData }) {
           status: "success",
         });
       })
-      .catch(() => console.log("bad"))
+      .catch((error) => {
+        if (error.response.status === 403) {
+          toast({
+            description: " 댓글 삭제는 작성자만 가능합니다.",
+            status: "error",
+          });
+          return;
+        }
+        if (error.response.status === 401) {
+          toast({
+            description: "권한 정보가 없습니다.",
+            status: "error",
+          });
+          return;
+        }
+      })
       .finally(() => {
         setIsSubmitting(false);
         onClose();

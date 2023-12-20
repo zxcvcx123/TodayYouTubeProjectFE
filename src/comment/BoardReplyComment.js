@@ -116,7 +116,22 @@ function ReplyCommentItem({
           status: "success",
         });
       })
-      .catch((error) => console.log("bad"))
+      .catch((error) => {
+        if (error.response.status === 403) {
+          toast({
+            description: " 댓글 수정은 작성자만 가능합니다.",
+            status: "error",
+          });
+          return;
+        }
+        if (error.response.status === 401) {
+          toast({
+            description: "권한 정보가 없습니다.",
+            status: "error",
+          });
+          return;
+        }
+      })
       .finally(() => {
         setIsSubmitting(false);
         setIsEditing(false);
@@ -319,7 +334,15 @@ export function BoardReplyComment({
             status: "success",
           });
         })
-        .catch((error) => console.log("bad"))
+        .catch((error) => {
+          if (error.response.status === 401) {
+            toast({
+              description: "권한 정보가 없습니다.",
+              status: "error",
+            });
+            return;
+          }
+        })
         .finally(() => {
           setIsSubmitting(false);
           setIsReplyFormOpen(false);
@@ -337,7 +360,15 @@ export function BoardReplyComment({
             status: "success",
           });
         })
-        .catch((error) => console.log("bad"))
+        .catch((error) => {
+          if (error.response.status === 401) {
+            toast({
+              description: "권한 정보가 없습니다.",
+              status: "error",
+            });
+            return;
+          }
+        })
         .finally(() => {
           setIsSubmitting(false);
           setIsReplyFormOpen(false);
@@ -357,7 +388,22 @@ export function BoardReplyComment({
             status: "success",
           });
         })
-        .catch((error) => console.log("bad"))
+        .catch((error) => {
+          if (error.response.status === 403) {
+            toast({
+              description: " 댓글 삭제는 작성자만 가능합니다.",
+              status: "error",
+            });
+            return;
+          }
+          if (error.response.status === 401) {
+            toast({
+              description: "권한 정보가 없습니다.",
+              status: "error",
+            });
+            return;
+          }
+        })
         .finally(() => {
           onClose();
           setIsSubmitting(false);
