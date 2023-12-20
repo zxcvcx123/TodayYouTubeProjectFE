@@ -72,6 +72,8 @@ function CommentForm({
 
     onSubmit({ board_id, comment });
 
+    setComment("");
+
     setTimeout(() => {
       setIsButtonDisabled(false);
     }, 2000);
