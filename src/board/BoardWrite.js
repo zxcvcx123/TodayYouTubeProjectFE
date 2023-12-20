@@ -100,90 +100,91 @@ function BoardWrite() {
       setTitleError("제목을 입력해주세요. title은 null이거나 공백이면 안 됨.");
       return;
     }
+
     // 본문이 null이거나 공백일 경우 에러메시지 세팅 후 반환
     if (!content || content.trim() === "") {
       setContentError("본문을 입력해주세요. 본문은 null이거나 공백이면 안 됨.");
       return;
+    }
 
-      setIsSubmitting(true);
+    setIsSubmitting(true);
 
-      if (imgFile.length > 5) {
-        toast({
-          description: "이미지 개수를 초과했습니다. (최대 5개)",
-          status: "info",
-        });
-        let htmlContent = content; // 여기에 HTML 컨텐츠를 넣으세요.
-        htmlContent = htmlContent.replace(
-          /<figure[^>]*>([\s\S]*?)<\/figure>/g,
-          "",
+    if (imgFile.length > 5) {
+      toast({
+        description: "이미지 개수를 초과했습니다. (최대 5개)",
+        status: "info",
+      });
+      let htmlContent = content; // 여기에 HTML 컨텐츠를 넣으세요.
+      htmlContent = htmlContent.replace(
+        /<figure[^>]*>([\s\S]*?)<\/figure>/g,
+        "",
+      );
+      setReturnData(htmlContent);
+      setIsSubmitting(false);
+    }
+
+    if (imgFile.length < 6) {
+      let uuSrc = getSrc();
+
+      // 제목이 null이거나 공백일 경우 에러메시지 세팅 후 반환
+      if (!title || title.trim() === "") {
+        setTitleError(
+          "제목을 입력해주세요. title은 null이거나 공백이면 안 됨.",
         );
-        setReturnData(htmlContent);
-        setIsSubmitting(false);
+        return;
+      }
+      // 본문이 null이거나 공백일 경우 에러메시지 세팅 후 반환
+      if (!content || content.trim() === "") {
+        setContentError(
+          "본문을 입력해주세요. 본문은 null이거나 공백이면 안 됨.",
+        );
+        return;
       }
 
-      if (imgFile.length < 6) {
-        let uuSrc = getSrc();
-
-        // 제목이 null이거나 공백일 경우 에러메시지 세팅 후 반환
-        if (!title || title.trim() === "") {
-          setTitleError(
-            "제목을 입력해주세요. title은 null이거나 공백이면 안 됨.",
-          );
-          return;
-        }
-        // 본문이 null이거나 공백일 경우 에러메시지 세팅 후 반환
-        if (!content || content.trim() === "") {
-          setContentError(
-            "본문을 입력해주세요. 본문은 null이거나 공백이면 안 됨.",
-          );
-          return;
-        }
-
-        axios
-          .postForm("/api/board/add", {
-            title,
-            link,
-            content,
-            uploadFiles,
-            uuSrc,
-            board_member_id: loginInfo.member_id,
-            name_eng: currentParams,
-          })
-          .then(() => {
+      axios
+        .postForm("/api/board/add", {
+          title,
+          link,
+          content,
+          uploadFiles,
+          uuSrc,
+          board_member_id: loginInfo.member_id,
+          name_eng: currentParams,
+        })
+        .then(() => {
+          toast({
+            description: "게시글 저장에 성공했습니다.",
+            status: "success",
+          });
+          navigate("/board/list?category=" + currentParams);
+        })
+        .catch((error) => {
+          if (error.response.status === 400) {
             toast({
-              description: "게시글 저장에 성공했습니다.",
-              status: "success",
+              description:
+                "게시글 유효성 및 파일(최대 5개) 검증에 실패했습니다. 양식에 맞게 작성해주세요.",
+              status: "error",
             });
-            navigate("/board/list?category=" + currentParams);
-          })
-          .catch((error) => {
-            if (error.response.status === 400) {
-              toast({
-                description:
-                  "게시글 유효성 및 파일(최대 5개) 검증에 실패했습니다. 양식에 맞게 작성해주세요.",
-                status: "error",
-              });
-              return;
-            }
+            return;
+          }
 
-            if (error.response.status === 401) {
-              toast({
-                description: "권한 정보가 없습니다.",
-                status: "error",
-              });
-              return;
-            }
+          if (error.response.status === 401) {
+            toast({
+              description: "권한 정보가 없습니다.",
+              status: "error",
+            });
+            return;
+          }
 
-            if (error.response) {
-              toast({
-                description: "게시글 저장에 실패했습니다.",
-                status: "error",
-              });
-              return;
-            }
-          })
-          .finally(() => setIsSubmitting(false));
-      }
+          if (error.response) {
+            toast({
+              description: "게시글 저장에 실패했습니다.",
+              status: "error",
+            });
+            return;
+          }
+        })
+        .finally(() => setIsSubmitting(false));
     }
   }
 
