@@ -54,6 +54,12 @@ function AdminMemberList(props) {
             status: "error",
           });
           navigate("/");
+        } else if (error.response && error.response.status === 405) {
+          toast({
+            description: "접근 불가한 경로입니다.",
+            status: "error",
+          });
+          navigate("/");
         }
       });
   }, [location, searchById]);

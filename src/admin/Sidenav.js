@@ -25,7 +25,7 @@ export function Sidenav() {
   };
 
   return (
-    <VStack bg={"rgb(53,53,53)"} color={"white"} w={40} h={1000}>
+    <VStack bg={"rgb(53,53,53)"} color={"white"} w={"40"} h={"1000"}>
       <Heading as="h4" size="md" my={"15px"}>
         관리자 페이지
       </Heading>

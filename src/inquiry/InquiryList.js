@@ -135,58 +135,24 @@ function InquiryList(props) {
             </Tr>
           </Thead>
           <Tbody>
-            <Tr
-              backgroundColor={"purple.100"}
-              _hover={{
-                cursor: "pointer",
-                backgroundColor: "purple.200",
-              }}
-            >
-              <Td textAlign={"center"} fontWeight={"bold"}>
-                notice
-              </Td>
-              <Td textAlign={"center"} fontWeight={"bold"}>
-                공지사항
-              </Td>
-              <Td textAlign={"center"} fontWeight={"bold"}>
-                문의게시판 답변관련 공지사항입니다.
-              </Td>
-              <Td textAlign={"center"} fontWeight={"bold"}>
-                관리자
-              </Td>
-              <Td textAlign={"center"} fontWeight={"bold"}>
-                2023 / 11 / 30
-              </Td>
-              <Td textAlign={"center"} fontWeight={"bold"}>
-                --
-              </Td>
-            </Tr>
-            <Tr
-              backgroundColor={"purple.100"}
-              _hover={{
-                cursor: "pointer",
-                backgroundColor: "purple.200",
-              }}
-            >
-              <Td textAlign={"center"} fontWeight={"bold"}>
-                notice
-              </Td>
-              <Td textAlign={"center"} fontWeight={"bold"}>
-                공지사항
-              </Td>
-              <Td textAlign={"center"} fontWeight={"bold"}>
-                문의게시판 답변관련 공지사항입니다.
-              </Td>
-              <Td textAlign={"center"} fontWeight={"bold"}>
-                관리자
-              </Td>
-              <Td textAlign={"center"} fontWeight={"bold"}>
-                2023 / 11 / 30
-              </Td>
-              <Td textAlign={"center"} fontWeight={"bold"}>
-                --
-              </Td>
-            </Tr>
+            {inquiryNotice &&
+              inquiryNotice.map((notice) => (
+                <Tr
+                  backgroundColor={"purple.100"}
+                  _hover={{
+                    cursor: "pointer",
+                    backgroundColor: "purple.200",
+                  }}
+                  key={notice.id}
+                >
+                  <Th textAlign={"center"}>notice</Th>
+                  <Th textAlign={"center"}>공지사항</Th>
+                  <Th textAlign={"center"}>{notice.title}</Th>
+                  <Th textAlign={"center"}>관리자</Th>
+                  <Th textAlign={"center"}>{notice.withOutTime}</Th>
+                  <Th textAlign={"center"}>--</Th>
+                </Tr>
+              ))}
             {inquiryList &&
               inquiryList.map((inquiry) => (
                 <Tr
