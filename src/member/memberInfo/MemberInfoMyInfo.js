@@ -243,7 +243,7 @@ function MemberInfoMyInfo({ loginInfo, handleLogout }) {
                             <Heading size="s" textTransform="uppercase">
                               등급
                             </Heading>
-                            <MemberInfoMyInfoPopover />
+                            {/*<MemberInfoMyInfoPopover />*/}
                           </Flex>
                           <Text pl={2} mt={1} pt="2" fontSize="sm">
                             {loginInfo !== null ? loginInfo.role_name : <></>}
