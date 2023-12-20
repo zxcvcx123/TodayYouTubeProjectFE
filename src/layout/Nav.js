@@ -243,19 +243,21 @@ export function Nav({ setSocket }) {
                   </MenuItem>
                   {/*<MenuItem onClick={() => navigate("/chat")}>채팅</MenuItem>*/}
                   <Divider />
-                  <MenuItem
-                    onClick={(e) => {
-                      navigate("board/list?category=notice");
-                    }}
-                  >
-                    공지
-                  </MenuItem>
+
                   <MenuItem
                     onClick={(e) => {
                       navigate("/inquiry/list");
                     }}
                   >
                     문의게시판
+                  </MenuItem>
+                  <Divider />
+                  <MenuItem
+                    onClick={(e) => {
+                      navigate("board/list?category=notice");
+                    }}
+                  >
+                    공지
                   </MenuItem>
                   <Divider />
                   {token.detectLogin && loginInfo.role_name === "운영자" && (
