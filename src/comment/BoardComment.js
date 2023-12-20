@@ -371,8 +371,6 @@ function CommentList({
 }) {
   return (
     <Card border="1px solid black" borderRadius="5" mt={2}>
-      {/*<CardHeader size="md">댓글 목록</CardHeader>*/}
-      {/*<Divider colorScheme="black" />*/}
       <CardBody>
         <Stack
           divider={<StackDivider border={"1px solid lightgray"} />}

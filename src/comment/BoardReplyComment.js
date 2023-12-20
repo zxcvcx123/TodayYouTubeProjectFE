@@ -141,46 +141,11 @@ function ReplyCommentItem({
   return (
     <Box>
       <Flex justifyContent="space-between">
-        <Heading size="xs" bg="whitesmoke" borderRadius="5">
+        <Heading size="xs" bg="#f2f2f2" borderRadius="5">
           {reply_comment.nickname} ({reply_comment.member_id})
         </Heading>
         <Flex gap={2} alignItems="center">
           <Text fontSize="xs">{reply_comment.ago}</Text>
-
-          {/*<Box>*/}
-          {/*{loginInfo && loginInfo.member_id === reply_comment.member_id && (*/}
-          {/*  <Flex gap={0.5}>*/}
-          {/*    {isEditing || (*/}
-          {/*      <Button*/}
-          {/*        size="xs"*/}
-          {/*        colorScheme="purple"*/}
-          {/*        onClick={() => setIsEditing(true)}*/}
-          {/*      >*/}
-          {/*        <FontAwesomeIcon icon={faPenToSquare} />*/}
-          {/*      </Button>*/}
-          {/*    )}*/}
-          {/*    {isEditing && (*/}
-          {/*      <Button*/}
-          {/*        size="xs"*/}
-          {/*        colorScheme="gray"*/}
-          {/*        onClick={() => setIsEditing(false)}*/}
-          {/*      >*/}
-          {/*        <FontAwesomeIcon icon={faXmark} />*/}
-          {/*      </Button>*/}
-          {/*    )}*/}
-
-          {/*    <Button*/}
-          {/*      onClick={() =>*/}
-          {/*        onDeleteModalOpen(reply_comment.id, reply_comment.member_id)*/}
-          {/*      }*/}
-          {/*      size="xs"*/}
-          {/*      colorScheme="red"*/}
-          {/*    >*/}
-          {/*      <FontAwesomeIcon icon={faTrash} />*/}
-          {/*    </Button>*/}
-          {/*  </Flex>*/}
-          {/*)}*/}
-          {/*</Box>*/}
         </Flex>
       </Flex>
 
