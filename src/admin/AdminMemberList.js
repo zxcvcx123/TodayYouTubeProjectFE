@@ -97,7 +97,13 @@ function AdminMemberList(props) {
   return (
     <Flex>
       <Sidenav />
-      <Box w={"80%"} m={"auto"} border={"1px solid black"}>
+      <Box
+        h={"790px"}
+        w={"80%"}
+        m={"auto"}
+        bg={"white"}
+        boxShadow={"0 2px 10px rgba(0, 0, 0, 0.3)"}
+      >
         <Flex>
           <Box w={"80%"} ml={"3%"}>
             <Flex>
@@ -122,7 +128,7 @@ function AdminMemberList(props) {
                 정지회원 관리
               </Button>
             </Flex>
-            <Table>
+            <Table size={"md"} fontSize={"0.9rem"}>
               <Thead>
                 <Tr>
                   <Td></Td>
@@ -180,6 +186,7 @@ function AdminMemberList(props) {
                       >
                         {member.role_name === "정지회원" && (
                           <Box
+                            w={"90px"}
                             h={8}
                             lineHeight={8}
                             borderRadius={(2, 5)}
@@ -194,7 +201,7 @@ function AdminMemberList(props) {
                       <Td textAlign={"center"}>
                         {memberList.indexOf(member) +
                           1 +
-                          (params.get("p") - 1) * 20}
+                          (params.get("p") - 1) * 10}
                       </Td>
                       <Td textAlign={"center"}>{member.member_id}</Td>
                       {member.role_name === "운영자" && (
