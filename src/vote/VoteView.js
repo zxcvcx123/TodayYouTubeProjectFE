@@ -10,6 +10,7 @@ import {
   FormLabel,
   Heading,
   HStack,
+  Img,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -51,6 +52,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import LoadingPage from "../component/LoadingPage";
 import BoardProfile from "../board/BoardProfile";
+import { medal } from "../assets/Image";
 
 function VoteView() {
   const { token, handleLogout, loginInfo, validateToken } =
@@ -111,7 +113,7 @@ function VoteView() {
       setOptionTwoVotes(res.data.voted_b);
 
       // 마감기한 설정
-      setVoteEndTime(8);
+      setVoteEndTime(1);
     });
 
     // axios.get 해서 버튼을 눌렀는지 안눌렀는지 게시판번호/아이디 기준으로 조회
@@ -315,7 +317,7 @@ function VoteView() {
               <Box
                 opacity={"1"}
                 position={"absolute"}
-                top={"50%"}
+                top={"40%"}
                 left={"50%"}
                 transform={"translate(-50%, -50%)"}
                 bg={"gray"}
@@ -340,24 +342,36 @@ function VoteView() {
                 {/* 투표 마감시 나오는 메달 시작 */}
                 {board.voteAgo >= voteEndTime &&
                   optionOneVotes > optionTwoVotes && (
-                    <Box position={"absolute"}>
-                      <FontAwesomeIcon
-                        icon={faAward}
-                        fontSize={"150px"}
-                        color="blue"
-                        zIndex={"902"}
-                      />
+                    <Box
+                      position={"absolute"}
+                      w={"150px"}
+                      top={"-70px"}
+                      left={"245px"}
+                    >
+                      <Img src={medal} />
+                      {/*<FontAwesomeIcon*/}
+                      {/*  icon={faAward}*/}
+                      {/*  fontSize={"150px"}*/}
+                      {/*  color="blue"*/}
+                      {/*  zIndex={"902"}*/}
+                      {/*/>*/}
                     </Box>
                   )}
                 {board.voteAgo >= voteEndTime &&
                   optionOneVotes === optionTwoVotes && (
-                    <Box position={"absolute"}>
-                      <FontAwesomeIcon
-                        icon={faAward}
-                        fontSize={"150px"}
-                        color="blue"
-                        zIndex={"902"}
-                      />
+                    <Box
+                      position={"absolute"}
+                      w={"150px"}
+                      top={"-70px"}
+                      right={"245px"}
+                    >
+                      <Img src={medal} />
+                      {/*<FontAwesomeIcon*/}
+                      {/*  icon={faAward}*/}
+                      {/*  fontSize={"150px"}*/}
+                      {/*  color="blue"*/}
+                      {/*  zIndex={"902"}*/}
+                      {/*/>*/}
                     </Box>
                   )}
                 {/* 투표 마감시 나오는 메달 끝 */}
@@ -411,24 +425,36 @@ function VoteView() {
                 {/* 투표 마감시 나오는 메달 시작 */}
                 {board.voteAgo >= voteEndTime &&
                   optionOneVotes < optionTwoVotes && (
-                    <Box position={"absolute"}>
-                      <FontAwesomeIcon
-                        icon={faAward}
-                        fontSize={"150px"}
-                        color="red"
-                        zIndex={"902"}
-                      />
+                    <Box
+                      position={"absolute"}
+                      w={"150px"}
+                      top={"-0px"}
+                      right={"245px"}
+                    >
+                      <Img src={medal} />
+                      {/*<FontAwesomeIcon*/}
+                      {/*  icon={faAward}*/}
+                      {/*  fontSize={"150px"}*/}
+                      {/*  color="red"*/}
+                      {/*  zIndex={"902"}*/}
+                      {/*/>*/}
                     </Box>
                   )}
                 {board.voteAgo >= voteEndTime &&
                   optionOneVotes === optionTwoVotes && (
-                    <Box position={"absolute"}>
-                      <FontAwesomeIcon
-                        icon={faAward}
-                        fontSize={"150px"}
-                        color="red"
-                        zIndex={"902"}
-                      />
+                    <Box
+                      position={"absolute"}
+                      w={"150px"}
+                      top={"-0px"}
+                      right={"245px"}
+                    >
+                      <Img src={medal} />
+                      {/*<FontAwesomeIcon*/}
+                      {/*  icon={faAward}*/}
+                      {/*  fontSize={"150px"}*/}
+                      {/*  color="red"*/}
+                      {/*  zIndex={"902"}*/}
+                      {/*/>*/}
                     </Box>
                   )}
                 {/* 투표 마감시 나오는 메달 끝 */}
@@ -478,7 +504,6 @@ function VoteView() {
             </Flex>
           </Box>
           {/* -------------------- 본문 -------------------- */}
-
           <ProgressBar
             optionOneVotes={optionOneVotes}
             optionTwoVotes={optionTwoVotes}

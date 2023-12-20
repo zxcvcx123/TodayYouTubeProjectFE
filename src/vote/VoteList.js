@@ -76,7 +76,7 @@ function VoteList() {
       setBoardList(res.data.vote);
       setPage(res.data.page);
       // 투표 마감기한 초기 설정
-      setVoteEndTime(8);
+      setVoteEndTime(1);
     });
   }, [location]);
 
@@ -110,7 +110,7 @@ function VoteList() {
 
   // -------------------------------------------------- 화면 렌더링 --------------------------------------------------
   return (
-    <Box w={"60%"} m={"20px auto"}>
+    <Box w={"1100px"} m={"20px auto"}>
       <Box>
         {/* ------------------------- 게시글 목록 상단 바 ------------------------- */}
         <Box mb={5}>
