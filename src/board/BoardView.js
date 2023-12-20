@@ -114,25 +114,20 @@ function BoardView() {
           return fetch(
             `https://www.googleapis.com/youtube/v3/channels?part=snippet&id=${channelId}&key=${apiKey}`,
           );
-        } else {
-          console.error("YouTube API 응답에서 항목을 찾을 수 없습니다.");
         }
       })
       .then((response) => response.json())
       .then((data) => {
         // 채널명 가져오기
         const channelTitle = data.items[0].snippet.title;
-        console.log("채널명:", channelTitle);
 
         // 채널 정보 state에 저장
         setChannelInfo(data.items[0].snippet);
-      })
-      .catch((error) => console.error("에러 발생:", error));
+      });
   };
 
   // 초기 렌더링
   useEffect(() => {
-    console.log("랜더링 테스트");
     axios.get("/api/board/id/" + id).then((response) => {
       setBoard(response.data);
 
@@ -220,8 +215,6 @@ function BoardView() {
           });
           return;
         }
-
-        console.log("error");
       })
       .finally(() => {
         onClose();
