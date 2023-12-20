@@ -32,6 +32,7 @@ function BoardWrite() {
   const [contentError, setContentError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isYouTubeLink, setIsYouTubeLink] = useState(false);
+  const [returnData, setReturnData] = useState(content);
 
   /* useLocation */
   const location = useLocation();
@@ -44,6 +45,9 @@ function BoardWrite() {
 
   /* use toast */
   const toast = useToast();
+
+  /* ck에디터 이미지 첨부 개수 확인 */
+  let imgFile = document.getElementsByTagName("figure");
 
   // useEffect를 사용하여 titleError가 변경(에러발생)될 때마다 스크롤이 제목 라벨으로 이동
   useEffect(() => {
@@ -88,70 +92,93 @@ function BoardWrite() {
       navigate("/member/login");
     }
 
+    console.log(imgFile.length);
+    console.log(imgFile);
+    console.log(content);
+
     setIsSubmitting(true);
-    let uuSrc = getSrc();
 
-    console.log("저장 버튼 클릭됨");
-
-    // 제목이 null이거나 공백일 경우 에러메시지 세팅 후 반환
-    if (!title || title.trim() === "") {
-      console.log("제목을 입력해주세요. title은 null이거나 공백이면 안 됨.");
-      setTitleError("제목을 입력해주세요. title은 null이거나 공백이면 안 됨.");
-      return;
-    }
-    // 본문이 null이거나 공백일 경우 에러메시지 세팅 후 반환
-    if (!content || content.trim() === "") {
-      console.log("본문을 입력해주세요. 본문은 null이거나 공백이면 안 됨.");
-      setContentError("본문을 입력해주세요. 본문은 null이거나 공백이면 안 됨.");
-      return;
+    if (imgFile.length > 5) {
+      toast({
+        description: "이미지 개수를 초과했습니다. (최대 5개)",
+        status: "info",
+      });
+      let htmlContent = content; // 여기에 HTML 컨텐츠를 넣으세요.
+      htmlContent = htmlContent.replace(
+        /<figure[^>]*>([\s\S]*?)<\/figure>/g,
+        "",
+      );
+      setReturnData(htmlContent);
+      setIsSubmitting(false);
     }
 
-    axios
-      .postForm("/api/board/add", {
-        title,
-        link,
-        content,
-        uploadFiles,
-        uuSrc,
-        board_member_id: loginInfo.member_id,
-        name_eng: currentParams,
-      })
-      .then(() => {
-        toast({
-          description: "게시글 저장에 성공했습니다.",
-          status: "success",
-        });
-        navigate("/board/list?category=" + currentParams);
-      })
-      .catch((error) => {
-        if (error.response.status === 400) {
-          toast({
-            description:
-              "게시글 유효성 및 파일(최대 5개) 검증에 실패했습니다. 양식에 맞게 작성해주세요.",
-            status: "error",
-          });
-          return;
-        }
+    if (imgFile.length < 6) {
+      let uuSrc = getSrc();
 
-        if (error.response.status === 401) {
-          toast({
-            description: "권한 정보가 없습니다.",
-            status: "error",
-          });
-          return;
-        }
+      // 제목이 null이거나 공백일 경우 에러메시지 세팅 후 반환
+      if (!title || title.trim() === "") {
+        console.log("제목을 입력해주세요. title은 null이거나 공백이면 안 됨.");
+        setTitleError(
+          "제목을 입력해주세요. title은 null이거나 공백이면 안 됨.",
+        );
+        return;
+      }
+      // 본문이 null이거나 공백일 경우 에러메시지 세팅 후 반환
+      if (!content || content.trim() === "") {
+        console.log("본문을 입력해주세요. 본문은 null이거나 공백이면 안 됨.");
+        setContentError(
+          "본문을 입력해주세요. 본문은 null이거나 공백이면 안 됨.",
+        );
+        return;
+      }
 
-        if (error.response) {
+      axios
+        .postForm("/api/board/add", {
+          title,
+          link,
+          content,
+          uploadFiles,
+          uuSrc,
+          board_member_id: loginInfo.member_id,
+          name_eng: currentParams,
+        })
+        .then(() => {
           toast({
-            description: "게시글 저장에 실패했습니다.",
-            status: "error",
+            description: "게시글 저장에 성공했습니다.",
+            status: "success",
           });
-          return;
-        }
+          navigate("/board/list?category=" + currentParams);
+        })
+        .catch((error) => {
+          if (error.response.status === 400) {
+            toast({
+              description:
+                "게시글 유효성 및 파일(최대 5개) 검증에 실패했습니다. 양식에 맞게 작성해주세요.",
+              status: "error",
+            });
+            return;
+          }
 
-        console.log("error");
-      })
-      .finally(() => setIsSubmitting(false));
+          if (error.response.status === 401) {
+            toast({
+              description: "권한 정보가 없습니다.",
+              status: "error",
+            });
+            return;
+          }
+
+          if (error.response) {
+            toast({
+              description: "게시글 저장에 실패했습니다.",
+              status: "error",
+            });
+            return;
+          }
+
+          console.log("error");
+        })
+        .finally(() => setIsSubmitting(false));
+    }
   }
 
   // 본문 영역 이미지 소스 코드 얻어오기
@@ -208,7 +235,12 @@ function BoardWrite() {
         <FormControl mb={2} isInvalid={contentError}>
           <FormLabel id="content">본문</FormLabel>
           {/* CKEditor 본문 영역 */}
-          <Editor setUuid={setUuid} uuid={uuid} setContent1={setContent} />
+          <Editor
+            data={returnData}
+            setUuid={setUuid}
+            uuid={uuid}
+            setContent1={setContent}
+          />
           <FormErrorMessage>{contentError}</FormErrorMessage>
         </FormControl>
 
@@ -235,60 +267,60 @@ function BoardWrite() {
       </Box>
     </Center>
 
-//       <Heading mb={5}>유튜브 추천 :: 새 글 작성하기</Heading>
+    //       <Heading mb={5}>유튜브 추천 :: 새 글 작성하기</Heading>
 
-//       {/* -------------------- 제목 -------------------- */}
-//       <FormControl mb={2} isInvalid={titleError}>
-//         <FormLabel id="title">제목</FormLabel>
-//         <Input
-//           value={title}
-//           onChange={(e) => setTitle(e.target.value)}
-//           placeholder="추천 게시글의 제목을 입력해주세요."
-//         />
-//         {/* isInvalid로 타이틀이 공백이거나 null일 경우 에러메시지 출력 */}
-//         <FormErrorMessage>{titleError}</FormErrorMessage>
-//       </FormControl>
+    //       {/* -------------------- 제목 -------------------- */}
+    //       <FormControl mb={2} isInvalid={titleError}>
+    //         <FormLabel id="title">제목</FormLabel>
+    //         <Input
+    //           value={title}
+    //           onChange={(e) => setTitle(e.target.value)}
+    //           placeholder="추천 게시글의 제목을 입력해주세요."
+    //         />
+    //         {/* isInvalid로 타이틀이 공백이거나 null일 경우 에러메시지 출력 */}
+    //         <FormErrorMessage>{titleError}</FormErrorMessage>
+    //       </FormControl>
 
-//       {/* -------------------- 링크 -------------------- */}
-//       <FormControl mb={2}>
-//         <FormLabel>링크</FormLabel>
-//         <Input
-//           value={link}
-//           onChange={(e) => setLink(e.target.value)}
-//           placeholder="추천 영상의 링크를 입력해주세요."
-//         />
-//       </FormControl>
+    //       {/* -------------------- 링크 -------------------- */}
+    //       <FormControl mb={2}>
+    //         <FormLabel>링크</FormLabel>
+    //         <Input
+    //           value={link}
+    //           onChange={(e) => setLink(e.target.value)}
+    //           placeholder="추천 영상의 링크를 입력해주세요."
+    //         />
+    //       </FormControl>
 
-//       {/* -------------------- 본문 -------------------- */}
-//       <FormControl mb={2} isInvalid={contentError}>
-//         <FormLabel id="content">본문</FormLabel>
-//         {/* CKEditor 본문 영역 */}
-//         <Editor setUuid={setUuid} uuid={uuid} setContent1={setContent} />
-//         <FormErrorMessage>{contentError}</FormErrorMessage>
-//       </FormControl>
+    //       {/* -------------------- 본문 -------------------- */}
+    //       <FormControl mb={2} isInvalid={contentError}>
+    //         <FormLabel id="content">본문</FormLabel>
+    //         {/* CKEditor 본문 영역 */}
+    //         <Editor setUuid={setUuid} uuid={uuid} setContent1={setContent} />
+    //         <FormErrorMessage>{contentError}</FormErrorMessage>
+    //       </FormControl>
 
-//       {/* -------------------- 파일 첨부 -------------------- */}
-//       <Filednd setUploadFiles={setUploadFiles} uploadFiles={uploadFiles} />
+    //       {/* -------------------- 파일 첨부 -------------------- */}
+    //       <Filednd setUploadFiles={setUploadFiles} uploadFiles={uploadFiles} />
 
-//       {/* -------------------- 버튼 섹션 -------------------- */}
-//       {/* 저장 버튼 */}
-//       <Button
-//         onClick={handleSubmit}
-//         colorScheme="blue"
-//         isDisabled={isSubmitting}
-//         mr={2}
-//       >
-//         작성 완료
-//       </Button>
+    //       {/* -------------------- 버튼 섹션 -------------------- */}
+    //       {/* 저장 버튼 */}
+    //       <Button
+    //         onClick={handleSubmit}
+    //         colorScheme="blue"
+    //         isDisabled={isSubmitting}
+    //         mr={2}
+    //       >
+    //         작성 완료
+    //       </Button>
 
-//       {/* 취소 버튼 */}
-//       <Button
-//         onClick={() => navigate("/board/list?category=" + currentParams)}
-//         colorScheme="red"
-//       >
-//         취소
-//       </Button>
-//     </Box>
+    //       {/* 취소 버튼 */}
+    //       <Button
+    //         onClick={() => navigate("/board/list?category=" + currentParams)}
+    //         colorScheme="red"
+    //       >
+    //         취소
+    //       </Button>
+    //     </Box>
   );
 }
 

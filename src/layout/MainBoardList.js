@@ -94,10 +94,10 @@ export function MainBoardList({
           >
             <List width={"100%"} spacing={2}>
               {mainRecommendBoardList.map((board, index) => (
-                <>
-                  {index > 0 && <Divider key={`divider-${index}`} />}
+                <Box key={board.uuid}>
+                  {index > 0 && <Divider />}
                   {renderListItem(board, index)}
-                </>
+                </Box>
               ))}
             </List>
           </CardBody>
@@ -122,10 +122,10 @@ export function MainBoardList({
           >
             <List width={"100%"} spacing={2}>
               {mainHitsBoardList.map((board, index) => (
-                <>
-                  {index > 0 && <Divider key={`divider-${index}`} />}
+                <Box key={board.uuid}>
+                  {index > 0 && <Divider />}
                   {renderListItem(board, index)}
-                </>
+                </Box>
               ))}
             </List>
           </CardBody>
@@ -152,10 +152,10 @@ export function MainBoardList({
           >
             <List mt={"10px"} spacing={2}>
               {mainBoardList2.map((board, index) => (
-                <>
-                  {index > 0 && <Divider key={`divider-${index}`} />}
+                <Box key={board.uuid}>
+                  {index > 0 && <Divider />}
                   {renderListItem(board, index)}
-                </>
+                </Box>
               ))}
             </List>
           </CardBody>
@@ -179,10 +179,10 @@ export function MainBoardList({
           >
             <List mt={"10px"} spacing={2}>
               {mainBoardList3.map((board, index) => (
-                <>
-                  {index > 0 && <Divider key={`divider-${index}`} />}
+                <Box key={board.uuid}>
+                  {index > 0 && <Divider />}
                   {renderListItem(board, index)}
-                </>
+                </Box>
               ))}
             </List>
           </CardBody>
@@ -206,10 +206,10 @@ export function MainBoardList({
           >
             <List mt={"10px"} spacing={2}>
               {mainBoardList7.map((board, index) => (
-                <>
-                  {index > 0 && <Divider key={`divider-${index}`} />}
+                <Box key={board.uuid}>
+                  {index > 0 && <Divider />}
                   {renderListItem(board, index)}
-                </>
+                </Box>
               ))}
             </List>
           </CardBody>
@@ -236,10 +236,10 @@ export function MainBoardList({
           >
             <List mt={"10px"} spacing={2}>
               {mainBoardList4.map((board, index) => (
-                <>
-                  {index > 0 && <Divider key={`divider-${index}`} />}
+                <Box key={board.uuid}>
+                  {index > 0 && <Divider />}
                   {renderListItem(board, index)}
-                </>
+                </Box>
               ))}
             </List>
           </CardBody>
@@ -263,10 +263,10 @@ export function MainBoardList({
           >
             <List mt={"10px"} spacing={2}>
               {mainBoardList6.map((board, index) => (
-                <>
-                  {index > 0 && <Divider key={`divider-${index}`} />}
+                <Box key={board.uuid}>
+                  {index > 0 && <Divider />}
                   {renderListItem(board, index)}
-                </>
+                </Box>
               ))}
             </List>
           </CardBody>
@@ -290,10 +290,10 @@ export function MainBoardList({
           >
             <List mt={"10px"} spacing={2}>
               {mainBoardList5.map((board, index) => (
-                <>
-                  {index > 0 && <Divider key={`divider-${index}`} />}
+                <Box key={board.uuid}>
+                  {index > 0 && <Divider />}
                   {renderListItem(board, index)}
-                </>
+                </Box>
               ))}
             </List>
           </CardBody>
