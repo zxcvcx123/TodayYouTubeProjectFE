@@ -91,8 +91,8 @@ function InquiryList(props) {
   }
 
   return (
-    <Box>
-      <Box width={"60%"} m={"auto"}>
+    <Box width={"1000px"} m={"auto"} mt={10} h={"800px"}>
+      <Box>
         <Box>
           <Heading mb={2}>문의게시판</Heading>
           <Flex
