@@ -328,7 +328,7 @@ export function Nav({ setSocket }) {
                       >
                         <PopoverArrow />
                         <PopoverCloseButton size={5} />
-                        <PopoverHeader>
+                        <PopoverHeader bgColor={"#f1eded"}>
                           <Flex justifyContent={"space-between"} w={"88%"}>
                             <Text>최근 알람</Text>
                             <Flex alignItems={"flex-end"} gap={3}>
@@ -351,6 +351,7 @@ export function Nav({ setSocket }) {
                               </Text>
                             </Flex>
                           </Flex>
+                          {/*<Divider />*/}
                         </PopoverHeader>
 
                         {IsConnected === true ? (

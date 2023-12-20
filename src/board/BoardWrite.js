@@ -51,6 +51,9 @@ function BoardWrite() {
 
   // useEffect를 사용하여 titleError가 변경(에러발생)될 때마다 스크롤이 제목 라벨으로 이동
   useEffect(() => {
+    if (currentParams === null) {
+      navigate("/");
+    }
     // 동시에 발생했을 경우에는 title로 먼저 스크롤 된다.
     if (titleError && contentError) {
       const errorElement = document.getElementById("title");
@@ -182,149 +185,149 @@ function BoardWrite() {
           .finally(() => setIsSubmitting(false));
       }
     }
+  }
 
-    // 본문 영역 이미지 소스 코드 얻어오기
-    function getSrc() {
-      let imgSrc = document.getElementsByTagName("img");
-      let arrSrc = [];
+  // 본문 영역 이미지 소스 코드 얻어오기
+  function getSrc() {
+    let imgSrc = document.getElementsByTagName("img");
+    let arrSrc = [];
 
-      for (let i = 0; i < imgSrc.length; i++) {
-        if (
-          imgSrc[i].src.length > 0 &&
-          imgSrc[i].src.startsWith(
-            "https://mybucketcontainer1133557799.s3.ap-northeast-2.amazonaws.com/fileserver/",
-          )
-        ) {
-          arrSrc.push(imgSrc[i].src.substring(79, 115));
-        }
+    for (let i = 0; i < imgSrc.length; i++) {
+      if (
+        imgSrc[i].src.length > 0 &&
+        imgSrc[i].src.startsWith(
+          "https://mybucketcontainer1133557799.s3.ap-northeast-2.amazonaws.com/fileserver/",
+        )
+      ) {
+        arrSrc.push(imgSrc[i].src.substring(79, 115));
       }
-
-      return arrSrc;
     }
 
-    return (
-      <Center>
-        <Box m={5} w={"1000px"}>
-          <Box mb={5}>
-            <Heading>{currentParams} 게시판</Heading>
-          </Box>
-
-          <Heading mb={5}>유튜브 추천 :: 새 글 작성하기</Heading>
-
-          {/* -------------------- 제목 -------------------- */}
-          <FormControl mb={2} isInvalid={titleError}>
-            <FormLabel id="title">제목</FormLabel>
-            <Input
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="추천 게시글의 제목을 입력해주세요."
-            />
-            {/* isInvalid로 타이틀이 공백이거나 null일 경우 에러메시지 출력 */}
-            <FormErrorMessage>{titleError}</FormErrorMessage>
-          </FormControl>
-
-          {/* -------------------- 링크 -------------------- */}
-          <FormControl mb={2}>
-            <FormLabel>링크</FormLabel>
-            <Input
-              value={link}
-              onChange={(e) => setLink(e.target.value)}
-              placeholder="추천 영상의 링크를 입력해주세요."
-            />
-          </FormControl>
-
-          {/* -------------------- 본문 -------------------- */}
-          <FormControl mb={2} isInvalid={contentError}>
-            <FormLabel id="content">본문</FormLabel>
-            {/* CKEditor 본문 영역 */}
-            <Editor
-              data={returnData}
-              setUuid={setUuid}
-              uuid={uuid}
-              setContent1={setContent}
-            />
-            <FormErrorMessage>{contentError}</FormErrorMessage>
-          </FormControl>
-
-          {/* -------------------- 파일 첨부 -------------------- */}
-          <Filednd setUploadFiles={setUploadFiles} uploadFiles={uploadFiles} />
-
-          {/* -------------------- 버튼 섹션 -------------------- */}
-          {/* 저장 버튼 */}
-          <Button
-            onClick={handleSubmit}
-            colorScheme="blue"
-            isDisabled={isSubmitting}
-          >
-            작성 완료
-          </Button>
-
-          {/* 취소 버튼 */}
-          <Button
-            onClick={() => navigate("/board/list?category=" + currentParams)}
-            colorScheme="red"
-          >
-            취소
-          </Button>
-        </Box>
-      </Center>
-
-      //       <Heading mb={5}>유튜브 추천 :: 새 글 작성하기</Heading>
-
-      //       {/* -------------------- 제목 -------------------- */}
-      //       <FormControl mb={2} isInvalid={titleError}>
-      //         <FormLabel id="title">제목</FormLabel>
-      //         <Input
-      //           value={title}
-      //           onChange={(e) => setTitle(e.target.value)}
-      //           placeholder="추천 게시글의 제목을 입력해주세요."
-      //         />
-      //         {/* isInvalid로 타이틀이 공백이거나 null일 경우 에러메시지 출력 */}
-      //         <FormErrorMessage>{titleError}</FormErrorMessage>
-      //       </FormControl>
-
-      //       {/* -------------------- 링크 -------------------- */}
-      //       <FormControl mb={2}>
-      //         <FormLabel>링크</FormLabel>
-      //         <Input
-      //           value={link}
-      //           onChange={(e) => setLink(e.target.value)}
-      //           placeholder="추천 영상의 링크를 입력해주세요."
-      //         />
-      //       </FormControl>
-
-      //       {/* -------------------- 본문 -------------------- */}
-      //       <FormControl mb={2} isInvalid={contentError}>
-      //         <FormLabel id="content">본문</FormLabel>
-      //         {/* CKEditor 본문 영역 */}
-      //         <Editor setUuid={setUuid} uuid={uuid} setContent1={setContent} />
-      //         <FormErrorMessage>{contentError}</FormErrorMessage>
-      //       </FormControl>
-
-      //       {/* -------------------- 파일 첨부 -------------------- */}
-      //       <Filednd setUploadFiles={setUploadFiles} uploadFiles={uploadFiles} />
-
-      //       {/* -------------------- 버튼 섹션 -------------------- */}
-      //       {/* 저장 버튼 */}
-      //       <Button
-      //         onClick={handleSubmit}
-      //         colorScheme="blue"
-      //         isDisabled={isSubmitting}
-      //         mr={2}
-      //       >
-      //         작성 완료
-      //       </Button>
-
-      //       {/* 취소 버튼 */}
-      //       <Button
-      //         onClick={() => navigate("/board/list?category=" + currentParams)}
-      //         colorScheme="red"
-      //       >
-      //         취소
-      //       </Button>
-      //     </Box>
-    );
+    return arrSrc;
   }
+
+  return (
+    <Center>
+      <Box m={5} w={"1000px"}>
+        {/*<Box mb={5}>*/}
+        {/*  <Heading>{currentParams} 게시판</Heading>*/}
+        {/*</Box>*/}
+
+        <Heading mb={5}>새 글 작성하기</Heading>
+
+        {/* -------------------- 제목 -------------------- */}
+        <FormControl mb={2} isInvalid={titleError}>
+          <FormLabel id="title">제목</FormLabel>
+          <Input
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="추천 게시글의 제목을 입력해주세요."
+          />
+          {/* isInvalid로 타이틀이 공백이거나 null일 경우 에러메시지 출력 */}
+          <FormErrorMessage>{titleError}</FormErrorMessage>
+        </FormControl>
+
+        {/* -------------------- 링크 -------------------- */}
+        <FormControl my={8}>
+          <FormLabel>링크</FormLabel>
+          <Input
+            value={link}
+            onChange={(e) => setLink(e.target.value)}
+            placeholder="추천 영상의 링크를 입력해주세요."
+          />
+        </FormControl>
+
+        {/* -------------------- 본문 -------------------- */}
+        <FormControl isInvalid={contentError}>
+          <FormLabel id="content">본문</FormLabel>
+          {/* CKEditor 본문 영역 */}
+          <Editor
+            data={returnData}
+            setUuid={setUuid}
+            uuid={uuid}
+            setContent1={setContent}
+          />
+          <FormErrorMessage>{contentError}</FormErrorMessage>
+        </FormControl>
+
+        {/* -------------------- 파일 첨부 -------------------- */}
+        <Filednd setUploadFiles={setUploadFiles} uploadFiles={uploadFiles} />
+
+        {/* -------------------- 버튼 섹션 -------------------- */}
+        {/* 저장 버튼 */}
+        <Button
+          onClick={handleSubmit}
+          colorScheme="blue"
+          isDisabled={isSubmitting}
+        >
+          작성 완료
+        </Button>
+
+        {/* 취소 버튼 */}
+        <Button
+          onClick={() => navigate("/board/list?category=" + currentParams)}
+          colorScheme="red"
+        >
+          취소
+        </Button>
+      </Box>
+    </Center>
+
+    //       <Heading mb={5}>유튜브 추천 :: 새 글 작성하기</Heading>
+
+    //       {/* -------------------- 제목 -------------------- */}
+    //       <FormControl mb={2} isInvalid={titleError}>
+    //         <FormLabel id="title">제목</FormLabel>
+    //         <Input
+    //           value={title}
+    //           onChange={(e) => setTitle(e.target.value)}
+    //           placeholder="추천 게시글의 제목을 입력해주세요."
+    //         />
+    //         {/* isInvalid로 타이틀이 공백이거나 null일 경우 에러메시지 출력 */}
+    //         <FormErrorMessage>{titleError}</FormErrorMessage>
+    //       </FormControl>
+
+    //       {/* -------------------- 링크 -------------------- */}
+    //       <FormControl mb={2}>
+    //         <FormLabel>링크</FormLabel>
+    //         <Input
+    //           value={link}
+    //           onChange={(e) => setLink(e.target.value)}
+    //           placeholder="추천 영상의 링크를 입력해주세요."
+    //         />
+    //       </FormControl>
+
+    //       {/* -------------------- 본문 -------------------- */}
+    //       <FormControl mb={2} isInvalid={contentError}>
+    //         <FormLabel id="content">본문</FormLabel>
+    //         {/* CKEditor 본문 영역 */}
+    //         <Editor setUuid={setUuid} uuid={uuid} setContent1={setContent} />
+    //         <FormErrorMessage>{contentError}</FormErrorMessage>
+    //       </FormControl>
+
+    //       {/* -------------------- 파일 첨부 -------------------- */}
+    //       <Filednd setUploadFiles={setUploadFiles} uploadFiles={uploadFiles} />
+
+    //       {/* -------------------- 버튼 섹션 -------------------- */}
+    //       {/* 저장 버튼 */}
+    //       <Button
+    //         onClick={handleSubmit}
+    //         colorScheme="blue"
+    //         isDisabled={isSubmitting}
+    //         mr={2}
+    //       >
+    //         작성 완료
+    //       </Button>
+
+    //       {/* 취소 버튼 */}
+    //       <Button
+    //         onClick={() => navigate("/board/list?category=" + currentParams)}
+    //         colorScheme="red"
+    //       >
+    //         취소
+    //       </Button>
+    //     </Box>
+  );
 }
 
 export default BoardWrite;
