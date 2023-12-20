@@ -234,27 +234,29 @@ function InquiryWrite() {
           data={returnData}
         />
       </FormControl>
-      {IsConnected && (
-        <Button
-          isDisabled={isSubmitting}
-          onClick={() => {
-            handleWriteButton();
-            send();
-          }}
-          colorScheme={"blue"}
-          mr={2}
-        >
-          작성완료
+      <Flex justifyContent="flex-end" alignItems="end">
+        {IsConnected && (
+          <Button
+            isDisabled={isSubmitting}
+            onClick={() => {
+              handleWriteButton();
+              send();
+            }}
+            colorScheme={"blue"}
+            mr={2}
+          >
+            작성완료
+          </Button>
+        )}
+        {IsConnected || (
+          <Button isDisabled={true} colorScheme={"blue"} mr={2}>
+            연결중
+          </Button>
+        )}
+        <Button colorScheme="red" onClick={onOpen}>
+          취소
         </Button>
-      )}
-      {IsConnected || (
-        <Button isDisabled={true} colorScheme={"blue"} mr={2}>
-          연결중
-        </Button>
-      )}
-      <Button colorScheme="red" onClick={onOpen}>
-        취소
-      </Button>
+      </Flex>
 
       {/* 작성취소 모달 */}
       <Modal isOpen={isOpen} onClose={onClose}>
