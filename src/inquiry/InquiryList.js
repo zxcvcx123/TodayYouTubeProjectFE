@@ -102,9 +102,8 @@ function InquiryList(props) {
             mb={2}
           >
             <Box
-              mb={3}
+              mt={3}
               fontSize={"0.9rem"}
-              ml={3}
               fontStyle={"italic"}
               color={"gray.500"}
             >
@@ -123,7 +122,7 @@ function InquiryList(props) {
           <Divider />
         </Box>
 
-        <Table size={"sm"} mb={5}>
+        <Table mb={5}>
           <Thead>
             <Tr>
               <Th textAlign={"center"}>번호</Th>
