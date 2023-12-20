@@ -44,14 +44,15 @@ function MemberInfoPageNation({ pageNumberInformation }) {
           <Flex flexDirection={"column"}>
             <Flex justifyContent={"center"} mb={2}>
               {/* 이전 페이지 그룹이 있을 때만 출력 */}
-              {pageNumberInformation !== null && (
-                <PageButton
-                  variant="ghost"
-                  pageNumber={pageNumberInformation.prevPageNumber}
-                >
-                  <FontAwesomeIcon icon={faAngleLeft} />
-                </PageButton>
-              )}
+              {pageNumberInformation !== null &&
+                pageNumberInformation.nextPageNumber !== null && (
+                  <PageButton
+                    variant="ghost"
+                    pageNumber={pageNumberInformation.prevPageNumber}
+                  >
+                    <FontAwesomeIcon icon={faAngleLeft} />
+                  </PageButton>
+                )}
               {/* 위 pageNumbers 배열에 저장된 번호를 map을 이용해 각각 UI를 그려주고 navigate 값을 설정한다. */}
               {pageNumberInformation !== null &&
                 pageNumbers.map((pageNumber) => (
@@ -69,14 +70,15 @@ function MemberInfoPageNation({ pageNumberInformation }) {
                   </PageButton>
                 ))}
               {/* 이후 페이지 그룹이 있을 때만 출력 */}
-              {pageNumberInformation !== null && (
-                <PageButton
-                  variant="ghost"
-                  pageNumber={pageNumberInformation.nextPageNumber}
-                >
-                  <FontAwesomeIcon icon={faAngleRight} />
-                </PageButton>
-              )}
+              {pageNumberInformation !== null &&
+                pageNumberInformation.nextPageNumber !== null && (
+                  <PageButton
+                    variant="ghost"
+                    pageNumber={pageNumberInformation.nextPageNumber}
+                  >
+                    <FontAwesomeIcon icon={faAngleRight} />
+                  </PageButton>
+                )}
             </Flex>
             <Center>
               <span>

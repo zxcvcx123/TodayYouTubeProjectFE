@@ -188,7 +188,7 @@ function MemberInfoMyInfo({ loginInfo, handleLogout }) {
                       </Flex>
                     </Flex>
                     <Flex w={"100%"}>
-                      <Flex w={"50%"} borderRight={"1px solid #E2E4E8"} mr={4}>
+                      <Flex w={"50%"} mr={4}>
                         <Box>
                           <Heading size="s" textTransform="uppercase">
                             이메일
@@ -198,20 +198,20 @@ function MemberInfoMyInfo({ loginInfo, handleLogout }) {
                           </Text>
                         </Box>
                       </Flex>
-                      <Flex w={"50%"}>
-                        <Box>
-                          <Heading size="s" textTransform="uppercase">
-                            전화번호
-                          </Heading>
-                          <Text pl={2} mt={1} pt="2" fontSize="sm">
-                            {loginInfo !== null ? (
-                              loginInfo.phone_number
-                            ) : (
-                              <></>
-                            )}
-                          </Text>
-                        </Box>
-                      </Flex>
+                      {/*<Flex w={"50%"}>*/}
+                      {/*  <Box>*/}
+                      {/*    <Heading size="s" textTransform="uppercase">*/}
+                      {/*      전화번호*/}
+                      {/*    </Heading>*/}
+                      {/*    <Text pl={2} mt={1} pt="2" fontSize="sm">*/}
+                      {/*      {loginInfo !== null ? (*/}
+                      {/*        loginInfo.phone_number*/}
+                      {/*      ) : (*/}
+                      {/*        <></>*/}
+                      {/*      )}*/}
+                      {/*    </Text>*/}
+                      {/*  </Box>*/}
+                      {/*</Flex>*/}
                     </Flex>
                     <Flex w={"100%"}>
                       <Flex w={"50%"} borderRight={"1px solid #E2E4E8"} mr={4}>
