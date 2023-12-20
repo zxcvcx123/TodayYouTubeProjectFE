@@ -94,7 +94,6 @@ function BoardList() {
         setListCount(response.data.listCount);
       })
       .catch((error) => {
-        console.error("Error fetching board list:", error);
         window.alert("게시글 목록을 가져오는 중에 오류가 발생했습니다.");
       })
       .finally(() => {
@@ -216,9 +215,7 @@ function BoardList() {
       state: boardInfo,
     });
     // 조회수 증가 요청
-    axios.post("/api/board/" + boardId + "/increaseView").catch((error) => {
-      console.error("조회수 증가 요청 중 에러:", error);
-    });
+    axios.post("/api/board/" + boardId + "/increaseView");
   }
 
   // -------------------------------------------------- 화면 렌더링 --------------------------------------------------

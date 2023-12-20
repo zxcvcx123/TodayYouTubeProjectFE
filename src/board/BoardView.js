@@ -116,20 +116,16 @@ function BoardView() {
           return fetch(
             `https://www.googleapis.com/youtube/v3/channels?part=snippet&id=${channelId}&key=${apiKey}`,
           );
-        } else {
-          console.error("YouTube API 응답에서 항목을 찾을 수 없습니다.");
         }
       })
       .then((response) => response.json())
       .then((data) => {
         // 채널명 가져오기
         const channelTitle = data.items[0].snippet.title;
-        console.log("채널명:", channelTitle);
 
         // 채널 정보 state에 저장
         setChannelInfo(data.items[0].snippet);
-      })
-      .catch((error) => console.error("에러 발생:", error));
+      });
   };
 
   // 초기 렌더링
@@ -253,6 +249,57 @@ function BoardView() {
       window.alert("작성자 본인만 삭제 가능합니다.");
       return;
     }
+    axios
+      .put("/api/board/remove/" + id, {
+        id: board.id,
+        title: board.title,
+        content: board.content,
+        link: board.link,
+        board_category_code: board.board_category_code,
+        board_member_id: board.board_member_id,
+        created_at: board.created_at,
+        updated_at: board.updated_at,
+        is_show: board.is_show,
+        countlike: board.countlike,
+        views: board.views,
+        login_member_id: loginInfo.member_id,
+      })
+      .then(() => {
+        toast({
+          description: "삭제되었습니다.",
+          status: "success",
+        });
+        navigate("/board/list?" + currentParams);
+      })
+      .catch((error) => {
+        if (error.response.status === 403) {
+          toast({
+            description: "게시글 삭제는 작성자만 가능합니다.",
+            status: "error",
+          });
+          return;
+        }
+
+        if (error.response.status === 401) {
+          toast({
+            description: "권한 정보가 없습니다.",
+            status: "error",
+          });
+          return;
+        }
+
+        if (error.response) {
+          toast({
+            description: "게시글 삭제에 실패했습니다.",
+            status: "error",
+          });
+          return;
+        }
+      })
+      .finally(() => {
+        onClose();
+        setIsSubmitting(false);
+      });
   }
 
   // 수정 버튼 클릭

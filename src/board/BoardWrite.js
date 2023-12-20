@@ -96,6 +96,17 @@ function BoardWrite() {
     console.log(imgFile);
     console.log(content);
 
+
+    // 제목이 null이거나 공백일 경우 에러메시지 세팅 후 반환
+    if (!title || title.trim() === "") {
+      setTitleError("제목을 입력해주세요. title은 null이거나 공백이면 안 됨.");
+      return;
+    }
+    // 본문이 null이거나 공백일 경우 에러메시지 세팅 후 반환
+    if (!content || content.trim() === "") {
+      setContentError("본문을 입력해주세요. 본문은 null이거나 공백이면 안 됨.");
+      return;
+      
     setIsSubmitting(true);
 
     if (imgFile.length > 5) {
@@ -117,7 +128,6 @@ function BoardWrite() {
 
       // 제목이 null이거나 공백일 경우 에러메시지 세팅 후 반환
       if (!title || title.trim() === "") {
-        console.log("제목을 입력해주세요. title은 null이거나 공백이면 안 됨.");
         setTitleError(
           "제목을 입력해주세요. title은 null이거나 공백이면 안 됨.",
         );
@@ -125,7 +135,6 @@ function BoardWrite() {
       }
       // 본문이 null이거나 공백일 경우 에러메시지 세팅 후 반환
       if (!content || content.trim() === "") {
-        console.log("본문을 입력해주세요. 본문은 null이거나 공백이면 안 됨.");
         setContentError(
           "본문을 입력해주세요. 본문은 null이거나 공백이면 안 됨.",
         );
@@ -174,8 +183,6 @@ function BoardWrite() {
             });
             return;
           }
-
-          console.log("error");
         })
         .finally(() => setIsSubmitting(false));
     }
