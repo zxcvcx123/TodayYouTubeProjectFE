@@ -10,6 +10,7 @@ import {
   CardFooter,
   FormControl,
   FormLabel,
+  Heading,
   Img,
   Input,
   Modal,
@@ -160,15 +161,9 @@ export function Filednd({
     <>
       {/* 파일 리스트 */}
       {mode === "Update" && (
-        <Box h={"200px"}>
-          <Text>기존 파일</Text>
-          <Box
-            border={"1px solid #edf1f6"}
-            display={"flex"}
-            h={"100%"}
-            alignItems={"center"}
-            gap={5}
-          >
+        <Box h={"200px"} border={"3px dashed black"} borderBottom={"none"}>
+          <Heading fontSize={"1.5rem"}>기존 파일</Heading>
+          <Box display={"flex"} h={"100%"} alignItems={"center"} gap={5}>
             {editUploadFiles.map((fileList) => (
               <Card key={fileList.id} h={"100%"} w={"25%"}>
                 <CardBody
@@ -206,7 +201,7 @@ export function Filednd({
           </Box>
         </Box>
       )}
-      <Box pt={9}>
+      <Box>
         <FormControl w={"100%"} h={"200px"} border={"3px dashed black"}>
           <FormLabel
             textAlign={"center"}
