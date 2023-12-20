@@ -86,7 +86,7 @@ export function MemberLogin() {
         }
       });
   }
-
+  console.log("");
   return (
     <>
       <div className="flex min-h-screen flex-1 flex-col justify-center px-6 py-0 lg:px-8">
