@@ -99,7 +99,7 @@ function MemberSignup(props) {
           description: "회원가입이 완료되었습니다",
           status: "success",
         });
-        navigate("/");
+        navigate("/member/login");
       })
       .catch((error) => {
         if (error.response.status === 400) {

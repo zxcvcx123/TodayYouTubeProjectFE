@@ -41,6 +41,9 @@ function InquiryWrite() {
   const { token, handleLogout, loginInfo, validateToken } =
     useContext(DetectLoginContext);
 
+  // 소켓
+  const { stompClient, setToId, IsConnected } = useContext(SocketContext);
+
   const [uuid, setUuid] = useState("");
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -51,8 +54,6 @@ function InquiryWrite() {
 
   const navigate = useNavigate();
   const toast = useToast();
-
-  const { stompClient, setToId } = useContext(SocketContext);
 
   // write 도메인에 쳐서 들어올경우
   useEffect(() => {
@@ -196,17 +197,24 @@ function InquiryWrite() {
         {/*></Textarea>*/}
         <Editor setUuid={setUuid} uuid={uuid} setContent1={setContent} />
       </FormControl>
-      <Button
-        isDisabled={isSubmitting}
-        onClick={() => {
-          handleWriteButton();
-          send();
-        }}
-        colorScheme={"blue"}
-        mr={2}
-      >
-        작성완료
-      </Button>
+      {IsConnected && (
+        <Button
+          isDisabled={isSubmitting}
+          onClick={() => {
+            handleWriteButton();
+            send();
+          }}
+          colorScheme={"blue"}
+          mr={2}
+        >
+          작성완료
+        </Button>
+      )}
+      {IsConnected || (
+        <Button isDisabled={true} colorScheme={"blue"} mr={2}>
+          연결중
+        </Button>
+      )}
       <Button colorScheme="red" onClick={onOpen}>
         취소
       </Button>

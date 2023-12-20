@@ -358,7 +358,10 @@ function InquiryView(props) {
                     {inquiry.answer_status !== "답변완료" && (
                       <Button
                         colorScheme="blue"
-                        onClick={handleAnswerComplete}
+                        onClick={() => {
+                          handleAnswerComplete();
+                          send();
+                        }}
                         mr={2}
                       >
                         답변
