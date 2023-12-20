@@ -253,17 +253,19 @@ function InquiryView(props) {
                   답변취소
                 </Button>
               )}
-              {answer === false && inquiry.answer_status === "답변진행중" && (
-                <Button
-                  colorScheme="green"
-                  onClick={() => {
-                    setAnswer(true);
-                  }}
-                  mr={2}
-                >
-                  답변하기
-                </Button>
-              )}
+              {answer === false &&
+                inquiry.answer_status === "답변진행중" &&
+                inquiry.inquiry_category !== "공지사항" && (
+                  <Button
+                    colorScheme="green"
+                    onClick={() => {
+                      setAnswer(true);
+                    }}
+                    mr={2}
+                  >
+                    답변하기
+                  </Button>
+                )}
               {answer === false && inquiry.answer_status === "답변완료" && (
                 <Button
                   colorScheme="purple"

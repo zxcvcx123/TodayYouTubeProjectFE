@@ -56,6 +56,9 @@ function InquiryEdit(props) {
     axios.get("/api/inquiry/" + id).then((response) => {
       setInquiry(response.data);
       setTitle(response.data.title);
+      if (inquiry_category === "공지사항") {
+        setInquiry_category(5);
+      }
       setInquiry_category(response.data.category_code);
       setContent(response.data.content);
     });
@@ -133,50 +136,53 @@ function InquiryEdit(props) {
       <Heading mt={10} mb={7}>
         문의 수정
       </Heading>
-      <FormControl>
-        <FormLabel fontWeight={"bold"}>문의유형</FormLabel>
-        <Menu>
-          <MenuButton
-            borderColor={"black"}
-            borderRadius="md"
-            borderWidth="1px"
-            as={Button}
-            rightIcon={<ChevronDownIcon />}
-          >
-            {inquiry_category === null && "선택"}
-            {inquiry_category === "1" && "개선사항"}
-            {inquiry_category === "2" && "유저신고"}
-            {inquiry_category === "3" && "광고 / 협찬문의"}
-            {inquiry_category === "4" && "기타 / 요청사항"}
-          </MenuButton>
-          <MenuList>
-            <MenuItem
-              value={"1"}
-              onClick={(e) => setInquiry_category(e.target.value)}
+      {inquiry_category === "5" && <Text fontWeight={"bold"}>공지사항</Text>}
+      {inquiry_category !== "5" && (
+        <FormControl>
+          <FormLabel fontWeight={"bold"}>문의유형</FormLabel>
+          <Menu>
+            <MenuButton
+              borderColor={"black"}
+              borderRadius="md"
+              borderWidth="1px"
+              as={Button}
+              rightIcon={<ChevronDownIcon />}
             >
-              개선사항
-            </MenuItem>
-            <MenuItem
-              value={"2"}
-              onClick={(e) => setInquiry_category(e.target.value)}
-            >
-              유저신고
-            </MenuItem>
-            <MenuItem
-              value={"3"}
-              onClick={(e) => setInquiry_category(e.target.value)}
-            >
-              광고/협찬문의
-            </MenuItem>
-            <MenuItem
-              value={"4"}
-              onClick={(e) => setInquiry_category(e.target.value)}
-            >
-              기타/요청사항
-            </MenuItem>
-          </MenuList>
-        </Menu>
-      </FormControl>
+              {inquiry_category === null && "선택"}
+              {inquiry_category === "1" && "개선사항"}
+              {inquiry_category === "2" && "유저신고"}
+              {inquiry_category === "3" && "광고 / 협찬문의"}
+              {inquiry_category === "4" && "기타 / 요청사항"}
+            </MenuButton>
+            <MenuList>
+              <MenuItem
+                value={"1"}
+                onClick={(e) => setInquiry_category(e.target.value)}
+              >
+                개선사항
+              </MenuItem>
+              <MenuItem
+                value={"2"}
+                onClick={(e) => setInquiry_category(e.target.value)}
+              >
+                유저신고
+              </MenuItem>
+              <MenuItem
+                value={"3"}
+                onClick={(e) => setInquiry_category(e.target.value)}
+              >
+                광고/협찬문의
+              </MenuItem>
+              <MenuItem
+                value={"4"}
+                onClick={(e) => setInquiry_category(e.target.value)}
+              >
+                기타/요청사항
+              </MenuItem>
+            </MenuList>
+          </Menu>
+        </FormControl>
+      )}
       <FormControl my={5}>
         <FormLabel fontWeight={"bold"}>제목</FormLabel>
         <Input

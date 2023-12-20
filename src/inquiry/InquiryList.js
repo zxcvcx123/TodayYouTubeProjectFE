@@ -144,6 +144,7 @@ function InquiryList(props) {
                     backgroundColor: "purple.200",
                   }}
                   key={notice.id}
+                  onClick={() => navigate("/inquiry/" + notice.id)}
                 >
                   <Th textAlign={"center"}>notice</Th>
                   <Th textAlign={"center"}>공지사항</Th>
