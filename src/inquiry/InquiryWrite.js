@@ -147,7 +147,7 @@ function InquiryWrite() {
   }
 
   return (
-    <Box width={"80%"} m={"auto"} mt={10}>
+    <Box width={"1000px"} m={"auto"} mt={10}>
       <Heading mb={5}>문의하기</Heading>
 
       <FormControl mb={5}>
@@ -161,6 +161,7 @@ function InquiryWrite() {
             borderWidth="1px"
             as={Button}
             rightIcon={<ChevronDownIcon />}
+            bg={"white"}
           >
             {inquiry_category === null && "선택"}
             {inquiry_category === "1" && "개선사항"}
@@ -199,9 +200,10 @@ function InquiryWrite() {
       <FormControl mb={5}>
         <FormLabel fontWeight={"bold"}>제목</FormLabel>
         <Input
+          bg={"white"}
           borderColor={"black.300"}
           type="text"
-          width={"70%"}
+          width={"1000px"}
           onChange={(e) => setTitle(e.target.value)}
         ></Input>
       </FormControl>
