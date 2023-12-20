@@ -192,13 +192,6 @@ export function Nav({ setSocket }) {
                 <MenuList style={{ fontFamily: "Nanum Gothic" }}>
                   <MenuItem
                     onClick={(e) => {
-                      navigate("board/list?category=notice");
-                    }}
-                  >
-                    공지
-                  </MenuItem>
-                  <MenuItem
-                    onClick={(e) => {
                       navigate("board/list?category=sports");
                     }}
                   >
@@ -250,6 +243,13 @@ export function Nav({ setSocket }) {
                   </MenuItem>
                   {/*<MenuItem onClick={() => navigate("/chat")}>채팅</MenuItem>*/}
                   <Divider />
+                  <MenuItem
+                    onClick={(e) => {
+                      navigate("board/list?category=notice");
+                    }}
+                  >
+                    공지
+                  </MenuItem>
                   <MenuItem
                     onClick={(e) => {
                       navigate("/inquiry/list");
