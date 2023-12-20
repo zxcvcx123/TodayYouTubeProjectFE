@@ -6,6 +6,7 @@ import {
   border,
   Box,
   Button,
+  Center,
   Checkbox,
   Flex,
   Heading,
@@ -105,13 +106,13 @@ function AdminMemberList(props) {
       <Sidenav />
       <Box
         h={"790px"}
-        w={"80%"}
+        w={"1400px"}
         m={"auto"}
         bg={"white"}
         boxShadow={"0 2px 10px rgba(0, 0, 0, 0.3)"}
       >
-        <Flex>
-          <Box w={"80%"} ml={"3%"}>
+        <Center>
+          <Box w={"80%"} mt={"30px"}>
             <Flex>
               <Heading mt={5} mb={5} mr={10}>
                 회원 정보 리스트
@@ -226,7 +227,7 @@ function AdminMemberList(props) {
             </Table>
             <Pagination pageInfo={pageInfo} />
           </Box>
-        </Flex>
+        </Center>
       </Box>
     </Flex>
   );
