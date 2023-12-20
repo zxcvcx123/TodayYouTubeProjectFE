@@ -24,6 +24,7 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import Editor from "../component/Editor";
 import { DetectLoginContext } from "../component/LoginProvider";
 import LoadingPage from "../component/LoadingPage";
+import YoutubeInfo from "../component/YoutubeInfo";
 
 function BoardEdit() {
   /* 로그인 정보 컨텍스트 */
@@ -38,6 +39,7 @@ function BoardEdit() {
   const [contentError, setContentError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [uuid, setUuid] = useState("");
+  const [isYouTubeLink, setIsYouTubeLink] = useState(false);
 
   /* use immer */
   const [board, updateBoard] = useImmer(null);
@@ -167,6 +169,7 @@ function BoardEdit() {
           uuSrc,
           uploadFiles,
           editUploadFiles: editUploadFiles.length,
+          isYouTubeLink: isYouTubeLink,
         })
         .then(() => {
           toast({
@@ -255,6 +258,14 @@ function BoardEdit() {
             value={board.link}
             onChange={(e) => handleBoardUpdate(e, "link")}
           />
+          <Box h={"300px"}>
+            <YoutubeInfo
+              link={board.link}
+              extraThumbnail={true}
+              mode={"voteLink"}
+              setIsYouTubeLink={setIsYouTubeLink}
+            />
+          </Box>
         </FormControl>
 
         {/* -------------------- 본문 -------------------- */}

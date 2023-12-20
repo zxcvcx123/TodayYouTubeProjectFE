@@ -18,6 +18,7 @@ import { Filednd } from "../file/Filednd";
 import Editor from "../component/Editor";
 import { DetectLoginContext } from "../component/LoginProvider";
 import LoadingPage from "../component/LoadingPage";
+import YoutubeInfo from "../component/YoutubeInfo";
 
 function BoardWrite() {
   /* 로그인 정보 컨텍스트 */
@@ -152,6 +153,7 @@ function BoardWrite() {
           uuSrc,
           board_member_id: loginInfo.member_id,
           name_eng: currentParams,
+          isYouTubeLink: isYouTubeLink,
         })
         .then(() => {
           toast({
@@ -240,6 +242,14 @@ function BoardWrite() {
             placeholder="추천 영상의 링크를 입력해주세요."
             bg={"white"}
           />
+          <Box h={"300px"}>
+            <YoutubeInfo
+              link={link}
+              extraThumbnail={true}
+              mode={"voteLink"}
+              setIsYouTubeLink={setIsYouTubeLink}
+            />
+          </Box>
         </FormControl>
 
         {/* -------------------- 본문 -------------------- */}
