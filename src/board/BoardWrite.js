@@ -32,6 +32,7 @@ function BoardWrite() {
   const [contentError, setContentError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isYouTubeLink, setIsYouTubeLink] = useState(false);
+  const [returnData, setReturnData] = useState(content);
 
   /* useLocation */
   const location = useLocation();
@@ -44,6 +45,9 @@ function BoardWrite() {
 
   /* use toast */
   const toast = useToast();
+
+  /* ck에디터 이미지 첨부 개수 확인 */
+  let imgFile = document.getElementsByTagName("figure");
 
   // useEffect를 사용하여 titleError가 변경(에러발생)될 때마다 스크롤이 제목 라벨으로 이동
   useEffect(() => {
@@ -88,8 +92,10 @@ function BoardWrite() {
       navigate("/member/login");
     }
 
-    setIsSubmitting(true);
-    let uuSrc = getSrc();
+    console.log(imgFile.length);
+    console.log(imgFile);
+    console.log(content);
+
 
     // 제목이 null이거나 공백일 경우 에러메시지 세팅 후 반환
     if (!title || title.trim() === "") {
@@ -100,52 +106,86 @@ function BoardWrite() {
     if (!content || content.trim() === "") {
       setContentError("본문을 입력해주세요. 본문은 null이거나 공백이면 안 됨.");
       return;
+      
+    setIsSubmitting(true);
+
+    if (imgFile.length > 5) {
+      toast({
+        description: "이미지 개수를 초과했습니다. (최대 5개)",
+        status: "info",
+      });
+      let htmlContent = content; // 여기에 HTML 컨텐츠를 넣으세요.
+      htmlContent = htmlContent.replace(
+        /<figure[^>]*>([\s\S]*?)<\/figure>/g,
+        "",
+      );
+      setReturnData(htmlContent);
+      setIsSubmitting(false);
     }
 
-    axios
-      .postForm("/api/board/add", {
-        title,
-        link,
-        content,
-        uploadFiles,
-        uuSrc,
-        board_member_id: loginInfo.member_id,
-        name_eng: currentParams,
-      })
-      .then(() => {
-        toast({
-          description: "게시글 저장에 성공했습니다.",
-          status: "success",
-        });
-        navigate("/board/list?category=" + currentParams);
-      })
-      .catch((error) => {
-        if (error.response.status === 400) {
-          toast({
-            description:
-              "게시글 유효성 및 파일(최대 5개) 검증에 실패했습니다. 양식에 맞게 작성해주세요.",
-            status: "error",
-          });
-          return;
-        }
+    if (imgFile.length < 6) {
+      let uuSrc = getSrc();
 
-        if (error.response.status === 401) {
-          toast({
-            description: "권한 정보가 없습니다.",
-            status: "error",
-          });
-          return;
-        }
+      // 제목이 null이거나 공백일 경우 에러메시지 세팅 후 반환
+      if (!title || title.trim() === "") {
+        setTitleError(
+          "제목을 입력해주세요. title은 null이거나 공백이면 안 됨.",
+        );
+        return;
+      }
+      // 본문이 null이거나 공백일 경우 에러메시지 세팅 후 반환
+      if (!content || content.trim() === "") {
+        setContentError(
+          "본문을 입력해주세요. 본문은 null이거나 공백이면 안 됨.",
+        );
+        return;
+      }
 
-        if (error.response) {
+      axios
+        .postForm("/api/board/add", {
+          title,
+          link,
+          content,
+          uploadFiles,
+          uuSrc,
+          board_member_id: loginInfo.member_id,
+          name_eng: currentParams,
+        })
+        .then(() => {
           toast({
-            description: "게시글 저장에 실패했습니다.",
-            status: "error",
+            description: "게시글 저장에 성공했습니다.",
+            status: "success",
           });
-          return;
-        }
-      })
-      .finally(() => setIsSubmitting(false));
+          navigate("/board/list?category=" + currentParams);
+        })
+        .catch((error) => {
+          if (error.response.status === 400) {
+            toast({
+              description:
+                "게시글 유효성 및 파일(최대 5개) 검증에 실패했습니다. 양식에 맞게 작성해주세요.",
+              status: "error",
+            });
+            return;
+          }
+
+          if (error.response.status === 401) {
+            toast({
+              description: "권한 정보가 없습니다.",
+              status: "error",
+            });
+            return;
+          }
+
+          if (error.response) {
+            toast({
+              description: "게시글 저장에 실패했습니다.",
+              status: "error",
+            });
+            return;
+          }
+        })
+        .finally(() => setIsSubmitting(false));
+    }
   }
 
   // 본문 영역 이미지 소스 코드 얻어오기
@@ -202,7 +242,12 @@ function BoardWrite() {
         <FormControl mb={2} isInvalid={contentError}>
           <FormLabel id="content">본문</FormLabel>
           {/* CKEditor 본문 영역 */}
-          <Editor setUuid={setUuid} uuid={uuid} setContent1={setContent} />
+          <Editor
+            data={returnData}
+            setUuid={setUuid}
+            uuid={uuid}
+            setContent1={setContent}
+          />
           <FormErrorMessage>{contentError}</FormErrorMessage>
         </FormControl>
 

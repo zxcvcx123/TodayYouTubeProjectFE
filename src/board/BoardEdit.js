@@ -159,7 +159,7 @@ function BoardEdit() {
           });
         } else if (error.response.status === 403) {
           toast({
-            description: "접근 불가한 권한입니다.",
+            description: "접근 불가한 경로입니다.",
             status: "error",
           });
         } else {

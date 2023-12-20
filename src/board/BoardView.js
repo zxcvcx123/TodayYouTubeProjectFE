@@ -55,6 +55,8 @@ function BoardView() {
   const [isAuthor, setIsAuthor] = useState(false);
   // const [isReadOnly, setIsReadOnly] = useState(true);
 
+  const [isAdmin, setIsAdmin] = useState(false);
+
   // useState를 사용하여 채널 정보를 저장할 state 생성
   const [channelInfo, setChannelInfo] = useState(null);
 
@@ -128,24 +130,45 @@ function BoardView() {
 
   // 초기 렌더링
   useEffect(() => {
-    axios.get("/api/board/id/" + id).then((response) => {
-      setBoard(response.data);
+    console.log("랜더링 테스트");
+    axios
+      .get("/api/board/id/" + id)
+      .then((response) => {
+        setBoard(response.data);
 
-      if (!response.data.is_show) {
-        navigate("/");
-        window.alert("삭제된 게시물입니다.");
-      }
+        // if (!response.data.is_show) {
+        //   navigate("/");
+        //   window.alert("삭제된 게시물입니다.");
+        // }
 
-      // 게시글 데이터를 가져온 후 작성자 여부를 확인하여 isAuthor 설정
-      if (loginInfo && loginInfo.member_id === response.data.board_member_id) {
-        setIsAuthor(true);
-      }
+        // 게시글 데이터를 가져온 후 작성자 여부를 확인하여 isAuthor 설정
+        if (
+          loginInfo &&
+          loginInfo.member_id === response.data.board_member_id
+        ) {
+          setIsAuthor(true);
+        }
 
-      // 게시글 정보를 가져온 후 채널 정보를 가져오는 함수 호출
-      if (response.data.link) {
-        fetchChannelInfo(response.data.link);
-      }
-    });
+        // 게시글 데이터를 가져온 후 운영자 여부를 확인하여 isAdmin 설정
+        if (
+          loginInfo &&
+          loginInfo.role_name &&
+          loginInfo.role_name === "운영자"
+        ) {
+          setIsAdmin(true);
+        }
+
+        if (loginInfo) {
+          console.log(loginInfo.role_name);
+          console.log(loginInfo.role_name === "운영자");
+        }
+
+        // 게시글 정보를 가져온 후 채널 정보를 가져오는 함수 호출
+        if (response.data.link) {
+          fetchChannelInfo(response.data.link);
+        }
+      })
+      .catch(() => navigate("/board/list?" + currentParams));
   }, [isSubmitting, location, loginInfo]);
 
   // 초기 렌더링 파일 목록 가져오기
@@ -164,11 +187,68 @@ function BoardView() {
   function handleDeleteClick() {
     setIsSubmitting(true);
     // 게시글 삭제 시 아이디 유효성 검증
+    if (isAdmin || isAuthor) {
+      axios
+        .put("/api/board/remove/" + id, {
+          id: board.id,
+          title: board.title,
+          content: board.content,
+          link: board.link,
+          board_category_code: board.board_category_code,
+          board_member_id: board.board_member_id,
+          created_at: board.created_at,
+          updated_at: board.updated_at,
+          is_show: board.is_show,
+          countlike: board.countlike,
+          views: board.views,
+          login_member_id: loginInfo.member_id,
+          role_name: loginInfo.role_name,
+        })
+        .then(() => {
+          toast({
+            description: "삭제되었습니다.",
+            status: "success",
+          });
+          navigate("/board/list?" + currentParams);
+        })
+        .catch((error) => {
+          if (error.response.status === 403) {
+            toast({
+              description: "게시글 삭제는 작성자만 가능합니다.",
+              status: "error",
+            });
+            return;
+          }
+
+          if (error.response.status === 401) {
+            toast({
+              description: "권한 정보가 없습니다.",
+              status: "error",
+            });
+            return;
+          }
+
+          if (error.response) {
+            toast({
+              description: "게시글 삭제에 실패했습니다.",
+              status: "error",
+            });
+            return;
+          }
+
+          console.log("error");
+        })
+        .finally(() => {
+          onClose();
+          setIsSubmitting(false);
+        });
+      return;
+    }
+
     if (!isAuthor) {
       window.alert("작성자 본인만 삭제 가능합니다.");
       return;
     }
-
     axios
       .put("/api/board/remove/" + id, {
         id: board.id,
@@ -466,7 +546,7 @@ function BoardView() {
         )}
         {/* -------------------- 버튼 섹션 -------------------- */}
         <Flex justifyContent={"right"}>
-          {isAuthor && (
+          {isAuthor || isAdmin ? (
             <Box mr={"10px"}>
               {/* 수정 버튼 */}
               <Button
@@ -482,6 +562,8 @@ function BoardView() {
                 삭제
               </Button>
             </Box>
+          ) : (
+            <></>
           )}
           {/* 목록 버튼 */}
           <Button

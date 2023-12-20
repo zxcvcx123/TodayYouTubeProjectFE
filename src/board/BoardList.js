@@ -75,7 +75,7 @@ function BoardList() {
   const location = useLocation();
 
   // 현재 URL에서 category 명 추출
-  const currentParams = new URLSearchParams(location.search).get("category");
+  let currentParams = new URLSearchParams(location.search).get("category");
 
   // modal
   const { isOpen, onClose, onOpen } = useDisclosure();
@@ -412,9 +412,11 @@ function BoardList() {
             </Table>
             {/* -------------------- 검색, 페이징 --------------------*/}
             <Flex justify={"flex-end"} mt={2}>
-              <Button onClick={handleWriteClick} colorScheme={"facebook"}>
-                글쓰기
-              </Button>
+              {currentParams !== "all" && (
+                <Button onClick={handleWriteClick} colorScheme={"facebook"}>
+                  글쓰기
+                </Button>
+              )}
             </Flex>
             <Center>
               <Box width={"70%"}>

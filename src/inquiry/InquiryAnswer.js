@@ -44,7 +44,6 @@ function InquiryAnswer(props) {
   useEffect(() => {
     axios.get("/api/inquiry/" + id).then((response) => {
       setInquiry(response.data);
-      console.log(response.data);
     });
   }, []);
 

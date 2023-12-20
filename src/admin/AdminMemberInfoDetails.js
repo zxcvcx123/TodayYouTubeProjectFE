@@ -74,10 +74,23 @@ function AdminMemberInfoDetails({
         navigate("/admin/member/list?p=1");
       })
       .catch((error) => {
-        toast({
-          description: "정지사유를 입력해주세요.",
-          status: "warning",
-        });
+        const status = error.response.status;
+        if (status === 400) {
+          toast({
+            description: "정지사유를 입력해주세요.",
+            status: "warning",
+          });
+        } else if (status === 403) {
+          toast({
+            description: "권한이 없습니다.",
+            status: "error",
+          });
+        } else if (status === 401) {
+          toast({
+            description: "이미 정지된 사용자입니다.",
+            status: "warning",
+          });
+        }
       })
       .finally(() => setIsSubmitting(false));
   }

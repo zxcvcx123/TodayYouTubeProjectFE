@@ -23,6 +23,7 @@ import {
   AlertIcon,
   AlertTitle,
   Alert,
+  useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { Sidenav } from "./Sidenav";
@@ -43,10 +44,11 @@ function AdminManageSuspension(props) {
   const [pageInfo, setPageInfo] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const toast = useToast();
   const { onClose, isOpen, onOpen } = useDisclosure();
   const location = useLocation();
   const navigate = useNavigate();
-
+  let toast = useToast();
   const [params] = useSearchParams();
 
   useEffect(() => {
@@ -59,8 +61,6 @@ function AdminManageSuspension(props) {
       })
       .catch(() => console.log("bad"));
   }, [isReleasing, location]);
-
-  console.log(params);
 
   if (suspensionList == null || releaseList == null || pageInfo == null) {
     return <LoadingPage />;
@@ -75,8 +75,23 @@ function AdminManageSuspension(props) {
         member_id: sendingRelease.member_id,
         role_name: loginInfo.role_name,
       })
-      .then(onClose)
-      .catch((error) => console.log(error))
+      .then(() => {
+        onClose();
+        toast({
+          description: "정지가 해제되었습니다.",
+          status: "success",
+        });
+      })
+     
+      .catch((error) => {
+        if (error.response && error.response.status === 403) {
+          toast({
+            description: "접근 불가한 경로입니다.",
+            status: "error",
+          });
+          navigate("/");
+        }
+      })
       .finally(() => {
         setIsReleasing(false);
         setIsSubmitting(false);

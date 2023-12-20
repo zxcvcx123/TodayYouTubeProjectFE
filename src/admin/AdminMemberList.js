@@ -16,6 +16,7 @@ import {
   Text,
   Thead,
   Tr,
+  useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import Pagination from "../page/Pagination";
@@ -34,7 +35,7 @@ function AdminMemberList(props) {
   const [pageInfo, setPageInfo] = useState(null);
   const [searchById, setSearchById] = useState("");
   const [isManaging, setIsManaging] = useState(false);
-
+  let toast = useToast();
   const navigate = useNavigate();
   let [params] = useSearchParams();
   let location = useLocation();
@@ -46,7 +47,15 @@ function AdminMemberList(props) {
         setMemberList(response.data.memberList);
         setPageInfo(response.data.pageInfo);
       })
-      .catch(() => console.log("bad"));
+      .catch((error) => {
+        if (error.response && error.response.status === 403) {
+          toast({
+            description: "접근 불가한 경로입니다.",
+            status: "error",
+          });
+          navigate("/");
+        }
+      });
   }, [location, searchById]);
 
   if (pageInfo == null) {
@@ -161,14 +170,21 @@ function AdminMemberList(props) {
                   onClick={() => navigate("/admin/member/" + member.member_id)}
                 >
                   <Td
-                    w={"5%"}
+                    w={"9%"}
                     textAlign={"center"}
                     onClick={(e) => e.stopPropagation(e)}
                   >
                     {member.role_name === "정지회원" && (
-                      <Button size={"sm"} colorScheme="red">
+                      <Box
+                        h={8}
+                        lineHeight={8}
+                        borderRadius={(2, 5)}
+                        size={"sm"}
+                        bgColor="red.500"
+                        color={"white"}
+                      >
                         정지회원
-                      </Button>
+                      </Box>
                     )}
                   </Td>
                   <Td textAlign={"center"}>

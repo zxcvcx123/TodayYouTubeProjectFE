@@ -29,7 +29,7 @@ import {
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouseUser } from "@fortawesome/free-solid-svg-icons/faHouseUser";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { DetectLoginContext } from "../component/LoginProvider";
 
 function BoardProfile({ board_member_id, board_id }) {
@@ -41,6 +41,7 @@ function BoardProfile({ board_member_id, board_id }) {
   const [boardProfile, setBoardProfile] = useState(null);
   const [isLoginMemberReported, setIsLoginMemberReported] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  let location = useLocation();
   let memberImage = boardProfile !== null ? boardProfile.url : "";
   let roleName = boardProfile !== null ? boardProfile.role_name : "";
   let nickName = boardProfile !== null ? boardProfile.nickname : "";
@@ -51,6 +52,7 @@ function BoardProfile({ board_member_id, board_id }) {
   const finalRef = React.useRef(null);
 
   useEffect(() => {
+    const isBoardPath = location.pathname.startsWith("/board/");
     if (board_member_id !== null) {
       setDependency(false);
       axios
@@ -71,18 +73,24 @@ function BoardProfile({ board_member_id, board_id }) {
             setIsFollowing(response.data);
           });
       }
-      if (board_id !== null && board_member_id !== null && loginInfo !== null) {
-        axios
-          .get("/api/member/report", {
-            params: {
-              reporter_id: loginInfo.member_id,
-              reported_id: board_member_id,
-              board_id: board_id,
-            },
-          })
-          .then((response) => {
-            setIsLoginMemberReported(response.data);
-          });
+      if (isBoardPath) {
+        if (
+          board_id !== null &&
+          board_member_id !== null &&
+          loginInfo !== null
+        ) {
+          axios
+            .get("/api/member/report", {
+              params: {
+                reporter_id: loginInfo.member_id,
+                reported_id: board_member_id,
+                board_id: board_id,
+              },
+            })
+            .then((response) => {
+              setIsLoginMemberReported(response.data);
+            });
+        }
       }
     }
   }, [board_member_id, dependency]);
@@ -250,6 +258,15 @@ function BoardProfile({ board_member_id, board_id }) {
                     borderRadius={"8px"}
                   >
                     ADMIN
+                  </Badge>
+                )}
+                {roleName === "정지회원" && (
+                  <Badge
+                    backgroundColor={"#dcdcdc"}
+                    color="black"
+                    borderRadius={"8px"}
+                  >
+                    정지회원
                   </Badge>
                 )}
                 <Text fontWeight="bold">{nickName}</Text>
