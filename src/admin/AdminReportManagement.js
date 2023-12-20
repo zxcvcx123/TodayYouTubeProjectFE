@@ -88,6 +88,15 @@ export function AdminReportManagement() {
             description: "접근 불가한 경로입니다.",
             status: "error",
           });
+
+          navigate("/");
+        }
+        if (error.response && error.response.status === 404) {
+          toast({
+            description: "접근 불가한 경로입니다.",
+            status: "error",
+          });
+
           navigate("/");
         }
       });
