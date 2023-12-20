@@ -56,6 +56,7 @@ export function AdminReportManagement() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [reportedMemberId, setReportedMemberId] = useState(null);
   const [boardId, setBoardId] = useState(null);
+  const [roleName, setRoleName] = useState(null);
   const [pageNumberInformation, setPageNumberInformation] = useState(null);
   const [allReportedList, setAllReportedList] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -74,19 +75,28 @@ export function AdminReportManagement() {
   useEffect(() => {
     setReportDependency(false);
     axios
-      .get("/api/member/report/list", {
+      .get("/api/admin/report/list", {
         params: { rc: reportCategory },
       })
       .then((response) => {
         setReportList(response.data.reporterList);
         setPageNumberInformation(response.data.pagingInformation);
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 403) {
+          toast({
+            description: "접근 불가한 경로입니다.",
+            status: "error",
+          });
+          navigate("/");
+        }
       });
   }, [reportCategory, allReportedList, reportDependency]);
 
-  function handleReportClick(board_id, reported_id) {
+  function handleReportClick(board_id, reported_id, role_name) {
     onOpen();
     axios
-      .get("/api/member/report/reportedList", {
+      .get("/api/admin/report/reportedList", {
         params: {
           reported_id: reported_id,
         },
@@ -95,6 +105,7 @@ export function AdminReportManagement() {
         setAllReportedList(response.data.allReportedList);
         setReportedMemberId(reported_id);
         setBoardId(board_id);
+        setRoleName(role_name);
       });
   }
 
@@ -105,6 +116,7 @@ export function AdminReportManagement() {
         member_id: reportedMemberId,
         period: suspensionPeriod,
         reason: suspensionReason,
+        role_name: roleName,
       })
       .then(() => {
         toast({
@@ -112,7 +124,7 @@ export function AdminReportManagement() {
           status: "success",
         });
         axios
-          .patch("/api/member/report/resolved", {
+          .patch("/api/admin/report/resolved", {
             reported_id: reportedMemberId,
           })
           .finally(() => {
@@ -127,7 +139,7 @@ export function AdminReportManagement() {
   function handleRejectReport() {
     setIsSubmitting(true);
     axios
-      .delete("/api/member/report/reject", {
+      .delete("/api/admin/report/reject", {
         params: {
           reported_id: reportedMemberId,
         },
@@ -206,14 +218,16 @@ export function AdminReportManagement() {
                                 등급
                               </Th>
                             )}
-                            <Th
-                              fontWeight={"bold"}
-                              borderColor={"black"}
-                              textAlign={"center"}
-                              fontSize={"18px"}
-                            >
-                              상태
-                            </Th>
+                            {reportCategory !== "unResolve" && (
+                              <Th
+                                fontWeight={"bold"}
+                                borderColor={"black"}
+                                textAlign={"center"}
+                                fontSize={"18px"}
+                              >
+                                상태
+                              </Th>
+                            )}
                             <Th
                               fontWeight={"bold"}
                               borderColor={"black"}
@@ -222,16 +236,15 @@ export function AdminReportManagement() {
                             >
                               신고횟수
                             </Th>
-                            {reportCategory !== "unResolve" && (
-                              <Th
-                                fontWeight={"bold"}
-                                borderColor={"black"}
-                                textAlign={"center"}
-                                fontSize={"18px"}
-                              >
-                                처리
-                              </Th>
-                            )}
+
+                            <Th
+                              fontWeight={"bold"}
+                              borderColor={"black"}
+                              textAlign={"center"}
+                              fontSize={"18px"}
+                            >
+                              처리
+                            </Th>
                           </Tr>
                         </Thead>
 
@@ -249,6 +262,7 @@ export function AdminReportManagement() {
                                       handleReportClick(
                                         report.board_id,
                                         report.reported_id,
+                                        report.role_name,
                                       );
                                     }}
                                   >

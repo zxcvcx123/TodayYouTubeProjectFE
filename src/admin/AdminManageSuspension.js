@@ -48,7 +48,7 @@ function AdminManageSuspension(props) {
   const { onClose, isOpen, onOpen } = useDisclosure();
   const location = useLocation();
   const navigate = useNavigate();
-
+  let toast = useToast();
   const [params] = useSearchParams();
 
   useEffect(() => {
@@ -82,7 +82,16 @@ function AdminManageSuspension(props) {
           status: "success",
         });
       })
-      .catch(() => console.log("bad"))
+     
+      .catch((error) => {
+        if (error.response && error.response.status === 403) {
+          toast({
+            description: "접근 불가한 경로입니다.",
+            status: "error",
+          });
+          navigate("/");
+        }
+      })
       .finally(() => {
         setIsReleasing(false);
         setIsSubmitting(false);

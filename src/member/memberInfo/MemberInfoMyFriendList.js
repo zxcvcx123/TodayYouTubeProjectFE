@@ -78,7 +78,7 @@ export function MemberInfoMyFriendList({ loginInfo }) {
     axios
       .get("/api/member/info/searchMember", {
         params: {
-          member_id: searchInput,
+          nickname: searchInput,
         },
       })
       .then((response) => {
@@ -180,7 +180,7 @@ export function MemberInfoMyFriendList({ loginInfo }) {
                   <ModalCloseButton />
                   <ModalBody pb={6}>
                     <FormControl>
-                      <FormLabel>아이디</FormLabel>
+                      <FormLabel>닉네임</FormLabel>
                       <Input
                         ref={initialRef}
                         placeholder="입력"

@@ -72,6 +72,11 @@ export function MemberLogin() {
             description: "잘못된 접근입니다.",
             status: "warning",
           });
+        } else if (error.response && error.response.status === 405) {
+          toast({
+            description: "탈퇴된 회원입니다.",
+            status: "warning",
+          });
         } else if (error.response && error.response.status === 404) {
           toast({
             description: "아이디와 암호를 다시 입력해주세요",

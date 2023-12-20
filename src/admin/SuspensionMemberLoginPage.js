@@ -15,6 +15,7 @@ import {
   Stack,
   StackDivider,
   Icon,
+  useToast,
 } from "@chakra-ui/react";
 import { WarningIcon } from "@chakra-ui/icons";
 import LoadingPage from "../component/LoadingPage";
@@ -23,13 +24,22 @@ function SuspensionMemberLoginPage(props) {
   const { member_id } = useParams();
 
   const [suspensionInfo, setSuspensionInfo] = useState(null);
-
+  let toast = useToast();
   const navigate = useNavigate();
 
   useEffect(() => {
     axios
       .get("/api/admin/suspensionMessage/" + member_id)
-      .then((response) => setSuspensionInfo(response.data));
+      .then((response) => setSuspensionInfo(response.data))
+      .catch((error) => {
+        if (error.response && error.response.status === 403) {
+          toast({
+            description: "접근 불가한 경로입니다.",
+            status: "error",
+          });
+          navigate("/");
+        }
+      });
   }, []);
 
   if (suspensionInfo == null) {
