@@ -110,8 +110,9 @@ function BoardEdit() {
 
     if (imgFile.length > 5) {
       toast({
-        description: "이미지 개수를 초과했습니다. (최대 5개)",
-        status: "info",
+        description:
+          "이미지 개수를 초과했습니다. (최대 5개) 다시 작성해주세요.",
+        status: "warning",
       });
       navigate("/board/" + boardId);
       setIsSubmitting(false);
