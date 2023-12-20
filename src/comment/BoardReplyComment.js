@@ -42,12 +42,19 @@ function ReplyCommentForm({
 }) {
   const [reply_comment, setReply_comment] = useState("");
   const { token, loginInfo } = useContext(DetectLoginContext);
-
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   function handleReplySubmit() {
-    onSubmit({
-      comment_id,
-      reply_comment,
-    });
+    if (isButtonDisabled || !loginInfo) {
+      return;
+    }
+
+    setIsButtonDisabled(true);
+
+    onSubmit({ comment_id, reply_comment });
+
+    setTimeout(() => {
+      setIsButtonDisabled(false);
+    }, 2000);
   }
 
   return (
@@ -62,7 +69,9 @@ function ReplyCommentForm({
           onChange={(e) => setReply_comment(e.target.value)}
           isDisabled={!loginInfo.member_id}
           placeholder={
-            loginInfo.member_id ? "댓글을 입력하세요" : "로그인 해주세요"
+            loginInfo.member_id
+              ? "댓글을 입력하세요"
+              : "로그인한 사용자만 입력이 가능합니다.요"
           }
         />
         <Button
@@ -70,7 +79,7 @@ function ReplyCommentForm({
           mt={2}
           size="sm"
           h="80px"
-          isDisabled={isSubmitting || !loginInfo.member_id}
+          isDisabled={isSubmitting || !loginInfo || isButtonDisabled}
           onClick={handleReplySubmit}
         >
           쓰기
@@ -107,7 +116,22 @@ function ReplyCommentItem({
           status: "success",
         });
       })
-      .catch((error) => console.log("bad"))
+      .catch((error) => {
+        if (error.response.status === 403) {
+          toast({
+            description: " 댓글 수정은 작성자만 가능합니다.",
+            status: "error",
+          });
+          return;
+        }
+        if (error.response.status === 401) {
+          toast({
+            description: "권한 정보가 없습니다.",
+            status: "error",
+          });
+          return;
+        }
+      })
       .finally(() => {
         setIsSubmitting(false);
         setIsEditing(false);
@@ -117,14 +141,21 @@ function ReplyCommentItem({
   return (
     <Box>
       <Flex justifyContent="space-between">
-        <Heading size="xs" bg="whitesmoke" borderRadius="5">
-          {reply_comment.nickname}({reply_comment.member_id})
+        <Heading size="xs" bg="#f2f2f2" borderRadius="5">
+          {reply_comment.nickname} ({reply_comment.member_id})
         </Heading>
         <Flex gap={2} alignItems="center">
           <Text fontSize="xs">{reply_comment.ago}</Text>
-          {/*{loginInfo.member_id === reply_comment.member_id && (*/}
-          <Box>
-            <Flex gap={0.5}>
+        </Flex>
+      </Flex>
+
+      <Flex justifyContent="space-between" alignItems="center">
+        <Box flex={1}>
+          <Flex justifyContent="space-between">
+            <Text sx={{ whiteSpace: "pre-wrap" }} pt={2} fontSize="sm">
+              {reply_comment.reply_comment}
+            </Text>
+            <Flex gap={0.5} mt={1}>
               {isEditing || (
                 <Button
                   size="xs"
@@ -154,16 +185,7 @@ function ReplyCommentItem({
                 <FontAwesomeIcon icon={faTrash} />
               </Button>
             </Flex>
-          </Box>
-          {/*)}*/}
-        </Flex>
-      </Flex>
-
-      <Flex justifyContent="space-between" alignItems="center">
-        <Box flex={1}>
-          <Text sx={{ whiteSpace: "pre-wrap" }} pt={2} fontSize="sm">
-            {reply_comment.reply_comment}
-          </Text>
+          </Flex>
           {isEditing && (
             <Box>
               <Textarea
@@ -277,7 +299,15 @@ export function BoardReplyComment({
             status: "success",
           });
         })
-        .catch((error) => console.log("bad"))
+        .catch((error) => {
+          if (error.response.status === 401) {
+            toast({
+              description: "권한 정보가 없습니다.",
+              status: "error",
+            });
+            return;
+          }
+        })
         .finally(() => {
           setIsSubmitting(false);
           setIsReplyFormOpen(false);
@@ -295,7 +325,15 @@ export function BoardReplyComment({
             status: "success",
           });
         })
-        .catch((error) => console.log("bad"))
+        .catch((error) => {
+          if (error.response.status === 401) {
+            toast({
+              description: "권한 정보가 없습니다.",
+              status: "error",
+            });
+            return;
+          }
+        })
         .finally(() => {
           setIsSubmitting(false);
           setIsReplyFormOpen(false);
@@ -315,7 +353,22 @@ export function BoardReplyComment({
             status: "success",
           });
         })
-        .catch((error) => console.log("bad"))
+        .catch((error) => {
+          if (error.response.status === 403) {
+            toast({
+              description: " 댓글 삭제는 작성자만 가능합니다.",
+              status: "error",
+            });
+            return;
+          }
+          if (error.response.status === 401) {
+            toast({
+              description: "권한 정보가 없습니다.",
+              status: "error",
+            });
+            return;
+          }
+        })
         .finally(() => {
           onClose();
           setIsSubmitting(false);

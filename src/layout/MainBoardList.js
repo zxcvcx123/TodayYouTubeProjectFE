@@ -77,7 +77,12 @@ export function MainBoardList({
         <Card width="40%" borderTopRadius={10}>
           <CardHeader width="100%" bg={"rgb(218,181,181)"} borderTopRadius={10}>
             <Heading width="100%" fontWeight="bold" fontSize="1.2rem">
-              통합 최다 추천글
+              <Flex justifyContent="space-between" alignItems="center">
+                <Text>통합 최다 추천글</Text>
+                <Tooltip label="사이트 내 통합 최다 추천 게시물입니다.">
+                  <InfoOutlineIcon boxSize={4} />
+                </Tooltip>
+              </Flex>
             </Heading>
           </CardHeader>
           <CardBody
@@ -100,7 +105,12 @@ export function MainBoardList({
         <Card width="40%" borderTopRadius={10}>
           <CardHeader width="100%" bg={"rgb(216,218,181)"} borderTopRadius={10}>
             <Heading width="100%" fontWeight="bold" fontSize="1.2rem">
-              통합 최다 조회수 글
+              <Flex justifyContent="space-between" alignItems="center">
+                <Text>통합 최다 조회 글</Text>
+                <Tooltip label="사이트 내 통합 최다 조회 게시물입니다.">
+                  <InfoOutlineIcon boxSize={4} />
+                </Tooltip>
+              </Flex>
             </Heading>
           </CardHeader>
           <CardBody
@@ -126,7 +136,12 @@ export function MainBoardList({
         <Card width="27%" borderTopRadius={10}>
           <CardHeader width="100%" bg={"rgb(186,218,181)"} borderTopRadius={10}>
             <Heading width="100%" fontWeight="bold" fontSize="1.2rem">
-              스포츠 게시판 최신글
+              <Flex justifyContent="space-between" alignItems="center">
+                <Text>스포츠 게시판 최신글</Text>
+                <Tooltip label="스포츠 게시판의 최신 5개 글입니다.">
+                  <InfoOutlineIcon boxSize={4} />
+                </Tooltip>
+              </Flex>
             </Heading>
           </CardHeader>
           <CardBody
@@ -148,7 +163,12 @@ export function MainBoardList({
         <Card width="27%" borderTopRadius={10}>
           <CardHeader width="100%" bg={"rgb(181,218,209)"} borderTopRadius={10}>
             <Heading width="100%" fontWeight="bold" fontSize="1.2rem">
-              먹방 게시판 최신글
+              <Flex justifyContent="space-between" alignItems="center">
+                <Text>먹방 게시판 최신글</Text>
+                <Tooltip label="먹방 게시판의 최신 5개 글입니다.">
+                  <InfoOutlineIcon boxSize={4} />
+                </Tooltip>
+              </Flex>
             </Heading>
           </CardHeader>
           <CardBody
@@ -170,8 +190,12 @@ export function MainBoardList({
         <Card width="27%" borderTopRadius={10}>
           <CardHeader width="100%" bg={"rgb(181,196,218)"} borderTopRadius={10}>
             <Heading width="100%" fontWeight="bold" fontSize="1.2rem">
-              게임 게시판 최신글
-              <InfoOutlineIcon />
+              <Flex justifyContent="space-between" alignItems="center">
+                <Text>게임 게시판 최신글</Text>
+                <Tooltip label="게임 게시판의 최신 5개 글입니다.">
+                  <InfoOutlineIcon boxSize={4} />
+                </Tooltip>
+              </Flex>
             </Heading>
           </CardHeader>
           <CardBody
@@ -196,7 +220,12 @@ export function MainBoardList({
         <Card width="27%" borderTopRadius={10}>
           <CardHeader width="100%" bg={"rgb(201,181,218)"} borderTopRadius={10}>
             <Heading width="100%" fontWeight="bold" fontSize="1.2rem">
-              일상 게시판 최신글
+              <Flex justifyContent="space-between" alignItems="center">
+                <Text>일상 게시판 최신글</Text>
+                <Tooltip label="일상 게시판의 최신 5개 글입니다.">
+                  <InfoOutlineIcon boxSize={4} />
+                </Tooltip>
+              </Flex>
             </Heading>
           </CardHeader>
           <CardBody
@@ -218,7 +247,12 @@ export function MainBoardList({
         <Card width="27%" borderTopRadius={10}>
           <CardHeader width="100%" bg={"rgb(218,181,192)"} borderTopRadius={10}>
             <Heading width="100%" fontWeight="bold" fontSize="1.2rem">
-              영화/드라마 게시판 최신글
+              <Flex justifyContent="space-between" alignItems="center">
+                <Text>영화/드라마 게시판 최신글</Text>
+                <Tooltip label="영화/드라마 게시판의 최신 5개 글입니다.">
+                  <InfoOutlineIcon boxSize={4} />
+                </Tooltip>
+              </Flex>
             </Heading>
           </CardHeader>
           <CardBody
@@ -240,7 +274,12 @@ export function MainBoardList({
         <Card width="27%" borderTopRadius={10}>
           <CardHeader width="100%" bg={"rgb(218,196,181)"} borderTopRadius={10}>
             <Heading width="100%" fontWeight="bold" fontSize="1.2rem">
-              요리 게시판 최신글
+              <Flex justifyContent="space-between" alignItems="center">
+                <Text>요리 게시판 최신글</Text>
+                <Tooltip label="요리 게시판의 최신 5개 글입니다.">
+                  <InfoOutlineIcon boxSize={4} />
+                </Tooltip>
+              </Flex>
             </Heading>
           </CardHeader>
           <CardBody

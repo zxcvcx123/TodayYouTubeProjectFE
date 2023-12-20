@@ -62,9 +62,19 @@ function CommentForm({
   const { stompClient, setToId } = useContext(SocketContext);
 
   const [comment, setComment] = useState("");
-
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   function handleSubmit() {
+    if (isButtonDisabled || !loginInfo) {
+      return;
+    }
+
+    setIsButtonDisabled(true);
+
     onSubmit({ board_id, comment });
+
+    setTimeout(() => {
+      setIsButtonDisabled(false);
+    }, 2000);
   }
 
   // 댓글작성시 알람기능
@@ -98,16 +108,16 @@ function CommentForm({
         bg="white"
         value={comment}
         onChange={(e) => setComment(e.target.value)}
-        isDisabled={!loginInfo} // Disable textarea if member_id is null
+        isDisabled={!loginInfo}
         placeholder={
           loginInfo
             ? "댓글을 입력하세요."
-            : "로그인한 사용자만 댓글 입력이 가능합니다."
+            : "로그인한 사용자만 입력이 가능합니다."
         }
       />
       <Button
         colorScheme="telegram"
-        isDisabled={isSubmitting || !loginInfo}
+        isDisabled={isSubmitting || !loginInfo || isButtonDisabled}
         h="80px"
         onClick={() => {
           handleSubmit();
@@ -152,7 +162,22 @@ function CommentItem({
           status: "success",
         });
       })
-      .catch(console.log("bad"))
+      .catch((error) => {
+        if (error.response.status === 403) {
+          toast({
+            description: " 댓글 수정은 작성자만 가능합니다.",
+            status: "error",
+          });
+          return;
+        }
+        if (error.response.status === 401) {
+          toast({
+            description: "권한 정보가 없습니다.",
+            status: "error",
+          });
+          return;
+        }
+      })
       .finally(() => {
         setIsSubmitting(false);
         setIsEditing(false);
@@ -168,115 +193,131 @@ function CommentItem({
       })
       .then((response) => {
         onCommentLikeClick({ ...response.data, comment_id: comment.id });
-        console.log(response.data);
       })
-      .catch((error) => console.log("bad"))
-      .finally(() => console.log("done"));
+      .catch((error) => {
+        if (error.response.status === 401) {
+          toast({
+            description: "권한 정보가 없습니다.",
+            status: "error",
+          });
+          return;
+        }
+      })
+      .finally();
   }
 
   return (
     <Box>
       <Flex justifyContent="space-between">
-        <Heading size="xs" bg="whitesmoke" borderRadius="5">
-          {comment.nickname}({comment.member_id})
+        <Heading size="xs" bg="#f2f2f2" borderRadius="5">
+          {comment.nickname} ({comment.member_id})
         </Heading>
         <Flex gap={2} alignItems="center">
           <Text size="xs" as="sub">
             {comment.ago}
           </Text>
-          {loginInfo && loginInfo.member_id === comment.member_id && (
-            <Flex gap={0.5}>
-              {isEditing || (
-                <Button
-                  size="xs"
-                  colorScheme="purple"
-                  onClick={() => setIsEditing(true)}
-                >
-                  <FontAwesomeIcon icon={faPenToSquare} />
-                </Button>
-              )}
-              {isEditing && (
-                <Button
-                  size="xs"
-                  colorScheme="gray"
-                  onClick={() => setIsEditing(false)}
-                >
-                  <FontAwesomeIcon icon={faXmark} />
-                </Button>
-              )}
-              <Button
-                onClick={() => onDeleteModalOpen(comment.id)}
-                colorScheme="red"
-                size="xs"
-              >
-                <FontAwesomeIcon icon={faTrash} />
-              </Button>
-            </Flex>
-          )}
         </Flex>
       </Flex>
       <Flex justifyContent="space-between" alignItems="center">
         <Box flex={1}>
-          <Flex alignItems="center" gap={2}>
-            <Text
-              sx={{ whiteSpace: "pre-wrap" }}
-              pt="2"
-              fontSize="sm"
-              alignItems="center"
-              justifyContent="center"
-            >
-              {comment.comment}
-            </Text>
-            <Flex gap={0.3} mt={2}>
-              <Tooltip
-                label={
-                  loginInfo ? "답글쓰기" : "로그인한 사용자만 작성 가능합니다."
-                }
+          <Flex alignItems="center" gap={2} justifyContent="space-between">
+            <Flex>
+              <Text
+                sx={{ whiteSpace: "pre-wrap" }}
+                pt="2"
+                fontSize="sm"
+                alignItems="center"
+                justifyContent="center"
               >
-                <Button
-                  size="xs"
-                  colorScheme="blackAlpha"
-                  onClick={() => setIsReplyFormOpen(!isReplyFormOpen)}
-                  isDisabled={!loginInfo}
-                >
-                  <FontAwesomeIcon icon={faPen} />
-                </Button>
-              </Tooltip>
+                {comment.comment}
+              </Text>
 
-              {numberOfReply > 0 && (
-                <Button
-                  size="xs"
-                  colorScheme="blackAlpha"
-                  onClick={() => setIsReplyListOpen(!isReplyListOpen)}
+              <Flex gap={0.3} mt={1.5} ml={3}>
+                <Tooltip
+                  label={
+                    loginInfo
+                      ? "답글쓰기"
+                      : "로그인한 사용자만 작성 가능합니다."
+                  }
                 >
-                  답글보기
-                </Button>
-              )}
-
-              <Flex alignItems="center">
-                <Button
-                  variant="ghost"
-                  size="xs"
-                  colorScheme="red"
-                  onClick={handleCommentLike}
-                  isDisabled={!loginInfo}
-                >
-                  <Tooltip
-                    label={
-                      loginInfo ? (
-                        <FontAwesomeIcon icon={faHeartRegular} />
-                      ) : (
-                        "로그인한 사용자만 가능합니다."
-                      )
-                    }
+                  <Button
+                    size="xs"
+                    colorScheme="blackAlpha"
+                    onClick={() => setIsReplyFormOpen(!isReplyFormOpen)}
+                    isDisabled={!loginInfo}
+                    variant="ghost"
                   >
-                    <FontAwesomeIcon
-                      icon={comment.likeHeart ? faHeartSolid : faHeartRegular}
-                    />
-                  </Tooltip>
-                </Button>
-                <Text fontSize="x-small">{comment.count_comment_like}</Text>
+                    <FontAwesomeIcon icon={faPen} />
+                  </Button>
+                </Tooltip>
+
+                {numberOfReply > 0 && (
+                  <Button
+                    size="xs"
+                    colorScheme="blackAlpha"
+                    onClick={() => setIsReplyListOpen(!isReplyListOpen)}
+                    variant="ghost"
+                  >
+                    답글보기
+                  </Button>
+                )}
+
+                <Flex alignItems="center">
+                  <Button
+                    variant="ghost"
+                    size="xs"
+                    colorScheme="red"
+                    onClick={handleCommentLike}
+                    isDisabled={!loginInfo}
+                  >
+                    <Tooltip
+                      label={
+                        loginInfo ? (
+                          <FontAwesomeIcon icon={faHeartRegular} />
+                        ) : (
+                          "로그인한 사용자만 가능합니다."
+                        )
+                      }
+                    >
+                      <FontAwesomeIcon
+                        icon={comment.likeHeart ? faHeartSolid : faHeartRegular}
+                      />
+                    </Tooltip>
+                  </Button>
+                  <Text fontSize="x-small">{comment.count_comment_like}</Text>
+                </Flex>
               </Flex>
+            </Flex>
+            <Flex mt={3}>
+              {loginInfo && loginInfo.member_id === comment.member_id && (
+                <Flex gap={0.5}>
+                  {isEditing || (
+                    <Button
+                      size="xs"
+                      colorScheme="purple"
+                      onClick={() => setIsEditing(true)}
+                    >
+                      <FontAwesomeIcon icon={faPenToSquare} />
+                    </Button>
+                  )}
+                  {isEditing && (
+                    <Button
+                      size="xs"
+                      colorScheme="gray"
+                      onClick={() => setIsEditing(false)}
+                    >
+                      <FontAwesomeIcon icon={faXmark} />
+                    </Button>
+                  )}
+                  <Button
+                    onClick={() => onDeleteModalOpen(comment.id)}
+                    colorScheme="red"
+                    size="xs"
+                  >
+                    <FontAwesomeIcon icon={faTrash} />
+                  </Button>
+                </Flex>
+              )}
             </Flex>
           </Flex>
 
@@ -330,8 +371,6 @@ function CommentList({
 }) {
   return (
     <Card border="1px solid black" borderRadius="5" mt={2}>
-      {/*<CardHeader size="md">댓글 목록</CardHeader>*/}
-      {/*<Divider colorScheme="black" />*/}
       <CardBody>
         <Stack
           divider={<StackDivider border={"1px solid lightgray"} />}
@@ -436,7 +475,6 @@ export function BoardComment({ board_id, boardData }) {
   // 댓글 쓰기 버튼
   function handleSubmit(comment) {
     setIsSubmitting(true);
-    console.log("실행 여부 확인");
     if (location.pathname.includes("vote")) {
       axios
         .post("/api/comment/vote/add", {
@@ -450,7 +488,15 @@ export function BoardComment({ board_id, boardData }) {
             status: "success",
           });
         })
-        .catch((error) => console.log(error))
+        .catch((error) => {
+          if (error.response.status === 401) {
+            toast({
+              description: "권한 정보가 없습니다.",
+              status: "error",
+            });
+            return;
+          }
+        })
         .finally(() => setIsSubmitting(false));
     } else {
       axios
@@ -465,7 +511,15 @@ export function BoardComment({ board_id, boardData }) {
             status: "success",
           });
         })
-        .catch((error) => console.log(error))
+        .catch((error) => {
+          if (error.response.status === 401) {
+            toast({
+              description: "권한 정보가 없습니다.",
+              status: "error",
+            });
+            return;
+          }
+        })
         .finally(() => setIsSubmitting(false));
     }
   }
@@ -483,7 +537,22 @@ export function BoardComment({ board_id, boardData }) {
           status: "success",
         });
       })
-      .catch(() => console.log("bad"))
+      .catch((error) => {
+        if (error.response.status === 403) {
+          toast({
+            description: " 댓글 삭제는 작성자만 가능합니다.",
+            status: "error",
+          });
+          return;
+        }
+        if (error.response.status === 401) {
+          toast({
+            description: "권한 정보가 없습니다.",
+            status: "error",
+          });
+          return;
+        }
+      })
       .finally(() => {
         setIsSubmitting(false);
         onClose();
