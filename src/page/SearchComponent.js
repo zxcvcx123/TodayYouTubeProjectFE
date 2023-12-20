@@ -32,7 +32,12 @@ export function SearchComponent() {
 
   return (
     <Flex mt={5} mb={5} width="100%" alignItems="center">
-      <Select size="sm" width="45%" onChange={(e) => setType(e.target.value)}>
+      <Select
+        size="sm"
+        width="45%"
+        bg="white"
+        onChange={(e) => setType(e.target.value)}
+      >
         <option value="all">제목+내용</option>
         <option value="title">제목</option>
         <option value="content">내용</option>
@@ -41,7 +46,9 @@ export function SearchComponent() {
       <Input
         size={"sm"}
         mr="2"
+        placeholder="검색어를 입력하세요."
         onChange={(e) => setKeyword(e.target.value)}
+        bg={"white"}
       ></Input>
       <SearchIcon _hover={{ cursor: "pointer" }} onClick={handleSearchClick} />
     </Flex>

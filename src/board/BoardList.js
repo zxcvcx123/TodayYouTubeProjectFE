@@ -241,7 +241,11 @@ function BoardList() {
           <Flex>
             {/* 한 페이지 출력 갯수 설정 (5, 10, 20) */}
             <Box>
-              <Select value={pageCount} onChange={(e) => handlePageCount(e)}>
+              <Select
+                value={pageCount}
+                onChange={(e) => handlePageCount(e)}
+                bg={"white"}
+              >
                 <option value={5}>5개씩 보기</option>
                 <option value={10}>10개씩 보기</option>
                 <option value={20}>20개씩 보기</option>
