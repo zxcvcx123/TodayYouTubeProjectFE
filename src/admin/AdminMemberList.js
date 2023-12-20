@@ -97,117 +97,123 @@ function AdminMemberList(props) {
   return (
     <Flex>
       <Sidenav />
-      <Box w={"80%"} ml={"3%"}>
+      <Box w={"80%"} m={"auto"} border={"1px solid black"}>
         <Flex>
-          <Heading mt={5} mb={5} mr={10}>
-            회원 정보 리스트
-          </Heading>
-          <Input
-            mt={5}
-            mb={5}
-            type="text"
-            w={"30%"}
-            placeholder="회원 ID입력"
-            onChange={(e) => handleMemberIdSearch(e)}
-          />
-          <Button
-            onClick={() => navigate("/admin/suspension")}
-            colorScheme="blue"
-            mt={5}
-            mb={5}
-            ml={"25%"}
-          >
-            정지회원 관리
-          </Button>
-        </Flex>
-        <Table>
-          <Thead>
-            <Tr>
-              <Td></Td>
-              <Td
-                fontWeight={"bold"}
-                borderColor={"black"}
-                textAlign={"center"}
+          <Box w={"80%"} ml={"3%"}>
+            <Flex>
+              <Heading mt={5} mb={5} mr={10}>
+                회원 정보 리스트
+              </Heading>
+              <Input
+                mt={5}
+                mb={5}
+                type="text"
+                w={"30%"}
+                placeholder="회원 ID입력"
+                onChange={(e) => handleMemberIdSearch(e)}
+              />
+              <Button
+                onClick={() => navigate("/admin/suspension")}
+                colorScheme="blue"
+                mt={5}
+                mb={5}
+                ml={"25%"}
               >
-                번호
-              </Td>
-              <Td
-                fontWeight={"bold"}
-                borderColor={"black"}
-                textAlign={"center"}
-              >
-                아이디
-              </Td>
-              <Td
-                fontWeight={"bold"}
-                borderColor={"black"}
-                textAlign={"center"}
-              >
-                등급
-              </Td>
-              <Td
-                fontWeight={"bold"}
-                borderColor={"black"}
-                textAlign={"center"}
-              >
-                이메일
-              </Td>
-              <Td
-                fontWeight={"bold"}
-                borderColor={"black"}
-                textAlign={"center"}
-              >
-                가입일시
-              </Td>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {memberList &&
-              memberList.map((member) => (
-                <Tr
-                  key={member.member_id}
-                  _hover={{ backgroundColor: "red.100", cursor: "pointer" }}
-                  onClick={() => navigate("/admin/member/" + member.member_id)}
-                >
+                정지회원 관리
+              </Button>
+            </Flex>
+            <Table>
+              <Thead>
+                <Tr>
+                  <Td></Td>
                   <Td
-                    w={"9%"}
+                    fontWeight={"bold"}
+                    borderColor={"black"}
                     textAlign={"center"}
-                    onClick={(e) => e.stopPropagation(e)}
                   >
-                    {member.role_name === "정지회원" && (
-                      <Box
-                        h={8}
-                        lineHeight={8}
-                        borderRadius={(2, 5)}
-                        size={"sm"}
-                        bgColor="red.500"
-                        color={"white"}
-                      >
-                        정지회원
-                      </Box>
-                    )}
+                    번호
                   </Td>
-                  <Td textAlign={"center"}>
-                    {memberList.indexOf(member) +
-                      1 +
-                      (params.get("p") - 1) * 20}
+                  <Td
+                    fontWeight={"bold"}
+                    borderColor={"black"}
+                    textAlign={"center"}
+                  >
+                    아이디
                   </Td>
-                  <Td textAlign={"center"}>{member.member_id}</Td>
-                  {member.role_name === "운영자" && (
-                    <Td color={"blue"} textAlign={"center"}>
-                      {member.role_name}
-                    </Td>
-                  )}
-                  {member.role_name === "운영자" || (
-                    <Td textAlign={"center"}>일반[{member.role_name}]</Td>
-                  )}
-                  <Td textAlign={"center"}>{member.email}</Td>
-                  <Td textAlign={"center"}>{member.created_at}</Td>
+                  <Td
+                    fontWeight={"bold"}
+                    borderColor={"black"}
+                    textAlign={"center"}
+                  >
+                    등급
+                  </Td>
+                  <Td
+                    fontWeight={"bold"}
+                    borderColor={"black"}
+                    textAlign={"center"}
+                  >
+                    이메일
+                  </Td>
+                  <Td
+                    fontWeight={"bold"}
+                    borderColor={"black"}
+                    textAlign={"center"}
+                  >
+                    가입일시
+                  </Td>
                 </Tr>
-              ))}
-          </Tbody>
-        </Table>
-        <Pagination pageInfo={pageInfo} />
+              </Thead>
+              <Tbody>
+                {memberList &&
+                  memberList.map((member) => (
+                    <Tr
+                      key={member.member_id}
+                      _hover={{ backgroundColor: "red.100", cursor: "pointer" }}
+                      onClick={() =>
+                        navigate("/admin/member/" + member.member_id)
+                      }
+                    >
+                      <Td
+                        w={"9%"}
+                        textAlign={"center"}
+                        onClick={(e) => e.stopPropagation(e)}
+                      >
+                        {member.role_name === "정지회원" && (
+                          <Box
+                            h={8}
+                            lineHeight={8}
+                            borderRadius={(2, 5)}
+                            size={"sm"}
+                            bgColor="red.500"
+                            color={"white"}
+                          >
+                            정지회원
+                          </Box>
+                        )}
+                      </Td>
+                      <Td textAlign={"center"}>
+                        {memberList.indexOf(member) +
+                          1 +
+                          (params.get("p") - 1) * 20}
+                      </Td>
+                      <Td textAlign={"center"}>{member.member_id}</Td>
+                      {member.role_name === "운영자" && (
+                        <Td color={"blue"} textAlign={"center"}>
+                          {member.role_name}
+                        </Td>
+                      )}
+                      {member.role_name === "운영자" || (
+                        <Td textAlign={"center"}>일반[{member.role_name}]</Td>
+                      )}
+                      <Td textAlign={"center"}>{member.email}</Td>
+                      <Td textAlign={"center"}>{member.created_at}</Td>
+                    </Tr>
+                  ))}
+              </Tbody>
+            </Table>
+            <Pagination pageInfo={pageInfo} />
+          </Box>
+        </Flex>
       </Box>
     </Flex>
   );

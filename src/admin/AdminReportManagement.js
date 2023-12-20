@@ -297,7 +297,7 @@ export function AdminReportManagement() {
                                     _hover={{
                                       cursor: "pointer",
                                     }}
-                                    key={report.id}
+                                    key={report.uuid}
                                   >
                                     <Td
                                       p={5}
@@ -388,8 +388,9 @@ export function AdminReportManagement() {
                                           w={"100%"}
                                           border={"1px solid black"}
                                           mb={"50px"}
+                                          key={reportedInfo.id}
                                         >
-                                          <AccordionItem key={reportedInfo.id}>
+                                          <AccordionItem>
                                             {({ isExpanded }) => (
                                               <>
                                                 <h2>
