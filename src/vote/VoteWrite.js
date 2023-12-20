@@ -283,7 +283,10 @@ function VoteWrite() {
         <Input
           textAlign={"center"}
           value={content}
-          onChange={(e) => setContent(e.target.value)}
+          onChange={(e) => {
+            setIsSubmitting(false);
+            setContent(e.target.value);
+          }}
           placeholder="한 줄 설명을 입력해주세요"
         />
         <FormErrorMessage justifyContent={"center"}>
