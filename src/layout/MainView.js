@@ -564,8 +564,8 @@ export function MainView() {
                       otherList.indexOf(other) + 2 === 2
                         ? "blue"
                         : otherList.indexOf(other) + 2 === 3
-                          ? "orange"
-                          : "purple"
+                          ? "red"
+                          : "default"
                     }
                     h={"90%"}
                     mr={"5px"}
