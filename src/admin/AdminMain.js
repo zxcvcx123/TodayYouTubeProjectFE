@@ -14,6 +14,7 @@ import {
   Heading,
   Spinner,
   Text,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
 import { BarChart } from "../component/BarChart";
@@ -124,14 +125,26 @@ function AdminMain() {
   const [countVisitorAll, setCountVisitorAll] = useState(null);
   const [countVisitorToday, setCountVisitorToday] = useState(null);
 
+  let toast = useToast();
   /* ---------- 게시글, 좋아요, 댓글 작성 불러와 state 셋팅 ---------- */
   useEffect(() => {
-    axios.get("/api/admin/user").then((response) => {
-      setUserWriteRankDataList(response.data.userWriteRankDataList);
-      setUserLikeRankDataList(response.data.userLikeRankDataList);
-      setUserCommentRankDataList(response.data.userCommentRankDataList);
-      setIsLoading(false);
-    });
+    axios
+      .get("/api/admin/user")
+      .then((response) => {
+        setUserWriteRankDataList(response.data.userWriteRankDataList);
+        setUserLikeRankDataList(response.data.userLikeRankDataList);
+        setUserCommentRankDataList(response.data.userCommentRankDataList);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 403) {
+          toast({
+            description: "접근 불가한 경로입니다.",
+            status: "error",
+          });
+          navigate("/");
+        }
+      });
   }, []);
 
   useEffect(() => {
