@@ -55,6 +55,7 @@ export function MainBoardList({
       key={index}
       onClick={() => handleBoardPost(board.id)}
       alignItems="center"
+      mt={"-16px"}
     >
       <ListIcon as={CircleIcon} color={"whitesmoke"} mb={"3px"} />
       <Tooltip label={board.title}>
@@ -97,6 +98,7 @@ export function MainBoardList({
             bg={"white"}
             borderBottomRadius={10}
             boxShadow="lg"
+            pt={"10px"}
           >
             <List width={"100%"} spacing={2}>
               {mainRecommendBoardList.map((board, index) => (
@@ -125,6 +127,7 @@ export function MainBoardList({
             bg={"white"}
             borderBottomRadius={10}
             boxShadow="lg"
+            pt={"10px"}
           >
             <List width={"100%"} spacing={2}>
               {mainHitsBoardList.map((board, index) => (
@@ -155,6 +158,7 @@ export function MainBoardList({
             bg={"white"}
             borderBottomRadius={10}
             boxShadow="lg"
+            pt={"10px"}
           >
             <List mt={"10px"} spacing={2}>
               {mainBoardList2.map((board, index) => (
@@ -182,6 +186,7 @@ export function MainBoardList({
             bg={"white"}
             borderBottomRadius={10}
             boxShadow="lg"
+            pt={"10px"}
           >
             <List mt={"10px"} spacing={2}>
               {mainBoardList3.map((board, index) => (
@@ -209,6 +214,7 @@ export function MainBoardList({
             bg={"white"}
             borderBottomRadius={10}
             boxShadow="lg"
+            pt={"10px"}
           >
             <List mt={"10px"} spacing={2}>
               {mainBoardList7.map((board, index) => (
@@ -239,6 +245,7 @@ export function MainBoardList({
             bg={"white"}
             borderBottomRadius={10}
             boxShadow="lg"
+            pt={"10px"}
           >
             <List mt={"10px"} spacing={2}>
               {mainBoardList4.map((board, index) => (
@@ -266,6 +273,7 @@ export function MainBoardList({
             bg={"white"}
             borderBottomRadius={10}
             boxShadow="lg"
+            pt={"10px"}
           >
             <List mt={"10px"} spacing={2}>
               {mainBoardList6.map((board, index) => (
@@ -293,6 +301,7 @@ export function MainBoardList({
             bg={"white"}
             borderBottomRadius={10}
             boxShadow="lg"
+            pt={"10px"}
           >
             <List mt={"10px"} spacing={2}>
               {mainBoardList5.map((board, index) => (
