@@ -45,7 +45,7 @@ function MemberInfoPageNation({ pageNumberInformation }) {
             <Flex justifyContent={"center"} mb={2}>
               {/* 이전 페이지 그룹이 있을 때만 출력 */}
               {pageNumberInformation !== null &&
-                pageNumberInformation.nextPageNumber !== null && (
+                pageNumberInformation.prevPageNumber && (
                   <PageButton
                     variant="ghost"
                     pageNumber={pageNumberInformation.prevPageNumber}
@@ -71,7 +71,7 @@ function MemberInfoPageNation({ pageNumberInformation }) {
                 ))}
               {/* 이후 페이지 그룹이 있을 때만 출력 */}
               {pageNumberInformation !== null &&
-                pageNumberInformation.nextPageNumber !== null && (
+                pageNumberInformation.nextPageNumber && (
                   <PageButton
                     variant="ghost"
                     pageNumber={pageNumberInformation.nextPageNumber}

@@ -232,12 +232,12 @@ function MemberInfo(props) {
                                 >
                                   {categoryTopics !== "origin" && (
                                     <Td>
-                                      <YoutubeInfo
-                                        link={myBoard.link}
-                                        extraThumbnail={true}
-                                        thumbnailWidth={120}
-                                        thumbnailHeight={70}
-                                      />
+                                      <Box w={"120px"} h={"70px"}>
+                                        <YoutubeInfo
+                                          link={myBoard.link}
+                                          extraThumbnail={true}
+                                        />
+                                      </Box>
                                     </Td>
                                   )}
                                   <Td>{myBoard.title}</Td>
