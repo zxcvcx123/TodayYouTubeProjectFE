@@ -212,6 +212,7 @@ export function Filednd({
       <Box>
         <FormControl w={"100%"} h={"200px"} border={"3px dashed black"}>
           <FormLabel
+            bg={"white"}
             textAlign={"center"}
             w={"100%"}
             h={"100%"}

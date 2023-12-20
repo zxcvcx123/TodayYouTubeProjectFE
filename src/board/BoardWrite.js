@@ -225,6 +225,7 @@ function BoardWrite() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="추천 게시글의 제목을 입력해주세요."
+            bg={"white"}
           />
           {/* isInvalid로 타이틀이 공백이거나 null일 경우 에러메시지 출력 */}
           <FormErrorMessage>{titleError}</FormErrorMessage>
@@ -237,6 +238,7 @@ function BoardWrite() {
             value={link}
             onChange={(e) => setLink(e.target.value)}
             placeholder="추천 영상의 링크를 입력해주세요."
+            bg={"white"}
           />
         </FormControl>
 
