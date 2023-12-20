@@ -473,11 +473,10 @@ export function MainView() {
             _hover={{ transform: "scale(1.1)", cursor: "pointer" }}
             style={{
               border:
-                firstList.link === mainShowLink
+                firstList.id === mainShowId
                   ? "1px solid rgb(181,233,245)"
                   : "none",
-              transform:
-                firstList.link === mainShowLink ? "scale(1.1)" : undefined,
+              transform: firstList.id === mainShowId ? "scale(1.1)" : undefined,
             }}
             onClick={() => {
               setLinkCategory(firstList.categoryName);
@@ -498,7 +497,7 @@ export function MainView() {
                 1위
               </Badge>
               <Text
-                w={"90%"}
+                w={"190px"}
                 lineHeight={"30px"}
                 fontFamily={"Nanum Gothic"}
                 fontWeight={"bold"}
@@ -513,7 +512,7 @@ export function MainView() {
                 w={"50px"}
                 h={"50px"}
                 top={"-20px"}
-                right={"-80px"}
+                right={"-20px"}
               >
                 <Img src={medal1} />
               </Box>
@@ -547,11 +546,10 @@ export function MainView() {
                 _hover={{ transform: "scale(1.1)", cursor: "pointer" }}
                 style={{
                   border:
-                    other.link === mainShowLink
+                    other.id === mainShowId
                       ? "1px solid rgb(181,233,245)"
                       : "none",
-                  transform:
-                    other.link === mainShowLink ? "scale(1.1)" : undefined,
+                  transform: other.id === mainShowId ? "scale(1.1)" : undefined,
                 }}
                 key={other.id}
               >
