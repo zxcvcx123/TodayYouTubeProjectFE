@@ -71,7 +71,7 @@ function ReplyCommentForm({
           placeholder={
             loginInfo.member_id
               ? "댓글을 입력하세요"
-              : "로그인한 사용자만 입력이 가능합니다.요"
+              : "로그인한 사용자만 입력이 가능합니다."
           }
         />
         <Button
@@ -155,36 +155,38 @@ function ReplyCommentItem({
             <Text sx={{ whiteSpace: "pre-wrap" }} pt={2} fontSize="sm">
               {reply_comment.reply_comment}
             </Text>
-            <Flex gap={0.5} mt={1}>
-              {isEditing || (
-                <Button
-                  size="xs"
-                  colorScheme="purple"
-                  onClick={() => setIsEditing(true)}
-                >
-                  <FontAwesomeIcon icon={faPenToSquare} />
-                </Button>
-              )}
-              {isEditing && (
-                <Button
-                  size="xs"
-                  colorScheme="gray"
-                  onClick={() => setIsEditing(false)}
-                >
-                  <FontAwesomeIcon icon={faXmark} />
-                </Button>
-              )}
+            {loginInfo && loginInfo.member_id === reply_comment.member_id && (
+              <Flex gap={0.5} mt={1}>
+                {isEditing || (
+                  <Button
+                    size="xs"
+                    colorScheme="purple"
+                    onClick={() => setIsEditing(true)}
+                  >
+                    <FontAwesomeIcon icon={faPenToSquare} />
+                  </Button>
+                )}
+                {isEditing && (
+                  <Button
+                    size="xs"
+                    colorScheme="gray"
+                    onClick={() => setIsEditing(false)}
+                  >
+                    <FontAwesomeIcon icon={faXmark} />
+                  </Button>
+                )}
 
-              <Button
-                onClick={() =>
-                  onDeleteModalOpen(reply_comment.id, reply_comment.member_id)
-                }
-                size="xs"
-                colorScheme="red"
-              >
-                <FontAwesomeIcon icon={faTrash} />
-              </Button>
-            </Flex>
+                <Button
+                  onClick={() =>
+                    onDeleteModalOpen(reply_comment.id, reply_comment.member_id)
+                  }
+                  size="xs"
+                  colorScheme="red"
+                >
+                  <FontAwesomeIcon icon={faTrash} />
+                </Button>
+              </Flex>
+            )}
           </Flex>
           {isEditing && (
             <Box>
