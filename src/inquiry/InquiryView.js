@@ -4,12 +4,14 @@ import {
   AlertDescription,
   AlertIcon,
   AlertTitle,
+  Badge,
   Box,
   Button,
   Card,
   CardBody,
   CardFooter,
   CardHeader,
+  Divider,
   Flex,
   FormControl,
   FormLabel,
@@ -224,7 +226,9 @@ function InquiryView(props) {
         <CardHeader>
           <Flex justifyContent={"space-between"}>
             <Flex fontWeight={"bold"} gap={5}>
-              <Text w={50}>제목: </Text>
+              <Badge fontSize={"15px"} colorScheme={"blue"}>
+                제목
+              </Badge>
               <Text>{inquiry.title}</Text>
             </Flex>
             <Flex fontWeight={"bold"} gap={5}>
@@ -232,9 +236,12 @@ function InquiryView(props) {
             </Flex>
           </Flex>
         </CardHeader>
+        <Divider color={"rgb(166,166,166)"} />
         <CardBody fontWeight={"bold"}>
           <Flex>
-            <Text w={50}>내용: </Text>
+            <Badge fontSize={"15px"} colorScheme={"blue"} mr={5}>
+              내용
+            </Badge>
             <Text>{ViewContents()}</Text>
           </Flex>
         </CardBody>
@@ -339,13 +346,15 @@ function InquiryView(props) {
             <></>
           )}
         </CardFooter>
-
         {answer ? (
           <Card>
+            <Divider color={"rgb(166,166,166)"} />
             <CardHeader>
-              <Text>답변 내용</Text>
+              <Badge fontSize={"20px"} colorScheme="green">
+                답변 내용
+              </Badge>
             </CardHeader>
-            <CardBody>
+            <CardBody mt={"-25px"}>
               <Textarea
                 border={answerBorder}
                 readOnly={answerReadOnly}
@@ -353,7 +362,7 @@ function InquiryView(props) {
                 onChange={(e) => setAnswerContent(e.target.value)}
               ></Textarea>
             </CardBody>
-            <CardFooter justify={"flex-end"}>
+            <CardFooter justify={"flex-end"} mt={"-30px"}>
               <Box>
                 {loginInfo !== null && loginInfo.role_name === "운영자" && (
                   <>
