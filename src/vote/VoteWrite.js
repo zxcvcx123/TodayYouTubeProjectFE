@@ -298,6 +298,7 @@ function VoteWrite() {
           onClick={handleSubmit}
           colorScheme="blue"
           isDisabled={isSubmitting}
+          mr={2}
         >
           작성 완료
         </Button>
