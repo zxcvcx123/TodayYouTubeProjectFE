@@ -199,7 +199,7 @@ function AdminManageSuspension(props) {
           <Heading mt={90}>정지중인 회원들</Heading>
           {suspensionList &&
             suspensionList.map((suspension) => (
-              <Card w={"50%"} m={"auto"} mt={10} mb={5}>
+              <Card w={"50%"} m={"auto"} mt={10} mb={5} key={suspension.id}>
                 <CardHeader>
                   <Flex justifyContent={"space-between"}>
                     <Heading size="md">
