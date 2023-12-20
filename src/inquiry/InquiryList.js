@@ -35,6 +35,7 @@ function InquiryList(props) {
 
   const [inquiryList, setInquiryList] = useState(null);
   const [pageInfo, setPageInfo] = useState([]);
+  const [inquiryNotice, setInquiryNotice] = useState(null);
 
   const navigate = useNavigate();
   const [params] = useSearchParams();
@@ -50,6 +51,7 @@ function InquiryList(props) {
         .then((response) => {
           setInquiryList(response.data.inquiryList);
           setPageInfo(response.data.pageInfo);
+          setInquiryNotice(response.data.inquiryNotice);
         })
         .catch(() => console.log("bad"));
     }

@@ -170,14 +170,21 @@ function AdminMemberList(props) {
                   onClick={() => navigate("/admin/member/" + member.member_id)}
                 >
                   <Td
-                    w={"5%"}
+                    w={"9%"}
                     textAlign={"center"}
                     onClick={(e) => e.stopPropagation(e)}
                   >
                     {member.role_name === "정지회원" && (
-                      <Button size={"sm"} colorScheme="red">
+                      <Box
+                        h={8}
+                        lineHeight={8}
+                        borderRadius={(2, 5)}
+                        size={"sm"}
+                        bgColor="red.500"
+                        color={"white"}
+                      >
                         정지회원
-                      </Button>
+                      </Box>
                     )}
                   </Td>
                   <Td textAlign={"center"}>

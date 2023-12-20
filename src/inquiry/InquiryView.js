@@ -220,79 +220,51 @@ function InquiryView(props) {
   }
 
   return (
-    <Card width={"60%"} m={"auto"}>
-      <CardHeader>
-        <Flex justifyContent={"space-between"}>
-          <Flex fontWeight={"bold"} gap={5}>
-            <Text w={50}>제목: </Text>
-            <Text>{inquiry.title}</Text>
+    <Box h={"830px"}>
+      <Card width={"60%"} m={"auto"} mt={50}>
+        <CardHeader>
+          <Flex justifyContent={"space-between"}>
+            <Flex fontWeight={"bold"} gap={5}>
+              <Text w={50}>제목: </Text>
+              <Text>{inquiry.title}</Text>
+            </Flex>
+            <Flex fontWeight={"bold"} gap={5}>
+              <Text>{inquiry.inquiry_category}</Text>
+            </Flex>
           </Flex>
-          <Flex fontWeight={"bold"} gap={5}>
-            <Text>{inquiry.inquiry_category}</Text>
+        </CardHeader>
+        <CardBody fontWeight={"bold"}>
+          <Flex>
+            <Text w={50}>내용: </Text>
+            <Text>{ViewContents()}</Text>
           </Flex>
-        </Flex>
-      </CardHeader>
-      <CardBody fontWeight={"bold"}>
-        <Flex>
-          <Text w={50}>내용: </Text>
-          <Text>{ViewContents()}</Text>
-        </Flex>
-      </CardBody>
+        </CardBody>
 
-      <CardFooter justifyContent={"flex-end"}>
-        {loginInfo !== null && loginInfo.role_name === "운영자" && (
-          <Box>
-            {answer === true && inquiry.answer_status === "답변진행중" && (
-              <Button
-                colorScheme="red"
-                onClick={() => {
-                  setAnswer(false);
-                }}
-                mr={2}
-              >
-                답변취소
-              </Button>
-            )}
-            {answer === false && inquiry.answer_status === "답변진행중" && (
-              <Button
-                colorScheme="green"
-                onClick={() => {
-                  setAnswer(true);
-                }}
-                mr={2}
-              >
-                답변하기
-              </Button>
-            )}
-            {answer === false && inquiry.answer_status === "답변완료" && (
-              <Button
-                colorScheme="purple"
-                onClick={() => {
-                  setAnswer(true);
-                }}
-                mr={2}
-              >
-                답변보기
-              </Button>
-            )}
-            {answer === true && inquiry.answer_status === "답변완료" && (
-              <Button
-                colorScheme="orange"
-                onClick={() => {
-                  setAnswer(false);
-                }}
-                mr={2}
-              >
-                답변접기
-              </Button>
-            )}
-          </Box>
-        )}
-
-        {loginInfo !== null &&
-          loginInfo.role_name !== "운영자" &&
-          inquiry.answer_status === "답변완료" && (
+        <CardFooter justifyContent={"flex-end"}>
+          {loginInfo !== null && loginInfo.role_name === "운영자" && (
             <Box>
+              {answer === true && inquiry.answer_status === "답변진행중" && (
+                <Button
+                  colorScheme="red"
+                  onClick={() => {
+                    setAnswer(false);
+                  }}
+                  mr={2}
+                >
+                  답변취소
+                </Button>
+              )}
+              {answer === false && inquiry.answer_status === "답변진행중" && (
+                <Button
+                  colorScheme="green"
+                  onClick={() => {
+                    setAnswer(true);
+                  }}
+                  mr={2}
+                >
+                  답변하기
+                </Button>
+              )}
               {answer === false && inquiry.answer_status === "답변완료" && (
                 <Button
                   colorScheme="purple"
@@ -318,130 +290,163 @@ function InquiryView(props) {
             </Box>
           )}
 
-        {(loginInfo !== null &&
-          loginInfo.member_id === inquiry.inquiry_member_id) ||
-        loginInfo.role_name === "운영자" ? (
-          <Box>
-            <Button
-              colorScheme="blue"
-              onClick={() => navigate("/inquiry/edit/" + id)}
-              mr={2}
-            >
-              수정
-            </Button>
-            <Button colorScheme="red" onClick={contentDeleteModal.onOpen}>
-              삭제
-            </Button>
-          </Box>
+          {loginInfo !== null &&
+            loginInfo.role_name !== "운영자" &&
+            inquiry.answer_status === "답변완료" && (
+              <Box>
+                {answer === false && inquiry.answer_status === "답변완료" && (
+                  <Button
+                    colorScheme="purple"
+                    onClick={() => {
+                      setAnswer(true);
+                    }}
+                    mr={2}
+                  >
+                    답변보기
+                  </Button>
+                )}
+                {answer === true && inquiry.answer_status === "답변완료" && (
+                  <Button
+                    colorScheme="orange"
+                    onClick={() => {
+                      setAnswer(false);
+                    }}
+                    mr={2}
+                  >
+                    답변접기
+                  </Button>
+                )}
+              </Box>
+            )}
+
+          {(loginInfo !== null &&
+            loginInfo.member_id === inquiry.inquiry_member_id) ||
+          loginInfo.role_name === "운영자" ? (
+            <Box>
+              <Button
+                colorScheme="blue"
+                onClick={() => navigate("/inquiry/edit/" + id)}
+                mr={2}
+              >
+                수정
+              </Button>
+              <Button colorScheme="red" onClick={contentDeleteModal.onOpen}>
+                삭제
+              </Button>
+            </Box>
+          ) : (
+            <></>
+          )}
+        </CardFooter>
+
+        {answer ? (
+          <Card>
+            <CardHeader>
+              <Text>답변 내용</Text>
+            </CardHeader>
+            <CardBody>
+              <Textarea
+                border={answerBorder}
+                readOnly={answerReadOnly}
+                value={answerContent}
+                onChange={(e) => setAnswerContent(e.target.value)}
+              ></Textarea>
+            </CardBody>
+            <CardFooter justify={"flex-end"}>
+              <Box>
+                {loginInfo !== null && loginInfo.role_name === "운영자" && (
+                  <>
+                    {inquiry.answer_status !== "답변완료" && (
+                      <Button
+                        colorScheme="blue"
+                        onClick={handleAnswerComplete}
+                        mr={2}
+                      >
+                        답변
+                      </Button>
+                    )}
+                    {answerReadOnly && (
+                      <Button
+                        colorScheme="blue"
+                        onClick={() => {
+                          setAnswerReadOnly(false);
+                          setAnswerBorder("1px solid black");
+                        }}
+                        mr={2}
+                      >
+                        수정
+                      </Button>
+                    )}
+                    {answer || (
+                      <Button
+                        isDisabled={isSubmitting}
+                        colorScheme="blue"
+                        onClick={handleEditBtn}
+                        mr={2}
+                      >
+                        작성완료
+                      </Button>
+                    )}
+                    <Button
+                      colorScheme="red"
+                      onClick={answerDeleteModal.onOpen}
+                    >
+                      삭제
+                    </Button>
+                  </>
+                )}
+              </Box>
+            </CardFooter>
+          </Card>
         ) : (
           <></>
         )}
-      </CardFooter>
 
-      {answer ? (
-        <Card>
-          <CardHeader>
-            <Text>답변 내용</Text>
-          </CardHeader>
-          <CardBody>
-            <Textarea
-              border={answerBorder}
-              readOnly={answerReadOnly}
-              value={answerContent}
-              onChange={(e) => setAnswerContent(e.target.value)}
-            ></Textarea>
-          </CardBody>
-          <CardFooter justify={"flex-end"}>
-            <Box>
-              {loginInfo !== null && loginInfo.role_name === "운영자" && (
-                <>
-                  {inquiry.answer_status !== "답변완료" && (
-                    <Button
-                      colorScheme="blue"
-                      onClick={handleAnswerComplete}
-                      mr={2}
-                    >
-                      답변
-                    </Button>
-                  )}
-                  {answerReadOnly && (
-                    <Button
-                      colorScheme="blue"
-                      onClick={() => {
-                        setAnswerReadOnly(false);
-                        setAnswerBorder("1px solid black");
-                      }}
-                      mr={2}
-                    >
-                      수정
-                    </Button>
-                  )}
-                  {answerReadOnly || (
-                    <Button
-                      isDisabled={isSubmitting}
-                      colorScheme="blue"
-                      onClick={handleEditBtn}
-                      mr={2}
-                    >
-                      작성완료
-                    </Button>
-                  )}
-                  <Button colorScheme="red" onClick={answerDeleteModal.onOpen}>
-                    삭제
-                  </Button>
-                </>
-              )}
-            </Box>
-          </CardFooter>
-        </Card>
-      ) : (
-        <></>
-      )}
+        {/* 삭제 모달 */}
+        <Modal
+          isOpen={contentDeleteModal.isOpen}
+          onClose={contentDeleteModal.onClose}
+        >
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Modal Title</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>문의글을 삭제하시겠습니까?</ModalBody>
+            <ModalFooter>
+              <Button variant={"ghost"} onClick={contentDeleteModal.onClose}>
+                닫기
+              </Button>
+              <Button colorScheme="blue" onClick={handleDeleteButton}>
+                삭제
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
 
-      {/* 삭제 모달 */}
-      <Modal
-        isOpen={contentDeleteModal.isOpen}
-        onClose={contentDeleteModal.onClose}
-      >
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>문의글을 삭제하시겠습니까?</ModalBody>
-          <ModalFooter>
-            <Button variant={"ghost"} onClick={contentDeleteModal.onClose}>
-              닫기
-            </Button>
-            <Button colorScheme="blue" onClick={handleDeleteButton}>
-              삭제
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+        {/* 답변삭제 모달 */}
+        <Modal
+          isOpen={answerDeleteModal.isOpen}
+          onClose={answerDeleteModal.onClose}
+        >
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Modal Title</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>답변을 삭제하시겠습니까?</ModalBody>
+            <ModalFooter>
+              <Button variant={"ghost"} onClick={answerDeleteModal.onClose}>
+                닫기
+              </Button>
+              <Button colorScheme="blue" onClick={handleDeleteBtn}>
+                답변삭제
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
 
-      {/* 답변삭제 모달 */}
-      <Modal
-        isOpen={answerDeleteModal.isOpen}
-        onClose={answerDeleteModal.onClose}
-      >
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>답변을 삭제하시겠습니까?</ModalBody>
-          <ModalFooter>
-            <Button variant={"ghost"} onClick={answerDeleteModal.onClose}>
-              닫기
-            </Button>
-            <Button colorScheme="blue" onClick={handleDeleteBtn}>
-              답변삭제
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-
-      <ScrollToTop />
-    </Card>
+        <ScrollToTop />
+      </Card>
+    </Box>
   );
 }
 
