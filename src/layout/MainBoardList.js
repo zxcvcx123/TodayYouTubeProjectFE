@@ -69,8 +69,7 @@ export function MainBoardList({
             {`${board.title.slice(0, 20)}`}
           </Text>
           <Text>
-            {titleName === "추천" && <FontAwesomeIcon icon={faHeart} />}
-            {item}
+            {titleName === "추천" && <FontAwesomeIcon icon={faHeart} />} {item}
           </Text>
         </Flex>
       </Tooltip>

@@ -359,7 +359,9 @@ function VoteView() {
                       handleVoteA();
                     }}
                     isDisabled={
-                      IsConnected === false || board.voteAgo >= voteEndTime
+                      (voteChecked !== 0 && voteNot === 0) ||
+                      IsConnected === false ||
+                      board.voteAgo >= voteEndTime
                         ? true
                         : false
                     }
@@ -470,7 +472,7 @@ function VoteView() {
           {/* 목록 버튼 */}
           <Button
             colorScheme="blue"
-            onClick={() => navigate("/board/list?category=" + currentParams)}
+            onClick={() => navigate("/board/vote/list")}
           >
             목록
           </Button>
