@@ -39,6 +39,7 @@ import "./index.css";
 import AdminManageSuspension from "./admin/AdminManageSuspension";
 import SuspensionMemberLoginPage from "./admin/SuspensionMemberLoginPage";
 import { AdminReportManagement } from "./admin/AdminReportManagement";
+import { Box } from "@chakra-ui/react";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -51,10 +52,10 @@ const routes = createBrowserRouter(
         <Route path="board/:id" element={<BoardView />} />
         <Route path="board/list" element={<BoardList />} />
         <Route path="board/edit/:id" element={<BoardEdit />} />
-        <Route path="board/vote/write" element={<VoteWrite />} />
-        <Route path="board/vote/:id" element={<VoteView />} />
+        <Route path="vote/write" element={<VoteWrite />} />
+        <Route path="vote/:id" element={<VoteView />} />
         <Route
-          path="board/vote/list"
+          path="vote/list"
           element={
             <VoteLoading>
               <VoteList />
@@ -92,7 +93,7 @@ const routes = createBrowserRouter(
 
 function App() {
   // 건들지 마시오
+
   return <RouterProvider router={routes} />;
 }
-
 export default App;

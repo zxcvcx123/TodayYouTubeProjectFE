@@ -7,3 +7,4 @@ export { default as medal } from "./medal.png";
 export { default as medal1 } from "./medal1.png";
 export { default as medal2 } from "./medal2.png";
 export { default as medal3 } from "./medal3.png";
+export { default as vote } from "./vote.png";

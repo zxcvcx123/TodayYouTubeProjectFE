@@ -463,7 +463,7 @@ function BoardView() {
   }
 
   return (
-    <Center mb={"50px"}>
+    <Center mb={"50px"} border={"1px solid black"}>
       <Box mt={"20px"} w={"1000px"}>
         <Box mb={5}>
           <Box w={"500px"} borderBottom={"5px solid rgb(0,35,150,0.5)"}>
