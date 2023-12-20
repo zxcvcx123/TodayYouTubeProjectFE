@@ -219,7 +219,7 @@ function VoteView() {
           description: "정상적으로 삭제 되었습니다.",
           status: "success",
         });
-        navigate("/board/vote/list");
+        navigate("/vote/list");
       })
       .catch((error) => {
         if (error.response.status === 403) {
@@ -523,10 +523,7 @@ function VoteView() {
             </Button>
           )}
           {/* 목록 버튼 */}
-          <Button
-            colorScheme="blue"
-            onClick={() => navigate("/board/vote/list")}
-          >
+          <Button colorScheme="blue" onClick={() => navigate("/vote/list")}>
             목록
           </Button>
         </Flex>

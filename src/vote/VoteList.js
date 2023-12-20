@@ -85,7 +85,7 @@ function VoteList() {
     if (!token.detectLogin) {
       onOpen();
     } else {
-      navigate("/board/vote/write");
+      navigate("/vote/write");
     }
   }
 
@@ -127,7 +127,7 @@ function VoteList() {
                   position={"relative"}
                   w={"100%"}
                   border={"1px solid lightgray"}
-                  onClick={() => navigate("/board/vote/" + board.id)}
+                  onClick={() => navigate("/vote/" + board.id)}
                   _hover={{
                     backgroundColor: "lightcyan",
                     cursor: "pointer",

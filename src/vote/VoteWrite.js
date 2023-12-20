@@ -169,7 +169,7 @@ function VoteWrite() {
           description: "게시글 저장에 성공했습니다.",
           status: "success",
         });
-        navigate("/board/vote/list?p=1");
+        navigate("/vote/list?p=1");
       })
       .catch((error) => {
         if (error.response.status === 400) {
@@ -307,7 +307,7 @@ function VoteWrite() {
         </Button>
 
         {/* 취소 버튼 */}
-        <Button onClick={() => navigate("/board/vote/list")} colorScheme="red">
+        <Button onClick={() => navigate("/vote/list")} colorScheme="red">
           취소
         </Button>
       </Flex>

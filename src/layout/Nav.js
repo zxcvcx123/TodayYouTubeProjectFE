@@ -236,7 +236,7 @@ export function Nav({ setSocket }) {
 
                   <MenuItem
                     onClick={() => {
-                      navigate("board/vote/list?p=1");
+                      navigate("/vote/list?p=1");
                     }}
                   >
                     투표
