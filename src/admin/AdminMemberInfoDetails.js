@@ -274,7 +274,10 @@ function AdminMemberInfoDetails({
             isDisabled={memberInfo.role_name !== "정지회원"}
           >
             <Button
-              isDisabled={memberInfo.role_name === "정지회원"}
+              isDisabled={
+                memberInfo.role_name === "정지회원" ||
+                memberInfo.role_name === "탈퇴회원"
+              }
               ml="80%"
               colorScheme="red"
               onClick={onOpen}
