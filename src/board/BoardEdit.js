@@ -258,13 +258,16 @@ function BoardEdit() {
             value={board.link}
             onChange={(e) => handleBoardUpdate(e, "link")}
           />
-          <Box h={"300px"}>
-            <YoutubeInfo
-              link={board.link}
-              extraThumbnail={true}
-              mode={"voteLink"}
-              setIsYouTubeLink={setIsYouTubeLink}
-            />
+          <Box my={5}>
+            <Text> 썸네일 미리 보기 </Text>
+            <Box w={"200px"} h={"120px"}>
+              <YoutubeInfo
+                link={board.link}
+                extraThumbnail={true}
+                mode={"voteLink"}
+                setIsYouTubeLink={setIsYouTubeLink}
+              />
+            </Box>
           </Box>
         </FormControl>
 

@@ -234,7 +234,7 @@ function BoardWrite() {
         </FormControl>
 
         {/* -------------------- 링크 -------------------- */}
-        <FormControl my={8}>
+        <FormControl my={5}>
           <FormLabel>링크</FormLabel>
           <Input
             value={link}
@@ -242,13 +242,16 @@ function BoardWrite() {
             placeholder="추천 영상의 링크를 입력해주세요."
             bg={"white"}
           />
-          <Box h={"300px"}>
-            <YoutubeInfo
-              link={link}
-              extraThumbnail={true}
-              mode={"voteLink"}
-              setIsYouTubeLink={setIsYouTubeLink}
-            />
+          <Box my={5}>
+            <Text> 썸네일 미리 보기 </Text>
+            <Box w={"200px"} h={"120px"}>
+              <YoutubeInfo
+                link={link}
+                extraThumbnail={true}
+                mode={"voteLink"}
+                setIsYouTubeLink={setIsYouTubeLink}
+              />
+            </Box>
           </Box>
         </FormControl>
 
