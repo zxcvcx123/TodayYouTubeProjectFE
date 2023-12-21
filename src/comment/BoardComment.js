@@ -82,7 +82,7 @@ function CommentForm({
 
   // 댓글작성시 알람기능
   function send(comment) {
-    // 알림목록
+    // 알림목록, 개수
     stompClient.current.publish({
       destination: "/app/comment/sendalarm/" + loginInfo.member_id,
       body: JSON.stringify({
@@ -93,16 +93,16 @@ function CommentForm({
       }),
     });
 
-    // 개수
-    stompClient.current.publish({
-      destination: "/app/comment/sendalarm/count/" + loginInfo.member_id,
-      body: JSON.stringify({
-        sender_member_id: loginInfo.member_id,
-        receiver_member_id: boardData.board_member_id,
-        board_id: board_id,
-        board_title: boardData.board_title,
-      }),
-    });
+    //   // 개수
+    //   stompClient.current.publish({
+    //     destination: "/app/comment/sendalarm/count/" + loginInfo.member_id,
+    //     body: JSON.stringify({
+    //       sender_member_id: loginInfo.member_id,
+    //       receiver_member_id: boardData.board_member_id,
+    //       board_id: board_id,
+    //       board_title: boardData.board_title,
+    //     }),
+    //   });
   }
 
   return (

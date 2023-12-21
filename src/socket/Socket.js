@@ -104,7 +104,6 @@ function Socket({ children }) {
     });
 
     // 개인이 좋아요 했는지 안했는지 검증
-
     stompClient.current.subscribe(
       "/queue/like/" + loginInfo.member_id,
       (res) => {

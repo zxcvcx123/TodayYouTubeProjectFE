@@ -59,29 +59,27 @@ function BoardLike({ id }) {
         .catch()
         .finally();
     }
-  }, [like, countLike, loginInfo]);
+  }, [loginInfo]);
 
   // 좋아요 눌렀을때 본인 하트 현황 확인
   // 실시간으로 좋아요 갯수 최신화 하기
   function send() {
-    stompClient.current.publish({
-      destination: "/app/like/add/" + loginInfo.member_id,
-      body: JSON.stringify({
-        board_id: id,
-        member_id: loginInfo.member_id,
-      }),
-    });
+    // stompClient.current.publish({
+    //   destination: "/app/like/add/" + loginInfo.member_id,
+    //   body: JSON.stringify({
+    //     board_id: id,
+    //     member_id: loginInfo.member_id,
+    //   }),
+    // });
 
     stompClient.current.publish({
-      destination: "/app/like/",
+      destination: "/app/like/" + loginInfo.member_id,
       body: JSON.stringify({
         board_id: id,
         member_id: loginInfo.member_id,
       }),
     });
   }
-
-  function handleToLogin() {}
 
   return (
     <>

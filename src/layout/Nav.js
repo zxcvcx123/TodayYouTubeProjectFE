@@ -330,23 +330,27 @@ export function Nav({ setSocket }) {
                           <Flex justifyContent={"space-between"} w={"88%"}>
                             <Text>최근 알람</Text>
                             <Flex alignItems={"flex-end"} gap={3}>
-                              <Text
-                                _hover={{ cursor: "pointer" }}
-                                onClick={handleAllRead}
-                                style={{ fontSize: "small", color: "blue" }}
-                              >
-                                전부읽음
-                              </Text>
-                              <Text
-                                _hover={{ cursor: "pointer" }}
-                                onClick={handleDeletAllAlarm}
-                                style={{
-                                  fontSize: "small",
-                                  color: "blue",
-                                }}
-                              >
-                                전부삭제
-                              </Text>
+                              {IsConnected && (
+                                <>
+                                  <Text
+                                    _hover={{ cursor: "pointer" }}
+                                    onClick={handleAllRead}
+                                    style={{ fontSize: "small", color: "blue" }}
+                                  >
+                                    전부읽음
+                                  </Text>
+                                  <Text
+                                    _hover={{ cursor: "pointer" }}
+                                    onClick={handleDeletAllAlarm}
+                                    style={{
+                                      fontSize: "small",
+                                      color: "blue",
+                                    }}
+                                  >
+                                    전부삭제
+                                  </Text>
+                                </>
+                              )}
                             </Flex>
                           </Flex>
                           {/*<Divider />*/}
