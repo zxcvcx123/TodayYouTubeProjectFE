@@ -73,7 +73,7 @@ export function Nav({ setSocket }) {
   useEffect(() => {
     if (loginInfo !== null) {
       axios
-        .post("http://localhost:3000/api/websocket/alarmlist", {
+        .post("/api/websocket/alarmlist", {
           userId: loginInfo.member_id,
         })
         .then((res) => {
@@ -83,7 +83,7 @@ export function Nav({ setSocket }) {
         .finally();
 
       axios
-        .post("http://localhost:3000/api/websocket/alarmcount", {
+        .post("/api/websocket/alarmcount", {
           userId: loginInfo.member_id,
         })
         .then((res) => {
@@ -96,7 +96,7 @@ export function Nav({ setSocket }) {
 
   function handleRandomView() {
     axios
-      .get("http://localhost:3000/api/board/random")
+      .get("/api/board/random")
       .then((res) => {
         navigate("board/" + res.data.id + "?category=" + res.data.name_eng);
       })
@@ -116,11 +116,7 @@ export function Nav({ setSocket }) {
       navigate("/inquiry/list/");
     }
 
-    axios
-      .post("http://localhost:3000/api/alarmread", { id: id })
-      .then()
-      .catch()
-      .finally();
+    axios.post("/api/alarmread", { id: id }).then().catch().finally();
   }
 
   // 알람 모두 읽기

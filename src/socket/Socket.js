@@ -61,7 +61,7 @@ function Socket({ children }) {
     ) {
       // 추천 연결방식
       stompClient.current = Stomp.over(function () {
-        return new SockJS("http://localhost:3000/ws", "ws", {
+        return new SockJS("/ws", "ws", {
           transports: ["websocket", "xhr-streaming", "xhr-polling"],
         });
       });

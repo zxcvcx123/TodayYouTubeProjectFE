@@ -31,7 +31,7 @@ function Chat() {
       setSetIdAccess(true);
     }
     chatContent();
-  }, [chat]);
+  }, [chat, loginInfo]);
 
   const chatContent = () => {
     const chatArea = document.getElementById("chatArea");
