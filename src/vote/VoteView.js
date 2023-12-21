@@ -201,7 +201,7 @@ function VoteView() {
     // 투표 후 2초 이후에 isSubmitting을 false로 설정
     setTimeout(() => {
       setIsSubmittingVote(false);
-    }, 2000);
+    }, 500);
   }
 
   // 삭제 버튼
@@ -213,6 +213,7 @@ function VoteView() {
           id: id,
           vote_member_id: board.vote_member_id,
           login_memeber_id: loginInfo.member_id,
+          rolename: loginInfo.rolename,
         },
       })
       .then(() => {
@@ -544,11 +545,12 @@ function VoteView() {
         {/* -------------------- 버튼 섹션 -------------------- */}
         <Flex justifyContent={"flex-end"}>
           {/* 삭제 버튼 */}
-          {loginInfo && loginInfo.member_id === board.vote_member_id && (
-            <Button colorScheme="red" onClick={delModal.onOpen} mr={3}>
-              삭제
-            </Button>
-          )}
+          {(loginInfo && loginInfo.member_id === board.vote_member_id) ||
+            (loginInfo && loginInfo.role_name === "운영자" && (
+              <Button colorScheme="red" onClick={delModal.onOpen} mr={3}>
+                삭제
+              </Button>
+            ))}
           {/* 목록 버튼 */}
           <Button colorScheme="blue" onClick={() => navigate("/vote/list")}>
             목록

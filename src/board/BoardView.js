@@ -304,7 +304,7 @@ function BoardView() {
 
     // 작성자 본인 여부 검증
     if (loginInfo.member_id === board.board_member_id) {
-      navigate("/board/edit/" + id);
+      navigate("/board/edit/" + id + "?category=" + currentParams);
     } else {
       window.alert("작성자 본인만 수정이 가능합니다.");
     }

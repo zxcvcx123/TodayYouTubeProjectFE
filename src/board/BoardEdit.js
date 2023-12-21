@@ -16,7 +16,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useImmer } from "use-immer";
 import { Filednd } from "../file/Filednd";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
@@ -41,6 +41,10 @@ function BoardEdit() {
   const [uuid, setUuid] = useState("");
   const [isYouTubeLink, setIsYouTubeLink] = useState(false);
 
+  // 현재 URL에서 category 명 추출
+  const location = useLocation();
+  const currentParams = new URLSearchParams(location.search).get("category");
+
   /* use immer */
   const [board, updateBoard] = useImmer(null);
 
@@ -58,9 +62,11 @@ function BoardEdit() {
 
   // 초기 렌더링으로 게시물의 데이터를 가져와 상태를 업데이트 한다.
   useEffect(() => {
-    axios.get("/api/board/id/" + id).then((response) => {
-      updateBoard(response.data);
-    });
+    axios
+      .get("/api/board/id/" + id + "?category=" + currentParams)
+      .then((response) => {
+        updateBoard(response.data);
+      });
   }, []);
 
   // 파일 목록 가져오기
@@ -116,7 +122,7 @@ function BoardEdit() {
           "이미지 개수를 초과했습니다. (최대 5개) 다시 작성해주세요.",
         status: "warning",
       });
-      navigate("/board/" + boardId);
+      navigate("/board/" + boardId + "?category=" + currentParams);
       setIsSubmitting(false);
     }
 
@@ -132,7 +138,7 @@ function BoardEdit() {
 
       // 작성자 본인 여부 검증
       if (loginInfo.member_id === board.board_member_id) {
-        navigate("/board/edit/" + id);
+        navigate("/board/edit/" + id + "?category=" + currentParams);
       } else {
         window.alert("작성자 본인만 수정이 가능합니다.");
       }
@@ -176,7 +182,7 @@ function BoardEdit() {
             description: "게시글 수정에 성공했습니다.",
             status: "success",
           });
-          navigate("/board/" + board.id);
+          navigate("/board/" + board.id + "?category=" + currentParams);
         })
         .catch((error) => {
           if (error.response.status === 401) {
@@ -321,7 +327,9 @@ function BoardEdit() {
 
           {/* 취소 버튼 */}
           <Button
-            onClick={() => navigate("/board/" + board.id)}
+            onClick={() =>
+              navigate("/board/" + board.id + "?category=" + currentParams)
+            }
             colorScheme="red"
           >
             취소
