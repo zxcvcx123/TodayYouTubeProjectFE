@@ -64,7 +64,7 @@ function InquiryList(props) {
   // 로그인 안했을시 로그인화면으로 이동
   if (!token.detectLogin) {
     return (
-      <Box w={"100%"} m={"auto"} h={"700px"}>
+      <Box w={"500px"} m={"auto"} mt={25} h={"300px"}>
         <Alert
           // colorScheme="red"
           status="warning"
