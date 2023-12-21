@@ -29,7 +29,7 @@ function SuspensionMemberLoginPage(props) {
 
   useEffect(() => {
     axios
-      .get("/api/admin/suspensionMessage/" + member_id)
+      .get("/api/suspensionMessage/" + member_id)
       .then((response) => setSuspensionInfo(response.data))
       .catch((error) => {
         if (error.response && error.response.status === 403) {
@@ -47,7 +47,7 @@ function SuspensionMemberLoginPage(props) {
   }
 
   return (
-    <Box w={"80%"} m={"auto"}>
+    <Box w={"80%"} m={"auto"} mt={10}>
       <Alert
         // colorScheme="red"
         status="warning"
