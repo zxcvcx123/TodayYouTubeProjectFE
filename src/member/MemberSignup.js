@@ -172,7 +172,14 @@ function MemberSignup(props) {
   return (
     <>
       <Center>
-        <Card w={"40%"} align={"center"} border={"10px"}>
+        <Card
+          w={"40%"}
+          align={"center"}
+          border={"10px"}
+          mt={"30px"}
+          mb={"30px"}
+          minWidth={"600px"}
+        >
           <CardHeader mt={5}>
             <Heading>사용자 가입</Heading>
           </CardHeader>
@@ -190,9 +197,10 @@ function MemberSignup(props) {
                       : !checkIdResult
                 }
               >
-                <FormLabel>아이디</FormLabel>
+                <FormLabel ml={"100px"}>아이디</FormLabel>
                 <Flex>
                   <Input
+                    ml={"100px"}
                     w={"2xs"}
                     placeholder="아이디 입력 (6~40자)"
                     value={member_id}
@@ -219,6 +227,7 @@ function MemberSignup(props) {
                         englishAndNumberOnly(member_id) ||
                         !idDisable
                       }
+                      colorScheme="blue"
                       onClick={() => {
                         handleDuplicated("member_id", member_id);
                       }}
@@ -229,7 +238,7 @@ function MemberSignup(props) {
                     <Spinner />
                   )}
                 </Flex>
-                <FormErrorMessage>{idMessage}</FormErrorMessage>
+                <FormErrorMessage ml={"100px"}>{idMessage}</FormErrorMessage>
               </FormControl>
             </Box>
             {/* 닉네임 폼 ---------------------------------------------------------------------------------- */}
@@ -238,9 +247,10 @@ function MemberSignup(props) {
               isRequired
               isInvalid={nickname.length === 0 ? false : !checkNicknameResult}
             >
-              <FormLabel>닉네임</FormLabel>
+              <FormLabel ml={"100px"}>닉네임</FormLabel>
               <Flex>
                 <Input
+                  ml={"100px"}
                   w={"2xs"}
                   placeholder="닉네임 입력 (3~20자)"
                   maxLength={"20"}
@@ -261,6 +271,7 @@ function MemberSignup(props) {
                 {!isSubmitting ? (
                   <Button
                     isDisabled={nickname.length <= 2 || !nickNameDisable}
+                    colorScheme="blue"
                     onClick={() => {
                       handleDuplicated("nickname", nickname);
                     }}
@@ -271,7 +282,9 @@ function MemberSignup(props) {
                   <Spinner />
                 )}
               </Flex>
-              <FormErrorMessage>{nicknameMessage}</FormErrorMessage>
+              <FormErrorMessage ml={"100px"}>
+                {nicknameMessage}
+              </FormErrorMessage>
             </FormControl>
             {/* 비밀번호 폼 ---------------------------------------------------------------------------------- */}
             <FormControl
@@ -279,8 +292,9 @@ function MemberSignup(props) {
               isRequired
               isInvalid={password.length === 0 ? false : !passwordTypeResult}
             >
-              <FormLabel>비밀번호</FormLabel>
+              <FormLabel ml={"100px"}>비밀번호</FormLabel>
               <Input
+                ml={"100px"}
                 w={"2xs"}
                 type="password"
                 maxLength={"20"}
@@ -298,7 +312,9 @@ function MemberSignup(props) {
                 }}
               />
 
-              <FormErrorMessage>{passwordMessage}</FormErrorMessage>
+              <FormErrorMessage ml={"100px"}>
+                {passwordMessage}
+              </FormErrorMessage>
             </FormControl>
             {/* 비밀번호 재확인 ---------------------------------------------------------------------------------- */}
             <FormControl
@@ -312,9 +328,10 @@ function MemberSignup(props) {
                     : true
               }
             >
-              <FormLabel>비밀번호 재확인</FormLabel>
+              <FormLabel ml={"100px"}>비밀번호 재확인</FormLabel>
               <Flex>
                 <Input
+                  ml={"100px"}
                   w={"2xs"}
                   type="password"
                   maxLength={"20"}
@@ -334,6 +351,7 @@ function MemberSignup(props) {
                 />
                 {!isSubmitting ? (
                   <Button
+                    colorScheme="blue"
                     isDisabled={
                       password.length < 7 || password !== password_check
                     }
@@ -365,7 +383,9 @@ function MemberSignup(props) {
                   <Spinner />
                 )}
               </Flex>
-              <FormErrorMessage>{passwordCheckMessage}</FormErrorMessage>
+              <FormErrorMessage ml={"100px"}>
+                {passwordCheckMessage}
+              </FormErrorMessage>
             </FormControl>
 
             {/* 이메일 폼 -----------------------------------------------------------------------------------*/}
@@ -374,9 +394,10 @@ function MemberSignup(props) {
               isRequired
               isInvalid={email.length === 0 ? false : !checkEmailResult}
             >
-              <FormLabel>이메일</FormLabel>
+              <FormLabel ml={"100px"}>이메일</FormLabel>
               <Flex>
                 <Input
+                  ml={"100px"}
                   w={"2xs"}
                   type="email"
                   maxLength={"30"}
@@ -402,6 +423,7 @@ function MemberSignup(props) {
                 {!isSubmitting ? (
                   <Button
                     isDisabled={!emailDisable || !validateEmail(email)}
+                    colorScheme="blue"
                     onClick={(e) => {
                       if (validateEmail(email)) {
                         handleDuplicated("email", email);
@@ -414,12 +436,14 @@ function MemberSignup(props) {
                   <Spinner />
                 )}
               </Flex>
-              <FormErrorMessage>{emailMessage}</FormErrorMessage>
+              <FormErrorMessage ml={"100px"}>{emailMessage}</FormErrorMessage>
             </FormControl>
             {/* 생년월일 ---------------------------------------------------------------------------------- */}
-            <FormControl mt={4} isRequired>
-              <FormLabel>생년월일</FormLabel>
+            <FormControl mt={4} mb={4} isRequired>
+              <FormLabel ml={"100px"}>생년월일</FormLabel>
               <Input
+                ml={"100px"}
+                ml={"100px"}
                 w={"2xs"}
                 type="date"
                 onChange={(e) => {
@@ -427,14 +451,24 @@ function MemberSignup(props) {
                 }}
               />
             </FormControl>
-            <FormControl>
-              <RadioGroup defaultValue="m" onChange={setGender}>
-                <HStack spacing="24px">
-                  <Radio value="m">남자</Radio>
-                  <Radio value="w">여자</Radio>
-                </HStack>
-              </RadioGroup>
-            </FormControl>
+            <Center>
+              <FormControl>
+                <RadioGroup ml={"160px"} defaultValue="m" onChange={setGender}>
+                  <HStack spacing="24px">
+                    <Radio border={"2px solid blue"} value="m">
+                      남자
+                    </Radio>
+                    <Radio
+                      colorScheme="red"
+                      value="w"
+                      border={"2px solid tomato"}
+                    >
+                      여자
+                    </Radio>
+                  </HStack>
+                </RadioGroup>
+              </FormControl>
+            </Center>
           </CardBody>
           <CardFooter gap={6}>
             {!isSubmitting ? (
@@ -442,6 +476,7 @@ function MemberSignup(props) {
                 size={"lg"}
                 isDisabled={!submitAvailable}
                 onClick={handleSignupForm}
+                colorScheme="blue"
               >
                 가입
               </Button>

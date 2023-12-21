@@ -230,7 +230,9 @@ function MemberInfoMyInfo({ loginInfo, handleLogout }) {
                             성별
                           </Heading>
                           <Text pl={2} mt={1} pt="2" fontSize="sm">
-                            {loginInfo !== null ? loginInfo.gender : <></>}
+                            {loginInfo !== null && loginInfo.gender === "m"
+                              ? "남자"
+                              : "여자"}
                           </Text>
                         </Box>
                       </Flex>
