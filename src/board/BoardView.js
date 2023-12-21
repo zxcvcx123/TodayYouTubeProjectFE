@@ -95,10 +95,10 @@ function BoardView() {
     // videoIdMatch 배열에서 동영상 ID 추출
     const videoId = videoIdMatch && videoIdMatch[1];
 
-    if (!videoId) {
-      console.error("YouTube 동영상 ID를 추출할 수 없습니다.");
-      return;
-    }
+    // if (!videoId) {
+    //   console.error("YouTube 동영상 ID를 추출할 수 없습니다.");
+    //   return;
+    // }
 
     // YouTube Data API 엔드포인트
     const apiKey = config.apikey;

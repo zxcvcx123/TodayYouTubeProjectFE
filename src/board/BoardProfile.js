@@ -53,6 +53,7 @@ function BoardProfile({ board_member_id, board_id }) {
 
   useEffect(() => {
     const isBoardPath = location.pathname.startsWith("/board/");
+    const isVotePath = location.pathname.startsWith("/vote/");
     if (board_member_id !== null) {
       setDependency(false);
       axios
@@ -73,7 +74,7 @@ function BoardProfile({ board_member_id, board_id }) {
             setIsFollowing(response.data);
           });
       }
-      if (isBoardPath) {
+      if (isBoardPath || isVotePath) {
         if (
           board_id !== null &&
           board_member_id !== null &&
@@ -353,7 +354,9 @@ function BoardProfile({ board_member_id, board_id }) {
 
               <ModalFooter>
                 {isSubmitting ? (
-                  <Spinner />
+                  <Box mr={3}>
+                    <Spinner />
+                  </Box>
                 ) : (
                   <Button colorScheme="red" mr={3} onClick={handleMemberReport}>
                     접수
