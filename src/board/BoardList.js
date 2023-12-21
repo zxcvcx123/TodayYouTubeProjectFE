@@ -401,7 +401,7 @@ function BoardList() {
                           textOverflow={"ellipsis"}
                           whiteSpace={"nowrap"}
                         >
-                          {board.board_member_id}
+                          {board.nickname}
                         </Td>
                         <Td
                           textAlign={"center"}
