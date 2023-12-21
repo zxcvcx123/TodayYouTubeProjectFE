@@ -159,7 +159,13 @@ function MemberInfoMyInfo({ loginInfo, handleLogout }) {
   return (
     <>
       {!isMemberInfoEditValidated ? (
-        <Card w={"80%"} p={"20px"} boxShadow={"none"} minWidth="1200px">
+        <Card
+          mt={"1px"}
+          w={"100%"}
+          p={"20px"}
+          boxShadow={"none"}
+          minWidth="1200px"
+        >
           <CardBody>
             <Stack mt="6" spacing="3">
               <Card mt={"5"}>
@@ -214,7 +220,7 @@ function MemberInfoMyInfo({ loginInfo, handleLogout }) {
                       {/*</Flex>*/}
                     </Flex>
                     <Flex w={"100%"}>
-                      <Flex w={"50%"} borderRight={"1px solid #E2E4E8"} mr={4}>
+                      <Flex w={"49%"} borderRight={"1px solid #E2E4E8"} mr={4}>
                         <Box>
                           <Heading size="s" textTransform="uppercase">
                             생년월일
@@ -252,7 +258,7 @@ function MemberInfoMyInfo({ loginInfo, handleLogout }) {
                           </Text>
                         </Box>
                       </Flex>
-                      <Flex w={"50%"} borderRight={"1px solid #E2E4E8"} mr={4}>
+                      <Flex w={"50%"} mr={4}>
                         <Box>
                           <Heading size="s" textTransform="uppercase">
                             내가 받은 좋아요
@@ -277,7 +283,7 @@ function MemberInfoMyInfo({ loginInfo, handleLogout }) {
                           </Text>
                         </Box>
                       </Flex>
-                      <Flex w={"50%"} borderRight={"1px solid #E2E4E8"} mr={4}>
+                      <Flex w={"50%"} mr={4}>
                         <Box>
                           <Heading size="s" textTransform="uppercase">
                             댓글 수
@@ -293,7 +299,7 @@ function MemberInfoMyInfo({ loginInfo, handleLogout }) {
                       </Flex>
                     </Flex>
                     <Flex w={"100%"}>
-                      <Flex w={"50%"} borderRight={"1px solid #E2E4E8"} mr={4}>
+                      <Flex w={"50%"} mr={4}>
                         <Box>
                           <Flex alignItems={"center"}>
                             <Heading size="s" textTransform="uppercase">
@@ -305,7 +311,7 @@ function MemberInfoMyInfo({ loginInfo, handleLogout }) {
                           </Text>
                         </Box>
                       </Flex>
-                      <Flex w={"50%"} borderRight={"1px solid #E2E4E8"} mr={4}>
+                      <Flex w={"50%"} mr={4}>
                         <Box>
                           <Heading size="s" textTransform="uppercase"></Heading>
                           <Text pl={2} mt={1} pt="2" fontSize="sm"></Text>
