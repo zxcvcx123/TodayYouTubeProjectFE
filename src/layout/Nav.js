@@ -374,6 +374,7 @@ export function Nav({ setSocket }) {
                                     color:
                                       list._alarm === false ? "blue" : "gray",
                                   }}
+                                  w={"300px"}
                                 >
                                   {list.alarm_category === "ac002" ? (
                                     <>
