@@ -201,7 +201,7 @@ function VoteWrite() {
   }
 
   return (
-    <Box m={5}>
+    <Box border={"2px solid black"} m={5}>
       <Heading textAlign={"center"} mb={5}>
         투표 생성
       </Heading>
@@ -240,15 +240,13 @@ function VoteWrite() {
           <FormErrorMessage justifyContent={"center"}>
             {link_aError}
           </FormErrorMessage>
-          <Box h={"250px"}>
-            <YoutubeInfo
-              link={link_a}
-              extraThumbnail={true}
-              thumbnailWidth={"100%"}
-              mode={"voteLink1"}
-              setIsYouTubeLink1={setIsYouTubeLink1}
-            />
-          </Box>
+          <YoutubeInfo
+            link={link_a}
+            extraThumbnail={true}
+            thumbnailWidth={"100%"}
+            mode={"voteLink1"}
+            setIsYouTubeLink1={setIsYouTubeLink1}
+          />
         </FormControl>
 
         <Box>
@@ -270,14 +268,12 @@ function VoteWrite() {
           <FormErrorMessage justifyContent={"center"}>
             {link_bError}
           </FormErrorMessage>
-          <Box h={"250px"}>
-            <YoutubeInfo
-              link={link_b}
-              extraThumbnail={true}
-              mode={"voteLink2"}
-              setIsYouTubeLink2={setIsYouTubeLink2}
-            />
-          </Box>
+          <YoutubeInfo
+            link={link_b}
+            extraThumbnail={true}
+            mode={"voteLink2"}
+            setIsYouTubeLink2={setIsYouTubeLink2}
+          />
         </FormControl>
       </Flex>
 

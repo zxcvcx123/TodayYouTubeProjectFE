@@ -229,8 +229,8 @@ function BoardList() {
 
   // -------------------------------------------------- 화면 렌더링 --------------------------------------------------
   return (
-    <Flex justifyContent={"center"}>
-      <Box mb={"50px"}>
+    <Flex justifyContent={"center"} mb={"50px"}>
+      <Box>
         {/* ------------------------- 게시글 목록 상단 바 ------------------------- */}
         <Box my={5}>
           <Box w={"500px"} borderBottom={"5px solid rgb(0,35,150,0.5)"}>

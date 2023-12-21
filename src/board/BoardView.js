@@ -463,8 +463,8 @@ function BoardView() {
   }
 
   return (
-    <Center>
-      <Box mt={"20px"} w={"1000px"} mb={"50px"}>
+    <Center mb={"50px"}>
+      <Box mt={"20px"} w={"1000px"}>
         <Box mb={5}>
           <Box w={"500px"} borderBottom={"5px solid rgb(0,35,150,0.5)"}>
             <Heading>{board.categoryName} 게시판</Heading>
