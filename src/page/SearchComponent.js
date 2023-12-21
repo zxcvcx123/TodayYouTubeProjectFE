@@ -38,10 +38,10 @@ export function SearchComponent() {
         bg="white"
         onChange={(e) => setType(e.target.value)}
       >
-        <option value="all">제목+내용</option>
+        <option value="all">전체</option>
         <option value="title">제목</option>
         <option value="content">내용</option>
-        <option value="board_member_id">작성자</option>
+        <option value="nickname">작성자</option>
       </Select>
       <Input
         size={"sm"}
