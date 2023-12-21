@@ -53,6 +53,7 @@ import {
 import LoadingPage from "../component/LoadingPage";
 import BoardProfile from "../board/BoardProfile";
 import { medal } from "../assets/Image";
+import ReactPlayer from "react-player";
 
 function VoteView() {
   const { token, handleLogout, loginInfo, validateToken } =
@@ -375,7 +376,20 @@ function VoteView() {
                     </Box>
                   )}
                 {/* 투표 마감시 나오는 메달 끝 */}
-                <YoutubeInfo link={board.link_a} extraVideo={true} />
+                {/*<YoutubeInfo link={board.link_a} extraVideo={true} />*/}
+                <ReactPlayer
+                  className="video-container"
+                  url={board.link_a}
+                  width={"700px"}
+                  height={"500px"}
+                  config={{
+                    youtube: {
+                      playerVars: {
+                        autoplay: 0,
+                      },
+                    },
+                  }}
+                />
                 {loginInfo === null ? (
                   <Button
                     mt={2}
@@ -458,7 +472,20 @@ function VoteView() {
                     </Box>
                   )}
                 {/* 투표 마감시 나오는 메달 끝 */}
-                <YoutubeInfo link={board.link_b} extraVideo={true} />
+                {/*<YoutubeInfo link={board.link_b} extraVideo={true} />*/}
+                <ReactPlayer
+                  className="video-container"
+                  url={board.link_b}
+                  width={"700px"}
+                  height={"500px"}
+                  config={{
+                    youtube: {
+                      playerVars: {
+                        autoplay: 0,
+                      },
+                    },
+                  }}
+                />
                 {loginInfo === null ? (
                   <Button
                     mt={2}

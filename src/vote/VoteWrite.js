@@ -9,6 +9,7 @@ import {
   FormLabel,
   Heading,
   Input,
+  Text,
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
@@ -201,7 +202,7 @@ function VoteWrite() {
   }
 
   return (
-    <Box border={"2px solid black"} m={5}>
+    <Box m={5}>
       <Heading textAlign={"center"} mb={5}>
         투표 생성
       </Heading>
@@ -209,7 +210,7 @@ function VoteWrite() {
       {/* -------------------- 제목 -------------------- */}
       <FormControl mb={2} isInvalid={titleError}>
         <FormLabel id="title" textAlign={"center"}>
-          주제
+          <Heading fontSize={"1.5rem"}>주제</Heading>
         </FormLabel>
         <Input
           value={title}
@@ -227,7 +228,7 @@ function VoteWrite() {
       <Flex alignItems={"center"}>
         <FormControl mb={2} w={"50%"} isInvalid={link_aError}>
           <FormLabel id="link_a" textAlign={"center"}>
-            1번 링크
+            <Heading fontSize={"1.5rem"}>1번 링크</Heading>
           </FormLabel>
 
           <Input
@@ -240,13 +241,15 @@ function VoteWrite() {
           <FormErrorMessage justifyContent={"center"}>
             {link_aError}
           </FormErrorMessage>
-          <YoutubeInfo
-            link={link_a}
-            extraThumbnail={true}
-            thumbnailWidth={"100%"}
-            mode={"voteLink1"}
-            setIsYouTubeLink1={setIsYouTubeLink1}
-          />
+          <Box h={"250px"}>
+            <YoutubeInfo
+              link={link_a}
+              extraThumbnail={true}
+              thumbnailWidth={"100%"}
+              mode={"voteLink1"}
+              setIsYouTubeLink1={setIsYouTubeLink1}
+            />
+          </Box>
         </FormControl>
 
         <Box>
@@ -255,7 +258,7 @@ function VoteWrite() {
 
         <FormControl mb={2} w={"50%"} isInvalid={link_bError}>
           <FormLabel id="link_b" textAlign={"center"}>
-            2번 링크
+            <Heading fontSize={"1.5rem"}>2번 링크</Heading>
           </FormLabel>
 
           <Input
@@ -268,12 +271,14 @@ function VoteWrite() {
           <FormErrorMessage justifyContent={"center"}>
             {link_bError}
           </FormErrorMessage>
-          <YoutubeInfo
-            link={link_b}
-            extraThumbnail={true}
-            mode={"voteLink2"}
-            setIsYouTubeLink2={setIsYouTubeLink2}
-          />
+          <Box h={"250px"}>
+            <YoutubeInfo
+              link={link_b}
+              extraThumbnail={true}
+              mode={"voteLink2"}
+              setIsYouTubeLink2={setIsYouTubeLink2}
+            />
+          </Box>
         </FormControl>
       </Flex>
 
