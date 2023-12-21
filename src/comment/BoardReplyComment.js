@@ -142,7 +142,7 @@ function ReplyCommentItem({
     <Box>
       <Flex justifyContent="space-between">
         <Heading size="xs" bg="#f2f2f2" borderRadius="5">
-          {reply_comment.nickname} ({reply_comment.member_id})
+          {reply_comment.nickname}
         </Heading>
         <Flex gap={2} alignItems="center">
           <Text fontSize="xs">{reply_comment.ago}</Text>

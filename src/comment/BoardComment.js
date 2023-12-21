@@ -220,7 +220,7 @@ function CommentItem({
     <Box>
       <Flex justifyContent="space-between">
         <Heading size="xs" bg="#f2f2f2" borderRadius="5">
-          {comment.nickname} ({comment.member_id})
+          {comment.nickname}
         </Heading>
         <Flex gap={2} alignItems="center">
           <Text size="xs" as="sub">
