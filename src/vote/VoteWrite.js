@@ -50,16 +50,6 @@ function VoteWrite() {
   /* use toast */
   const toast = useToast();
 
-  // 비로그인 상태로 글쓰기 경로 직접 접근시 경고 발생 후 로그인페이지로 이동
-  useEffect(() => {
-    if (loginInfo == null) {
-      if (!token.detectLogin) {
-        window.alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-        navigate("/member/login");
-      }
-    }
-  }, [loginInfo]);
-
   // useEffect를 사용하여 titleError가 변경(에러발생)될 때마다 스크롤이 제목 라벨으로 이동
   useEffect(() => {
     // 동시에 발생했을 경우에는 title로 먼저 스크롤 된다.
@@ -121,6 +111,11 @@ function VoteWrite() {
   // 작성 완료 버튼 클릭 ---------------------------------------------------
   function handleSubmit() {
     setIsSubmitting(true);
+
+    if (!token.detectLogin) {
+      window.alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+      navigate("/member/login");
+    }
 
     // 제목이 null이거나 공백일 경우 에러메시지 세팅 후 반환
     if (!title || title.trim() === "") {
