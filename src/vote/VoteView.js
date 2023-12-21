@@ -213,7 +213,7 @@ function VoteView() {
           id: id,
           vote_member_id: board.vote_member_id,
           login_memeber_id: loginInfo.member_id,
-          rolename: loginInfo.rolename,
+          rolename: loginInfo.role_name,
         },
       })
       .then(() => {
@@ -570,7 +570,9 @@ function VoteView() {
               <ModalBody>삭제 하시겠습니까?</ModalBody>
 
               <ModalFooter>
-                <Button onClick={() => delModal.onClose()}>닫기</Button>
+                <Button onClick={() => delModal.onClose()} mr={2}>
+                  닫기
+                </Button>
                 <Button
                   isDisabled={isSubmitting}
                   onClick={handleDelete}
