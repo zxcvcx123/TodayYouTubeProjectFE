@@ -182,7 +182,7 @@ function MemberInfoMyInfoEdit({ loginInfo }) {
   }
 
   return (
-    <Card w={"80%"} p={"20px"} boxShadow={"none"}>
+    <Card mt="1px" w={"100%"} p={"20px"} boxShadow={"none"}>
       <CardBody>
         <Stack mt="6" spacing="3">
           <Card mt={"5"}>
