@@ -449,51 +449,51 @@ function MemberInfoMyInfoEdit({ loginInfo }) {
                   </Flex>
                 </Box>
                 <Box>
-                  <Flex alignItems={"center"}>
-                    <Heading size="s" textTransform="uppercase" mr={3}>
-                      전화번호
-                    </Heading>
-                    <Kbd
-                      h={"fit-content"}
-                      backgroundColor={"white"}
-                      color={"#0A6EFF"}
-                    >
-                      변경가능
-                    </Kbd>
-                  </Flex>
-                  <Flex mt={2} alignItems={"center"}>
-                    <FormControl isInvalid={isPhoneNumberChanged}>
-                      <Input
-                        m={"2xs"}
-                        type="tel"
-                        w={"250px"}
-                        placeholder="전화번호"
-                        maxLength={"15"}
-                        defaultValue={defaultPhoneNumber}
-                        value={changePhoneNumber}
-                        onChange={(e) => {
-                          setChangePhoneNumber(
-                            (e.target.value = e.target.value
-                              .replace(/[^0-9]/g, "")
-                              .replace(
-                                /(^02.{0}|^01.{1}|[0-9]{3,4})([0-9]{3,4})([0-9]{4})/g,
-                                "$1-$2-$3",
-                              )),
-                          );
-                          if (e.target.value.length < 9) {
-                            setIsPhoneNumberChanged(true);
-                          } else {
-                            setIsPhoneNumberChanged(false);
-                          }
-                        }}
-                      />
-                      {isPhoneNumberChanged && (
-                        <FormErrorMessage>
-                          전화번호 형식이 아닙니다
-                        </FormErrorMessage>
-                      )}
-                    </FormControl>
-                  </Flex>
+                  {/*<Flex alignItems={"center"}>*/}
+                  {/*  <Heading size="s" textTransform="uppercase" mr={3}>*/}
+                  {/*    전화번호*/}
+                  {/*  </Heading>*/}
+                  {/*  <Kbd*/}
+                  {/*    h={"fit-content"}*/}
+                  {/*    backgroundColor={"white"}*/}
+                  {/*    color={"#0A6EFF"}*/}
+                  {/*  >*/}
+                  {/*    변경가능*/}
+                  {/*  </Kbd>*/}
+                  {/*</Flex>*/}
+                  {/*<Flex mt={2} alignItems={"center"}>*/}
+                  {/*  <FormControl isInvalid={isPhoneNumberChanged}>*/}
+                  {/*    <Input*/}
+                  {/*      m={"2xs"}*/}
+                  {/*      type="tel"*/}
+                  {/*      w={"250px"}*/}
+                  {/*      placeholder="전화번호"*/}
+                  {/*      maxLength={"15"}*/}
+                  {/*      defaultValue={defaultPhoneNumber}*/}
+                  {/*      value={changePhoneNumber}*/}
+                  {/*      onChange={(e) => {*/}
+                  {/*        setChangePhoneNumber(*/}
+                  {/*          (e.target.value = e.target.value*/}
+                  {/*            .replace(/[^0-9]/g, "")*/}
+                  {/*            .replace(*/}
+                  {/*              /(^02.{0}|^01.{1}|[0-9]{3,4})([0-9]{3,4})([0-9]{4})/g,*/}
+                  {/*              "$1-$2-$3",*/}
+                  {/*            )),*/}
+                  {/*        );*/}
+                  {/*        if (e.target.value.length < 9) {*/}
+                  {/*          setIsPhoneNumberChanged(true);*/}
+                  {/*        } else {*/}
+                  {/*          setIsPhoneNumberChanged(false);*/}
+                  {/*        }*/}
+                  {/*      }}*/}
+                  {/*    />*/}
+                  {/*    {isPhoneNumberChanged && (*/}
+                  {/*      <FormErrorMessage>*/}
+                  {/*        전화번호 형식이 아닙니다*/}
+                  {/*      </FormErrorMessage>*/}
+                  {/*    )}*/}
+                  {/*  </FormControl>*/}
+                  {/*</Flex>*/}
                 </Box>
               </Stack>
             </CardBody>
