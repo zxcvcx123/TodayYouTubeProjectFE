@@ -545,12 +545,12 @@ function VoteView() {
         {/* -------------------- 버튼 섹션 -------------------- */}
         <Flex justifyContent={"flex-end"}>
           {/* 삭제 버튼 */}
-          {(loginInfo && loginInfo.member_id === board.vote_member_id) ||
-            (loginInfo && loginInfo.role_name === "운영자" && (
-              <Button colorScheme="red" onClick={delModal.onOpen} mr={3}>
-                삭제
-              </Button>
-            ))}
+          {((loginInfo && loginInfo.member_id === board.vote_member_id) ||
+            (loginInfo && loginInfo.role_name === "운영자")) && (
+            <Button colorScheme="red" onClick={delModal.onOpen} mr={3}>
+              삭제
+            </Button>
+          )}
           {/* 목록 버튼 */}
           <Button colorScheme="blue" onClick={() => navigate("/vote/list")}>
             목록

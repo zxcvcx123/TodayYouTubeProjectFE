@@ -197,121 +197,123 @@ function VoteWrite() {
   }
 
   return (
-    <Box m={5}>
-      <Heading textAlign={"center"} mb={5}>
-        투표 생성
-      </Heading>
+    <Center>
+      <Box m={5} w={"1300px"}>
+        <Heading textAlign={"center"} mb={5}>
+          투표 생성
+        </Heading>
 
-      {/* -------------------- 제목 -------------------- */}
-      <FormControl mb={2} isInvalid={titleError}>
-        <FormLabel id="title" textAlign={"center"}>
-          <Heading fontSize={"1.5rem"}>주제</Heading>
-        </FormLabel>
-        <Input
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="투표 주제를 입력해주세요. (필수)"
-          textAlign={"center"}
-        />
-        {/* isInvalid로 타이틀이 공백이거나 null일 경우 에러메시지 출력 */}
-        <FormErrorMessage justifyContent={"center"}>
-          {titleError}
-        </FormErrorMessage>
-      </FormControl>
-
-      {/* -------------------- 링크 -------------------- */}
-      <Flex alignItems={"center"}>
-        <FormControl mb={2} w={"50%"} isInvalid={link_aError}>
-          <FormLabel id="link_a" textAlign={"center"}>
-            <Heading fontSize={"1.5rem"}>1번 링크</Heading>
+        {/* -------------------- 제목 -------------------- */}
+        <FormControl mb={2} isInvalid={titleError}>
+          <FormLabel id="title" textAlign={"center"}>
+            <Heading fontSize={"1.5rem"}>주제</Heading>
           </FormLabel>
-
           <Input
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="투표 주제를 입력해주세요. (필수)"
             textAlign={"center"}
-            value={link_a}
-            onChange={(e) => setlink_a(e.target.value)}
-            placeholder="주제에 어울리는 유트브 영상 링크를 입력해주세요. (필수)"
-            required
           />
+          {/* isInvalid로 타이틀이 공백이거나 null일 경우 에러메시지 출력 */}
           <FormErrorMessage justifyContent={"center"}>
-            {link_aError}
+            {titleError}
           </FormErrorMessage>
-          <Box h={"250px"}>
-            <YoutubeInfo
-              link={link_a}
-              extraThumbnail={true}
-              thumbnailWidth={"100%"}
-              mode={"voteLink1"}
-              setIsYouTubeLink1={setIsYouTubeLink1}
-            />
-          </Box>
         </FormControl>
 
-        <Box>
-          <Heading>VS</Heading>
-        </Box>
+        {/* -------------------- 링크 -------------------- */}
+        <Flex alignItems={"center"}>
+          <FormControl mb={2} w={"50%"} isInvalid={link_aError}>
+            <FormLabel id="link_a" textAlign={"center"}>
+              <Heading fontSize={"1.5rem"}>1번 링크</Heading>
+            </FormLabel>
 
-        <FormControl mb={2} w={"50%"} isInvalid={link_bError}>
-          <FormLabel id="link_b" textAlign={"center"}>
-            <Heading fontSize={"1.5rem"}>2번 링크</Heading>
-          </FormLabel>
+            <Input
+              textAlign={"center"}
+              value={link_a}
+              onChange={(e) => setlink_a(e.target.value)}
+              placeholder="주제에 어울리는 유트브 영상 링크를 입력해주세요. (필수)"
+              required
+            />
+            <FormErrorMessage justifyContent={"center"}>
+              {link_aError}
+            </FormErrorMessage>
+            <Box h={"250px"}>
+              <YoutubeInfo
+                link={link_a}
+                extraThumbnail={true}
+                thumbnailWidth={"100%"}
+                mode={"voteLink1"}
+                setIsYouTubeLink1={setIsYouTubeLink1}
+              />
+            </Box>
+          </FormControl>
 
+          <Box>
+            <Heading>VS</Heading>
+          </Box>
+
+          <FormControl mb={2} w={"50%"} isInvalid={link_bError}>
+            <FormLabel id="link_b" textAlign={"center"}>
+              <Heading fontSize={"1.5rem"}>2번 링크</Heading>
+            </FormLabel>
+
+            <Input
+              textAlign={"center"}
+              value={link_b}
+              onChange={(e) => setlink_b(e.target.value)}
+              placeholder="주제에 어울리는 링크를 입력해주세요. (필수)"
+              required
+            />
+            <FormErrorMessage justifyContent={"center"}>
+              {link_bError}
+            </FormErrorMessage>
+            <Box h={"250px"}>
+              <YoutubeInfo
+                link={link_b}
+                extraThumbnail={true}
+                mode={"voteLink2"}
+                setIsYouTubeLink2={setIsYouTubeLink2}
+              />
+            </Box>
+          </FormControl>
+        </Flex>
+
+        {/* -------------------- 본문 -------------------- */}
+        <FormControl mb={2} isInvalid={contentError}>
+          <FormLabel id="content" textAlign={"center"}></FormLabel>
           <Input
             textAlign={"center"}
-            value={link_b}
-            onChange={(e) => setlink_b(e.target.value)}
-            placeholder="주제에 어울리는 링크를 입력해주세요. (필수)"
-            required
+            value={content}
+            onChange={(e) => {
+              setIsSubmitting(false);
+              setContent(e.target.value);
+            }}
+            placeholder="한 줄 설명을 입력해주세요"
           />
           <FormErrorMessage justifyContent={"center"}>
-            {link_bError}
+            {contentError}
           </FormErrorMessage>
-          <Box h={"250px"}>
-            <YoutubeInfo
-              link={link_b}
-              extraThumbnail={true}
-              mode={"voteLink2"}
-              setIsYouTubeLink2={setIsYouTubeLink2}
-            />
-          </Box>
         </FormControl>
-      </Flex>
 
-      {/* -------------------- 본문 -------------------- */}
-      <FormControl mb={2} isInvalid={contentError}>
-        <FormLabel id="content" textAlign={"center"}></FormLabel>
-        <Input
-          textAlign={"center"}
-          value={content}
-          onChange={(e) => {
-            setIsSubmitting(false);
-            setContent(e.target.value);
-          }}
-          placeholder="한 줄 설명을 입력해주세요"
-        />
-        <FormErrorMessage justifyContent={"center"}>
-          {contentError}
-        </FormErrorMessage>
-      </FormControl>
+        {/* -------------------- 버튼 섹션 -------------------- */}
+        {/* 저장 버튼 */}
+        <Flex>
+          <Button
+            onClick={handleSubmit}
+            colorScheme="blue"
+            isDisabled={isSubmitting}
+            mr={2}
+          >
+            작성 완료
+          </Button>
 
-      {/* -------------------- 버튼 섹션 -------------------- */}
-      {/* 저장 버튼 */}
-      <Flex>
-        <Button
-          onClick={handleSubmit}
-          colorScheme="blue"
-          isDisabled={isSubmitting}
-          mr={2}
-        >
-          작성 완료
-        </Button>
-
-        {/* 취소 버튼 */}
-        <Button onClick={() => navigate("/vote/list")} colorScheme="red">
-          취소
-        </Button>
-      </Flex>
-    </Box>
+          {/* 취소 버튼 */}
+          <Button onClick={() => navigate("/vote/list")} colorScheme="red">
+            취소
+          </Button>
+        </Flex>
+      </Box>
+    </Center>
   );
 }
 
