@@ -89,6 +89,7 @@ function Socket({ children }) {
     stompClient.current.subscribe("/topic/greetings", (res) => {
       const json = JSON.parse(res.body);
       setChatId(json.id);
+
       const newChat = [...chat];
       newChat.push(json.chat);
       setChat(newChat);

@@ -1,11 +1,8 @@
 import { Box } from "@chakra-ui/react";
 import { Outlet } from "react-router-dom";
-import { Footer } from "./Footer";
 import { Nav } from "./Nav";
-import LoginProvider, { DetectLoginContext } from "../component/LoginProvider";
-import { createContext, useContext, useRef, useState } from "react";
+import LoginProvider from "../component/LoginProvider";
 import Socket from "../socket/Socket";
-import MiniHomepy from "../member/minihomepy/MiniHomepy";
 
 export function HomeLayout() {
   let test = "테스트1";
@@ -15,6 +12,7 @@ export function HomeLayout() {
     <Box bg="rgb(242,242,242)">
       <LoginProvider>
         <Box>
+          {/* 모든 영역에서 socket 연결 */}
           <Socket>
             <Nav />
             <Box w={"100%"} m={"0 auto"}>

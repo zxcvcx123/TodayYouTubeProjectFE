@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   Button,
   Flex,
@@ -16,7 +16,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as fullHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as emptyHeart } from "@fortawesome/free-regular-svg-icons";
-import { useNavigate, useOutletContext } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { DetectLoginContext } from "../component/LoginProvider";
 import axios from "axios";
 import { SocketContext } from "../socket/Socket";
@@ -61,17 +61,10 @@ function BoardLike({ id }) {
     }
   }, [loginInfo]);
 
+  // 웹소켓 사용부분(데이터 전송)
   // 좋아요 눌렀을때 본인 하트 현황 확인
   // 실시간으로 좋아요 갯수 최신화 하기
   function send() {
-    // stompClient.current.publish({
-    //   destination: "/app/like/add/" + loginInfo.member_id,
-    //   body: JSON.stringify({
-    //     board_id: id,
-    //     member_id: loginInfo.member_id,
-    //   }),
-    // });
-
     stompClient.current.publish({
       destination: "/app/like/" + loginInfo.member_id,
       body: JSON.stringify({
