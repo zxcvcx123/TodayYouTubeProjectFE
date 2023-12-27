@@ -250,7 +250,7 @@ export function Nav({ setSocket }) {
                   <Divider />
                   {token.detectLogin && loginInfo.role_name === "운영자" && (
                     <MenuItem onClick={() => navigate("/admin")}>
-                      관리자(임시)
+                      관리자
                     </MenuItem>
                   )}
                 </MenuList>
